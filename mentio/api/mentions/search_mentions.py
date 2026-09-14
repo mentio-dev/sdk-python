@@ -31,7 +31,7 @@ def _get_kwargs(
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
-    link_host: list[str] | None | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -108,15 +108,15 @@ def _get_kwargs(
         json_tags = tags
     params["tags"] = json_tags
 
-    json_link_host: list[str] | None | Unset
-    if isinstance(link_host, Unset):
-        json_link_host = UNSET
-    elif isinstance(link_host, list):
-        json_link_host = link_host
+    json_link_hosts: list[str] | None | Unset
+    if isinstance(link_hosts, Unset):
+        json_link_hosts = UNSET
+    elif isinstance(link_hosts, list):
+        json_link_hosts = link_hosts
 
     else:
-        json_link_host = link_host
-    params["linkHost"] = json_link_host
+        json_link_hosts = link_hosts
+    params["linkHosts"] = json_link_hosts
 
     params["q"] = q
 
@@ -203,7 +203,7 @@ def sync_detailed(
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
-    link_host: list[str] | None | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -242,8 +242,9 @@ def sync_detailed(
             Unknown reach never passes.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
-        link_host (list[str] | None | Unset): Only posts linking to any of these hosts, matched
-            exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+        link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
+            itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
+            comma-separated.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -279,7 +280,7 @@ def sync_detailed(
         min_relevance=min_relevance,
         min_followers=min_followers,
         tags=tags,
-        link_host=link_host,
+        link_hosts=link_hosts,
         q=q,
         since=since,
         until=until,
@@ -312,7 +313,7 @@ def sync(
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
-    link_host: list[str] | None | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -351,8 +352,9 @@ def sync(
             Unknown reach never passes.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
-        link_host (list[str] | None | Unset): Only posts linking to any of these hosts, matched
-            exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+        link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
+            itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
+            comma-separated.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -389,7 +391,7 @@ def sync(
         min_relevance=min_relevance,
         min_followers=min_followers,
         tags=tags,
-        link_host=link_host,
+        link_hosts=link_hosts,
         q=q,
         since=since,
         until=until,
@@ -416,7 +418,7 @@ async def asyncio_detailed(
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
-    link_host: list[str] | None | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -455,8 +457,9 @@ async def asyncio_detailed(
             Unknown reach never passes.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
-        link_host (list[str] | None | Unset): Only posts linking to any of these hosts, matched
-            exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+        link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
+            itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
+            comma-separated.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -492,7 +495,7 @@ async def asyncio_detailed(
         min_relevance=min_relevance,
         min_followers=min_followers,
         tags=tags,
-        link_host=link_host,
+        link_hosts=link_hosts,
         q=q,
         since=since,
         until=until,
@@ -523,7 +526,7 @@ async def asyncio(
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
-    link_host: list[str] | None | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -562,8 +565,9 @@ async def asyncio(
             Unknown reach never passes.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
-        link_host (list[str] | None | Unset): Only posts linking to any of these hosts, matched
-            exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+        link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
+            itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
+            comma-separated.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -601,7 +605,7 @@ async def asyncio(
             min_relevance=min_relevance,
             min_followers=min_followers,
             tags=tags,
-            link_host=link_host,
+            link_hosts=link_hosts,
             q=q,
             since=since,
             until=until,

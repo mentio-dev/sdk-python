@@ -29,6 +29,8 @@ class ListAlertsResponse200DataItemFilter:
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
         min_followers (int | Unset): Only authors with at least this many followers. Unknown reach never passes.
         tags (list[str] | Unset): Only authors your workspace tagged with any of these.
+        link_hosts (list[str] | Unset): Only posts linking to any of these hosts, the host itself or a subdomain of it
+            (octolens.com also matches blog.octolens.com). A post with no links never passes.
     """
 
     keyword_ids: list[str] | Unset = UNSET
@@ -39,6 +41,7 @@ class ListAlertsResponse200DataItemFilter:
     exclude_authors: list[str] | Unset = UNSET
     min_followers: int | Unset = UNSET
     tags: list[str] | Unset = UNSET
+    link_hosts: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -76,6 +79,10 @@ class ListAlertsResponse200DataItemFilter:
         if not isinstance(self.tags, Unset):
             tags = self.tags
 
+        link_hosts: list[str] | Unset = UNSET
+        if not isinstance(self.link_hosts, Unset):
+            link_hosts = self.link_hosts
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -95,6 +102,8 @@ class ListAlertsResponse200DataItemFilter:
             field_dict["minFollowers"] = min_followers
         if tags is not UNSET:
             field_dict["tags"] = tags
+        if link_hosts is not UNSET:
+            field_dict["linkHosts"] = link_hosts
 
         return field_dict
 
@@ -139,6 +148,8 @@ class ListAlertsResponse200DataItemFilter:
 
         tags = cast(list[str], d.pop("tags", UNSET))
 
+        link_hosts = cast(list[str], d.pop("linkHosts", UNSET))
+
         list_alerts_response_200_data_item_filter = cls(
             keyword_ids=keyword_ids,
             platforms=platforms,
@@ -148,6 +159,7 @@ class ListAlertsResponse200DataItemFilter:
             exclude_authors=exclude_authors,
             min_followers=min_followers,
             tags=tags,
+            link_hosts=link_hosts,
         )
 
         list_alerts_response_200_data_item_filter.additional_properties = d

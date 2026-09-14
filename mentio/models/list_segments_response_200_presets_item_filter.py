@@ -37,6 +37,8 @@ class ListSegmentsResponse200PresetsItemFilter:
         never_keyword_kinds (list[ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem] | Unset): Never
             mentioned a keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | Unset): At least one mention linking to any of these hosts, the host itself or a
+            subdomain of it.
         muted (bool | Unset): true: only muted people; false: only unmuted.
     """
 
@@ -56,6 +58,7 @@ class ListSegmentsResponse200PresetsItemFilter:
         list[ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem] | Unset
     ) = UNSET
     new_since_days: int | Unset = UNSET
+    link_hosts: list[str] | Unset = UNSET
     muted: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -99,6 +102,10 @@ class ListSegmentsResponse200PresetsItemFilter:
 
         new_since_days = self.new_since_days
 
+        link_hosts: list[str] | Unset = UNSET
+        if not isinstance(self.link_hosts, Unset):
+            link_hosts = self.link_hosts
+
         muted = self.muted
 
         field_dict: dict[str, Any] = {}
@@ -124,6 +131,8 @@ class ListSegmentsResponse200PresetsItemFilter:
             field_dict["neverKeywordKinds"] = never_keyword_kinds
         if new_since_days is not UNSET:
             field_dict["newSinceDays"] = new_since_days
+        if link_hosts is not UNSET:
+            field_dict["linkHosts"] = link_hosts
         if muted is not UNSET:
             field_dict["muted"] = muted
 
@@ -189,6 +198,8 @@ class ListSegmentsResponse200PresetsItemFilter:
 
         new_since_days = d.pop("newSinceDays", UNSET)
 
+        link_hosts = cast(list[str], d.pop("linkHosts", UNSET))
+
         muted = d.pop("muted", UNSET)
 
         list_segments_response_200_presets_item_filter = cls(
@@ -202,6 +213,7 @@ class ListSegmentsResponse200PresetsItemFilter:
             keyword_kinds=keyword_kinds,
             never_keyword_kinds=never_keyword_kinds,
             new_since_days=new_since_days,
+            link_hosts=link_hosts,
             muted=muted,
         )
 

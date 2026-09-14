@@ -203,7 +203,7 @@ class _Mentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
-          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+          link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -236,7 +236,7 @@ class _Mentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
-          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+          link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -286,6 +286,7 @@ class _People:
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
+          link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
         _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(_ops.people.export_people_csv.sync_detailed(client=self._client, **params))
@@ -318,6 +319,7 @@ class _People:
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
+          link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
@@ -718,7 +720,7 @@ class _AsyncMentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
-          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+          link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -751,7 +753,7 @@ class _AsyncMentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
-          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
+          link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -801,6 +803,7 @@ class _AsyncPeople:
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
+          link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
         _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(await _ops.people.export_people_csv.asyncio_detailed(client=self._client, **params))
@@ -833,6 +836,7 @@ class _AsyncPeople:
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
+          link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""

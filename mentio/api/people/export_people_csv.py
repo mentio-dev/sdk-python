@@ -37,6 +37,7 @@ def _get_kwargs(
     keyword_kinds: list[ExportPeopleCsvKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> dict[str, Any]:
 
@@ -128,6 +129,16 @@ def _get_kwargs(
 
     params["newSinceDays"] = new_since_days
 
+    json_link_hosts: list[str] | None | Unset
+    if isinstance(link_hosts, Unset):
+        json_link_hosts = UNSET
+    elif isinstance(link_hosts, list):
+        json_link_hosts = link_hosts
+
+    else:
+        json_link_hosts = link_hosts
+    params["linkHosts"] = json_link_hosts
+
     json_sort: str | Unset = UNSET
     if not isinstance(sort, Unset):
         json_sort = sort.value
@@ -208,6 +219,7 @@ def sync_detailed(
     keyword_kinds: list[ExportPeopleCsvKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> Response[ErrorResponse | str]:
     """Export people as CSV
@@ -241,6 +253,8 @@ def sync_detailed(
         never_keyword_kinds (list[ExportPeopleCsvNeverKeywordKindsItem] | Unset): Never mentioned
             a keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -270,6 +284,7 @@ def sync_detailed(
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
+        link_hosts=link_hosts,
         sort=sort,
     )
 
@@ -299,6 +314,7 @@ def sync(
     keyword_kinds: list[ExportPeopleCsvKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> ErrorResponse | str | None:
     """Export people as CSV
@@ -332,6 +348,8 @@ def sync(
         never_keyword_kinds (list[ExportPeopleCsvNeverKeywordKindsItem] | Unset): Never mentioned
             a keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -362,6 +380,7 @@ def sync(
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
+        link_hosts=link_hosts,
         sort=sort,
     ).parsed
 
@@ -385,6 +404,7 @@ async def asyncio_detailed(
     keyword_kinds: list[ExportPeopleCsvKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> Response[ErrorResponse | str]:
     """Export people as CSV
@@ -418,6 +438,8 @@ async def asyncio_detailed(
         never_keyword_kinds (list[ExportPeopleCsvNeverKeywordKindsItem] | Unset): Never mentioned
             a keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -447,6 +469,7 @@ async def asyncio_detailed(
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
+        link_hosts=link_hosts,
         sort=sort,
     )
 
@@ -474,6 +497,7 @@ async def asyncio(
     keyword_kinds: list[ExportPeopleCsvKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> ErrorResponse | str | None:
     """Export people as CSV
@@ -507,6 +531,8 @@ async def asyncio(
         never_keyword_kinds (list[ExportPeopleCsvNeverKeywordKindsItem] | Unset): Never mentioned
             a keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -538,6 +564,7 @@ async def asyncio(
             keyword_kinds=keyword_kinds,
             never_keyword_kinds=never_keyword_kinds,
             new_since_days=new_since_days,
+            link_hosts=link_hosts,
             sort=sort,
         )
     ).parsed

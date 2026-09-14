@@ -36,6 +36,7 @@ def _get_kwargs(
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
     offset: int | None | Unset = 0,
@@ -129,6 +130,16 @@ def _get_kwargs(
 
     params["newSinceDays"] = new_since_days
 
+    json_link_hosts: list[str] | None | Unset
+    if isinstance(link_hosts, Unset):
+        json_link_hosts = UNSET
+    elif isinstance(link_hosts, list):
+        json_link_hosts = link_hosts
+
+    else:
+        json_link_hosts = link_hosts
+    params["linkHosts"] = json_link_hosts
+
     json_sort: str | Unset = UNSET
     if not isinstance(sort, Unset):
         json_sort = sort.value
@@ -214,6 +225,7 @@ def sync_detailed(
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
     offset: int | None | Unset = 0,
@@ -250,6 +262,8 @@ def sync_detailed(
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
             keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ListPeopleSort.MENTIONS.
@@ -282,6 +296,7 @@ def sync_detailed(
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
+        link_hosts=link_hosts,
         sort=sort,
         limit=limit,
         offset=offset,
@@ -313,6 +328,7 @@ def sync(
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
     offset: int | None | Unset = 0,
@@ -349,6 +365,8 @@ def sync(
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
             keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ListPeopleSort.MENTIONS.
@@ -382,6 +400,7 @@ def sync(
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
+        link_hosts=link_hosts,
         sort=sort,
         limit=limit,
         offset=offset,
@@ -407,6 +426,7 @@ async def asyncio_detailed(
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
     offset: int | None | Unset = 0,
@@ -443,6 +463,8 @@ async def asyncio_detailed(
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
             keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ListPeopleSort.MENTIONS.
@@ -475,6 +497,7 @@ async def asyncio_detailed(
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
+        link_hosts=link_hosts,
         sort=sort,
         limit=limit,
         offset=offset,
@@ -504,6 +527,7 @@ async def asyncio(
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
+    link_hosts: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
     offset: int | None | Unset = 0,
@@ -540,6 +564,8 @@ async def asyncio(
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
             keyword of these kinds.
         new_since_days (int | Unset): First seen within this many days.
+        link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
+            these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ListPeopleSort.MENTIONS.
@@ -574,6 +600,7 @@ async def asyncio(
             keyword_kinds=keyword_kinds,
             never_keyword_kinds=never_keyword_kinds,
             new_since_days=new_since_days,
+            link_hosts=link_hosts,
             sort=sort,
             limit=limit,
             offset=offset,
