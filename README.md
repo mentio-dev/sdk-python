@@ -78,23 +78,23 @@ mentio.mentions.update("mm_9c1b...", status="ignored")
 ### An instant Slack alert for buying signals on Reddit
 
 ```python
-slack = next(c for c in mentio.channels.list().data if c.type == "slack")
+slack = next(c for c in mentio.channels.list().data if c.kind == "slack")
 
 mentio.alerts.create(
     name="Reddit buying signals",
     mode="instant",
     filter={"platforms": ["reddit"], "intents": ["buy_intent"], "minRelevance": 40},
-    channel_ids=[slack.id],
+    channelIds=[slack.id],
 )
 ```
 
-Slack, Telegram, email and webhook channels are created with `mentio.channels.create(...)`; `mentio.alerts.test(id)` sends a sample; `mentio.alerts.run(id)` sends a daily alert's last 24 hours now.
+Body fields keep the API's names (`channelIds`, `minRelevance`); query parameters are snake_case (`min_followers`). Slack, Telegram, email and webhook channels are created with `mentio.channels.create(...)`; `mentio.alerts.test(id)` sends a sample; `mentio.alerts.run(id)` sends a daily alert's last 24 hours now.
 
 ### Analytics
 
 ```python
 summary = mentio.analytics.summary(range_="30d", compare=True, timezone="Europe/Madrid")
-by_platform = mentio.analytics.breakdown(range_="30d", dimension="platform")
+by_platform = mentio.analytics.breakdown(range_="30d", by="platform")
 sov = mentio.analytics.share_of_voice(range_="90d")
 ```
 
