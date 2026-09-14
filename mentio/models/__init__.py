@@ -270,6 +270,7 @@ from .mention_status import MentionStatus
 from .mention_triage import MentionTriage
 from .mention_triage_assignee_type_0 import MentionTriageAssigneeType0
 from .merge_people_body import MergePeopleBody
+from .mute_alert_authors_body import MuteAlertAuthorsBody
 from .person import Person
 from .person_accounts_item import PersonAccountsItem
 from .person_accounts_item_platform import PersonAccountsItemPlatform
@@ -316,6 +317,7 @@ from .test_alert_response_200 import TestAlertResponse200
 from .test_alert_response_200_outcomes_item import TestAlertResponse200OutcomesItem
 from .test_channel_response_200 import TestChannelResponse200
 from .test_channel_response_200_outcomes_item import TestChannelResponse200OutcomesItem
+from .unmute_alert_authors_body import UnmuteAlertAuthorsBody
 from .update_alert_body import UpdateAlertBody
 from .update_alert_body_filter import UpdateAlertBodyFilter
 from .update_alert_body_filter_platforms_item import UpdateAlertBodyFilterPlatformsItem
@@ -522,6 +524,7 @@ __all__ = (
     "MentionTriage",
     "MentionTriageAssigneeType0",
     "MergePeopleBody",
+    "MuteAlertAuthorsBody",
     "Person",
     "PersonAccountsItem",
     "PersonAccountsItemPlatform",
@@ -566,6 +569,7 @@ __all__ = (
     "TestAlertResponse200OutcomesItem",
     "TestChannelResponse200",
     "TestChannelResponse200OutcomesItem",
+    "UnmuteAlertAuthorsBody",
     "UpdateAlertBody",
     "UpdateAlertBodyFilter",
     "UpdateAlertBodyFilterPlatformsItem",

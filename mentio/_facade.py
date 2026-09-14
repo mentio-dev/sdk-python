@@ -94,10 +94,12 @@ import mentio.api.alerts.get_channel  # noqa: F401
 import mentio.api.alerts.list_alerts  # noqa: F401
 import mentio.api.alerts.list_channel_deliveries  # noqa: F401
 import mentio.api.alerts.list_channels  # noqa: F401
+import mentio.api.alerts.mute_alert_authors  # noqa: F401
 import mentio.api.alerts.rotate_webhook_secret  # noqa: F401
 import mentio.api.alerts.run_alert_digest  # noqa: F401
 import mentio.api.alerts.test_alert  # noqa: F401
 import mentio.api.alerts.test_channel  # noqa: F401
+import mentio.api.alerts.unmute_alert_authors  # noqa: F401
 import mentio.api.alerts.update_alert  # noqa: F401
 import mentio.api.alerts.update_channel  # noqa: F401
 import mentio.api.analytics.get_analytics_breakdown  # noqa: F401
@@ -201,6 +203,7 @@ class _Mentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -233,6 +236,7 @@ class _Mentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -387,7 +391,7 @@ class _Segments:
         return _result(_ops.segments.update_segment.sync_detailed(id, client=self._client, body=_body(_m.UpdateSegmentBody, body, fields)))
 
 class _Alerts:
-    """alerts: create, delete, get, list, run, test, update."""
+    """alerts: create, delete, get, list, mute, run, test, unmute, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -417,6 +421,15 @@ class _Alerts:
         """List alerts"""
         return _result(_ops.alerts.list_alerts.sync_detailed(client=self._client))
 
+    def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+        """Mute authors on an alert
+
+        Add authors to the alert's muted list without touching the rest of its filter. Links are read the way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no person (a subreddit, a story) rejects the request with that entry named.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
+        return _result(_ops.alerts.mute_alert_authors.sync_detailed(id, client=self._client, body=_body(_m.MuteAlertAuthorsBody, body, fields)))
+
     def run(self, id: str) -> _m.RunAlertDigestResponse200:
         """Send a digest now"""
         return _result(_ops.alerts.run_alert_digest.sync_detailed(id, client=self._client))
@@ -424,6 +437,15 @@ class _Alerts:
     def test(self, id: str) -> _m.TestAlertResponse200:
         """Send a test through an alert's channels"""
         return _result(_ops.alerts.test_alert.sync_detailed(id, client=self._client))
+
+    def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+        """Unmute authors on an alert
+
+        Remove authors from the alert's muted list without touching the rest of its filter. Name each one by the stored entry or by any link to that profile or its posts. Authors that are not muted are ignored, so a retry is safe.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
+        return _result(_ops.alerts.unmute_alert_authors.sync_detailed(id, client=self._client, body=_body(_m.UnmuteAlertAuthorsBody, body, fields)))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Update an alert
@@ -696,6 +718,7 @@ class _AsyncMentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -728,6 +751,7 @@ class _AsyncMentions:
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          link_host: Only posts linking to any of these hosts, matched exactly and without `www.` (docs.mentio.dev). Repeatable, or comma-separated.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -882,7 +906,7 @@ class _AsyncSegments:
         return _result(await _ops.segments.update_segment.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateSegmentBody, body, fields)))
 
 class _AsyncAlerts:
-    """alerts: create, delete, get, list, run, test, update."""
+    """alerts: create, delete, get, list, mute, run, test, unmute, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -912,6 +936,15 @@ class _AsyncAlerts:
         """List alerts"""
         return _result(await _ops.alerts.list_alerts.asyncio_detailed(client=self._client))
 
+    async def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+        """Mute authors on an alert
+
+        Add authors to the alert's muted list without touching the rest of its filter. Links are read the way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no person (a subreddit, a story) rejects the request with that entry named.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
+        return _result(await _ops.alerts.mute_alert_authors.asyncio_detailed(id, client=self._client, body=_body(_m.MuteAlertAuthorsBody, body, fields)))
+
     async def run(self, id: str) -> _m.RunAlertDigestResponse200:
         """Send a digest now"""
         return _result(await _ops.alerts.run_alert_digest.asyncio_detailed(id, client=self._client))
@@ -919,6 +952,15 @@ class _AsyncAlerts:
     async def test(self, id: str) -> _m.TestAlertResponse200:
         """Send a test through an alert's channels"""
         return _result(await _ops.alerts.test_alert.asyncio_detailed(id, client=self._client))
+
+    async def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+        """Unmute authors on an alert
+
+        Remove authors from the alert's muted list without touching the rest of its filter. Name each one by the stored entry or by any link to that profile or its posts. Authors that are not muted are ignored, so a retry is safe.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
+        return _result(await _ops.alerts.unmute_alert_authors.asyncio_detailed(id, client=self._client, body=_body(_m.UnmuteAlertAuthorsBody, body, fields)))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Update an alert

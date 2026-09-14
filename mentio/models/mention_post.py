@@ -23,6 +23,8 @@ class MentionPost:
             news, linkedin.
         url (str): Permalink of the post.
         text (str): Title and body, truncated to 8 KB at ingest.
+        links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for
+            posts ingested before September 2026.
         published_at (str): When the post was published.
         reply_to (MentionPostReplyToType0 | None): The post this one replies to (X, Bluesky); null for top-level posts.
     """
@@ -30,6 +32,7 @@ class MentionPost:
     platform: MentionPostPlatform
     url: str
     text: str
+    links: list[str]
     published_at: str
     reply_to: MentionPostReplyToType0 | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -44,6 +47,8 @@ class MentionPost:
         url = self.url
 
         text = self.text
+
+        links = self.links
 
         published_at = self.published_at
 
@@ -60,6 +65,7 @@ class MentionPost:
                 "platform": platform,
                 "url": url,
                 "text": text,
+                "links": links,
                 "publishedAt": published_at,
                 "replyTo": reply_to,
             }
@@ -79,6 +85,8 @@ class MentionPost:
         url = d.pop("url")
 
         text = d.pop("text")
+
+        links = cast(list[str], d.pop("links"))
 
         published_at = d.pop("publishedAt")
 
@@ -101,6 +109,7 @@ class MentionPost:
             platform=platform,
             url=url,
             text=text,
+            links=links,
             published_at=published_at,
             reply_to=reply_to,
         )
