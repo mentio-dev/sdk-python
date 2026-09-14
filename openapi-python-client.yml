@@ -1,0 +1,6 @@
+# openapi-python-client configuration. The project metadata (pyproject.toml,
+# README.md) is hand-owned; only the `mentio` package directory is generated,
+# with our own package __init__ template so the facade is exported.
+project_name_override: mentio
+package_name_override: mentio
+use_path_prefixes_for_title_model_names: false

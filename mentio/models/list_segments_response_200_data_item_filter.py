@@ -1,0 +1,223 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, Self, TypeVar, cast
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.list_segments_response_200_data_item_filter_keyword_kinds_item import (
+    ListSegmentsResponse200DataItemFilterKeywordKindsItem,
+)
+from ..models.list_segments_response_200_data_item_filter_never_keyword_kinds_item import (
+    ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem,
+)
+from ..models.list_segments_response_200_data_item_filter_platforms_item import (
+    ListSegmentsResponse200DataItemFilterPlatformsItem,
+)
+from ..types import UNSET, Unset
+
+T = TypeVar("T", bound="ListSegmentsResponse200DataItemFilter")
+
+
+@_attrs_define
+class ListSegmentsResponse200DataItemFilter:
+    """
+    Attributes:
+        platforms (list[ListSegmentsResponse200DataItemFilterPlatformsItem] | Unset): People with an account on any of
+            these platforms.
+        tags (list[str] | Unset): People carrying any of these tags.
+        min_followers (int | Unset): At least this many followers. Unknown reach never matches.
+        max_followers (int | Unset): At most this many followers. Unknown reach never matches.
+        min_mentions (int | Unset): At least this many matched mentions.
+        min_negative (int | Unset): At least this many negative mentions.
+        intents (list[str] | Unset): At least one mention carrying any of these intents.
+        keyword_kinds (list[ListSegmentsResponse200DataItemFilterKeywordKindsItem] | Unset): Mentioned a keyword of any
+            of these kinds.
+        never_keyword_kinds (list[ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem] | Unset): Never mentioned
+            a keyword of these kinds.
+        new_since_days (int | Unset): First seen within this many days.
+        muted (bool | Unset): true: only muted people; false: only unmuted.
+    """
+
+    platforms: list[ListSegmentsResponse200DataItemFilterPlatformsItem] | Unset = UNSET
+    tags: list[str] | Unset = UNSET
+    min_followers: int | Unset = UNSET
+    max_followers: int | Unset = UNSET
+    min_mentions: int | Unset = UNSET
+    min_negative: int | Unset = UNSET
+    intents: list[str] | Unset = UNSET
+    keyword_kinds: (
+        list[ListSegmentsResponse200DataItemFilterKeywordKindsItem] | Unset
+    ) = UNSET
+    never_keyword_kinds: (
+        list[ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem] | Unset
+    ) = UNSET
+    new_since_days: int | Unset = UNSET
+    muted: bool | Unset = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        platforms: list[str] | Unset = UNSET
+        if not isinstance(self.platforms, Unset):
+            platforms = []
+            for platforms_item_data in self.platforms:
+                platforms_item = platforms_item_data.value
+                platforms.append(platforms_item)
+
+        tags: list[str] | Unset = UNSET
+        if not isinstance(self.tags, Unset):
+            tags = self.tags
+
+        min_followers = self.min_followers
+
+        max_followers = self.max_followers
+
+        min_mentions = self.min_mentions
+
+        min_negative = self.min_negative
+
+        intents: list[str] | Unset = UNSET
+        if not isinstance(self.intents, Unset):
+            intents = self.intents
+
+        keyword_kinds: list[str] | Unset = UNSET
+        if not isinstance(self.keyword_kinds, Unset):
+            keyword_kinds = []
+            for keyword_kinds_item_data in self.keyword_kinds:
+                keyword_kinds_item = keyword_kinds_item_data.value
+                keyword_kinds.append(keyword_kinds_item)
+
+        never_keyword_kinds: list[str] | Unset = UNSET
+        if not isinstance(self.never_keyword_kinds, Unset):
+            never_keyword_kinds = []
+            for never_keyword_kinds_item_data in self.never_keyword_kinds:
+                never_keyword_kinds_item = never_keyword_kinds_item_data.value
+                never_keyword_kinds.append(never_keyword_kinds_item)
+
+        new_since_days = self.new_since_days
+
+        muted = self.muted
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if platforms is not UNSET:
+            field_dict["platforms"] = platforms
+        if tags is not UNSET:
+            field_dict["tags"] = tags
+        if min_followers is not UNSET:
+            field_dict["minFollowers"] = min_followers
+        if max_followers is not UNSET:
+            field_dict["maxFollowers"] = max_followers
+        if min_mentions is not UNSET:
+            field_dict["minMentions"] = min_mentions
+        if min_negative is not UNSET:
+            field_dict["minNegative"] = min_negative
+        if intents is not UNSET:
+            field_dict["intents"] = intents
+        if keyword_kinds is not UNSET:
+            field_dict["keywordKinds"] = keyword_kinds
+        if never_keyword_kinds is not UNSET:
+            field_dict["neverKeywordKinds"] = never_keyword_kinds
+        if new_since_days is not UNSET:
+            field_dict["newSinceDays"] = new_since_days
+        if muted is not UNSET:
+            field_dict["muted"] = muted
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        d = dict(src_dict)
+        _platforms = d.pop("platforms", UNSET)
+        platforms: list[ListSegmentsResponse200DataItemFilterPlatformsItem] | Unset = (
+            UNSET
+        )
+        if _platforms is not UNSET:
+            platforms = []
+            for platforms_item_data in _platforms:
+                platforms_item = ListSegmentsResponse200DataItemFilterPlatformsItem(
+                    platforms_item_data
+                )
+
+                platforms.append(platforms_item)
+
+        tags = cast(list[str], d.pop("tags", UNSET))
+
+        min_followers = d.pop("minFollowers", UNSET)
+
+        max_followers = d.pop("maxFollowers", UNSET)
+
+        min_mentions = d.pop("minMentions", UNSET)
+
+        min_negative = d.pop("minNegative", UNSET)
+
+        intents = cast(list[str], d.pop("intents", UNSET))
+
+        _keyword_kinds = d.pop("keywordKinds", UNSET)
+        keyword_kinds: (
+            list[ListSegmentsResponse200DataItemFilterKeywordKindsItem] | Unset
+        ) = UNSET
+        if _keyword_kinds is not UNSET:
+            keyword_kinds = []
+            for keyword_kinds_item_data in _keyword_kinds:
+                keyword_kinds_item = (
+                    ListSegmentsResponse200DataItemFilterKeywordKindsItem(
+                        keyword_kinds_item_data
+                    )
+                )
+
+                keyword_kinds.append(keyword_kinds_item)
+
+        _never_keyword_kinds = d.pop("neverKeywordKinds", UNSET)
+        never_keyword_kinds: (
+            list[ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem] | Unset
+        ) = UNSET
+        if _never_keyword_kinds is not UNSET:
+            never_keyword_kinds = []
+            for never_keyword_kinds_item_data in _never_keyword_kinds:
+                never_keyword_kinds_item = (
+                    ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem(
+                        never_keyword_kinds_item_data
+                    )
+                )
+
+                never_keyword_kinds.append(never_keyword_kinds_item)
+
+        new_since_days = d.pop("newSinceDays", UNSET)
+
+        muted = d.pop("muted", UNSET)
+
+        list_segments_response_200_data_item_filter = cls(
+            platforms=platforms,
+            tags=tags,
+            min_followers=min_followers,
+            max_followers=max_followers,
+            min_mentions=min_mentions,
+            min_negative=min_negative,
+            intents=intents,
+            keyword_kinds=keyword_kinds,
+            never_keyword_kinds=never_keyword_kinds,
+            new_since_days=new_since_days,
+            muted=muted,
+        )
+
+        list_segments_response_200_data_item_filter.additional_properties = d
+        return list_segments_response_200_data_item_filter
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

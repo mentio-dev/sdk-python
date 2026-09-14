@@ -1,0 +1,35 @@
+from enum import StrEnum
+
+
+class ErrorResponseErrorCode(StrEnum):
+    BILLING_NOT_CONFIGURED = "billing_not_configured"
+    DUPLICATE_KEYWORD = "duplicate_keyword"
+    DUPLICATE_SEGMENT = "duplicate_segment"
+    EMAIL_NOT_CONFIGURED = "email_not_configured"
+    FORBIDDEN = "forbidden"
+    INSUFFICIENT_BALANCE = "insufficient_balance"
+    INTERNAL_ERROR = "internal_error"
+    INVALID_ASSIGNEE = "invalid_assignee"
+    INVALID_CURSOR = "invalid_cursor"
+    INVALID_SIGNATURE = "invalid_signature"
+    INVALID_TOKEN = "invalid_token"
+    KEYWORD_LIMIT_REACHED = "keyword_limit_reached"
+    NOT_A_DIGEST = "not_a_digest"
+    NOT_FOUND = "not_found"
+    ORDER_NOT_CREDITED = "order_not_credited"
+    PAYLOAD_TOO_LARGE = "payload_too_large"
+    PROTECTED_USER = "protected_user"
+    RATE_LIMITED = "rate_limited"
+    READ_ONLY_KEY = "read_only_key"
+    SCHEDULE_REQUIRED = "schedule_required"
+    SLACK_NOT_CONFIGURED = "slack_not_configured"
+    SLACK_NOT_CONNECTED = "slack_not_connected"
+    TELEGRAM_NOT_CONFIGURED = "telegram_not_configured"
+    UNAUTHORIZED = "unauthorized"
+    UNKNOWN_CHANNEL = "unknown_channel"
+    UPSTREAM_UNAVAILABLE = "upstream_unavailable"
+    VALIDATION_ERROR = "validation_error"
+    WEBHOOK_NOT_CONFIGURED = "webhook_not_configured"
+
+    def __str__(self) -> str:
+        return str(self.value)

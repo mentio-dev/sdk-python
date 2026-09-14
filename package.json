@@ -1,0 +1,17 @@
+{
+  "name": "@mentio-dev/sdk-python",
+  "version": "0.2.2",
+  "private": true,
+  "description": "Tooling package for the mentio Python SDK: regenerates the client and its facade from the OpenAPI document, runs the tests, builds the wheel. The Python package itself is published to PyPI as `mentio`.",
+  "type": "module",
+  "scripts": {
+    "generate": "uvx --python 3.12 openapi-python-client@0.29.1 generate --path ../sdk/openapi.json --output-path mentio --config openapi-python-client.yml --custom-template-path templates --meta none --overwrite && tsx scripts/generate-facade.ts",
+    "test": "uv run --python 3.12 --quiet pytest -q",
+    "build": "uv build --quiet",
+    "typecheck": "uv run --python 3.12 --quiet python -c \"import mentio; mentio.Mentio('mk_live_typecheck')\""
+  },
+  "devDependencies": {
+    "tsx": "^4.23.1",
+    "typescript": "^5.7.0"
+  }
+}
