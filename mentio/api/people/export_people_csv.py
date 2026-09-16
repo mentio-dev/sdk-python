@@ -46,6 +46,7 @@ def _get_kwargs(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> dict[str, Any]:
@@ -186,6 +187,8 @@ def _get_kwargs(
 
     params["stages"] = json_stages
 
+    params["automated"] = automated
+
     json_owner_ids: list[str] | None | Unset
     if isinstance(owner_ids, Unset):
         json_owner_ids = UNSET
@@ -281,6 +284,7 @@ def sync_detailed(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> Response[ErrorResponse | str]:
@@ -326,6 +330,8 @@ def sync_detailed(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
@@ -362,6 +368,7 @@ def sync_detailed(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        automated=automated,
         owner_ids=owner_ids,
         sort=sort,
     )
@@ -397,6 +404,7 @@ def sync(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> ErrorResponse | str | None:
@@ -442,6 +450,8 @@ def sync(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
@@ -479,6 +489,7 @@ def sync(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        automated=automated,
         owner_ids=owner_ids,
         sort=sort,
     ).parsed
@@ -508,6 +519,7 @@ async def asyncio_detailed(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> Response[ErrorResponse | str]:
@@ -553,6 +565,8 @@ async def asyncio_detailed(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
@@ -589,6 +603,7 @@ async def asyncio_detailed(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        automated=automated,
         owner_ids=owner_ids,
         sort=sort,
     )
@@ -622,6 +637,7 @@ async def asyncio(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> ErrorResponse | str | None:
@@ -667,6 +683,8 @@ async def asyncio(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
@@ -705,6 +723,7 @@ async def asyncio(
             new_since_days=new_since_days,
             link_hosts=link_hosts,
             stages=stages,
+            automated=automated,
             owner_ids=owner_ids,
             sort=sort,
         )

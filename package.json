@@ -1,6 +1,6 @@
 {
   "name": "@mentio-dev/sdk-python",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "description": "Tooling package for the mentio Python SDK: regenerates the client and its facade from the OpenAPI document, runs the tests, builds the wheel. The Python package itself is published to PyPI as `mentio`.",
   "type": "module",

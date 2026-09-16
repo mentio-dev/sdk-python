@@ -43,6 +43,7 @@ def _get_kwargs(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ListPeopleStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
@@ -185,6 +186,8 @@ def _get_kwargs(
 
     params["stages"] = json_stages
 
+    params["automated"] = automated
+
     json_owner_ids: list[str] | None | Unset
     if isinstance(owner_ids, Unset):
         json_owner_ids = UNSET
@@ -285,6 +288,7 @@ def sync_detailed(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ListPeopleStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
@@ -295,7 +299,8 @@ def sync_detailed(
      The people behind your mentions: one row per person, with their accounts, reach, public profile,
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, or a saved segment. Offset-paginated with a total.
+    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
+    segment. Offset-paginated with a total.
 
     Args:
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
@@ -332,6 +337,8 @@ def sync_detailed(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ListPeopleStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
@@ -371,6 +378,7 @@ def sync_detailed(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        automated=automated,
         owner_ids=owner_ids,
         sort=sort,
         limit=limit,
@@ -408,6 +416,7 @@ def sync(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ListPeopleStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
@@ -418,7 +427,8 @@ def sync(
      The people behind your mentions: one row per person, with their accounts, reach, public profile,
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, or a saved segment. Offset-paginated with a total.
+    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
+    segment. Offset-paginated with a total.
 
     Args:
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
@@ -455,6 +465,8 @@ def sync(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ListPeopleStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
@@ -495,6 +507,7 @@ def sync(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        automated=automated,
         owner_ids=owner_ids,
         sort=sort,
         limit=limit,
@@ -526,6 +539,7 @@ async def asyncio_detailed(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ListPeopleStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
@@ -536,7 +550,8 @@ async def asyncio_detailed(
      The people behind your mentions: one row per person, with their accounts, reach, public profile,
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, or a saved segment. Offset-paginated with a total.
+    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
+    segment. Offset-paginated with a total.
 
     Args:
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
@@ -573,6 +588,8 @@ async def asyncio_detailed(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ListPeopleStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
@@ -612,6 +629,7 @@ async def asyncio_detailed(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        automated=automated,
         owner_ids=owner_ids,
         sort=sort,
         limit=limit,
@@ -647,6 +665,7 @@ async def asyncio(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ListPeopleStagesItem] | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ListPeopleSort | Unset = ListPeopleSort.MENTIONS,
     limit: int | Unset = 50,
@@ -657,7 +676,8 @@ async def asyncio(
      The people behind your mentions: one row per person, with their accounts, reach, public profile,
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, or a saved segment. Offset-paginated with a total.
+    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
+    segment. Offset-paginated with a total.
 
     Args:
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
@@ -694,6 +714,8 @@ async def asyncio(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ListPeopleStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made
+            (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
             `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ListPeopleSort | Unset): mentions: most matches first. recent: last seen first.
@@ -735,6 +757,7 @@ async def asyncio(
             new_since_days=new_since_days,
             link_hosts=link_hosts,
             stages=stages,
+            automated=automated,
             owner_ids=owner_ids,
             sort=sort,
             limit=limit,

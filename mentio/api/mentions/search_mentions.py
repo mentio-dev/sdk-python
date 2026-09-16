@@ -29,6 +29,7 @@ def _get_kwargs(
     relevant: bool | Unset = UNSET,
     sentiment: SearchMentionsSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
@@ -81,6 +82,8 @@ def _get_kwargs(
     params["sentiment"] = json_sentiment
 
     params["intent"] = intent
+
+    params["automated"] = automated
 
     params["personId"] = person_id
 
@@ -307,6 +310,7 @@ def sync_detailed(
     relevant: bool | Unset = UNSET,
     sentiment: SearchMentionsSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
@@ -349,6 +353,9 @@ def sync_detailed(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
             praise, comparison).
+        automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
+            scheduled or templated post, AI-written text); false: only the rest, mentions judged
+            before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -409,6 +416,7 @@ def sync_detailed(
         relevant=relevant,
         sentiment=sentiment,
         intent=intent,
+        automated=automated,
         person_id=person_id,
         include_muted=include_muted,
         assignee_id=assignee_id,
@@ -452,6 +460,7 @@ def sync(
     relevant: bool | Unset = UNSET,
     sentiment: SearchMentionsSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
@@ -494,6 +503,9 @@ def sync(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
             praise, comparison).
+        automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
+            scheduled or templated post, AI-written text); false: only the rest, mentions judged
+            before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -555,6 +567,7 @@ def sync(
         relevant=relevant,
         sentiment=sentiment,
         intent=intent,
+        automated=automated,
         person_id=person_id,
         include_muted=include_muted,
         assignee_id=assignee_id,
@@ -592,6 +605,7 @@ async def asyncio_detailed(
     relevant: bool | Unset = UNSET,
     sentiment: SearchMentionsSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
@@ -634,6 +648,9 @@ async def asyncio_detailed(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
             praise, comparison).
+        automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
+            scheduled or templated post, AI-written text); false: only the rest, mentions judged
+            before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -694,6 +711,7 @@ async def asyncio_detailed(
         relevant=relevant,
         sentiment=sentiment,
         intent=intent,
+        automated=automated,
         person_id=person_id,
         include_muted=include_muted,
         assignee_id=assignee_id,
@@ -735,6 +753,7 @@ async def asyncio(
     relevant: bool | Unset = UNSET,
     sentiment: SearchMentionsSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
+    automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
@@ -777,6 +796,9 @@ async def asyncio(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
             praise, comparison).
+        automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
+            scheduled or templated post, AI-written text); false: only the rest, mentions judged
+            before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -839,6 +861,7 @@ async def asyncio(
             relevant=relevant,
             sentiment=sentiment,
             intent=intent,
+            automated=automated,
             person_id=person_id,
             include_muted=include_muted,
             assignee_id=assignee_id,

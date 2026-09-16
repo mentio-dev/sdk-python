@@ -51,6 +51,8 @@ class CreateSegmentBodyFilter:
             subdomain of it.
         muted (bool | Unset): true: only muted people; false: only unmuted.
         stages (list[CreateSegmentBodyFilterStagesItem] | Unset): People at any of these outreach stages.
+        automated (bool | Unset): true: only people whose matched posts are mostly machine-made (bot accounts); false:
+            only the rest.
         owner_ids (list[str] | Unset): People owned by any of these members (user ids); "none" matches people nobody
             owns.
     """
@@ -73,6 +75,7 @@ class CreateSegmentBodyFilter:
     link_hosts: list[str] | Unset = UNSET
     muted: bool | Unset = UNSET
     stages: list[CreateSegmentBodyFilterStagesItem] | Unset = UNSET
+    automated: bool | Unset = UNSET
     owner_ids: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -144,6 +147,8 @@ class CreateSegmentBodyFilter:
                 stages_item = stages_item_data.value
                 stages.append(stages_item)
 
+        automated = self.automated
+
         owner_ids: list[str] | Unset = UNSET
         if not isinstance(self.owner_ids, Unset):
             owner_ids = self.owner_ids
@@ -183,6 +188,8 @@ class CreateSegmentBodyFilter:
             field_dict["muted"] = muted
         if stages is not UNSET:
             field_dict["stages"] = stages
+        if automated is not UNSET:
+            field_dict["automated"] = automated
         if owner_ids is not UNSET:
             field_dict["ownerIds"] = owner_ids
 
@@ -268,6 +275,8 @@ class CreateSegmentBodyFilter:
 
                 stages.append(stages_item)
 
+        automated = d.pop("automated", UNSET)
+
         owner_ids = cast(list[str], d.pop("ownerIds", UNSET))
 
         create_segment_body_filter = cls(
@@ -287,6 +296,7 @@ class CreateSegmentBodyFilter:
             link_hosts=link_hosts,
             muted=muted,
             stages=stages,
+            automated=automated,
             owner_ids=owner_ids,
         )
 

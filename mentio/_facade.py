@@ -198,6 +198,7 @@ class _Mentions:
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
           assignee_id: Only mentions assigned to this workspace member (user id).
@@ -241,6 +242,7 @@ class _Mentions:
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
           assignee_id: Only mentions assigned to this workspace member (user id).
@@ -326,6 +328,7 @@ class _People:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
         _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
@@ -340,7 +343,7 @@ class _People:
     def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, or a saved segment. Offset-paginated with a total.
+        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total.
 
         Keyword arguments (query):
           platform: People with an account on this platform.
@@ -364,6 +367,7 @@ class _People:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
@@ -771,6 +775,7 @@ class _AsyncMentions:
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
           assignee_id: Only mentions assigned to this workspace member (user id).
@@ -814,6 +819,7 @@ class _AsyncMentions:
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
           assignee_id: Only mentions assigned to this workspace member (user id).
@@ -899,6 +905,7 @@ class _AsyncPeople:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
         _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
@@ -913,7 +920,7 @@ class _AsyncPeople:
     async def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, or a saved segment. Offset-paginated with a total.
+        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total.
 
         Keyword arguments (query):
           platform: People with an account on this platform.
@@ -937,6 +944,7 @@ class _AsyncPeople:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.

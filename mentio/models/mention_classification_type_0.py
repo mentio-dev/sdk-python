@@ -21,6 +21,9 @@ class MentionClassificationType0:
         relevance (int | None): 0 to 100; null only when classification failed.
         sentiment (MentionClassificationType0Sentiment): Classifier sentiment.
         intents (list[str]): Detected intents: buy_intent, question, complaint, praise, comparison.
+        automated (bool): The post reads as machine-made: a bot or app account, a scheduled or templated post, an
+            obvious AI-written summary. A label only: automated mentions stay in the feed, are delivered as usual and are
+            billed like any other match. false while unjudged.
         note (None | str): One sentence from the classifier explaining the score.
         failed (bool): true when the model could not score this post; it stays in the feed and is not billed.
     """
@@ -28,6 +31,7 @@ class MentionClassificationType0:
     relevance: int | None
     sentiment: MentionClassificationType0Sentiment
     intents: list[str]
+    automated: bool
     note: None | str
     failed: bool
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -39,6 +43,8 @@ class MentionClassificationType0:
         sentiment = self.sentiment.value
 
         intents = self.intents
+
+        automated = self.automated
 
         note: None | str
         note = self.note
@@ -52,6 +58,7 @@ class MentionClassificationType0:
                 "relevance": relevance,
                 "sentiment": sentiment,
                 "intents": intents,
+                "automated": automated,
                 "note": note,
                 "failed": failed,
             }
@@ -74,6 +81,8 @@ class MentionClassificationType0:
 
         intents = cast(list[str], d.pop("intents"))
 
+        automated = d.pop("automated")
+
         def _parse_note(data: object) -> None | str:
             if data is None:
                 return data
@@ -87,6 +96,7 @@ class MentionClassificationType0:
             relevance=relevance,
             sentiment=sentiment,
             intents=intents,
+            automated=automated,
             note=note,
             failed=failed,
         )
