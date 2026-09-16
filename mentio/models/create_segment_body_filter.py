@@ -12,6 +12,9 @@ from ..models.create_segment_body_filter_keyword_kinds_item import (
 from ..models.create_segment_body_filter_never_keyword_kinds_item import (
     CreateSegmentBodyFilterNeverKeywordKindsItem,
 )
+from ..models.create_segment_body_filter_not_platforms_item import (
+    CreateSegmentBodyFilterNotPlatformsItem,
+)
 from ..models.create_segment_body_filter_platforms_item import (
     CreateSegmentBodyFilterPlatformsItem,
 )
@@ -39,6 +42,10 @@ class CreateSegmentBodyFilter:
             kinds.
         never_keyword_kinds (list[CreateSegmentBodyFilterNeverKeywordKindsItem] | Unset): Never mentioned a keyword of
             these kinds.
+        not_platforms (list[CreateSegmentBodyFilterNotPlatformsItem] | Unset): Nobody with an account on these
+            platforms.
+        not_tags (list[str] | Unset): Nobody carrying any of these tags.
+        not_intents (list[str] | Unset): Nobody whose mentions carry any of these intents.
         new_since_days (int | Unset): First seen within this many days.
         link_hosts (list[str] | Unset): At least one mention linking to any of these hosts, the host itself or a
             subdomain of it.
@@ -59,6 +66,9 @@ class CreateSegmentBodyFilter:
     never_keyword_kinds: list[CreateSegmentBodyFilterNeverKeywordKindsItem] | Unset = (
         UNSET
     )
+    not_platforms: list[CreateSegmentBodyFilterNotPlatformsItem] | Unset = UNSET
+    not_tags: list[str] | Unset = UNSET
+    not_intents: list[str] | Unset = UNSET
     new_since_days: int | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
     muted: bool | Unset = UNSET
@@ -104,6 +114,21 @@ class CreateSegmentBodyFilter:
                 never_keyword_kinds_item = never_keyword_kinds_item_data.value
                 never_keyword_kinds.append(never_keyword_kinds_item)
 
+        not_platforms: list[str] | Unset = UNSET
+        if not isinstance(self.not_platforms, Unset):
+            not_platforms = []
+            for not_platforms_item_data in self.not_platforms:
+                not_platforms_item = not_platforms_item_data.value
+                not_platforms.append(not_platforms_item)
+
+        not_tags: list[str] | Unset = UNSET
+        if not isinstance(self.not_tags, Unset):
+            not_tags = self.not_tags
+
+        not_intents: list[str] | Unset = UNSET
+        if not isinstance(self.not_intents, Unset):
+            not_intents = self.not_intents
+
         new_since_days = self.new_since_days
 
         link_hosts: list[str] | Unset = UNSET
@@ -144,6 +169,12 @@ class CreateSegmentBodyFilter:
             field_dict["keywordKinds"] = keyword_kinds
         if never_keyword_kinds is not UNSET:
             field_dict["neverKeywordKinds"] = never_keyword_kinds
+        if not_platforms is not UNSET:
+            field_dict["notPlatforms"] = not_platforms
+        if not_tags is not UNSET:
+            field_dict["notTags"] = not_tags
+        if not_intents is not UNSET:
+            field_dict["notIntents"] = not_intents
         if new_since_days is not UNSET:
             field_dict["newSinceDays"] = new_since_days
         if link_hosts is not UNSET:
@@ -207,6 +238,21 @@ class CreateSegmentBodyFilter:
 
                 never_keyword_kinds.append(never_keyword_kinds_item)
 
+        _not_platforms = d.pop("notPlatforms", UNSET)
+        not_platforms: list[CreateSegmentBodyFilterNotPlatformsItem] | Unset = UNSET
+        if _not_platforms is not UNSET:
+            not_platforms = []
+            for not_platforms_item_data in _not_platforms:
+                not_platforms_item = CreateSegmentBodyFilterNotPlatformsItem(
+                    not_platforms_item_data
+                )
+
+                not_platforms.append(not_platforms_item)
+
+        not_tags = cast(list[str], d.pop("notTags", UNSET))
+
+        not_intents = cast(list[str], d.pop("notIntents", UNSET))
+
         new_since_days = d.pop("newSinceDays", UNSET)
 
         link_hosts = cast(list[str], d.pop("linkHosts", UNSET))
@@ -234,6 +280,9 @@ class CreateSegmentBodyFilter:
             intents=intents,
             keyword_kinds=keyword_kinds,
             never_keyword_kinds=never_keyword_kinds,
+            not_platforms=not_platforms,
+            not_tags=not_tags,
+            not_intents=not_intents,
             new_since_days=new_since_days,
             link_hosts=link_hosts,
             muted=muted,

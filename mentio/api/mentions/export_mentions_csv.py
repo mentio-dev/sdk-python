@@ -7,8 +7,18 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
+from ...models.export_mentions_csv_not_platforms_item import (
+    ExportMentionsCsvNotPlatformsItem,
+)
+from ...models.export_mentions_csv_not_sentiments_item import (
+    ExportMentionsCsvNotSentimentsItem,
+)
 from ...models.export_mentions_csv_platform import ExportMentionsCsvPlatform
+from ...models.export_mentions_csv_platforms_item import ExportMentionsCsvPlatformsItem
 from ...models.export_mentions_csv_sentiment import ExportMentionsCsvSentiment
+from ...models.export_mentions_csv_sentiments_item import (
+    ExportMentionsCsvSentimentsItem,
+)
 from ...models.export_mentions_csv_status import ExportMentionsCsvStatus
 from ...types import UNSET, Response, Unset
 
@@ -30,6 +40,16 @@ def _get_kwargs(
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
+    not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
+    keyword_ids: list[str] | None | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
+    not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    intents: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -113,6 +133,102 @@ def _get_kwargs(
         json_link_hosts = link_hosts
     params["linkHosts"] = json_link_hosts
 
+    json_platforms: list[str] | Unset = UNSET
+    if not isinstance(platforms, Unset):
+        json_platforms = []
+        for platforms_item_data in platforms:
+            platforms_item = platforms_item_data.value
+            json_platforms.append(platforms_item)
+
+    params["platforms"] = json_platforms
+
+    json_not_platforms: list[str] | Unset = UNSET
+    if not isinstance(not_platforms, Unset):
+        json_not_platforms = []
+        for not_platforms_item_data in not_platforms:
+            not_platforms_item = not_platforms_item_data.value
+            json_not_platforms.append(not_platforms_item)
+
+    params["notPlatforms"] = json_not_platforms
+
+    json_keyword_ids: list[str] | None | Unset
+    if isinstance(keyword_ids, Unset):
+        json_keyword_ids = UNSET
+    elif isinstance(keyword_ids, list):
+        json_keyword_ids = keyword_ids
+
+    else:
+        json_keyword_ids = keyword_ids
+    params["keywordIds"] = json_keyword_ids
+
+    json_not_keyword_ids: list[str] | None | Unset
+    if isinstance(not_keyword_ids, Unset):
+        json_not_keyword_ids = UNSET
+    elif isinstance(not_keyword_ids, list):
+        json_not_keyword_ids = not_keyword_ids
+
+    else:
+        json_not_keyword_ids = not_keyword_ids
+    params["notKeywordIds"] = json_not_keyword_ids
+
+    json_sentiments: list[str] | Unset = UNSET
+    if not isinstance(sentiments, Unset):
+        json_sentiments = []
+        for sentiments_item_data in sentiments:
+            sentiments_item = sentiments_item_data.value
+            json_sentiments.append(sentiments_item)
+
+    params["sentiments"] = json_sentiments
+
+    json_not_sentiments: list[str] | Unset = UNSET
+    if not isinstance(not_sentiments, Unset):
+        json_not_sentiments = []
+        for not_sentiments_item_data in not_sentiments:
+            not_sentiments_item = not_sentiments_item_data.value
+            json_not_sentiments.append(not_sentiments_item)
+
+    params["notSentiments"] = json_not_sentiments
+
+    json_intents: list[str] | None | Unset
+    if isinstance(intents, Unset):
+        json_intents = UNSET
+    elif isinstance(intents, list):
+        json_intents = intents
+
+    else:
+        json_intents = intents
+    params["intents"] = json_intents
+
+    json_not_intents: list[str] | None | Unset
+    if isinstance(not_intents, Unset):
+        json_not_intents = UNSET
+    elif isinstance(not_intents, list):
+        json_not_intents = not_intents
+
+    else:
+        json_not_intents = not_intents
+    params["notIntents"] = json_not_intents
+
+    json_not_link_hosts: list[str] | None | Unset
+    if isinstance(not_link_hosts, Unset):
+        json_not_link_hosts = UNSET
+    elif isinstance(not_link_hosts, list):
+        json_not_link_hosts = not_link_hosts
+
+    else:
+        json_not_link_hosts = not_link_hosts
+    params["notLinkHosts"] = json_not_link_hosts
+
+    json_not_tags: list[str] | None | Unset
+    if isinstance(not_tags, Unset):
+        json_not_tags = UNSET
+    elif isinstance(not_tags, list):
+        json_not_tags = not_tags
+
+    else:
+        json_not_tags = not_tags
+    params["notTags"] = json_not_tags
+
     params["q"] = q
 
     json_since: str | Unset = UNSET
@@ -193,6 +309,16 @@ def sync_detailed(
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
+    not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
+    keyword_ids: list[str] | None | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
+    not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    intents: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -234,6 +360,21 @@ def sync_detailed(
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
+        platforms (list[ExportMentionsCsvPlatformsItem] | Unset): Only posts from any of these
+            platforms.
+        not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
+            platforms.
+        keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
+        sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
+        not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
+            A mention the classifier has not scored yet still passes.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
+            itself or a subdomain of it.
+        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
+            these.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -264,6 +405,16 @@ def sync_detailed(
         min_followers=min_followers,
         tags=tags,
         link_hosts=link_hosts,
+        platforms=platforms,
+        not_platforms=not_platforms,
+        keyword_ids=keyword_ids,
+        not_keyword_ids=not_keyword_ids,
+        sentiments=sentiments,
+        not_sentiments=not_sentiments,
+        intents=intents,
+        not_intents=not_intents,
+        not_link_hosts=not_link_hosts,
+        not_tags=not_tags,
         q=q,
         since=since,
         until=until,
@@ -294,6 +445,16 @@ def sync(
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
+    not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
+    keyword_ids: list[str] | None | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
+    not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    intents: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -335,6 +496,21 @@ def sync(
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
+        platforms (list[ExportMentionsCsvPlatformsItem] | Unset): Only posts from any of these
+            platforms.
+        not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
+            platforms.
+        keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
+        sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
+        not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
+            A mention the classifier has not scored yet still passes.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
+            itself or a subdomain of it.
+        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
+            these.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -366,6 +542,16 @@ def sync(
         min_followers=min_followers,
         tags=tags,
         link_hosts=link_hosts,
+        platforms=platforms,
+        not_platforms=not_platforms,
+        keyword_ids=keyword_ids,
+        not_keyword_ids=not_keyword_ids,
+        sentiments=sentiments,
+        not_sentiments=not_sentiments,
+        intents=intents,
+        not_intents=not_intents,
+        not_link_hosts=not_link_hosts,
+        not_tags=not_tags,
         q=q,
         since=since,
         until=until,
@@ -390,6 +576,16 @@ async def asyncio_detailed(
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
+    not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
+    keyword_ids: list[str] | None | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
+    not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    intents: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -431,6 +627,21 @@ async def asyncio_detailed(
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
+        platforms (list[ExportMentionsCsvPlatformsItem] | Unset): Only posts from any of these
+            platforms.
+        not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
+            platforms.
+        keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
+        sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
+        not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
+            A mention the classifier has not scored yet still passes.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
+            itself or a subdomain of it.
+        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
+            these.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -461,6 +672,16 @@ async def asyncio_detailed(
         min_followers=min_followers,
         tags=tags,
         link_hosts=link_hosts,
+        platforms=platforms,
+        not_platforms=not_platforms,
+        keyword_ids=keyword_ids,
+        not_keyword_ids=not_keyword_ids,
+        sentiments=sentiments,
+        not_sentiments=not_sentiments,
+        intents=intents,
+        not_intents=not_intents,
+        not_link_hosts=not_link_hosts,
+        not_tags=not_tags,
         q=q,
         since=since,
         until=until,
@@ -489,6 +710,16 @@ async def asyncio(
     min_followers: int | None | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
+    not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
+    keyword_ids: list[str] | None | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
+    not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    intents: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -530,6 +761,21 @@ async def asyncio(
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
+        platforms (list[ExportMentionsCsvPlatformsItem] | Unset): Only posts from any of these
+            platforms.
+        not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
+            platforms.
+        keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
+        sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
+        not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
+            A mention the classifier has not scored yet still passes.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
+            itself or a subdomain of it.
+        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
+            these.
         q (str | Unset): Substring search in the post text.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -562,6 +808,16 @@ async def asyncio(
             min_followers=min_followers,
             tags=tags,
             link_hosts=link_hosts,
+            platforms=platforms,
+            not_platforms=not_platforms,
+            keyword_ids=keyword_ids,
+            not_keyword_ids=not_keyword_ids,
+            sentiments=sentiments,
+            not_sentiments=not_sentiments,
+            intents=intents,
+            not_intents=not_intents,
+            not_link_hosts=not_link_hosts,
+            not_tags=not_tags,
             q=q,
             since=since,
             until=until,

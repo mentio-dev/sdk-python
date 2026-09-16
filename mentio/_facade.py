@@ -207,10 +207,20 @@ class _Mentions:
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
+          platforms: Only posts from any of these platforms.
+          not_platforms: Never posts from these platforms.
+          keyword_ids: Only matches of any of these keywords.
+          not_keyword_ids: Never matches of these keywords.
+          sentiments: Only these sentiments.
+          not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          intents: Only mentions carrying any of these intents.
+          not_intents: Never mentions carrying these intents.
+          not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          not_tags: Never authors your workspace tagged with any of these.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_csv.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Mention:
@@ -240,13 +250,23 @@ class _Mentions:
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
+          platforms: Only posts from any of these platforms.
+          not_platforms: Never posts from these platforms.
+          keyword_ids: Only matches of any of these keywords.
+          not_keyword_ids: Never matches of these keywords.
+          sentiments: Only these sentiments.
+          not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          intents: Only mentions carrying any of these intents.
+          not_intents: Never mentions carrying these intents.
+          not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          not_tags: Never authors your workspace tagged with any of these.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(_ops.mentions.search_mentions.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -298,6 +318,9 @@ class _People:
           min_mentions: At least this many matched mentions.
           min_negative: At least this many negative mentions.
           intents: At least one mention carrying any of these intents.
+          not_platforms: Nobody with an account on these platforms. Repeatable, or comma-separated.
+          not_tags: Nobody carrying any of these tags. Repeatable, or comma-separated.
+          not_intents: Nobody whose mentions carry any of these intents. Repeatable, or comma-separated.
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
@@ -305,7 +328,7 @@ class _People:
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(_ops.people.export_people_csv.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Person:
@@ -333,6 +356,9 @@ class _People:
           min_mentions: At least this many matched mentions.
           min_negative: At least this many negative mentions.
           intents: At least one mention carrying any of these intents.
+          not_platforms: Nobody with an account on these platforms. Repeatable, or comma-separated.
+          not_tags: Nobody carrying any of these tags. Repeatable, or comma-separated.
+          not_intents: Nobody whose mentions carry any of these intents. Repeatable, or comma-separated.
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
@@ -342,7 +368,7 @@ class _People:
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(_ops.people.list_people.sync_detailed(client=self._client, **params))
 
     def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
@@ -754,10 +780,20 @@ class _AsyncMentions:
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
+          platforms: Only posts from any of these platforms.
+          not_platforms: Never posts from these platforms.
+          keyword_ids: Only matches of any of these keywords.
+          not_keyword_ids: Never matches of these keywords.
+          sentiments: Only these sentiments.
+          not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          intents: Only mentions carrying any of these intents.
+          not_intents: Never mentions carrying these intents.
+          not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          not_tags: Never authors your workspace tagged with any of these.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_csv.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Mention:
@@ -787,13 +823,23 @@ class _AsyncMentions:
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
+          platforms: Only posts from any of these platforms.
+          not_platforms: Never posts from these platforms.
+          keyword_ids: Only matches of any of these keywords.
+          not_keyword_ids: Never matches of these keywords.
+          sentiments: Only these sentiments.
+          not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          intents: Only mentions carrying any of these intents.
+          not_intents: Never mentions carrying these intents.
+          not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          not_tags: Never authors your workspace tagged with any of these.
           q: Substring search in the post text.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(await _ops.mentions.search_mentions.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -845,6 +891,9 @@ class _AsyncPeople:
           min_mentions: At least this many matched mentions.
           min_negative: At least this many negative mentions.
           intents: At least one mention carrying any of these intents.
+          not_platforms: Nobody with an account on these platforms. Repeatable, or comma-separated.
+          not_tags: Nobody carrying any of these tags. Repeatable, or comma-separated.
+          not_intents: Nobody whose mentions carry any of these intents. Repeatable, or comma-separated.
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
@@ -852,7 +901,7 @@ class _AsyncPeople:
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(await _ops.people.export_people_csv.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Person:
@@ -880,6 +929,9 @@ class _AsyncPeople:
           min_mentions: At least this many matched mentions.
           min_negative: At least this many negative mentions.
           intents: At least one mention carrying any of these intents.
+          not_platforms: Nobody with an account on these platforms. Repeatable, or comma-separated.
+          not_tags: Nobody carrying any of these tags. Repeatable, or comma-separated.
+          not_intents: Nobody whose mentions carry any of these intents. Repeatable, or comma-separated.
           keyword_kinds: Mentioned a keyword of any of these kinds.
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
@@ -889,7 +941,7 @@ class _AsyncPeople:
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(await _ops.people.list_people.asyncio_detailed(client=self._client, **params))
 
     async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:

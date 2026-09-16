@@ -95,6 +95,9 @@ from .create_segment_body_filter_keyword_kinds_item import (
 from .create_segment_body_filter_never_keyword_kinds_item import (
     CreateSegmentBodyFilterNeverKeywordKindsItem,
 )
+from .create_segment_body_filter_not_platforms_item import (
+    CreateSegmentBodyFilterNotPlatformsItem,
+)
 from .create_segment_body_filter_platforms_item import (
     CreateSegmentBodyFilterPlatformsItem,
 )
@@ -113,13 +116,18 @@ from .email_channel_stats_last_7d import EmailChannelStatsLast7D
 from .error_response import ErrorResponse
 from .error_response_error import ErrorResponseError
 from .error_response_error_code import ErrorResponseErrorCode
+from .export_mentions_csv_not_platforms_item import ExportMentionsCsvNotPlatformsItem
+from .export_mentions_csv_not_sentiments_item import ExportMentionsCsvNotSentimentsItem
 from .export_mentions_csv_platform import ExportMentionsCsvPlatform
+from .export_mentions_csv_platforms_item import ExportMentionsCsvPlatformsItem
 from .export_mentions_csv_sentiment import ExportMentionsCsvSentiment
+from .export_mentions_csv_sentiments_item import ExportMentionsCsvSentimentsItem
 from .export_mentions_csv_status import ExportMentionsCsvStatus
 from .export_people_csv_keyword_kinds_item import ExportPeopleCsvKeywordKindsItem
 from .export_people_csv_never_keyword_kinds_item import (
     ExportPeopleCsvNeverKeywordKindsItem,
 )
+from .export_people_csv_not_platforms_item import ExportPeopleCsvNotPlatformsItem
 from .export_people_csv_platform import ExportPeopleCsvPlatform
 from .export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from .export_people_csv_sort import ExportPeopleCsvSort
@@ -205,6 +213,7 @@ from .list_keywords_response_200_data_item_stats import (
 )
 from .list_people_keyword_kinds_item import ListPeopleKeywordKindsItem
 from .list_people_never_keyword_kinds_item import ListPeopleNeverKeywordKindsItem
+from .list_people_not_platforms_item import ListPeopleNotPlatformsItem
 from .list_people_platform import ListPeoplePlatform
 from .list_people_platforms_item import ListPeoplePlatformsItem
 from .list_people_response_200 import ListPeopleResponse200
@@ -264,6 +273,9 @@ from .list_segments_response_200_data_item_filter_keyword_kinds_item import (
 from .list_segments_response_200_data_item_filter_never_keyword_kinds_item import (
     ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem,
 )
+from .list_segments_response_200_data_item_filter_not_platforms_item import (
+    ListSegmentsResponse200DataItemFilterNotPlatformsItem,
+)
 from .list_segments_response_200_data_item_filter_platforms_item import (
     ListSegmentsResponse200DataItemFilterPlatformsItem,
 )
@@ -279,6 +291,9 @@ from .list_segments_response_200_presets_item_filter_keyword_kinds_item import (
 )
 from .list_segments_response_200_presets_item_filter_never_keyword_kinds_item import (
     ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem,
+)
+from .list_segments_response_200_presets_item_filter_not_platforms_item import (
+    ListSegmentsResponse200PresetsItemFilterNotPlatformsItem,
 )
 from .list_segments_response_200_presets_item_filter_platforms_item import (
     ListSegmentsResponse200PresetsItemFilterPlatformsItem,
@@ -322,15 +337,20 @@ from .run_alert_digest_response_200_outcomes_item import (
     RunAlertDigestResponse200OutcomesItem,
 )
 from .run_alert_digest_response_200_skipped import RunAlertDigestResponse200Skipped
+from .search_mentions_not_platforms_item import SearchMentionsNotPlatformsItem
+from .search_mentions_not_sentiments_item import SearchMentionsNotSentimentsItem
 from .search_mentions_platform import SearchMentionsPlatform
+from .search_mentions_platforms_item import SearchMentionsPlatformsItem
 from .search_mentions_response_200 import SearchMentionsResponse200
 from .search_mentions_sentiment import SearchMentionsSentiment
+from .search_mentions_sentiments_item import SearchMentionsSentimentsItem
 from .search_mentions_sort import SearchMentionsSort
 from .search_mentions_status import SearchMentionsStatus
 from .segment import Segment
 from .segment_filter import SegmentFilter
 from .segment_filter_keyword_kinds_item import SegmentFilterKeywordKindsItem
 from .segment_filter_never_keyword_kinds_item import SegmentFilterNeverKeywordKindsItem
+from .segment_filter_not_platforms_item import SegmentFilterNotPlatformsItem
 from .segment_filter_platforms_item import SegmentFilterPlatformsItem
 from .segment_filter_stages_item import SegmentFilterStagesItem
 from .share_of_voice import ShareOfVoice
@@ -382,6 +402,9 @@ from .update_segment_body_filter_keyword_kinds_item import (
 )
 from .update_segment_body_filter_never_keyword_kinds_item import (
     UpdateSegmentBodyFilterNeverKeywordKindsItem,
+)
+from .update_segment_body_filter_not_platforms_item import (
+    UpdateSegmentBodyFilterNotPlatformsItem,
 )
 from .update_segment_body_filter_platforms_item import (
     UpdateSegmentBodyFilterPlatformsItem,
@@ -456,6 +479,7 @@ __all__ = (
     "CreateSegmentBodyFilter",
     "CreateSegmentBodyFilterKeywordKindsItem",
     "CreateSegmentBodyFilterNeverKeywordKindsItem",
+    "CreateSegmentBodyFilterNotPlatformsItem",
     "CreateSegmentBodyFilterPlatformsItem",
     "CreateSegmentBodyFilterStagesItem",
     "CreateSlackChannel",
@@ -472,11 +496,16 @@ __all__ = (
     "ErrorResponse",
     "ErrorResponseError",
     "ErrorResponseErrorCode",
+    "ExportMentionsCsvNotPlatformsItem",
+    "ExportMentionsCsvNotSentimentsItem",
     "ExportMentionsCsvPlatform",
+    "ExportMentionsCsvPlatformsItem",
     "ExportMentionsCsvSentiment",
+    "ExportMentionsCsvSentimentsItem",
     "ExportMentionsCsvStatus",
     "ExportPeopleCsvKeywordKindsItem",
     "ExportPeopleCsvNeverKeywordKindsItem",
+    "ExportPeopleCsvNotPlatformsItem",
     "ExportPeopleCsvPlatform",
     "ExportPeopleCsvPlatformsItem",
     "ExportPeopleCsvSort",
@@ -528,6 +557,7 @@ __all__ = (
     "ListKeywordsResponse200DataItemStats",
     "ListPeopleKeywordKindsItem",
     "ListPeopleNeverKeywordKindsItem",
+    "ListPeopleNotPlatformsItem",
     "ListPeoplePlatform",
     "ListPeoplePlatformsItem",
     "ListPeopleResponse200",
@@ -555,12 +585,14 @@ __all__ = (
     "ListSegmentsResponse200DataItemFilter",
     "ListSegmentsResponse200DataItemFilterKeywordKindsItem",
     "ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem",
+    "ListSegmentsResponse200DataItemFilterNotPlatformsItem",
     "ListSegmentsResponse200DataItemFilterPlatformsItem",
     "ListSegmentsResponse200DataItemFilterStagesItem",
     "ListSegmentsResponse200PresetsItem",
     "ListSegmentsResponse200PresetsItemFilter",
     "ListSegmentsResponse200PresetsItemFilterKeywordKindsItem",
     "ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem",
+    "ListSegmentsResponse200PresetsItemFilterNotPlatformsItem",
     "ListSegmentsResponse200PresetsItemFilterPlatformsItem",
     "ListSegmentsResponse200PresetsItemFilterStagesItem",
     "LogPersonActivityBody",
@@ -597,15 +629,20 @@ __all__ = (
     "RunAlertDigestResponse200",
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",
+    "SearchMentionsNotPlatformsItem",
+    "SearchMentionsNotSentimentsItem",
     "SearchMentionsPlatform",
+    "SearchMentionsPlatformsItem",
     "SearchMentionsResponse200",
     "SearchMentionsSentiment",
+    "SearchMentionsSentimentsItem",
     "SearchMentionsSort",
     "SearchMentionsStatus",
     "Segment",
     "SegmentFilter",
     "SegmentFilterKeywordKindsItem",
     "SegmentFilterNeverKeywordKindsItem",
+    "SegmentFilterNotPlatformsItem",
     "SegmentFilterPlatformsItem",
     "SegmentFilterStagesItem",
     "ShareOfVoice",
@@ -650,6 +687,7 @@ __all__ = (
     "UpdateSegmentBodyFilter",
     "UpdateSegmentBodyFilterKeywordKindsItem",
     "UpdateSegmentBodyFilterNeverKeywordKindsItem",
+    "UpdateSegmentBodyFilterNotPlatformsItem",
     "UpdateSegmentBodyFilterPlatformsItem",
     "UpdateSegmentBodyFilterStagesItem",
     "WebhookChannel",

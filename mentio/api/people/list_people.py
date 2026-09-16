@@ -11,6 +11,7 @@ from ...models.list_people_keyword_kinds_item import ListPeopleKeywordKindsItem
 from ...models.list_people_never_keyword_kinds_item import (
     ListPeopleNeverKeywordKindsItem,
 )
+from ...models.list_people_not_platforms_item import ListPeopleNotPlatformsItem
 from ...models.list_people_platform import ListPeoplePlatform
 from ...models.list_people_platforms_item import ListPeoplePlatformsItem
 from ...models.list_people_response_200 import ListPeopleResponse200
@@ -34,6 +35,9 @@ def _get_kwargs(
     min_mentions: int | Unset = UNSET,
     min_negative: int | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
+    not_platforms: list[ListPeopleNotPlatformsItem] | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
@@ -112,6 +116,35 @@ def _get_kwargs(
     else:
         json_intents = intents
     params["intents"] = json_intents
+
+    json_not_platforms: list[str] | Unset = UNSET
+    if not isinstance(not_platforms, Unset):
+        json_not_platforms = []
+        for not_platforms_item_data in not_platforms:
+            not_platforms_item = not_platforms_item_data.value
+            json_not_platforms.append(not_platforms_item)
+
+    params["notPlatforms"] = json_not_platforms
+
+    json_not_tags: list[str] | None | Unset
+    if isinstance(not_tags, Unset):
+        json_not_tags = UNSET
+    elif isinstance(not_tags, list):
+        json_not_tags = not_tags
+
+    else:
+        json_not_tags = not_tags
+    params["notTags"] = json_not_tags
+
+    json_not_intents: list[str] | None | Unset
+    if isinstance(not_intents, Unset):
+        json_not_intents = UNSET
+    elif isinstance(not_intents, list):
+        json_not_intents = not_intents
+
+    else:
+        json_not_intents = not_intents
+    params["notIntents"] = json_not_intents
 
     json_keyword_kinds: list[str] | Unset = UNSET
     if not isinstance(keyword_kinds, Unset):
@@ -244,6 +277,9 @@ def sync_detailed(
     min_mentions: int | Unset = UNSET,
     min_negative: int | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
+    not_platforms: list[ListPeopleNotPlatformsItem] | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
@@ -281,6 +317,12 @@ def sync_detailed(
         min_mentions (int | Unset): At least this many matched mentions.
         min_negative (int | Unset): At least this many negative mentions.
         intents (list[str] | None | Unset): At least one mention carrying any of these intents.
+        not_platforms (list[ListPeopleNotPlatformsItem] | Unset): Nobody with an account on these
+            platforms. Repeatable, or comma-separated.
+        not_tags (list[str] | None | Unset): Nobody carrying any of these tags. Repeatable, or
+            comma-separated.
+        not_intents (list[str] | None | Unset): Nobody whose mentions carry any of these intents.
+            Repeatable, or comma-separated.
         keyword_kinds (list[ListPeopleKeywordKindsItem] | Unset): Mentioned a keyword of any of
             these kinds.
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
@@ -321,6 +363,9 @@ def sync_detailed(
         min_mentions=min_mentions,
         min_negative=min_negative,
         intents=intents,
+        not_platforms=not_platforms,
+        not_tags=not_tags,
+        not_intents=not_intents,
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
@@ -355,6 +400,9 @@ def sync(
     min_mentions: int | Unset = UNSET,
     min_negative: int | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
+    not_platforms: list[ListPeopleNotPlatformsItem] | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
@@ -392,6 +440,12 @@ def sync(
         min_mentions (int | Unset): At least this many matched mentions.
         min_negative (int | Unset): At least this many negative mentions.
         intents (list[str] | None | Unset): At least one mention carrying any of these intents.
+        not_platforms (list[ListPeopleNotPlatformsItem] | Unset): Nobody with an account on these
+            platforms. Repeatable, or comma-separated.
+        not_tags (list[str] | None | Unset): Nobody carrying any of these tags. Repeatable, or
+            comma-separated.
+        not_intents (list[str] | None | Unset): Nobody whose mentions carry any of these intents.
+            Repeatable, or comma-separated.
         keyword_kinds (list[ListPeopleKeywordKindsItem] | Unset): Mentioned a keyword of any of
             these kinds.
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
@@ -433,6 +487,9 @@ def sync(
         min_mentions=min_mentions,
         min_negative=min_negative,
         intents=intents,
+        not_platforms=not_platforms,
+        not_tags=not_tags,
+        not_intents=not_intents,
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
@@ -461,6 +518,9 @@ async def asyncio_detailed(
     min_mentions: int | Unset = UNSET,
     min_negative: int | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
+    not_platforms: list[ListPeopleNotPlatformsItem] | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
@@ -498,6 +558,12 @@ async def asyncio_detailed(
         min_mentions (int | Unset): At least this many matched mentions.
         min_negative (int | Unset): At least this many negative mentions.
         intents (list[str] | None | Unset): At least one mention carrying any of these intents.
+        not_platforms (list[ListPeopleNotPlatformsItem] | Unset): Nobody with an account on these
+            platforms. Repeatable, or comma-separated.
+        not_tags (list[str] | None | Unset): Nobody carrying any of these tags. Repeatable, or
+            comma-separated.
+        not_intents (list[str] | None | Unset): Nobody whose mentions carry any of these intents.
+            Repeatable, or comma-separated.
         keyword_kinds (list[ListPeopleKeywordKindsItem] | Unset): Mentioned a keyword of any of
             these kinds.
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
@@ -538,6 +604,9 @@ async def asyncio_detailed(
         min_mentions=min_mentions,
         min_negative=min_negative,
         intents=intents,
+        not_platforms=not_platforms,
+        not_tags=not_tags,
+        not_intents=not_intents,
         keyword_kinds=keyword_kinds,
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
@@ -570,6 +639,9 @@ async def asyncio(
     min_mentions: int | Unset = UNSET,
     min_negative: int | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
+    not_platforms: list[ListPeopleNotPlatformsItem] | Unset = UNSET,
+    not_tags: list[str] | None | Unset = UNSET,
+    not_intents: list[str] | None | Unset = UNSET,
     keyword_kinds: list[ListPeopleKeywordKindsItem] | Unset = UNSET,
     never_keyword_kinds: list[ListPeopleNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
@@ -607,6 +679,12 @@ async def asyncio(
         min_mentions (int | Unset): At least this many matched mentions.
         min_negative (int | Unset): At least this many negative mentions.
         intents (list[str] | None | Unset): At least one mention carrying any of these intents.
+        not_platforms (list[ListPeopleNotPlatformsItem] | Unset): Nobody with an account on these
+            platforms. Repeatable, or comma-separated.
+        not_tags (list[str] | None | Unset): Nobody carrying any of these tags. Repeatable, or
+            comma-separated.
+        not_intents (list[str] | None | Unset): Nobody whose mentions carry any of these intents.
+            Repeatable, or comma-separated.
         keyword_kinds (list[ListPeopleKeywordKindsItem] | Unset): Mentioned a keyword of any of
             these kinds.
         never_keyword_kinds (list[ListPeopleNeverKeywordKindsItem] | Unset): Never mentioned a
@@ -649,6 +727,9 @@ async def asyncio(
             min_mentions=min_mentions,
             min_negative=min_negative,
             intents=intents,
+            not_platforms=not_platforms,
+            not_tags=not_tags,
+            not_intents=not_intents,
             keyword_kinds=keyword_kinds,
             never_keyword_kinds=never_keyword_kinds,
             new_since_days=new_since_days,
