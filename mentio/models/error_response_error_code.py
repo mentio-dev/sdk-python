@@ -11,6 +11,7 @@ class ErrorResponseErrorCode(StrEnum):
     INTERNAL_ERROR = "internal_error"
     INVALID_ASSIGNEE = "invalid_assignee"
     INVALID_CURSOR = "invalid_cursor"
+    INVALID_MEMBER = "invalid_member"
     INVALID_SIGNATURE = "invalid_signature"
     INVALID_TOKEN = "invalid_token"
     KEYWORD_LIMIT_REACHED = "keyword_limit_reached"

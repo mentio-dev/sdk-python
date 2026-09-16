@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any
+from typing import Any, cast
 from urllib.parse import quote
 
 import httpx
@@ -7,45 +7,31 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
-from ...models.person import Person
-from ...models.update_person_body import UpdatePersonBody
 from ...types import Response
 
 
 def _get_kwargs(
     id: str,
-    *,
-    body: UpdatePersonBody,
+    activity_id: str,
 ) -> dict[str, Any]:
-    headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
-        "method": "patch",
-        "url": "/v1/people/{id}".format(
+        "method": "delete",
+        "url": "/v1/people/{id}/activities/{activity_id}".format(
             id=quote(str(id), safe=""),
+            activity_id=quote(str(activity_id), safe=""),
         ),
     }
 
-    _kwargs["json"] = body.to_dict()
-
-    headers["Content-Type"] = "application/json"
-
-    _kwargs["headers"] = headers
     return _kwargs
 
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ErrorResponse | Person | None:
-    if response.status_code == 200:
-        response_200 = Person.from_dict(response.json())
-
-        return response_200
-
-    if response.status_code == 400:
-        response_400 = ErrorResponse.from_dict(response.json())
-
-        return response_400
+) -> Any | ErrorResponse | None:
+    if response.status_code == 204:
+        response_204 = cast(Any, None)
+        return response_204
 
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
@@ -65,7 +51,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ErrorResponse | Person]:
+) -> Response[Any | ErrorResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -76,31 +62,29 @@ def _build_response(
 
 def sync_detailed(
     id: str,
+    activity_id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> Response[ErrorResponse | Person]:
-    """Update your annotations on a person
+) -> Response[Any | ErrorResponse]:
+    """Delete an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        activity_id (str): Activity id (act_...). Example: act_abc123.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ErrorResponse | Person]
+        Response[Any | ErrorResponse]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        body=body,
+        activity_id=activity_id,
     )
 
     response = client.get_httpx_client().request(
@@ -112,62 +96,58 @@ def sync_detailed(
 
 def sync(
     id: str,
+    activity_id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> ErrorResponse | Person | None:
-    """Update your annotations on a person
+) -> Any | ErrorResponse | None:
+    """Delete an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        activity_id (str): Activity id (act_...). Example: act_abc123.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ErrorResponse | Person
+        Any | ErrorResponse
     """
 
     return sync_detailed(
         id=id,
+        activity_id=activity_id,
         client=client,
-        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
     id: str,
+    activity_id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> Response[ErrorResponse | Person]:
-    """Update your annotations on a person
+) -> Response[Any | ErrorResponse]:
+    """Delete an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        activity_id (str): Activity id (act_...). Example: act_abc123.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ErrorResponse | Person]
+        Response[Any | ErrorResponse]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        body=body,
+        activity_id=activity_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -177,32 +157,30 @@ async def asyncio_detailed(
 
 async def asyncio(
     id: str,
+    activity_id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> ErrorResponse | Person | None:
-    """Update your annotations on a person
+) -> Any | ErrorResponse | None:
+    """Delete an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        activity_id (str): Activity id (act_...). Example: act_abc123.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ErrorResponse | Person
+        Any | ErrorResponse
     """
 
     return (
         await asyncio_detailed(
             id=id,
+            activity_id=activity_id,
             client=client,
-            body=body,
         )
     ).parsed

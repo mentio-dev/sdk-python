@@ -78,7 +78,8 @@ def sync_detailed(
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags and notes combine under the person named by `into`.
+    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
+    its owner and stage unless it had none.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -113,7 +114,8 @@ def sync(
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags and notes combine under the person named by `into`.
+    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
+    its owner and stage unless it had none.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -143,7 +145,8 @@ async def asyncio_detailed(
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags and notes combine under the person named by `into`.
+    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
+    its owner and stage unless it had none.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -176,7 +179,8 @@ async def asyncio(
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags and notes combine under the person named by `into`.
+    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
+    its owner and stage unless it had none.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.

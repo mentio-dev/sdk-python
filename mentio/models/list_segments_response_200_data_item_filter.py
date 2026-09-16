@@ -15,6 +15,9 @@ from ..models.list_segments_response_200_data_item_filter_never_keyword_kinds_it
 from ..models.list_segments_response_200_data_item_filter_platforms_item import (
     ListSegmentsResponse200DataItemFilterPlatformsItem,
 )
+from ..models.list_segments_response_200_data_item_filter_stages_item import (
+    ListSegmentsResponse200DataItemFilterStagesItem,
+)
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ListSegmentsResponse200DataItemFilter")
@@ -40,6 +43,9 @@ class ListSegmentsResponse200DataItemFilter:
         link_hosts (list[str] | Unset): At least one mention linking to any of these hosts, the host itself or a
             subdomain of it.
         muted (bool | Unset): true: only muted people; false: only unmuted.
+        stages (list[ListSegmentsResponse200DataItemFilterStagesItem] | Unset): People at any of these outreach stages.
+        owner_ids (list[str] | Unset): People owned by any of these members (user ids); "none" matches people nobody
+            owns.
     """
 
     platforms: list[ListSegmentsResponse200DataItemFilterPlatformsItem] | Unset = UNSET
@@ -58,6 +64,8 @@ class ListSegmentsResponse200DataItemFilter:
     new_since_days: int | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
     muted: bool | Unset = UNSET
+    stages: list[ListSegmentsResponse200DataItemFilterStagesItem] | Unset = UNSET
+    owner_ids: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -106,6 +114,17 @@ class ListSegmentsResponse200DataItemFilter:
 
         muted = self.muted
 
+        stages: list[str] | Unset = UNSET
+        if not isinstance(self.stages, Unset):
+            stages = []
+            for stages_item_data in self.stages:
+                stages_item = stages_item_data.value
+                stages.append(stages_item)
+
+        owner_ids: list[str] | Unset = UNSET
+        if not isinstance(self.owner_ids, Unset):
+            owner_ids = self.owner_ids
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -133,6 +152,10 @@ class ListSegmentsResponse200DataItemFilter:
             field_dict["linkHosts"] = link_hosts
         if muted is not UNSET:
             field_dict["muted"] = muted
+        if stages is not UNSET:
+            field_dict["stages"] = stages
+        if owner_ids is not UNSET:
+            field_dict["ownerIds"] = owner_ids
 
         return field_dict
 
@@ -200,6 +223,19 @@ class ListSegmentsResponse200DataItemFilter:
 
         muted = d.pop("muted", UNSET)
 
+        _stages = d.pop("stages", UNSET)
+        stages: list[ListSegmentsResponse200DataItemFilterStagesItem] | Unset = UNSET
+        if _stages is not UNSET:
+            stages = []
+            for stages_item_data in _stages:
+                stages_item = ListSegmentsResponse200DataItemFilterStagesItem(
+                    stages_item_data
+                )
+
+                stages.append(stages_item)
+
+        owner_ids = cast(list[str], d.pop("ownerIds", UNSET))
+
         list_segments_response_200_data_item_filter = cls(
             platforms=platforms,
             tags=tags,
@@ -213,6 +249,8 @@ class ListSegmentsResponse200DataItemFilter:
             new_since_days=new_since_days,
             link_hosts=link_hosts,
             muted=muted,
+            stages=stages,
+            owner_ids=owner_ids,
         )
 
         list_segments_response_200_data_item_filter.additional_properties = d

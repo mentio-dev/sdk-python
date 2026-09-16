@@ -98,6 +98,7 @@ from .create_segment_body_filter_never_keyword_kinds_item import (
 from .create_segment_body_filter_platforms_item import (
     CreateSegmentBodyFilterPlatformsItem,
 )
+from .create_segment_body_filter_stages_item import CreateSegmentBodyFilterStagesItem
 from .create_slack_channel import CreateSlackChannel
 from .create_slack_channel_kind import CreateSlackChannelKind
 from .create_webhook_channel import CreateWebhookChannel
@@ -122,6 +123,7 @@ from .export_people_csv_never_keyword_kinds_item import (
 from .export_people_csv_platform import ExportPeopleCsvPlatform
 from .export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from .export_people_csv_sort import ExportPeopleCsvSort
+from .export_people_csv_stages_item import ExportPeopleCsvStagesItem
 from .get_analytics_breakdown_by import GetAnalyticsBreakdownBy
 from .get_analytics_breakdown_platforms_item import GetAnalyticsBreakdownPlatformsItem
 from .get_analytics_breakdown_range import GetAnalyticsBreakdownRange
@@ -216,6 +218,15 @@ from .list_people_response_200_data_item_accounts_item_platform import (
 from .list_people_response_200_data_item_annotations import (
     ListPeopleResponse200DataItemAnnotations,
 )
+from .list_people_response_200_data_item_outreach import (
+    ListPeopleResponse200DataItemOutreach,
+)
+from .list_people_response_200_data_item_outreach_owner_type_0 import (
+    ListPeopleResponse200DataItemOutreachOwnerType0,
+)
+from .list_people_response_200_data_item_outreach_stage import (
+    ListPeopleResponse200DataItemOutreachStage,
+)
 from .list_people_response_200_data_item_platform import (
     ListPeopleResponse200DataItemPlatform,
 )
@@ -231,6 +242,17 @@ from .list_people_response_200_data_item_stats_sentiment import (
     ListPeopleResponse200DataItemStatsSentiment,
 )
 from .list_people_sort import ListPeopleSort
+from .list_people_stages_item import ListPeopleStagesItem
+from .list_person_activities_response_200 import ListPersonActivitiesResponse200
+from .list_person_activities_response_200_data_item import (
+    ListPersonActivitiesResponse200DataItem,
+)
+from .list_person_activities_response_200_data_item_channel import (
+    ListPersonActivitiesResponse200DataItemChannel,
+)
+from .list_person_activities_response_200_data_item_member_type_0 import (
+    ListPersonActivitiesResponse200DataItemMemberType0,
+)
 from .list_segments_response_200 import ListSegmentsResponse200
 from .list_segments_response_200_data_item import ListSegmentsResponse200DataItem
 from .list_segments_response_200_data_item_filter import (
@@ -245,6 +267,9 @@ from .list_segments_response_200_data_item_filter_never_keyword_kinds_item impor
 from .list_segments_response_200_data_item_filter_platforms_item import (
     ListSegmentsResponse200DataItemFilterPlatformsItem,
 )
+from .list_segments_response_200_data_item_filter_stages_item import (
+    ListSegmentsResponse200DataItemFilterStagesItem,
+)
 from .list_segments_response_200_presets_item import ListSegmentsResponse200PresetsItem
 from .list_segments_response_200_presets_item_filter import (
     ListSegmentsResponse200PresetsItemFilter,
@@ -258,6 +283,11 @@ from .list_segments_response_200_presets_item_filter_never_keyword_kinds_item im
 from .list_segments_response_200_presets_item_filter_platforms_item import (
     ListSegmentsResponse200PresetsItemFilterPlatformsItem,
 )
+from .list_segments_response_200_presets_item_filter_stages_item import (
+    ListSegmentsResponse200PresetsItemFilterStagesItem,
+)
+from .log_person_activity_body import LogPersonActivityBody
+from .log_person_activity_body_channel import LogPersonActivityBodyChannel
 from .mention import Mention
 from .mention_author_type_0 import MentionAuthorType0
 from .mention_classification_type_0 import MentionClassificationType0
@@ -274,7 +304,13 @@ from .mute_alert_authors_body import MuteAlertAuthorsBody
 from .person import Person
 from .person_accounts_item import PersonAccountsItem
 from .person_accounts_item_platform import PersonAccountsItemPlatform
+from .person_activity import PersonActivity
+from .person_activity_channel import PersonActivityChannel
+from .person_activity_member_type_0 import PersonActivityMemberType0
 from .person_annotations import PersonAnnotations
+from .person_outreach import PersonOutreach
+from .person_outreach_owner_type_0 import PersonOutreachOwnerType0
+from .person_outreach_stage import PersonOutreachStage
 from .person_platform import PersonPlatform
 from .person_profile_type_0 import PersonProfileType0
 from .person_profile_type_0_links_item import PersonProfileType0LinksItem
@@ -296,6 +332,7 @@ from .segment_filter import SegmentFilter
 from .segment_filter_keyword_kinds_item import SegmentFilterKeywordKindsItem
 from .segment_filter_never_keyword_kinds_item import SegmentFilterNeverKeywordKindsItem
 from .segment_filter_platforms_item import SegmentFilterPlatformsItem
+from .segment_filter_stages_item import SegmentFilterStagesItem
 from .share_of_voice import ShareOfVoice
 from .share_of_voice_data_item import ShareOfVoiceDataItem
 from .share_of_voice_data_item_keyword import ShareOfVoiceDataItemKeyword
@@ -337,6 +374,7 @@ from .update_keyword_body_platforms_type_0_item import (
 from .update_mention_body import UpdateMentionBody
 from .update_mention_body_status import UpdateMentionBodyStatus
 from .update_person_body import UpdatePersonBody
+from .update_person_body_stage import UpdatePersonBodyStage
 from .update_segment_body import UpdateSegmentBody
 from .update_segment_body_filter import UpdateSegmentBodyFilter
 from .update_segment_body_filter_keyword_kinds_item import (
@@ -348,6 +386,7 @@ from .update_segment_body_filter_never_keyword_kinds_item import (
 from .update_segment_body_filter_platforms_item import (
     UpdateSegmentBodyFilterPlatformsItem,
 )
+from .update_segment_body_filter_stages_item import UpdateSegmentBodyFilterStagesItem
 from .webhook_channel import WebhookChannel
 from .webhook_channel_config import WebhookChannelConfig
 from .webhook_channel_config_headers import WebhookChannelConfigHeaders
@@ -418,6 +457,7 @@ __all__ = (
     "CreateSegmentBodyFilterKeywordKindsItem",
     "CreateSegmentBodyFilterNeverKeywordKindsItem",
     "CreateSegmentBodyFilterPlatformsItem",
+    "CreateSegmentBodyFilterStagesItem",
     "CreateSlackChannel",
     "CreateSlackChannelKind",
     "CreateWebhookChannel",
@@ -440,6 +480,7 @@ __all__ = (
     "ExportPeopleCsvPlatform",
     "ExportPeopleCsvPlatformsItem",
     "ExportPeopleCsvSort",
+    "ExportPeopleCsvStagesItem",
     "GetAnalyticsBreakdownBy",
     "GetAnalyticsBreakdownPlatformsItem",
     "GetAnalyticsBreakdownRange",
@@ -494,6 +535,9 @@ __all__ = (
     "ListPeopleResponse200DataItemAccountsItem",
     "ListPeopleResponse200DataItemAccountsItemPlatform",
     "ListPeopleResponse200DataItemAnnotations",
+    "ListPeopleResponse200DataItemOutreach",
+    "ListPeopleResponse200DataItemOutreachOwnerType0",
+    "ListPeopleResponse200DataItemOutreachStage",
     "ListPeopleResponse200DataItemPlatform",
     "ListPeopleResponse200DataItemProfileType0",
     "ListPeopleResponse200DataItemProfileType0LinksItem",
@@ -501,17 +545,26 @@ __all__ = (
     "ListPeopleResponse200DataItemStats",
     "ListPeopleResponse200DataItemStatsSentiment",
     "ListPeopleSort",
+    "ListPeopleStagesItem",
+    "ListPersonActivitiesResponse200",
+    "ListPersonActivitiesResponse200DataItem",
+    "ListPersonActivitiesResponse200DataItemChannel",
+    "ListPersonActivitiesResponse200DataItemMemberType0",
     "ListSegmentsResponse200",
     "ListSegmentsResponse200DataItem",
     "ListSegmentsResponse200DataItemFilter",
     "ListSegmentsResponse200DataItemFilterKeywordKindsItem",
     "ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem",
     "ListSegmentsResponse200DataItemFilterPlatformsItem",
+    "ListSegmentsResponse200DataItemFilterStagesItem",
     "ListSegmentsResponse200PresetsItem",
     "ListSegmentsResponse200PresetsItemFilter",
     "ListSegmentsResponse200PresetsItemFilterKeywordKindsItem",
     "ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem",
     "ListSegmentsResponse200PresetsItemFilterPlatformsItem",
+    "ListSegmentsResponse200PresetsItemFilterStagesItem",
+    "LogPersonActivityBody",
+    "LogPersonActivityBodyChannel",
     "Mention",
     "MentionAuthorType0",
     "MentionClassificationType0",
@@ -528,7 +581,13 @@ __all__ = (
     "Person",
     "PersonAccountsItem",
     "PersonAccountsItemPlatform",
+    "PersonActivity",
+    "PersonActivityChannel",
+    "PersonActivityMemberType0",
     "PersonAnnotations",
+    "PersonOutreach",
+    "PersonOutreachOwnerType0",
+    "PersonOutreachStage",
     "PersonPlatform",
     "PersonProfileType0",
     "PersonProfileType0LinksItem",
@@ -548,6 +607,7 @@ __all__ = (
     "SegmentFilterKeywordKindsItem",
     "SegmentFilterNeverKeywordKindsItem",
     "SegmentFilterPlatformsItem",
+    "SegmentFilterStagesItem",
     "ShareOfVoice",
     "ShareOfVoiceDataItem",
     "ShareOfVoiceDataItemKeyword",
@@ -585,11 +645,13 @@ __all__ = (
     "UpdateMentionBody",
     "UpdateMentionBodyStatus",
     "UpdatePersonBody",
+    "UpdatePersonBodyStage",
     "UpdateSegmentBody",
     "UpdateSegmentBodyFilter",
     "UpdateSegmentBodyFilterKeywordKindsItem",
     "UpdateSegmentBodyFilterNeverKeywordKindsItem",
     "UpdateSegmentBodyFilterPlatformsItem",
+    "UpdateSegmentBodyFilterStagesItem",
     "WebhookChannel",
     "WebhookChannelConfig",
     "WebhookChannelConfigHeaders",

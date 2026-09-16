@@ -7,45 +7,33 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
-from ...models.person import Person
-from ...models.update_person_body import UpdatePersonBody
+from ...models.list_person_activities_response_200 import (
+    ListPersonActivitiesResponse200,
+)
 from ...types import Response
 
 
 def _get_kwargs(
     id: str,
-    *,
-    body: UpdatePersonBody,
 ) -> dict[str, Any]:
-    headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
-        "method": "patch",
-        "url": "/v1/people/{id}".format(
+        "method": "get",
+        "url": "/v1/people/{id}/activities".format(
             id=quote(str(id), safe=""),
         ),
     }
 
-    _kwargs["json"] = body.to_dict()
-
-    headers["Content-Type"] = "application/json"
-
-    _kwargs["headers"] = headers
     return _kwargs
 
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ErrorResponse | Person | None:
+) -> ErrorResponse | ListPersonActivitiesResponse200 | None:
     if response.status_code == 200:
-        response_200 = Person.from_dict(response.json())
+        response_200 = ListPersonActivitiesResponse200.from_dict(response.json())
 
         return response_200
-
-    if response.status_code == 400:
-        response_400 = ErrorResponse.from_dict(response.json())
-
-        return response_400
 
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
@@ -65,7 +53,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ErrorResponse | Person]:
+) -> Response[ErrorResponse | ListPersonActivitiesResponse200]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -78,29 +66,26 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> Response[ErrorResponse | Person]:
-    """Update your annotations on a person
+) -> Response[ErrorResponse | ListPersonActivitiesResponse200]:
+    """List outreach activities
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Every logged contact with this person across all their accounts, newest first (at most 200): who
+    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
+    contact the same person without knowing.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ErrorResponse | Person]
+        Response[ErrorResponse | ListPersonActivitiesResponse200]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -114,30 +99,27 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> ErrorResponse | Person | None:
-    """Update your annotations on a person
+) -> ErrorResponse | ListPersonActivitiesResponse200 | None:
+    """List outreach activities
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Every logged contact with this person across all their accounts, newest first (at most 200): who
+    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
+    contact the same person without knowing.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ErrorResponse | Person
+        ErrorResponse | ListPersonActivitiesResponse200
     """
 
     return sync_detailed(
         id=id,
         client=client,
-        body=body,
     ).parsed
 
 
@@ -145,29 +127,26 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> Response[ErrorResponse | Person]:
-    """Update your annotations on a person
+) -> Response[ErrorResponse | ListPersonActivitiesResponse200]:
+    """List outreach activities
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Every logged contact with this person across all their accounts, newest first (at most 200): who
+    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
+    contact the same person without knowing.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ErrorResponse | Person]
+        Response[ErrorResponse | ListPersonActivitiesResponse200]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -179,30 +158,27 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> ErrorResponse | Person | None:
-    """Update your annotations on a person
+) -> ErrorResponse | ListPersonActivitiesResponse200 | None:
+    """List outreach activities
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Every logged contact with this person across all their accounts, newest first (at most 200): who
+    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
+    contact the same person without knowing.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ErrorResponse | Person
+        ErrorResponse | ListPersonActivitiesResponse200
     """
 
     return (
         await asyncio_detailed(
             id=id,
             client=client,
-            body=body,
         )
     ).parsed

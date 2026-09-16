@@ -7,21 +7,21 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
-from ...models.person import Person
-from ...models.update_person_body import UpdatePersonBody
+from ...models.log_person_activity_body import LogPersonActivityBody
+from ...models.person_activity import PersonActivity
 from ...types import Response
 
 
 def _get_kwargs(
     id: str,
     *,
-    body: UpdatePersonBody,
+    body: LogPersonActivityBody,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
-        "method": "patch",
-        "url": "/v1/people/{id}".format(
+        "method": "post",
+        "url": "/v1/people/{id}/activities".format(
             id=quote(str(id), safe=""),
         ),
     }
@@ -36,11 +36,11 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ErrorResponse | Person | None:
-    if response.status_code == 200:
-        response_200 = Person.from_dict(response.json())
+) -> ErrorResponse | PersonActivity | None:
+    if response.status_code == 201:
+        response_201 = PersonActivity.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ErrorResponse.from_dict(response.json())
@@ -65,7 +65,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ErrorResponse | Person]:
+) -> Response[ErrorResponse | PersonActivity]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -78,24 +78,25 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> Response[ErrorResponse | Person]:
-    """Update your annotations on a person
+    body: LogPersonActivityBody,
+) -> Response[ErrorResponse | PersonActivity]:
+    """Log an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
+    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
+    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
+    logs an unattributed activity, which claims nobody.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        body (LogPersonActivityBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ErrorResponse | Person]
+        Response[ErrorResponse | PersonActivity]
     """
 
     kwargs = _get_kwargs(
@@ -114,24 +115,25 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> ErrorResponse | Person | None:
-    """Update your annotations on a person
+    body: LogPersonActivityBody,
+) -> ErrorResponse | PersonActivity | None:
+    """Log an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
+    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
+    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
+    logs an unattributed activity, which claims nobody.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        body (LogPersonActivityBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ErrorResponse | Person
+        ErrorResponse | PersonActivity
     """
 
     return sync_detailed(
@@ -145,24 +147,25 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> Response[ErrorResponse | Person]:
-    """Update your annotations on a person
+    body: LogPersonActivityBody,
+) -> Response[ErrorResponse | PersonActivity]:
+    """Log an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
+    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
+    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
+    logs an unattributed activity, which claims nobody.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        body (LogPersonActivityBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ErrorResponse | Person]
+        Response[ErrorResponse | PersonActivity]
     """
 
     kwargs = _get_kwargs(
@@ -179,24 +182,25 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdatePersonBody,
-) -> ErrorResponse | Person | None:
-    """Update your annotations on a person
+    body: LogPersonActivityBody,
+) -> ErrorResponse | PersonActivity | None:
+    """Log an outreach activity
 
-     Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
-    workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
+    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
+    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
+    logs an unattributed activity, which claims nobody.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
-        body (UpdatePersonBody): Omitted fields are untouched.
+        body (LogPersonActivityBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ErrorResponse | Person
+        ErrorResponse | PersonActivity
     """
 
     return (

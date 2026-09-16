@@ -120,9 +120,12 @@ import mentio.api.mentions.export_mentions_csv  # noqa: F401
 import mentio.api.mentions.get_mention  # noqa: F401
 import mentio.api.mentions.search_mentions  # noqa: F401
 import mentio.api.mentions.update_mention  # noqa: F401
+import mentio.api.people.delete_person_activity  # noqa: F401
 import mentio.api.people.export_people_csv  # noqa: F401
 import mentio.api.people.get_person  # noqa: F401
 import mentio.api.people.list_people  # noqa: F401
+import mentio.api.people.list_person_activities  # noqa: F401
+import mentio.api.people.log_person_activity  # noqa: F401
 import mentio.api.people.merge_people  # noqa: F401
 import mentio.api.people.split_person  # noqa: F401
 import mentio.api.people.update_person  # noqa: F401
@@ -259,15 +262,27 @@ class _Mentions:
         return _result(_ops.mentions.update_mention.sync_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
 
 class _People:
-    """people: export, get, list, merge, split, update."""
+    """people: activities, delete_activity, export, get, list, log_activity, merge, split, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
+    def activities(self, id: str) -> _m.ListPersonActivitiesResponse200:
+        """List outreach activities
+
+        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing."""
+        return _result(_ops.people.list_person_activities.sync_detailed(id, client=self._client))
+
+    def delete_activity(self, id: str, activity_id: str) -> Any:
+        """Delete an outreach activity
+
+        Remove a contact logged by mistake. The person's owner and stage stay as they are."""
+        return _result(_ops.people.delete_person_activity.sync_detailed(id, activity_id, client=self._client))
+
     def export(self, **params: Any) -> str:
         """Export people as CSV
 
-        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           platform: People with an account on this platform.
@@ -287,8 +302,10 @@ class _People:
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(_ops.people.export_people_csv.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Person:
@@ -300,7 +317,7 @@ class _People:
     def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats and your annotations. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, or a saved segment. Offset-paginated with a total.
+        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, or a saved segment. Offset-paginated with a total.
 
         Keyword arguments (query):
           platform: People with an account on this platform.
@@ -320,16 +337,30 @@ class _People:
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(_ops.people.list_people.sync_detailed(client=self._client, **params))
+
+    def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
+        """Log an outreach activity
+
+        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          channel (required): How they were reached: email, x, linkedin, bluesky, reddit, github, call, meeting or other.
+          note: What was sent or said, briefly.
+          occurredAt: When the contact happened (ISO 8601, or epoch ms). Defaults to now.
+          memberId: The member who reached out (user id). Defaults to the signed-in member; an API key that omits it logs an unattributed activity."""
+        return _result(_ops.people.log_person_activity.sync_detailed(id, client=self._client, body=_body(_m.LogPersonActivityBody, body, fields)))
 
     def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags and notes combine under the person named by `into`.
+        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none.
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
@@ -344,12 +375,14 @@ class _People:
     def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes and mute, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change.
+        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
           notes:
-          muted:"""
+          muted:
+          ownerId: The member who owns the contact (user id); null clears.
+          stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
         return _result(_ops.people.update_person.sync_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
 
 class _Segments:
@@ -776,15 +809,27 @@ class _AsyncMentions:
         return _result(await _ops.mentions.update_mention.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
 
 class _AsyncPeople:
-    """people: export, get, list, merge, split, update."""
+    """people: activities, delete_activity, export, get, list, log_activity, merge, split, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
+    async def activities(self, id: str) -> _m.ListPersonActivitiesResponse200:
+        """List outreach activities
+
+        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing."""
+        return _result(await _ops.people.list_person_activities.asyncio_detailed(id, client=self._client))
+
+    async def delete_activity(self, id: str, activity_id: str) -> Any:
+        """Delete an outreach activity
+
+        Remove a contact logged by mistake. The person's owner and stage stay as they are."""
+        return _result(await _ops.people.delete_person_activity.asyncio_detailed(id, activity_id, client=self._client))
+
     async def export(self, **params: Any) -> str:
         """Export people as CSV
 
-        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           platform: People with an account on this platform.
@@ -804,8 +849,10 @@ class _AsyncPeople:
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(await _ops.people.export_people_csv.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Person:
@@ -817,7 +864,7 @@ class _AsyncPeople:
     async def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats and your annotations. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, or a saved segment. Offset-paginated with a total.
+        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, or a saved segment. Offset-paginated with a total.
 
         Keyword arguments (query):
           platform: People with an account on this platform.
@@ -837,16 +884,30 @@ class _AsyncPeople:
           never_keyword_kinds: Never mentioned a keyword of these kinds.
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(await _ops.people.list_people.asyncio_detailed(client=self._client, **params))
+
+    async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
+        """Log an outreach activity
+
+        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          channel (required): How they were reached: email, x, linkedin, bluesky, reddit, github, call, meeting or other.
+          note: What was sent or said, briefly.
+          occurredAt: When the contact happened (ISO 8601, or epoch ms). Defaults to now.
+          memberId: The member who reached out (user id). Defaults to the signed-in member; an API key that omits it logs an unattributed activity."""
+        return _result(await _ops.people.log_person_activity.asyncio_detailed(id, client=self._client, body=_body(_m.LogPersonActivityBody, body, fields)))
 
     async def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags and notes combine under the person named by `into`.
+        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none.
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
@@ -861,12 +922,14 @@ class _AsyncPeople:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes and mute, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change.
+        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
           notes:
-          muted:"""
+          muted:
+          ownerId: The member who owns the contact (user id); null clears.
+          stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
         return _result(await _ops.people.update_person.asyncio_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
 
 class _AsyncSegments:

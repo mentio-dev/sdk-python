@@ -11,6 +11,7 @@ from ..models.person_platform import PersonPlatform
 if TYPE_CHECKING:
     from ..models.person_accounts_item import PersonAccountsItem
     from ..models.person_annotations import PersonAnnotations
+    from ..models.person_outreach import PersonOutreach
     from ..models.person_profile_type_0 import PersonProfileType0
     from ..models.person_reach import PersonReach
     from ..models.person_stats import PersonStats
@@ -35,6 +36,8 @@ class Person:
         profile (None | PersonProfileType0): Public profile facts; null until looked up.
         stats (PersonStats): Computed over this workspace's matches.
         annotations (PersonAnnotations): What this workspace wrote about the person.
+        outreach (PersonOutreach): Where your workspace stands with the person. The first logged activity claims an
+            unowned person for whoever reached out and moves not_contacted to contacted.
     """
 
     id: str
@@ -48,6 +51,7 @@ class Person:
     profile: None | PersonProfileType0
     stats: PersonStats
     annotations: PersonAnnotations
+    outreach: PersonOutreach
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -86,6 +90,8 @@ class Person:
 
         annotations = self.annotations.to_dict()
 
+        outreach = self.outreach.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -101,6 +107,7 @@ class Person:
                 "profile": profile,
                 "stats": stats,
                 "annotations": annotations,
+                "outreach": outreach,
             }
         )
 
@@ -110,6 +117,7 @@ class Person:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.person_accounts_item import PersonAccountsItem
         from ..models.person_annotations import PersonAnnotations
+        from ..models.person_outreach import PersonOutreach
         from ..models.person_profile_type_0 import PersonProfileType0
         from ..models.person_reach import PersonReach
         from ..models.person_stats import PersonStats
@@ -175,6 +183,8 @@ class Person:
 
         annotations = PersonAnnotations.from_dict(d.pop("annotations"))
 
+        outreach = PersonOutreach.from_dict(d.pop("outreach"))
+
         person = cls(
             id=id,
             platform=platform,
@@ -187,6 +197,7 @@ class Person:
             profile=profile,
             stats=stats,
             annotations=annotations,
+            outreach=outreach,
         )
 
         person.additional_properties = d

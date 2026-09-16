@@ -17,6 +17,9 @@ if TYPE_CHECKING:
     from ..models.list_people_response_200_data_item_annotations import (
         ListPeopleResponse200DataItemAnnotations,
     )
+    from ..models.list_people_response_200_data_item_outreach import (
+        ListPeopleResponse200DataItemOutreach,
+    )
     from ..models.list_people_response_200_data_item_profile_type_0 import (
         ListPeopleResponse200DataItemProfileType0,
     )
@@ -49,6 +52,8 @@ class ListPeopleResponse200DataItem:
         profile (ListPeopleResponse200DataItemProfileType0 | None): Public profile facts; null until looked up.
         stats (ListPeopleResponse200DataItemStats): Computed over this workspace's matches.
         annotations (ListPeopleResponse200DataItemAnnotations): What this workspace wrote about the person.
+        outreach (ListPeopleResponse200DataItemOutreach): Where your workspace stands with the person. The first logged
+            activity claims an unowned person for whoever reached out and moves not_contacted to contacted.
     """
 
     id: str
@@ -62,6 +67,7 @@ class ListPeopleResponse200DataItem:
     profile: ListPeopleResponse200DataItemProfileType0 | None
     stats: ListPeopleResponse200DataItemStats
     annotations: ListPeopleResponse200DataItemAnnotations
+    outreach: ListPeopleResponse200DataItemOutreach
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -102,6 +108,8 @@ class ListPeopleResponse200DataItem:
 
         annotations = self.annotations.to_dict()
 
+        outreach = self.outreach.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -117,6 +125,7 @@ class ListPeopleResponse200DataItem:
                 "profile": profile,
                 "stats": stats,
                 "annotations": annotations,
+                "outreach": outreach,
             }
         )
 
@@ -129,6 +138,9 @@ class ListPeopleResponse200DataItem:
         )
         from ..models.list_people_response_200_data_item_annotations import (
             ListPeopleResponse200DataItemAnnotations,
+        )
+        from ..models.list_people_response_200_data_item_outreach import (
+            ListPeopleResponse200DataItemOutreach,
         )
         from ..models.list_people_response_200_data_item_profile_type_0 import (
             ListPeopleResponse200DataItemProfileType0,
@@ -209,6 +221,8 @@ class ListPeopleResponse200DataItem:
             d.pop("annotations")
         )
 
+        outreach = ListPeopleResponse200DataItemOutreach.from_dict(d.pop("outreach"))
+
         list_people_response_200_data_item = cls(
             id=id,
             platform=platform,
@@ -221,6 +235,7 @@ class ListPeopleResponse200DataItem:
             profile=profile,
             stats=stats,
             annotations=annotations,
+            outreach=outreach,
         )
 
         list_people_response_200_data_item.additional_properties = d

@@ -16,6 +16,7 @@ from ...models.export_people_csv_never_keyword_kinds_item import (
 from ...models.export_people_csv_platform import ExportPeopleCsvPlatform
 from ...models.export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from ...models.export_people_csv_sort import ExportPeopleCsvSort
+from ...models.export_people_csv_stages_item import ExportPeopleCsvStagesItem
 from ...types import UNSET, Response, Unset
 
 
@@ -38,6 +39,8 @@ def _get_kwargs(
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> dict[str, Any]:
 
@@ -139,6 +142,25 @@ def _get_kwargs(
         json_link_hosts = link_hosts
     params["linkHosts"] = json_link_hosts
 
+    json_stages: list[str] | Unset = UNSET
+    if not isinstance(stages, Unset):
+        json_stages = []
+        for stages_item_data in stages:
+            stages_item = stages_item_data.value
+            json_stages.append(stages_item)
+
+    params["stages"] = json_stages
+
+    json_owner_ids: list[str] | None | Unset
+    if isinstance(owner_ids, Unset):
+        json_owner_ids = UNSET
+    elif isinstance(owner_ids, list):
+        json_owner_ids = owner_ids
+
+    else:
+        json_owner_ids = owner_ids
+    params["ownerIds"] = json_owner_ids
+
     json_sort: str | Unset = UNSET
     if not isinstance(sort, Unset):
         json_sort = sort.value
@@ -220,13 +242,16 @@ def sync_detailed(
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> Response[ErrorResponse | str]:
     """Export people as CSV
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags. Capped at 5,000 people. At most
-    6 exports per minute per workspace; a 429 carries Retry-After.
+    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
+    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
+    Retry-After.
 
     Args:
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
@@ -255,6 +280,10 @@ def sync_detailed(
         new_since_days (int | Unset): First seen within this many days.
         link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
+            Repeatable, or comma-separated.
+        owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
+            `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -285,6 +314,8 @@ def sync_detailed(
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
         link_hosts=link_hosts,
+        stages=stages,
+        owner_ids=owner_ids,
         sort=sort,
     )
 
@@ -315,13 +346,16 @@ def sync(
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> ErrorResponse | str | None:
     """Export people as CSV
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags. Capped at 5,000 people. At most
-    6 exports per minute per workspace; a 429 carries Retry-After.
+    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
+    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
+    Retry-After.
 
     Args:
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
@@ -350,6 +384,10 @@ def sync(
         new_since_days (int | Unset): First seen within this many days.
         link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
+            Repeatable, or comma-separated.
+        owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
+            `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -381,6 +419,8 @@ def sync(
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
         link_hosts=link_hosts,
+        stages=stages,
+        owner_ids=owner_ids,
         sort=sort,
     ).parsed
 
@@ -405,13 +445,16 @@ async def asyncio_detailed(
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> Response[ErrorResponse | str]:
     """Export people as CSV
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags. Capped at 5,000 people. At most
-    6 exports per minute per workspace; a 429 carries Retry-After.
+    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
+    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
+    Retry-After.
 
     Args:
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
@@ -440,6 +483,10 @@ async def asyncio_detailed(
         new_since_days (int | Unset): First seen within this many days.
         link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
+            Repeatable, or comma-separated.
+        owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
+            `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -470,6 +517,8 @@ async def asyncio_detailed(
         never_keyword_kinds=never_keyword_kinds,
         new_since_days=new_since_days,
         link_hosts=link_hosts,
+        stages=stages,
+        owner_ids=owner_ids,
         sort=sort,
     )
 
@@ -498,13 +547,16 @@ async def asyncio(
     never_keyword_kinds: list[ExportPeopleCsvNeverKeywordKindsItem] | Unset = UNSET,
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
+    stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
 ) -> ErrorResponse | str | None:
     """Export people as CSV
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags. Capped at 5,000 people. At most
-    6 exports per minute per workspace; a 429 carries Retry-After.
+    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
+    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
+    Retry-After.
 
     Args:
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
@@ -533,6 +585,10 @@ async def asyncio(
         new_since_days (int | Unset): First seen within this many days.
         link_hosts (list[str] | None | Unset): People with at least one mention linking to any of
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
+            Repeatable, or comma-separated.
+        owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
+            `none` matches people nobody owns. Repeatable, or comma-separated.
         sort (ExportPeopleCsvSort | Unset): mentions: most matches first. recent: last seen first.
             reach: most followers first, unknown last. new: first seen most recently first. Default:
             ExportPeopleCsvSort.MENTIONS.
@@ -565,6 +621,8 @@ async def asyncio(
             never_keyword_kinds=never_keyword_kinds,
             new_since_days=new_since_days,
             link_hosts=link_hosts,
+            stages=stages,
+            owner_ids=owner_ids,
             sort=sort,
         )
     ).parsed
