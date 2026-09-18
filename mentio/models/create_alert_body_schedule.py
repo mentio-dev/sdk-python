@@ -13,19 +13,22 @@ T = TypeVar("T", bound="CreateAlertBodySchedule")
 
 @_attrs_define
 class CreateAlertBodySchedule:
-    """Required for daily alerts.
+    """Required for daily and weekly alerts (weekly ones also need schedule.weekday).
 
     Attributes:
         hour (int):
         timezone (str):
         minute (int | Unset):  Default: 0.
         skip_empty (bool | Unset):  Default: True.
+        weekday (int | Unset): Weekly rules: the day it sends, 0 Sunday to 6 Saturday. Required for mode weekly; ignored
+            on daily rules.
     """
 
     hour: int
     timezone: str
     minute: int | Unset = 0
     skip_empty: bool | Unset = True
+    weekday: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,6 +39,8 @@ class CreateAlertBodySchedule:
         minute = self.minute
 
         skip_empty = self.skip_empty
+
+        weekday = self.weekday
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,6 +54,8 @@ class CreateAlertBodySchedule:
             field_dict["minute"] = minute
         if skip_empty is not UNSET:
             field_dict["skipEmpty"] = skip_empty
+        if weekday is not UNSET:
+            field_dict["weekday"] = weekday
 
         return field_dict
 
@@ -63,11 +70,14 @@ class CreateAlertBodySchedule:
 
         skip_empty = d.pop("skipEmpty", UNSET)
 
+        weekday = d.pop("weekday", UNSET)
+
         create_alert_body_schedule = cls(
             hour=hour,
             timezone=timezone,
             minute=minute,
             skip_empty=skip_empty,
+            weekday=weekday,
         )
 
         create_alert_body_schedule.additional_properties = d

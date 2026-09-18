@@ -21,6 +21,8 @@ class CreateApiKeyResponse201:
         scope (CreateApiKeyResponse201Scope): read: GET only. write: everything.
         created_at (str): ISO 8601 timestamp, UTC.
         last_used_at (None | str): ISO 8601 timestamp, UTC.
+        expires_at (None | str): When the key stops working; null for a key that never expires. An expired key stays
+            listed until revoked.
         key (str): The full key. Shown once; store it now.
     """
 
@@ -30,6 +32,7 @@ class CreateApiKeyResponse201:
     scope: CreateApiKeyResponse201Scope
     created_at: str
     last_used_at: None | str
+    expires_at: None | str
     key: str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -47,6 +50,9 @@ class CreateApiKeyResponse201:
         last_used_at: None | str
         last_used_at = self.last_used_at
 
+        expires_at: None | str
+        expires_at = self.expires_at
+
         key = self.key
 
         field_dict: dict[str, Any] = {}
@@ -59,6 +65,7 @@ class CreateApiKeyResponse201:
                 "scope": scope,
                 "createdAt": created_at,
                 "lastUsedAt": last_used_at,
+                "expiresAt": expires_at,
                 "key": key,
             }
         )
@@ -85,6 +92,13 @@ class CreateApiKeyResponse201:
 
         last_used_at = _parse_last_used_at(d.pop("lastUsedAt"))
 
+        def _parse_expires_at(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        expires_at = _parse_expires_at(d.pop("expiresAt"))
+
         key = d.pop("key")
 
         create_api_key_response_201 = cls(
@@ -94,6 +108,7 @@ class CreateApiKeyResponse201:
             scope=scope,
             created_at=created_at,
             last_used_at=last_used_at,
+            expires_at=expires_at,
             key=key,
         )
 

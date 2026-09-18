@@ -109,13 +109,21 @@ import mentio.api.analytics.get_share_of_voice  # noqa: F401
 import mentio.api.api_keys.create_api_key  # noqa: F401
 import mentio.api.api_keys.list_api_keys  # noqa: F401
 import mentio.api.api_keys.revoke_api_key  # noqa: F401
+import mentio.api.auth.whoami  # noqa: F401
 import mentio.api.company.get_company  # noqa: F401
 import mentio.api.company.update_company  # noqa: F401
+import mentio.api.filters.get_filters  # noqa: F401
+import mentio.api.filters.update_filters  # noqa: F401
 import mentio.api.keywords.create_keyword  # noqa: F401
 import mentio.api.keywords.delete_keyword  # noqa: F401
 import mentio.api.keywords.get_keyword  # noqa: F401
 import mentio.api.keywords.list_keywords  # noqa: F401
 import mentio.api.keywords.update_keyword  # noqa: F401
+import mentio.api.members.create_invitation  # noqa: F401
+import mentio.api.members.list_invitations  # noqa: F401
+import mentio.api.members.list_members  # noqa: F401
+import mentio.api.members.remove_member  # noqa: F401
+import mentio.api.members.revoke_invitation  # noqa: F401
 import mentio.api.mentions.export_mentions_csv  # noqa: F401
 import mentio.api.mentions.get_mention  # noqa: F401
 import mentio.api.mentions.search_mentions  # noqa: F401
@@ -135,6 +143,7 @@ import mentio.api.segments.get_segment  # noqa: F401
 import mentio.api.segments.list_segments  # noqa: F401
 import mentio.api.segments.update_segment  # noqa: F401
 import mentio.api.system.get_health  # noqa: F401
+import mentio.api.usage.get_usage  # noqa: F401
 
 
 class _Keywords:
@@ -146,12 +155,14 @@ class _Keywords:
     def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
-        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance.
+        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only.
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to track it on; omit or null for every platform."""
+          platforms: Platforms to track it on; omit or null for every platform.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          matching: Omitted fields are untouched; an empty list clears one."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -173,11 +184,14 @@ class _Keywords:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Mute or unmute it, or change the platforms it is tracked on.
+        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply to new mentions from the next poll; stored mentions are untouched.
 
         Body: a dict, a model, or the fields as keyword arguments:
+          kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
-          platforms: Replaces the platform list; null means every platform."""
+          platforms: Replaces the platform list; null means every platform.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          matching: Omitted fields are untouched; an empty list clears one."""
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
@@ -206,6 +220,9 @@ class _Mentions:
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
+          max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
+          alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -218,7 +235,9 @@ class _Mentions:
           not_intents: Never mentions carrying these intents.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
-          q: Substring search in the post text.
+          languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
+          not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
         _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
@@ -233,7 +252,7 @@ class _Mentions:
     def search(self, **params: Any) -> _m.SearchMentionsResponse200:
         """List mentions
 
-        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword.
+        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -250,6 +269,9 @@ class _Mentions:
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
+          max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
+          alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -262,7 +284,9 @@ class _Mentions:
           not_intents: Never mentions carrying these intents.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
-          q: Substring search in the post text.
+          languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
+          not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
@@ -274,13 +298,15 @@ class _Mentions:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
         """Update a mention
 
-        The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign it to a workspace member, snooze it out of the feed, or leave an internal note. Null clears a field; omitted fields are untouched. Delivery and billing never change.
+        The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign it to a workspace member, snooze it out of the feed, leave an internal note, or correct the classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list, filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
           status: ignored or done to handle it; open to put it back.
           assigneeId: A workspace member (user id), or null to unassign.
           snoozedUntil: ISO 8601 (or epoch ms) until which the mention leaves the feed; null wakes it.
-          note: Internal note; null or empty clears it."""
+          note: Internal note; null or empty clears it.
+          relevant: Your verdict on relevance, correcting the classifier: true sets relevance to 100 and puts a filtered mention back in the relevant feed, false sets it to 0 and takes it out; null withdraws the verdict and restores the classifier's score. Never billed or unbilled. A mention still being classified answers 409 classification_pending.
+          sentiment: Your corrected sentiment; null withdraws the correction and restores the classifier's."""
         return _result(_ops.mentions.update_mention.sync_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
 
 class _People:
@@ -464,12 +490,14 @@ class _Alerts:
     def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
+        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday).
+
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
           enabled:
           mode:
           filter:
-          schedule: Required for daily alerts.
+          schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday).
           event: Custom event name for webhook payloads; null for the mode default.
           channelIds: Channel ids from GET /v1/channels."""
         return _result(_ops.alerts.create_alert.sync_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields)))
@@ -602,6 +630,9 @@ class _Company:
           description:
           useCases: Replaces the whole list.
           accounts:
+          website: The company website; null clears it.
+          competitors: Replaces the whole list; [] clears it.
+          guidelines: Free-text rules for the classifier; null clears them.
           context: Overrides the composed context until the next profile edit."""
         return _result(_ops.company.update_company.sync_detailed(client=self._client, body=_body(_m.UpdateCompanyBody, body, fields)))
 
@@ -624,7 +655,7 @@ class _Analytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out)."""
+          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(_ops.analytics.get_analytics_breakdown.sync_detailed(client=self._client, **params))
 
@@ -641,8 +672,8 @@ class _Analytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          bucket: Point granularity. Default: day up to 90 days, week beyond. Weeks start on Monday.
-          by: Split into one series per platform or per keyword (the top 20 by matched, the rest folded into "other"). Omit for one total series."""
+          bucket: Point granularity: hour (windows of at most 14 days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
+          by: Split into one series per platform, per keyword (the top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral, negative, unclassified). Omit for one total series."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsSeriesRange), "platforms": (_enum_list, _m.GetAnalyticsSeriesPlatformsItem), "bucket": (_enum, _m.GetAnalyticsSeriesBucket), "by": (_enum, _m.GetAnalyticsSeriesBy)})
         return _result(_ops.analytics.get_analytics_series.sync_detailed(client=self._client, **params))
 
@@ -687,11 +718,12 @@ class _ApiKeys:
     def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
         """Create an API key
 
-        Mint a key for this workspace. The key itself is returned once; only its hash is stored.
+        Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed until revoked.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: A label for the key; "default" when omitted.
-          scope: read: GET only. write: everything."""
+          scope: read: GET only. write: everything.
+          expiresAt: When the key stops working (ISO 8601, or epoch ms), for a key handed to a script or a contractor. Must be in the future. Omit or null for a key that never expires."""
         return _result(_ops.api_keys.create_api_key.sync_detailed(client=self._client, body=_body(_m.CreateApiKeyBody, body, fields)))
 
     def list(self) -> _m.ListApiKeysResponse200:
@@ -714,6 +746,94 @@ class _System:
         """getHealth"""
         return _result(_ops.system.get_health.sync_detailed(client=self._client))
 
+class _Filters:
+    """filters: get, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def get(self) -> _m.WorkspaceFilters:
+        """Get the workspace filters
+
+        The noise rules applied to every keyword before a mention is stored: excluded terms and authors, excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post they reject is never classified, delivered or billed. Keyword-level rules live on each keyword (`matching`); both apply."""
+        return _result(_ops.filters.get_filters.sync_detailed(client=self._client))
+
+    def update(self, body: dict[str, Any] | _m.UpdateFiltersBody | None = None, **fields: Any) -> _m.WorkspaceFilters:
+        """Update the workspace filters
+
+        Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions are untouched.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          excludedTerms: Replaces the list; [] clears it.
+          excludedAuthors: Replaces the list; [] clears it.
+          excludedRepos: Replaces the list; [] clears it.
+          subreddits: Reddit only; an omitted list is untouched."""
+        return _result(_ops.filters.update_filters.sync_detailed(client=self._client, body=_body(_m.UpdateFiltersBody, body, fields)))
+
+class _Auth:
+    """auth: whoami."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def whoami(self) -> _m.Whoami:
+        """Introspect the credential
+
+        The workspace this credential acts on, how the request authenticated (an API key, an OAuth access token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is the classic scripting mistake."""
+        return _result(_ops.auth.whoami.sync_detailed(client=self._client))
+
+class _Members:
+    """members: invitations, invite, list, remove, revoke_invitation."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def invitations(self) -> _m.ListInvitationsResponse200:
+        """List pending invitations
+
+        Invitations sent and not yet accepted, declined or expired. An accepted one appears in GET /v1/members instead."""
+        return _result(_ops.members.list_invitations.sync_detailed(client=self._client))
+
+    def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, **fields: Any) -> _m.Invitation:
+        """Invite a member
+
+        Send an email invitation to join the workspace as admin or member; it expires after 48 hours. Idempotent: an address that already holds an open invitation gets it back with 200 and no second email. An address that is already a member is a 409 already_member. Team changes need a signed-in owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers 403.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          email (required): The address to invite; it receives an email with a link to join.
+          role: The role they join with. Ownership is only handed over in the dashboard."""
+        return _result(_ops.members.create_invitation.sync_detailed(client=self._client, body=_body(_m.CreateInvitationBody, body, fields)))
+
+    def list(self) -> _m.ListMembersResponse200:
+        """List members
+
+        Everyone in the workspace, owners first. `userId` is what a mention's assigneeId and a person's ownerId take."""
+        return _result(_ops.members.list_members.sync_detailed(client=self._client))
+
+    def remove(self, id: str) -> Any:
+        """Remove a member
+
+        The person loses the workspace within a minute (their dashboard session on the next request, an OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in owner or admin; only an owner removes another owner, and the last owner cannot be removed (409 last_owner)."""
+        return _result(_ops.members.remove_member.sync_detailed(id, client=self._client))
+
+    def revoke_invitation(self, id: str) -> Any:
+        """Revoke an invitation
+
+        The link in the email stops working at once. Needs a signed-in owner or admin; an API key answers 403."""
+        return _result(_ops.members.revoke_invitation.sync_detailed(id, client=self._client))
+
+class _Usage:
+    """usage: get."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def get(self) -> _m.UsageSummary:
+        """Get usage and balance
+
+        The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged daily."""
+        return _result(_ops.usage.get_usage.sync_detailed(client=self._client))
+
 class _AsyncKeywords:
     """keywords: create, delete, get, list, update."""
 
@@ -723,12 +843,14 @@ class _AsyncKeywords:
     async def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
-        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance.
+        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only.
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to track it on; omit or null for every platform."""
+          platforms: Platforms to track it on; omit or null for every platform.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          matching: Omitted fields are untouched; an empty list clears one."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -750,11 +872,14 @@ class _AsyncKeywords:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Mute or unmute it, or change the platforms it is tracked on.
+        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply to new mentions from the next poll; stored mentions are untouched.
 
         Body: a dict, a model, or the fields as keyword arguments:
+          kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
-          platforms: Replaces the platform list; null means every platform."""
+          platforms: Replaces the platform list; null means every platform.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          matching: Omitted fields are untouched; an empty list clears one."""
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:
@@ -783,6 +908,9 @@ class _AsyncMentions:
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
+          max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
+          alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -795,7 +923,9 @@ class _AsyncMentions:
           not_intents: Never mentions carrying these intents.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
-          q: Substring search in the post text.
+          languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
+          not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
         _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
@@ -810,7 +940,7 @@ class _AsyncMentions:
     async def search(self, **params: Any) -> _m.SearchMentionsResponse200:
         """List mentions
 
-        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword.
+        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -827,6 +957,9 @@ class _AsyncMentions:
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
+          max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
+          alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -839,7 +972,9 @@ class _AsyncMentions:
           not_intents: Never mentions carrying these intents.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
-          q: Substring search in the post text.
+          languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
+          not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
@@ -851,13 +986,15 @@ class _AsyncMentions:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
         """Update a mention
 
-        The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign it to a workspace member, snooze it out of the feed, or leave an internal note. Null clears a field; omitted fields are untouched. Delivery and billing never change.
+        The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign it to a workspace member, snooze it out of the feed, leave an internal note, or correct the classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list, filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
           status: ignored or done to handle it; open to put it back.
           assigneeId: A workspace member (user id), or null to unassign.
           snoozedUntil: ISO 8601 (or epoch ms) until which the mention leaves the feed; null wakes it.
-          note: Internal note; null or empty clears it."""
+          note: Internal note; null or empty clears it.
+          relevant: Your verdict on relevance, correcting the classifier: true sets relevance to 100 and puts a filtered mention back in the relevant feed, false sets it to 0 and takes it out; null withdraws the verdict and restores the classifier's score. Never billed or unbilled. A mention still being classified answers 409 classification_pending.
+          sentiment: Your corrected sentiment; null withdraws the correction and restores the classifier's."""
         return _result(await _ops.mentions.update_mention.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
 
 class _AsyncPeople:
@@ -1041,12 +1178,14 @@ class _AsyncAlerts:
     async def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
+        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday).
+
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
           enabled:
           mode:
           filter:
-          schedule: Required for daily alerts.
+          schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday).
           event: Custom event name for webhook payloads; null for the mode default.
           channelIds: Channel ids from GET /v1/channels."""
         return _result(await _ops.alerts.create_alert.asyncio_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields)))
@@ -1179,6 +1318,9 @@ class _AsyncCompany:
           description:
           useCases: Replaces the whole list.
           accounts:
+          website: The company website; null clears it.
+          competitors: Replaces the whole list; [] clears it.
+          guidelines: Free-text rules for the classifier; null clears them.
           context: Overrides the composed context until the next profile edit."""
         return _result(await _ops.company.update_company.asyncio_detailed(client=self._client, body=_body(_m.UpdateCompanyBody, body, fields)))
 
@@ -1201,7 +1343,7 @@ class _AsyncAnalytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out)."""
+          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(await _ops.analytics.get_analytics_breakdown.asyncio_detailed(client=self._client, **params))
 
@@ -1218,8 +1360,8 @@ class _AsyncAnalytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          bucket: Point granularity. Default: day up to 90 days, week beyond. Weeks start on Monday.
-          by: Split into one series per platform or per keyword (the top 20 by matched, the rest folded into "other"). Omit for one total series."""
+          bucket: Point granularity: hour (windows of at most 14 days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
+          by: Split into one series per platform, per keyword (the top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral, negative, unclassified). Omit for one total series."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsSeriesRange), "platforms": (_enum_list, _m.GetAnalyticsSeriesPlatformsItem), "bucket": (_enum, _m.GetAnalyticsSeriesBucket), "by": (_enum, _m.GetAnalyticsSeriesBy)})
         return _result(await _ops.analytics.get_analytics_series.asyncio_detailed(client=self._client, **params))
 
@@ -1264,11 +1406,12 @@ class _AsyncApiKeys:
     async def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
         """Create an API key
 
-        Mint a key for this workspace. The key itself is returned once; only its hash is stored.
+        Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed until revoked.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: A label for the key; "default" when omitted.
-          scope: read: GET only. write: everything."""
+          scope: read: GET only. write: everything.
+          expiresAt: When the key stops working (ISO 8601, or epoch ms), for a key handed to a script or a contractor. Must be in the future. Omit or null for a key that never expires."""
         return _result(await _ops.api_keys.create_api_key.asyncio_detailed(client=self._client, body=_body(_m.CreateApiKeyBody, body, fields)))
 
     async def list(self) -> _m.ListApiKeysResponse200:
@@ -1290,6 +1433,94 @@ class _AsyncSystem:
     async def health(self) -> _m.GetHealthResponse200:
         """getHealth"""
         return _result(await _ops.system.get_health.asyncio_detailed(client=self._client))
+
+class _AsyncFilters:
+    """filters: get, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def get(self) -> _m.WorkspaceFilters:
+        """Get the workspace filters
+
+        The noise rules applied to every keyword before a mention is stored: excluded terms and authors, excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post they reject is never classified, delivered or billed. Keyword-level rules live on each keyword (`matching`); both apply."""
+        return _result(await _ops.filters.get_filters.asyncio_detailed(client=self._client))
+
+    async def update(self, body: dict[str, Any] | _m.UpdateFiltersBody | None = None, **fields: Any) -> _m.WorkspaceFilters:
+        """Update the workspace filters
+
+        Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions are untouched.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          excludedTerms: Replaces the list; [] clears it.
+          excludedAuthors: Replaces the list; [] clears it.
+          excludedRepos: Replaces the list; [] clears it.
+          subreddits: Reddit only; an omitted list is untouched."""
+        return _result(await _ops.filters.update_filters.asyncio_detailed(client=self._client, body=_body(_m.UpdateFiltersBody, body, fields)))
+
+class _AsyncAuth:
+    """auth: whoami."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def whoami(self) -> _m.Whoami:
+        """Introspect the credential
+
+        The workspace this credential acts on, how the request authenticated (an API key, an OAuth access token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is the classic scripting mistake."""
+        return _result(await _ops.auth.whoami.asyncio_detailed(client=self._client))
+
+class _AsyncMembers:
+    """members: invitations, invite, list, remove, revoke_invitation."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def invitations(self) -> _m.ListInvitationsResponse200:
+        """List pending invitations
+
+        Invitations sent and not yet accepted, declined or expired. An accepted one appears in GET /v1/members instead."""
+        return _result(await _ops.members.list_invitations.asyncio_detailed(client=self._client))
+
+    async def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, **fields: Any) -> _m.Invitation:
+        """Invite a member
+
+        Send an email invitation to join the workspace as admin or member; it expires after 48 hours. Idempotent: an address that already holds an open invitation gets it back with 200 and no second email. An address that is already a member is a 409 already_member. Team changes need a signed-in owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers 403.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          email (required): The address to invite; it receives an email with a link to join.
+          role: The role they join with. Ownership is only handed over in the dashboard."""
+        return _result(await _ops.members.create_invitation.asyncio_detailed(client=self._client, body=_body(_m.CreateInvitationBody, body, fields)))
+
+    async def list(self) -> _m.ListMembersResponse200:
+        """List members
+
+        Everyone in the workspace, owners first. `userId` is what a mention's assigneeId and a person's ownerId take."""
+        return _result(await _ops.members.list_members.asyncio_detailed(client=self._client))
+
+    async def remove(self, id: str) -> Any:
+        """Remove a member
+
+        The person loses the workspace within a minute (their dashboard session on the next request, an OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in owner or admin; only an owner removes another owner, and the last owner cannot be removed (409 last_owner)."""
+        return _result(await _ops.members.remove_member.asyncio_detailed(id, client=self._client))
+
+    async def revoke_invitation(self, id: str) -> Any:
+        """Revoke an invitation
+
+        The link in the email stops working at once. Needs a signed-in owner or admin; an API key answers 403."""
+        return _result(await _ops.members.revoke_invitation.asyncio_detailed(id, client=self._client))
+
+class _AsyncUsage:
+    """usage: get."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def get(self) -> _m.UsageSummary:
+        """Get usage and balance
+
+        The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged daily."""
+        return _result(await _ops.usage.get_usage.asyncio_detailed(client=self._client))
 
 class Mentio:
     """The Mentio API: one object, one call per endpoint, grouped by resource.
@@ -1332,6 +1563,10 @@ class Mentio:
         self.analytics = _Analytics(self.client)
         self.api_keys = _ApiKeys(self.client)
         self.system = _System(self.client)
+        self.filters = _Filters(self.client)
+        self.auth = _Auth(self.client)
+        self.members = _Members(self.client)
+        self.usage = _Usage(self.client)
 
     def __enter__(self) -> "Mentio":
         self.client.__enter__()
@@ -1381,6 +1616,10 @@ class AsyncMentio:
         self.analytics = _AsyncAnalytics(self.client)
         self.api_keys = _AsyncApiKeys(self.client)
         self.system = _AsyncSystem(self.client)
+        self.filters = _AsyncFilters(self.client)
+        self.auth = _AsyncAuth(self.client)
+        self.members = _AsyncMembers(self.client)
+        self.usage = _AsyncUsage(self.client)
 
     async def __aenter__(self) -> "AsyncMentio":
         await self.client.__aenter__()

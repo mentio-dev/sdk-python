@@ -26,8 +26,9 @@ class Alert:
         name (str):
         enabled (bool):
         mode (AlertMode): instant: each matching mention as it happens. daily: one digest at the scheduled local time.
+            weekly: one digest a week, on schedule.weekday.
         filter_ (AlertFilter):
-        schedule (AlertScheduleType0 | None): Daily alerts only.
+        schedule (AlertScheduleType0 | None): Daily and weekly alerts only.
         event (str): Event name carried in webhook payloads; the mode default unless you set one.
         channels (list[AlertChannelsItem]): Where it sends.
         stats (AlertStats): Computed over this workspace's deliveries.

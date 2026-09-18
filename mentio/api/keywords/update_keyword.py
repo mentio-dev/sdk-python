@@ -82,7 +82,9 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Update a keyword
 
-     Mute or unmute it, or change the platforms it is tracked on.
+     Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
+    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
+    to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -116,7 +118,9 @@ def sync(
 ) -> ErrorResponse | Keyword | None:
     """Update a keyword
 
-     Mute or unmute it, or change the platforms it is tracked on.
+     Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
+    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
+    to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -145,7 +149,9 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Update a keyword
 
-     Mute or unmute it, or change the platforms it is tracked on.
+     Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
+    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
+    to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -177,7 +183,9 @@ async def asyncio(
 ) -> ErrorResponse | Keyword | None:
     """Update a keyword
 
-     Mute or unmute it, or change the platforms it is tracked on.
+     Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
+    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
+    to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.

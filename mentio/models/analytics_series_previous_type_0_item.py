@@ -22,8 +22,9 @@ T = TypeVar("T", bound="AnalyticsSeriesPreviousType0Item")
 class AnalyticsSeriesPreviousType0Item:
     """
     Attributes:
-        key (str): Platform name, keyword id, "total" for the unsplit series, or "other" for the keys beyond the top 20.
-        label (str): Readable name: the platform, the keyword term, "Total" or "Other".
+        key (str): Platform name, keyword id, sentiment (positive, neutral, negative, unclassified), "total" for the
+            unsplit series, or "other" for the keys beyond the top 20.
+        label (str): Readable name: the platform, the keyword term, the sentiment, "Total" or "Other".
         keyword (AnalyticsSeriesPreviousType0ItemKeywordType0 | None): Set when split by keyword; null otherwise.
         points (list[AnalyticsSeriesPreviousType0ItemPointsItem]): One point per bucket across the window, oldest first,
             zero-filled.

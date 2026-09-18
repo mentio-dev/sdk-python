@@ -13,19 +13,22 @@ T = TypeVar("T", bound="AlertScheduleType0")
 
 @_attrs_define
 class AlertScheduleType0:
-    """Daily alerts only.
+    """Daily and weekly alerts only.
 
     Attributes:
         hour (int):
         timezone (str):
         minute (int | Unset):  Default: 0.
         skip_empty (bool | Unset):  Default: True.
+        weekday (int | Unset): Weekly rules: the day it sends, 0 Sunday to 6 Saturday. Required for mode weekly; ignored
+            on daily rules.
     """
 
     hour: int
     timezone: str
     minute: int | Unset = 0
     skip_empty: bool | Unset = True
+    weekday: int | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,6 +39,8 @@ class AlertScheduleType0:
         minute = self.minute
 
         skip_empty = self.skip_empty
+
+        weekday = self.weekday
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,6 +54,8 @@ class AlertScheduleType0:
             field_dict["minute"] = minute
         if skip_empty is not UNSET:
             field_dict["skipEmpty"] = skip_empty
+        if weekday is not UNSET:
+            field_dict["weekday"] = weekday
 
         return field_dict
 
@@ -63,11 +70,14 @@ class AlertScheduleType0:
 
         skip_empty = d.pop("skipEmpty", UNSET)
 
+        weekday = d.pop("weekday", UNSET)
+
         alert_schedule_type_0 = cls(
             hour=hour,
             timezone=timezone,
             minute=minute,
             skip_empty=skip_empty,
+            weekday=weekday,
         )
 
         alert_schedule_type_0.additional_properties = d

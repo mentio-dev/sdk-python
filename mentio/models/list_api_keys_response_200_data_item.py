@@ -23,6 +23,8 @@ class ListApiKeysResponse200DataItem:
         scope (ListApiKeysResponse200DataItemScope): read: GET only. write: everything.
         created_at (str): ISO 8601 timestamp, UTC.
         last_used_at (None | str): ISO 8601 timestamp, UTC.
+        expires_at (None | str): When the key stops working; null for a key that never expires. An expired key stays
+            listed until revoked.
     """
 
     id: str
@@ -31,6 +33,7 @@ class ListApiKeysResponse200DataItem:
     scope: ListApiKeysResponse200DataItemScope
     created_at: str
     last_used_at: None | str
+    expires_at: None | str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,6 +50,9 @@ class ListApiKeysResponse200DataItem:
         last_used_at: None | str
         last_used_at = self.last_used_at
 
+        expires_at: None | str
+        expires_at = self.expires_at
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -57,6 +63,7 @@ class ListApiKeysResponse200DataItem:
                 "scope": scope,
                 "createdAt": created_at,
                 "lastUsedAt": last_used_at,
+                "expiresAt": expires_at,
             }
         )
 
@@ -82,6 +89,13 @@ class ListApiKeysResponse200DataItem:
 
         last_used_at = _parse_last_used_at(d.pop("lastUsedAt"))
 
+        def _parse_expires_at(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        expires_at = _parse_expires_at(d.pop("expiresAt"))
+
         list_api_keys_response_200_data_item = cls(
             id=id,
             name=name,
@@ -89,6 +103,7 @@ class ListApiKeysResponse200DataItem:
             scope=scope,
             created_at=created_at,
             last_used_at=last_used_at,
+            expires_at=expires_at,
         )
 
         list_api_keys_response_200_data_item.additional_properties = d

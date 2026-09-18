@@ -7,6 +7,7 @@ from typing import Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.update_mention_body_sentiment import UpdateMentionBodySentiment
 from ..models.update_mention_body_status import UpdateMentionBodyStatus
 from ..types import UNSET, Unset
 
@@ -23,12 +24,20 @@ class UpdateMentionBody:
         snoozed_until (datetime.datetime | Unset): ISO 8601 (or epoch ms) until which the mention leaves the feed; null
             wakes it.
         note (None | str | Unset): Internal note; null or empty clears it.
+        relevant (bool | None | Unset): Your verdict on relevance, correcting the classifier: true sets relevance to 100
+            and puts a filtered mention back in the relevant feed, false sets it to 0 and takes it out; null withdraws the
+            verdict and restores the classifier's score. Never billed or unbilled. A mention still being classified answers
+            409 classification_pending.
+        sentiment (UpdateMentionBodySentiment | Unset): Your corrected sentiment; null withdraws the correction and
+            restores the classifier's.
     """
 
     status: UpdateMentionBodyStatus | Unset = UNSET
     assignee_id: None | str | Unset = UNSET
     snoozed_until: datetime.datetime | Unset = UNSET
     note: None | str | Unset = UNSET
+    relevant: bool | None | Unset = UNSET
+    sentiment: UpdateMentionBodySentiment | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -52,6 +61,16 @@ class UpdateMentionBody:
         else:
             note = self.note
 
+        relevant: bool | None | Unset
+        if isinstance(self.relevant, Unset):
+            relevant = UNSET
+        else:
+            relevant = self.relevant
+
+        sentiment: str | Unset = UNSET
+        if not isinstance(self.sentiment, Unset):
+            sentiment = self.sentiment.value
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -63,6 +82,10 @@ class UpdateMentionBody:
             field_dict["snoozedUntil"] = snoozed_until
         if note is not UNSET:
             field_dict["note"] = note
+        if relevant is not UNSET:
+            field_dict["relevant"] = relevant
+        if sentiment is not UNSET:
+            field_dict["sentiment"] = sentiment
 
         return field_dict
 
@@ -101,11 +124,29 @@ class UpdateMentionBody:
 
         note = _parse_note(d.pop("note", UNSET))
 
+        def _parse_relevant(data: object) -> bool | None | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(bool | None | Unset, data)
+
+        relevant = _parse_relevant(d.pop("relevant", UNSET))
+
+        _sentiment = d.pop("sentiment", UNSET)
+        sentiment: UpdateMentionBodySentiment | Unset
+        if isinstance(_sentiment, Unset):
+            sentiment = UNSET
+        else:
+            sentiment = UpdateMentionBodySentiment(_sentiment)
+
         update_mention_body = cls(
             status=status,
             assignee_id=assignee_id,
             snoozed_until=snoozed_until,
             note=note,
+            relevant=relevant,
+            sentiment=sentiment,
         )
 
         update_mention_body.additional_properties = d

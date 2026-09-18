@@ -36,9 +36,9 @@ class ListAlertsResponse200DataItem:
         name (str):
         enabled (bool):
         mode (ListAlertsResponse200DataItemMode): instant: each matching mention as it happens. daily: one digest at the
-            scheduled local time.
+            scheduled local time. weekly: one digest a week, on schedule.weekday.
         filter_ (ListAlertsResponse200DataItemFilter):
-        schedule (ListAlertsResponse200DataItemScheduleType0 | None): Daily alerts only.
+        schedule (ListAlertsResponse200DataItemScheduleType0 | None): Daily and weekly alerts only.
         event (str): Event name carried in webhook payloads; the mode default unless you set one.
         channels (list[ListAlertsResponse200DataItemChannelsItem]): Where it sends.
         stats (ListAlertsResponse200DataItemStats): Computed over this workspace's deliveries.

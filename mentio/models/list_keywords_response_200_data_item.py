@@ -14,6 +14,9 @@ from ..models.list_keywords_response_200_data_item_platforms_type_0_item import 
 )
 
 if TYPE_CHECKING:
+    from ..models.list_keywords_response_200_data_item_matching import (
+        ListKeywordsResponse200DataItemMatching,
+    )
     from ..models.list_keywords_response_200_data_item_polling_item import (
         ListKeywordsResponse200DataItemPollingItem,
     )
@@ -37,6 +40,11 @@ class ListKeywordsResponse200DataItem:
             balance too.
         platforms (list[ListKeywordsResponse200DataItemPlatformsType0Item] | None): Platforms this keyword is tracked
             on; null means every platform.
+        context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile (at
+            most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word."
+            Null clears it.
+        matching (ListKeywordsResponse200DataItemMatching): Matching rules applied before a mention is stored; a
+            rejected post is never billed.
         stats (ListKeywordsResponse200DataItemStats): Computed over this workspace's matches.
         polling (list[ListKeywordsResponse200DataItemPollingItem]): Poll health per platform polled on a schedule. Live
             feeds (Bluesky) have no entry.
@@ -49,6 +57,8 @@ class ListKeywordsResponse200DataItem:
     muted: bool
     paused_for_balance: bool
     platforms: list[ListKeywordsResponse200DataItemPlatformsType0Item] | None
+    context: None | str
+    matching: ListKeywordsResponse200DataItemMatching
     stats: ListKeywordsResponse200DataItemStats
     polling: list[ListKeywordsResponse200DataItemPollingItem]
     created_at: str
@@ -75,6 +85,11 @@ class ListKeywordsResponse200DataItem:
         else:
             platforms = self.platforms
 
+        context: None | str
+        context = self.context
+
+        matching = self.matching.to_dict()
+
         stats = self.stats.to_dict()
 
         polling = []
@@ -94,6 +109,8 @@ class ListKeywordsResponse200DataItem:
                 "muted": muted,
                 "pausedForBalance": paused_for_balance,
                 "platforms": platforms,
+                "context": context,
+                "matching": matching,
                 "stats": stats,
                 "polling": polling,
                 "createdAt": created_at,
@@ -104,6 +121,9 @@ class ListKeywordsResponse200DataItem:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.list_keywords_response_200_data_item_matching import (
+            ListKeywordsResponse200DataItemMatching,
+        )
         from ..models.list_keywords_response_200_data_item_polling_item import (
             ListKeywordsResponse200DataItemPollingItem,
         )
@@ -150,6 +170,15 @@ class ListKeywordsResponse200DataItem:
 
         platforms = _parse_platforms(d.pop("platforms"))
 
+        def _parse_context(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        context = _parse_context(d.pop("context"))
+
+        matching = ListKeywordsResponse200DataItemMatching.from_dict(d.pop("matching"))
+
         stats = ListKeywordsResponse200DataItemStats.from_dict(d.pop("stats"))
 
         polling = []
@@ -170,6 +199,8 @@ class ListKeywordsResponse200DataItem:
             muted=muted,
             paused_for_balance=paused_for_balance,
             platforms=platforms,
+            context=context,
+            matching=matching,
             stats=stats,
             polling=polling,
             created_at=created_at,

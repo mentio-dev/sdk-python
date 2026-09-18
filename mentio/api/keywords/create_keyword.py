@@ -79,7 +79,9 @@ def sync_detailed(
 
      Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
     funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance.
+    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
+    case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the
+    classifier reads for this keyword only.
 
     Args:
         body (CreateKeywordBody):
@@ -112,7 +114,9 @@ def sync(
 
      Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
     funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance.
+    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
+    case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the
+    classifier reads for this keyword only.
 
     Args:
         body (CreateKeywordBody):
@@ -140,7 +144,9 @@ async def asyncio_detailed(
 
      Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
     funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance.
+    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
+    case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the
+    classifier reads for this keyword only.
 
     Args:
         body (CreateKeywordBody):
@@ -171,7 +177,9 @@ async def asyncio(
 
      Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
     funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance.
+    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
+    case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the
+    classifier reads for this keyword only.
 
     Args:
         body (CreateKeywordBody):

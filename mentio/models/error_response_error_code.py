@@ -2,7 +2,9 @@ from enum import StrEnum
 
 
 class ErrorResponseErrorCode(StrEnum):
+    ALREADY_MEMBER = "already_member"
     BILLING_NOT_CONFIGURED = "billing_not_configured"
+    CLASSIFICATION_PENDING = "classification_pending"
     DUPLICATE_KEYWORD = "duplicate_keyword"
     DUPLICATE_SEGMENT = "duplicate_segment"
     EMAIL_NOT_CONFIGURED = "email_not_configured"
@@ -15,6 +17,7 @@ class ErrorResponseErrorCode(StrEnum):
     INVALID_SIGNATURE = "invalid_signature"
     INVALID_TOKEN = "invalid_token"
     KEYWORD_LIMIT_REACHED = "keyword_limit_reached"
+    LAST_OWNER = "last_owner"
     NOT_A_DIGEST = "not_a_digest"
     NOT_FOUND = "not_found"
     ORDER_NOT_CREDITED = "order_not_credited"

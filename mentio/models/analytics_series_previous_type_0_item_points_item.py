@@ -13,7 +13,8 @@ T = TypeVar("T", bound="AnalyticsSeriesPreviousType0ItemPointsItem")
 class AnalyticsSeriesPreviousType0ItemPointsItem:
     """
     Attributes:
-        date (str): The day, or the Monday of the week.
+        date (str): The bucket start in `timezone`: the day (YYYY-MM-DD), the Monday of the week, the first of the
+            month, or the hour as YYYY-MM-DDTHH:00.
         matched (int): Every match published in the bucket.
         relevant (int): Of those, scored at or above the relevance threshold.
         positive (int): Classified positive.

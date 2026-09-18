@@ -16,7 +16,7 @@ class AlertStats:
     Attributes:
         sent_last_7_d (int): Deliveries in the last 7 days, across channels.
         last_sent_at (None | str): ISO 8601 timestamp, UTC.
-        next_run_at (None | str): Daily alerts: the next digest; null when disabled or instant.
+        next_run_at (None | str): Daily and weekly alerts: the next digest; null when disabled or instant.
     """
 
     sent_last_7_d: int

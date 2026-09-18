@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
+
+if TYPE_CHECKING:
+    from ..models.keyword_stats_feedback import KeywordStatsFeedback
+
 
 T = TypeVar("T", bound="KeywordStats")
 
@@ -18,12 +22,14 @@ class KeywordStats:
         relevant (int): Matches scored at or above the relevance threshold.
         last7d (int): Matches published in the last 7 days.
         last_mention_at (None | str): Newest matched post; null until the first one.
+        feedback (KeywordStatsFeedback): Your verdicts on this keyword's mentions (PATCH /v1/mentions/{id} relevant).
     """
 
     mentions: int
     relevant: int
     last7d: int
     last_mention_at: None | str
+    feedback: KeywordStatsFeedback
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,6 +42,8 @@ class KeywordStats:
         last_mention_at: None | str
         last_mention_at = self.last_mention_at
 
+        feedback = self.feedback.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -44,6 +52,7 @@ class KeywordStats:
                 "relevant": relevant,
                 "last7d": last7d,
                 "lastMentionAt": last_mention_at,
+                "feedback": feedback,
             }
         )
 
@@ -51,6 +60,10 @@ class KeywordStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.keyword_stats_feedback import (
+            KeywordStatsFeedback,
+        )
+
         d = dict(src_dict)
         mentions = d.pop("mentions")
 
@@ -65,11 +78,14 @@ class KeywordStats:
 
         last_mention_at = _parse_last_mention_at(d.pop("lastMentionAt"))
 
+        feedback = KeywordStatsFeedback.from_dict(d.pop("feedback"))
+
         keyword_stats = cls(
             mentions=mentions,
             relevant=relevant,
             last7d=last7d,
             last_mention_at=last_mention_at,
+            feedback=feedback,
         )
 
         keyword_stats.additional_properties = d

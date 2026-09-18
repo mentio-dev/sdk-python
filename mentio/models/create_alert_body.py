@@ -25,7 +25,8 @@ class CreateAlertBody:
         enabled (bool | Unset):  Default: True.
         mode (CreateAlertBodyMode | Unset):  Default: CreateAlertBodyMode.INSTANT.
         filter_ (CreateAlertBodyFilter | Unset):
-        schedule (CreateAlertBodySchedule | Unset): Required for daily alerts.
+        schedule (CreateAlertBodySchedule | Unset): Required for daily and weekly alerts (weekly ones also need
+            schedule.weekday).
         event (None | str | Unset): Custom event name for webhook payloads; null for the mode default.
         channel_ids (list[str] | Unset): Channel ids from GET /v1/channels.
     """

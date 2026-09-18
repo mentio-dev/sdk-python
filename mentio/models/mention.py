@@ -35,8 +35,8 @@ class Mention:
         keyword (MentionKeyword): The keyword this post matched.
         post (MentionPost):
         author (MentionAuthorType0 | None): Who posted it; null when the platform gave no author at all.
-        classification (MentionClassificationType0 | None): The classifier verdict; null while the post is still queued
-            for classification.
+        classification (MentionClassificationType0 | None): The classifier verdict, as corrected by your feedback; null
+            while the post is still queued for classification.
         triage (MentionTriage):
         created_at (str): When the match was recorded; the default feed order.
     """

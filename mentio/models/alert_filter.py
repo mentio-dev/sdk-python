@@ -27,6 +27,10 @@ class AlertFilter:
         tags (list[str] | Unset): Only authors your workspace tagged with any of these.
         link_hosts (list[str] | Unset): Only posts linking to any of these hosts, the host itself or a subdomain of it
             (octolens.com also matches blog.octolens.com). A post with no links never passes.
+        languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es, de). A post whose
+            language is unknown never passes.
+        automated (bool | Unset): true: only posts that read as machine-made (bots, templated posts); false: only the
+            rest. Omit for both.
     """
 
     keyword_ids: list[str] | Unset = UNSET
@@ -38,6 +42,8 @@ class AlertFilter:
     min_followers: int | Unset = UNSET
     tags: list[str] | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
+    languages: list[str] | Unset = UNSET
+    automated: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -79,6 +85,12 @@ class AlertFilter:
         if not isinstance(self.link_hosts, Unset):
             link_hosts = self.link_hosts
 
+        languages: list[str] | Unset = UNSET
+        if not isinstance(self.languages, Unset):
+            languages = self.languages
+
+        automated = self.automated
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -100,6 +112,10 @@ class AlertFilter:
             field_dict["tags"] = tags
         if link_hosts is not UNSET:
             field_dict["linkHosts"] = link_hosts
+        if languages is not UNSET:
+            field_dict["languages"] = languages
+        if automated is not UNSET:
+            field_dict["automated"] = automated
 
         return field_dict
 
@@ -138,6 +154,10 @@ class AlertFilter:
 
         link_hosts = cast(list[str], d.pop("linkHosts", UNSET))
 
+        languages = cast(list[str], d.pop("languages", UNSET))
+
+        automated = d.pop("automated", UNSET)
+
         alert_filter = cls(
             keyword_ids=keyword_ids,
             platforms=platforms,
@@ -148,6 +168,8 @@ class AlertFilter:
             min_followers=min_followers,
             tags=tags,
             link_hosts=link_hosts,
+            languages=languages,
+            automated=automated,
         )
 
         alert_filter.additional_properties = d

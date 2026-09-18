@@ -37,6 +37,9 @@ def _get_kwargs(
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
+    max_followers: int | None | Unset = UNSET,
+    is_reply: bool | Unset = UNSET,
+    alert_id: str | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[SearchMentionsPlatformsItem] | Unset = UNSET,
@@ -49,6 +52,8 @@ def _get_kwargs(
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    languages: list[str] | Unset = UNSET,
+    not_languages: list[str] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -116,6 +121,17 @@ def _get_kwargs(
     else:
         json_min_followers = min_followers
     params["minFollowers"] = json_min_followers
+
+    json_max_followers: int | None | Unset
+    if isinstance(max_followers, Unset):
+        json_max_followers = UNSET
+    else:
+        json_max_followers = max_followers
+    params["maxFollowers"] = json_max_followers
+
+    params["isReply"] = is_reply
+
+    params["alertId"] = alert_id
 
     json_tags: list[str] | None | Unset
     if isinstance(tags, Unset):
@@ -233,6 +249,18 @@ def _get_kwargs(
         json_not_tags = not_tags
     params["notTags"] = json_not_tags
 
+    json_languages: list[str] | Unset = UNSET
+    if not isinstance(languages, Unset):
+        json_languages = languages
+
+    params["languages"] = json_languages
+
+    json_not_languages: list[str] | Unset = UNSET
+    if not isinstance(not_languages, Unset):
+        json_not_languages = not_languages
+
+    params["notLanguages"] = json_not_languages
+
     params["q"] = q
 
     json_since: str | Unset = UNSET
@@ -318,6 +346,9 @@ def sync_detailed(
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
+    max_followers: int | None | Unset = UNSET,
+    is_reply: bool | Unset = UNSET,
+    alert_id: str | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[SearchMentionsPlatformsItem] | Unset = UNSET,
@@ -330,6 +361,8 @@ def sync_detailed(
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    languages: list[str] | Unset = UNSET,
+    not_languages: list[str] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -341,7 +374,8 @@ def sync_detailed(
 
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword.
+    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
+    rule's filter on top of the others: the same mentions that rule would send.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -369,6 +403,13 @@ def sync_detailed(
             are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
+        max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
+            reach never passes.
+        is_reply (bool | Unset): true: only replies and comments (posts answering another post);
+            false: only top-level posts. Omitted: both.
+        alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
+            the other filters: the same mentions the rule would send, for a feed-shaped export or a
+            preview. Unknown ids are a 404.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -389,7 +430,11 @@ def sync_detailed(
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
-        q (str | Unset): Substring search in the post text.
+        languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
+            de). A post whose language is unknown never passes.
+        not_languages (list[str] | Unset): Never posts in these languages. A post whose language
+            is unknown still passes.
+        q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
         until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
@@ -424,6 +469,9 @@ def sync_detailed(
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
         min_followers=min_followers,
+        max_followers=max_followers,
+        is_reply=is_reply,
+        alert_id=alert_id,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -436,6 +484,8 @@ def sync_detailed(
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
         not_tags=not_tags,
+        languages=languages,
+        not_languages=not_languages,
         q=q,
         since=since,
         until=until,
@@ -468,6 +518,9 @@ def sync(
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
+    max_followers: int | None | Unset = UNSET,
+    is_reply: bool | Unset = UNSET,
+    alert_id: str | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[SearchMentionsPlatformsItem] | Unset = UNSET,
@@ -480,6 +533,8 @@ def sync(
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    languages: list[str] | Unset = UNSET,
+    not_languages: list[str] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -491,7 +546,8 @@ def sync(
 
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword.
+    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
+    rule's filter on top of the others: the same mentions that rule would send.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -519,6 +575,13 @@ def sync(
             are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
+        max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
+            reach never passes.
+        is_reply (bool | Unset): true: only replies and comments (posts answering another post);
+            false: only top-level posts. Omitted: both.
+        alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
+            the other filters: the same mentions the rule would send, for a feed-shaped export or a
+            preview. Unknown ids are a 404.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -539,7 +602,11 @@ def sync(
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
-        q (str | Unset): Substring search in the post text.
+        languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
+            de). A post whose language is unknown never passes.
+        not_languages (list[str] | Unset): Never posts in these languages. A post whose language
+            is unknown still passes.
+        q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
         until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
@@ -575,6 +642,9 @@ def sync(
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
         min_followers=min_followers,
+        max_followers=max_followers,
+        is_reply=is_reply,
+        alert_id=alert_id,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -587,6 +657,8 @@ def sync(
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
         not_tags=not_tags,
+        languages=languages,
+        not_languages=not_languages,
         q=q,
         since=since,
         until=until,
@@ -613,6 +685,9 @@ async def asyncio_detailed(
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
+    max_followers: int | None | Unset = UNSET,
+    is_reply: bool | Unset = UNSET,
+    alert_id: str | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[SearchMentionsPlatformsItem] | Unset = UNSET,
@@ -625,6 +700,8 @@ async def asyncio_detailed(
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    languages: list[str] | Unset = UNSET,
+    not_languages: list[str] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -636,7 +713,8 @@ async def asyncio_detailed(
 
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword.
+    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
+    rule's filter on top of the others: the same mentions that rule would send.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -664,6 +742,13 @@ async def asyncio_detailed(
             are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
+        max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
+            reach never passes.
+        is_reply (bool | Unset): true: only replies and comments (posts answering another post);
+            false: only top-level posts. Omitted: both.
+        alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
+            the other filters: the same mentions the rule would send, for a feed-shaped export or a
+            preview. Unknown ids are a 404.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -684,7 +769,11 @@ async def asyncio_detailed(
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
-        q (str | Unset): Substring search in the post text.
+        languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
+            de). A post whose language is unknown never passes.
+        not_languages (list[str] | Unset): Never posts in these languages. A post whose language
+            is unknown still passes.
+        q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
         until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
@@ -719,6 +808,9 @@ async def asyncio_detailed(
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
         min_followers=min_followers,
+        max_followers=max_followers,
+        is_reply=is_reply,
+        alert_id=alert_id,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -731,6 +823,8 @@ async def asyncio_detailed(
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
         not_tags=not_tags,
+        languages=languages,
+        not_languages=not_languages,
         q=q,
         since=since,
         until=until,
@@ -761,6 +855,9 @@ async def asyncio(
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
+    max_followers: int | None | Unset = UNSET,
+    is_reply: bool | Unset = UNSET,
+    alert_id: str | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[SearchMentionsPlatformsItem] | Unset = UNSET,
@@ -773,6 +870,8 @@ async def asyncio(
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    languages: list[str] | Unset = UNSET,
+    not_languages: list[str] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -784,7 +883,8 @@ async def asyncio(
 
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword.
+    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
+    rule's filter on top of the others: the same mentions that rule would send.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -812,6 +912,13 @@ async def asyncio(
             are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
+        max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
+            reach never passes.
+        is_reply (bool | Unset): true: only replies and comments (posts answering another post);
+            false: only top-level posts. Omitted: both.
+        alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
+            the other filters: the same mentions the rule would send, for a feed-shaped export or a
+            preview. Unknown ids are a 404.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -832,7 +939,11 @@ async def asyncio(
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
-        q (str | Unset): Substring search in the post text.
+        languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
+            de). A post whose language is unknown never passes.
+        not_languages (list[str] | Unset): Never posts in these languages. A post whose language
+            is unknown still passes.
+        q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
         until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
@@ -869,6 +980,9 @@ async def asyncio(
             exclude_authors=exclude_authors,
             min_relevance=min_relevance,
             min_followers=min_followers,
+            max_followers=max_followers,
+            is_reply=is_reply,
+            alert_id=alert_id,
             tags=tags,
             link_hosts=link_hosts,
             platforms=platforms,
@@ -881,6 +995,8 @@ async def asyncio(
             not_intents=not_intents,
             not_link_hosts=not_link_hosts,
             not_tags=not_tags,
+            languages=languages,
+            not_languages=not_languages,
             q=q,
             since=since,
             until=until,

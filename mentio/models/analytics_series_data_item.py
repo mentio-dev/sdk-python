@@ -22,8 +22,9 @@ T = TypeVar("T", bound="AnalyticsSeriesDataItem")
 class AnalyticsSeriesDataItem:
     """
     Attributes:
-        key (str): Platform name, keyword id, "total" for the unsplit series, or "other" for the keys beyond the top 20.
-        label (str): Readable name: the platform, the keyword term, "Total" or "Other".
+        key (str): Platform name, keyword id, sentiment (positive, neutral, negative, unclassified), "total" for the
+            unsplit series, or "other" for the keys beyond the top 20.
+        label (str): Readable name: the platform, the keyword term, the sentiment, "Total" or "Other".
         keyword (AnalyticsSeriesDataItemKeywordType0 | None): Set when split by keyword; null otherwise.
         points (list[AnalyticsSeriesDataItemPointsItem]): One point per bucket across the window, oldest first, zero-
             filled.

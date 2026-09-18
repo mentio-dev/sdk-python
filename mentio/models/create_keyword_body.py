@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -11,6 +11,10 @@ from ..models.create_keyword_body_platforms_type_0_item import (
     CreateKeywordBodyPlatformsType0Item,
 )
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.create_keyword_body_matching import CreateKeywordBodyMatching
+
 
 T = TypeVar("T", bound="CreateKeywordBody")
 
@@ -24,11 +28,17 @@ class CreateKeywordBody:
             of voice and segments. Default: CreateKeywordBodyKind.BRAND.
         platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to track it on; omit or null for
             every platform.
+        context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
+            profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the
+            geometry word." Null clears it.
+        matching (CreateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
     """
 
     term: str
     kind: CreateKeywordBodyKind | Unset = CreateKeywordBodyKind.BRAND
     platforms: list[CreateKeywordBodyPlatformsType0Item] | None | Unset = UNSET
+    context: None | str | Unset = UNSET
+    matching: CreateKeywordBodyMatching | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -50,6 +60,16 @@ class CreateKeywordBody:
         else:
             platforms = self.platforms
 
+        context: None | str | Unset
+        if isinstance(self.context, Unset):
+            context = UNSET
+        else:
+            context = self.context
+
+        matching: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.matching, Unset):
+            matching = self.matching.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -61,11 +81,19 @@ class CreateKeywordBody:
             field_dict["kind"] = kind
         if platforms is not UNSET:
             field_dict["platforms"] = platforms
+        if context is not UNSET:
+            field_dict["context"] = context
+        if matching is not UNSET:
+            field_dict["matching"] = matching
 
         return field_dict
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.create_keyword_body_matching import (
+            CreateKeywordBodyMatching,
+        )
+
         d = dict(src_dict)
         term = d.pop("term")
 
@@ -102,10 +130,28 @@ class CreateKeywordBody:
 
         platforms = _parse_platforms(d.pop("platforms", UNSET))
 
+        def _parse_context(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        context = _parse_context(d.pop("context", UNSET))
+
+        _matching = d.pop("matching", UNSET)
+        matching: CreateKeywordBodyMatching | Unset
+        if isinstance(_matching, Unset):
+            matching = UNSET
+        else:
+            matching = CreateKeywordBodyMatching.from_dict(_matching)
+
         create_keyword_body = cls(
             term=term,
             kind=kind,
             platforms=platforms,
+            context=context,
+            matching=matching,
         )
 
         create_keyword_body.additional_properties = d

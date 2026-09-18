@@ -5,6 +5,7 @@ class AnalyticsBreakdownBy(StrEnum):
     HOUR = "hour"
     INTENT = "intent"
     KEYWORD = "keyword"
+    LANGUAGE = "language"
     PERSON = "person"
     PLATFORM = "platform"
     SENTIMENT = "sentiment"

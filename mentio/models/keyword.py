@@ -10,6 +10,7 @@ from ..models.keyword_kind import KeywordKind
 from ..models.keyword_platforms_type_0_item import KeywordPlatformsType0Item
 
 if TYPE_CHECKING:
+    from ..models.keyword_matching import KeywordMatching
     from ..models.keyword_polling_item import KeywordPollingItem
     from ..models.keyword_stats import KeywordStats
 
@@ -29,6 +30,10 @@ class Keyword:
             balance too.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms this keyword is tracked on; null means every
             platform.
+        context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile (at
+            most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word."
+            Null clears it.
+        matching (KeywordMatching): Matching rules applied before a mention is stored; a rejected post is never billed.
         stats (KeywordStats): Computed over this workspace's matches.
         polling (list[KeywordPollingItem]): Poll health per platform polled on a schedule. Live feeds (Bluesky) have no
             entry.
@@ -41,6 +46,8 @@ class Keyword:
     muted: bool
     paused_for_balance: bool
     platforms: list[KeywordPlatformsType0Item] | None
+    context: None | str
+    matching: KeywordMatching
     stats: KeywordStats
     polling: list[KeywordPollingItem]
     created_at: str
@@ -67,6 +74,11 @@ class Keyword:
         else:
             platforms = self.platforms
 
+        context: None | str
+        context = self.context
+
+        matching = self.matching.to_dict()
+
         stats = self.stats.to_dict()
 
         polling = []
@@ -86,6 +98,8 @@ class Keyword:
                 "muted": muted,
                 "pausedForBalance": paused_for_balance,
                 "platforms": platforms,
+                "context": context,
+                "matching": matching,
                 "stats": stats,
                 "polling": polling,
                 "createdAt": created_at,
@@ -96,6 +110,7 @@ class Keyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.keyword_matching import KeywordMatching
         from ..models.keyword_polling_item import KeywordPollingItem
         from ..models.keyword_stats import KeywordStats
 
@@ -132,6 +147,15 @@ class Keyword:
 
         platforms = _parse_platforms(d.pop("platforms"))
 
+        def _parse_context(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        context = _parse_context(d.pop("context"))
+
+        matching = KeywordMatching.from_dict(d.pop("matching"))
+
         stats = KeywordStats.from_dict(d.pop("stats"))
 
         polling = []
@@ -150,6 +174,8 @@ class Keyword:
             muted=muted,
             paused_for_balance=paused_for_balance,
             platforms=platforms,
+            context=context,
+            matching=matching,
             stats=stats,
             polling=polling,
             created_at=created_at,

@@ -21,6 +21,11 @@ class Company:
         description (str): What the company does, one paragraph.
         use_cases (list[str]): What people use the product for.
         accounts (CompanyAccounts): Your own accounts, so your own posts are recognized.
+        website (None | str): The company website, as set up during onboarding.
+        competitors (list[str]): Competitors by name, so the classifier reads a rival's mention as such; usually the
+            same names as your competitor keywords.
+        guidelines (None | str): Free-text rules for the classifier: what counts as relevant for you and what never does
+            ("posts about our API, never job listings"). The second biggest lever after the description.
         context (str): The text the classifier reads. Composed from the fields above unless you override it.
     """
 
@@ -28,6 +33,9 @@ class Company:
     description: str
     use_cases: list[str]
     accounts: CompanyAccounts
+    website: None | str
+    competitors: list[str]
+    guidelines: None | str
     context: str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -40,6 +48,14 @@ class Company:
 
         accounts = self.accounts.to_dict()
 
+        website: None | str
+        website = self.website
+
+        competitors = self.competitors
+
+        guidelines: None | str
+        guidelines = self.guidelines
+
         context = self.context
 
         field_dict: dict[str, Any] = {}
@@ -50,6 +66,9 @@ class Company:
                 "description": description,
                 "useCases": use_cases,
                 "accounts": accounts,
+                "website": website,
+                "competitors": competitors,
+                "guidelines": guidelines,
                 "context": context,
             }
         )
@@ -69,6 +88,22 @@ class Company:
 
         accounts = CompanyAccounts.from_dict(d.pop("accounts"))
 
+        def _parse_website(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        website = _parse_website(d.pop("website"))
+
+        competitors = cast(list[str], d.pop("competitors"))
+
+        def _parse_guidelines(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        guidelines = _parse_guidelines(d.pop("guidelines"))
+
         context = d.pop("context")
 
         company = cls(
@@ -76,6 +111,9 @@ class Company:
             description=description,
             use_cases=use_cases,
             accounts=accounts,
+            website=website,
+            competitors=competitors,
+            guidelines=guidelines,
             context=context,
         )
 

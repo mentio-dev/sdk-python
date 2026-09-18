@@ -147,7 +147,7 @@ def sync_detailed(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out).
+            are left out), language (ISO 639-1; "unknown" for posts without one).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -211,7 +211,7 @@ def sync(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out).
+            are left out), language (ISO 639-1; "unknown" for posts without one).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -270,7 +270,7 @@ async def asyncio_detailed(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out).
+            are left out), language (ISO 639-1; "unknown" for posts without one).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -332,7 +332,7 @@ async def asyncio(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out).
+            are left out), language (ISO 639-1; "unknown" for posts without one).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

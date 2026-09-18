@@ -20,7 +20,7 @@ class AnalyticsSeriesWindow:
         to (str): Last day, inclusive.
         days (int): Length of the window in days.
         timezone (str): IANA zone the days were cut in.
-        bucket (AnalyticsSeriesWindowBucket): Point granularity: day, or week (Monday to Sunday).
+        bucket (AnalyticsSeriesWindowBucket): Point granularity used: hour, day, week (Monday to Sunday) or month.
     """
 
     from_: str

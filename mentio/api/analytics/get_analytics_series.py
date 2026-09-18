@@ -156,10 +156,11 @@ def sync_detailed(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity. Default: day up to 90 days,
-            week beyond. Weeks start on Monday.
-        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform or per keyword (the
-            top 20 by matched, the rest folded into "other"). Omit for one total series.
+        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity: hour (windows of at most 14
+            days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
+        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform, per keyword (the
+            top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral,
+            negative, unclassified). Omit for one total series.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -222,10 +223,11 @@ def sync(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity. Default: day up to 90 days,
-            week beyond. Weeks start on Monday.
-        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform or per keyword (the
-            top 20 by matched, the rest folded into "other"). Omit for one total series.
+        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity: hour (windows of at most 14
+            days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
+        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform, per keyword (the
+            top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral,
+            negative, unclassified). Omit for one total series.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -283,10 +285,11 @@ async def asyncio_detailed(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity. Default: day up to 90 days,
-            week beyond. Weeks start on Monday.
-        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform or per keyword (the
-            top 20 by matched, the rest folded into "other"). Omit for one total series.
+        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity: hour (windows of at most 14
+            days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
+        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform, per keyword (the
+            top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral,
+            negative, unclassified). Omit for one total series.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -347,10 +350,11 @@ async def asyncio(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity. Default: day up to 90 days,
-            week beyond. Weeks start on Monday.
-        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform or per keyword (the
-            top 20 by matched, the rest folded into "other"). Omit for one total series.
+        bucket (GetAnalyticsSeriesBucket | Unset): Point granularity: hour (windows of at most 14
+            days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
+        by (GetAnalyticsSeriesBy | Unset): Split into one series per platform, per keyword (the
+            top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral,
+            negative, unclassified). Omit for one total series.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

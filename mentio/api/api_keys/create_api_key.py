@@ -38,6 +38,11 @@ def _parse_response(
 
         return response_201
 
+    if response.status_code == 400:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
+
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
 
@@ -67,7 +72,9 @@ def sync_detailed(
 ) -> Response[CreateApiKeyResponse201 | ErrorResponse]:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored.
+     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
+    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
+    until revoked.
 
     Args:
         body (CreateApiKeyBody):
@@ -98,7 +105,9 @@ def sync(
 ) -> CreateApiKeyResponse201 | ErrorResponse | None:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored.
+     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
+    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
+    until revoked.
 
     Args:
         body (CreateApiKeyBody):
@@ -124,7 +133,9 @@ async def asyncio_detailed(
 ) -> Response[CreateApiKeyResponse201 | ErrorResponse]:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored.
+     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
+    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
+    until revoked.
 
     Args:
         body (CreateApiKeyBody):
@@ -153,7 +164,9 @@ async def asyncio(
 ) -> CreateApiKeyResponse201 | ErrorResponse | None:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored.
+     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
+    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
+    until revoked.
 
     Args:
         body (CreateApiKeyBody):
