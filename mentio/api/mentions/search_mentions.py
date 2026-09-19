@@ -36,6 +36,7 @@ def _get_kwargs(
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
+    min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
@@ -114,6 +115,13 @@ def _get_kwargs(
     else:
         json_min_relevance = min_relevance
     params["minRelevance"] = json_min_relevance
+
+    json_min_confidence: float | None | Unset
+    if isinstance(min_confidence, Unset):
+        json_min_confidence = UNSET
+    else:
+        json_min_confidence = min_confidence
+    params["minConfidence"] = json_min_confidence
 
     json_min_followers: int | None | Unset
     if isinstance(min_followers, Unset):
@@ -345,6 +353,7 @@ def sync_detailed(
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
+    min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
@@ -385,8 +394,9 @@ def sync_detailed(
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
-            praise, comparison).
+        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
+            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
+            promotional).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -401,6 +411,8 @@ def sync_detailed(
             profile URLs. Repeatable, or one comma-separated value.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
+        min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
+            least this, 0 to 1. Mentions without a confidence are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
@@ -424,8 +436,10 @@ def sync_detailed(
         sentiments (list[SearchMentionsSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[SearchMentionsNotSentimentsItem] | Unset): Never these sentiments. A
             mention the classifier has not scored yet still passes.
-        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
-        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
+            tags.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
+            tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
@@ -468,6 +482,7 @@ def sync_detailed(
         snoozed=snoozed,
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
+        min_confidence=min_confidence,
         min_followers=min_followers,
         max_followers=max_followers,
         is_reply=is_reply,
@@ -517,6 +532,7 @@ def sync(
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
+    min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
@@ -557,8 +573,9 @@ def sync(
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
-            praise, comparison).
+        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
+            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
+            promotional).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -573,6 +590,8 @@ def sync(
             profile URLs. Repeatable, or one comma-separated value.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
+        min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
+            least this, 0 to 1. Mentions without a confidence are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
@@ -596,8 +615,10 @@ def sync(
         sentiments (list[SearchMentionsSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[SearchMentionsNotSentimentsItem] | Unset): Never these sentiments. A
             mention the classifier has not scored yet still passes.
-        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
-        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
+            tags.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
+            tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
@@ -641,6 +662,7 @@ def sync(
         snoozed=snoozed,
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
+        min_confidence=min_confidence,
         min_followers=min_followers,
         max_followers=max_followers,
         is_reply=is_reply,
@@ -684,6 +706,7 @@ async def asyncio_detailed(
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
+    min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
@@ -724,8 +747,9 @@ async def asyncio_detailed(
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
-            praise, comparison).
+        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
+            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
+            promotional).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -740,6 +764,8 @@ async def asyncio_detailed(
             profile URLs. Repeatable, or one comma-separated value.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
+        min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
+            least this, 0 to 1. Mentions without a confidence are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
@@ -763,8 +789,10 @@ async def asyncio_detailed(
         sentiments (list[SearchMentionsSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[SearchMentionsNotSentimentsItem] | Unset): Never these sentiments. A
             mention the classifier has not scored yet still passes.
-        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
-        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
+            tags.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
+            tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
@@ -807,6 +835,7 @@ async def asyncio_detailed(
         snoozed=snoozed,
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
+        min_confidence=min_confidence,
         min_followers=min_followers,
         max_followers=max_followers,
         is_reply=is_reply,
@@ -854,6 +883,7 @@ async def asyncio(
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
+    min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
@@ -894,8 +924,9 @@ async def asyncio(
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent (buy_intent, question, complaint,
-            praise, comparison).
+        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
+            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
+            promotional).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -910,6 +941,8 @@ async def asyncio(
             profile URLs. Repeatable, or one comma-separated value.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
+        min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
+            least this, 0 to 1. Mentions without a confidence are excluded.
         min_followers (int | None | Unset): Only authors with at least this many followers.
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
@@ -933,8 +966,10 @@ async def asyncio(
         sentiments (list[SearchMentionsSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[SearchMentionsNotSentimentsItem] | Unset): Never these sentiments. A
             mention the classifier has not scored yet still passes.
-        intents (list[str] | None | Unset): Only mentions carrying any of these intents.
-        not_intents (list[str] | None | Unset): Never mentions carrying these intents.
+        intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
+            tags.
+        not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
+            tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
@@ -979,6 +1014,7 @@ async def asyncio(
             snoozed=snoozed,
             exclude_authors=exclude_authors,
             min_relevance=min_relevance,
+            min_confidence=min_confidence,
             min_followers=min_followers,
             max_followers=max_followers,
             is_reply=is_reply,

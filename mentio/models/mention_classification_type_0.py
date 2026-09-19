@@ -26,12 +26,17 @@ class MentionClassificationType0:
     Attributes:
         relevance (int | None): 0 to 100; null only when classification failed.
         sentiment (MentionClassificationType0Sentiment): Classifier sentiment.
-        intents (list[str]): Detected intents: buy_intent, question, complaint, praise, comparison.
+        intents (list[str]): Intent and topic tags: buy_intent, question, complaint, praise, comparison, churn_intent
+            (leaving or replacing the keyword), bug_report, pricing, hiring, event, promotional.
         automated (bool): The post reads as machine-made: a bot or app account, a scheduled or templated post, an
             obvious AI-written summary. A label only: automated mentions stay in the feed, are delivered as usual and are
             billed like any other match. false while unjudged.
         language (None | str): The language the post is written in, as an ISO 639-1 code (en, es, de); null when unknown
             or classified before languages were recorded.
+        confidence (float | None): How sure the classifier is of its relevance verdict, 0 to 1. null when the verdict
+            came without one: the fallback model judged, or the row was scored before confidence was recorded.
+        uncertain (bool): The verdict deserves a human look: confidence under 0.4, or the model that wrote the note
+            disagreed with the verdict. A flag for reviewers; it never hides a mention.
         note (None | str): One sentence from the classifier explaining the score.
         failed (bool): true when the model could not score this post; it stays in the feed and is not billed.
         feedback (MentionClassificationType0FeedbackType0 | None): A person's correction of the verdict, or null. A
@@ -44,6 +49,8 @@ class MentionClassificationType0:
     intents: list[str]
     automated: bool
     language: None | str
+    confidence: float | None
+    uncertain: bool
     note: None | str
     failed: bool
     feedback: MentionClassificationType0FeedbackType0 | None
@@ -66,6 +73,11 @@ class MentionClassificationType0:
         language: None | str
         language = self.language
 
+        confidence: float | None
+        confidence = self.confidence
+
+        uncertain = self.uncertain
+
         note: None | str
         note = self.note
 
@@ -86,6 +98,8 @@ class MentionClassificationType0:
                 "intents": intents,
                 "automated": automated,
                 "language": language,
+                "confidence": confidence,
+                "uncertain": uncertain,
                 "note": note,
                 "failed": failed,
                 "feedback": feedback,
@@ -122,6 +136,15 @@ class MentionClassificationType0:
 
         language = _parse_language(d.pop("language"))
 
+        def _parse_confidence(data: object) -> float | None:
+            if data is None:
+                return data
+            return cast(float | None, data)
+
+        confidence = _parse_confidence(d.pop("confidence"))
+
+        uncertain = d.pop("uncertain")
+
         def _parse_note(data: object) -> None | str:
             if data is None:
                 return data
@@ -156,6 +179,8 @@ class MentionClassificationType0:
             intents=intents,
             automated=automated,
             language=language,
+            confidence=confidence,
+            uncertain=uncertain,
             note=note,
             failed=failed,
             feedback=feedback,

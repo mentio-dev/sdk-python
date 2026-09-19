@@ -203,7 +203,7 @@ class _Mentions:
     def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), status, relevant, delivered, url, text (first 1,000 characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -211,7 +211,7 @@ class _Mentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -219,6 +219,7 @@ class _Mentions:
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
+          min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
@@ -231,8 +232,8 @@ class _Mentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
-          intents: Only mentions carrying any of these intents.
-          not_intents: Never mentions carrying these intents.
+          intents: Only mentions carrying any of these intent or topic tags.
+          not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
@@ -260,7 +261,7 @@ class _Mentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -268,6 +269,7 @@ class _Mentions:
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
+          min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
@@ -280,8 +282,8 @@ class _Mentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
-          intents: Only mentions carrying any of these intents.
-          not_intents: Never mentions carrying these intents.
+          intents: Only mentions carrying any of these intent or topic tags.
+          not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
@@ -891,7 +893,7 @@ class _AsyncMentions:
     async def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), status, relevant, delivered, url, text (first 1,000 characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -899,7 +901,7 @@ class _AsyncMentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -907,6 +909,7 @@ class _AsyncMentions:
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
+          min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
@@ -919,8 +922,8 @@ class _AsyncMentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
-          intents: Only mentions carrying any of these intents.
-          not_intents: Never mentions carrying these intents.
+          intents: Only mentions carrying any of these intent or topic tags.
+          not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
@@ -948,7 +951,7 @@ class _AsyncMentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent (buy_intent, question, complaint, praise, comparison).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -956,6 +959,7 @@ class _AsyncMentions:
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
+          min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
@@ -968,8 +972,8 @@ class _AsyncMentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
-          intents: Only mentions carrying any of these intents.
-          not_intents: Never mentions carrying these intents.
+          intents: Only mentions carrying any of these intent or topic tags.
+          not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.

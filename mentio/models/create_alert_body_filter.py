@@ -24,8 +24,10 @@ class CreateAlertBodyFilter:
         keyword_ids (list[str] | Unset): Only these keywords.
         platforms (list[CreateAlertBodyFilterPlatformsItem] | Unset): Only posts from these platforms.
         min_relevance (int | Unset): Only mentions scored at least this; unclassified ones never pass.
+        min_confidence (float | Unset): Only mentions whose classifier confidence is at least this, 0 to 1. A mention
+            without a confidence never passes.
         sentiments (list[CreateAlertBodyFilterSentimentsItem] | Unset): Only these sentiments.
-        intents (list[str] | Unset): At least one of these intents.
+        intents (list[str] | Unset): At least one of these intent or topic tags.
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
         min_followers (int | Unset): Only authors with at least this many followers. Unknown reach never passes.
         tags (list[str] | Unset): Only authors your workspace tagged with any of these.
@@ -40,6 +42,7 @@ class CreateAlertBodyFilter:
     keyword_ids: list[str] | Unset = UNSET
     platforms: list[CreateAlertBodyFilterPlatformsItem] | Unset = UNSET
     min_relevance: int | Unset = UNSET
+    min_confidence: float | Unset = UNSET
     sentiments: list[CreateAlertBodyFilterSentimentsItem] | Unset = UNSET
     intents: list[str] | Unset = UNSET
     exclude_authors: list[str] | Unset = UNSET
@@ -63,6 +66,8 @@ class CreateAlertBodyFilter:
                 platforms.append(platforms_item)
 
         min_relevance = self.min_relevance
+
+        min_confidence = self.min_confidence
 
         sentiments: list[str] | Unset = UNSET
         if not isinstance(self.sentiments, Unset):
@@ -104,6 +109,8 @@ class CreateAlertBodyFilter:
             field_dict["platforms"] = platforms
         if min_relevance is not UNSET:
             field_dict["minRelevance"] = min_relevance
+        if min_confidence is not UNSET:
+            field_dict["minConfidence"] = min_confidence
         if sentiments is not UNSET:
             field_dict["sentiments"] = sentiments
         if intents is not UNSET:
@@ -139,6 +146,8 @@ class CreateAlertBodyFilter:
 
         min_relevance = d.pop("minRelevance", UNSET)
 
+        min_confidence = d.pop("minConfidence", UNSET)
+
         _sentiments = d.pop("sentiments", UNSET)
         sentiments: list[CreateAlertBodyFilterSentimentsItem] | Unset = UNSET
         if _sentiments is not UNSET:
@@ -168,6 +177,7 @@ class CreateAlertBodyFilter:
             keyword_ids=keyword_ids,
             platforms=platforms,
             min_relevance=min_relevance,
+            min_confidence=min_confidence,
             sentiments=sentiments,
             intents=intents,
             exclude_authors=exclude_authors,
