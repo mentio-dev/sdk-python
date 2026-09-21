@@ -175,11 +175,21 @@ class _Keywords:
         """Get a keyword"""
         return _result(_ops.keywords.get_keyword.sync_detailed(id, client=self._client))
 
-    def list(self) -> _m.ListKeywordsResponse200:
+    def list(self, **params: Any) -> _m.ListKeywordsResponse200:
         """List keywords
 
-        Every keyword of the workspace, newest first, with its match stats and poll health."""
-        return _result(_ops.keywords.list_keywords.sync_detailed(client=self._client))
+        The keywords of the workspace with their match stats and poll health. Without parameters: every keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched before paging.
+
+        Keyword arguments (query):
+          q: Text to find in the term or in the keyword's context, case-insensitive.
+          kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          status: Only keywords in these states: active, muted, paused. Repeatable, or comma-separated.
+          platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+          sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
+          limit: Page size, 1 to 500. Omit for every keyword after `offset`.
+          offset: Skip this many keywords."""
+        _coerce(params, {"kind": (_enum_list, _m.ListKeywordsKindItem), "status": (_enum_list, _m.ListKeywordsStatusItem), "platform": (_enum_list, _m.ListKeywordsPlatformItem), "sort": (_enum, _m.ListKeywordsSort)})
+        return _result(_ops.keywords.list_keywords.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
@@ -865,11 +875,21 @@ class _AsyncKeywords:
         """Get a keyword"""
         return _result(await _ops.keywords.get_keyword.asyncio_detailed(id, client=self._client))
 
-    async def list(self) -> _m.ListKeywordsResponse200:
+    async def list(self, **params: Any) -> _m.ListKeywordsResponse200:
         """List keywords
 
-        Every keyword of the workspace, newest first, with its match stats and poll health."""
-        return _result(await _ops.keywords.list_keywords.asyncio_detailed(client=self._client))
+        The keywords of the workspace with their match stats and poll health. Without parameters: every keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched before paging.
+
+        Keyword arguments (query):
+          q: Text to find in the term or in the keyword's context, case-insensitive.
+          kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          status: Only keywords in these states: active, muted, paused. Repeatable, or comma-separated.
+          platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+          sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
+          limit: Page size, 1 to 500. Omit for every keyword after `offset`.
+          offset: Skip this many keywords."""
+        _coerce(params, {"kind": (_enum_list, _m.ListKeywordsKindItem), "status": (_enum_list, _m.ListKeywordsStatusItem), "platform": (_enum_list, _m.ListKeywordsPlatformItem), "sort": (_enum, _m.ListKeywordsSort)})
+        return _result(await _ops.keywords.list_keywords.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword

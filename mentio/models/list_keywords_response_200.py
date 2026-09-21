@@ -20,9 +20,11 @@ class ListKeywordsResponse200:
     """
     Attributes:
         data (list[ListKeywordsResponse200DataItem]):
+        total (int): Keywords matching the filters, before `limit` and `offset`.
     """
 
     data: list[ListKeywordsResponse200DataItem]
+    total: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -31,11 +33,14 @@ class ListKeywordsResponse200:
             data_item = data_item_data.to_dict()
             data.append(data_item)
 
+        total = self.total
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "data": data,
+                "total": total,
             }
         )
 
@@ -55,8 +60,11 @@ class ListKeywordsResponse200:
 
             data.append(data_item)
 
+        total = d.pop("total")
+
         list_keywords_response_200 = cls(
             data=data,
+            total=total,
         )
 
         list_keywords_response_200.additional_properties = d
