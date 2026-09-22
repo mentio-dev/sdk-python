@@ -7,6 +7,9 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
+from ...models.export_mentions_csv_keyword_kinds_item import (
+    ExportMentionsCsvKeywordKindsItem,
+)
 from ...models.export_mentions_csv_not_platforms_item import (
     ExportMentionsCsvNotPlatformsItem,
 )
@@ -43,6 +46,8 @@ def _get_kwargs(
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
+    view_id: str | Unset = UNSET,
+    keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -139,6 +144,17 @@ def _get_kwargs(
     params["isReply"] = is_reply
 
     params["alertId"] = alert_id
+
+    params["viewId"] = view_id
+
+    json_keyword_kinds: list[str] | Unset = UNSET
+    if not isinstance(keyword_kinds, Unset):
+        json_keyword_kinds = []
+        for keyword_kinds_item_data in keyword_kinds:
+            keyword_kinds_item = keyword_kinds_item_data.value
+            json_keyword_kinds.append(keyword_kinds_item)
+
+    params["keywordKinds"] = json_keyword_kinds
 
     json_tags: list[str] | None | Unset
     if isinstance(tags, Unset):
@@ -351,6 +367,8 @@ def sync_detailed(
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
+    view_id: str | Unset = UNSET,
+    keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -414,6 +432,11 @@ def sync_detailed(
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
             the other filters: the same mentions the rule would send, for a feed-shaped export or a
             preview. Unknown ids are a 404.
+        view_id (str | Unset): Apply a saved view's filter (an id from GET /v1/views) on top of
+            the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a
+            404.
+        keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
+            of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -473,6 +496,8 @@ def sync_detailed(
         max_followers=max_followers,
         is_reply=is_reply,
         alert_id=alert_id,
+        view_id=view_id,
+        keyword_kinds=keyword_kinds,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -520,6 +545,8 @@ def sync(
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
+    view_id: str | Unset = UNSET,
+    keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -583,6 +610,11 @@ def sync(
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
             the other filters: the same mentions the rule would send, for a feed-shaped export or a
             preview. Unknown ids are a 404.
+        view_id (str | Unset): Apply a saved view's filter (an id from GET /v1/views) on top of
+            the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a
+            404.
+        keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
+            of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -643,6 +675,8 @@ def sync(
         max_followers=max_followers,
         is_reply=is_reply,
         alert_id=alert_id,
+        view_id=view_id,
+        keyword_kinds=keyword_kinds,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -684,6 +718,8 @@ async def asyncio_detailed(
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
+    view_id: str | Unset = UNSET,
+    keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -747,6 +783,11 @@ async def asyncio_detailed(
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
             the other filters: the same mentions the rule would send, for a feed-shaped export or a
             preview. Unknown ids are a 404.
+        view_id (str | Unset): Apply a saved view's filter (an id from GET /v1/views) on top of
+            the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a
+            404.
+        keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
+            of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -806,6 +847,8 @@ async def asyncio_detailed(
         max_followers=max_followers,
         is_reply=is_reply,
         alert_id=alert_id,
+        view_id=view_id,
+        keyword_kinds=keyword_kinds,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -851,6 +894,8 @@ async def asyncio(
     max_followers: int | None | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
+    view_id: str | Unset = UNSET,
+    keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -914,6 +959,11 @@ async def asyncio(
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
             the other filters: the same mentions the rule would send, for a feed-shaped export or a
             preview. Unknown ids are a 404.
+        view_id (str | Unset): Apply a saved view's filter (an id from GET /v1/views) on top of
+            the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a
+            404.
+        keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
+            of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
             (exact, case-sensitive). Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
@@ -975,6 +1025,8 @@ async def asyncio(
             max_followers=max_followers,
             is_reply=is_reply,
             alert_id=alert_id,
+            view_id=view_id,
+            keyword_kinds=keyword_kinds,
             tags=tags,
             link_hosts=link_hosts,
             platforms=platforms,

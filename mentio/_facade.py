@@ -144,6 +144,11 @@ import mentio.api.segments.list_segments  # noqa: F401
 import mentio.api.segments.update_segment  # noqa: F401
 import mentio.api.system.get_health  # noqa: F401
 import mentio.api.usage.get_usage  # noqa: F401
+import mentio.api.views.create_view  # noqa: F401
+import mentio.api.views.delete_view  # noqa: F401
+import mentio.api.views.get_view  # noqa: F401
+import mentio.api.views.list_views  # noqa: F401
+import mentio.api.views.update_view  # noqa: F401
 
 
 class _Keywords:
@@ -234,6 +239,8 @@ class _Mentions:
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
+          view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
+          keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -251,7 +258,7 @@ class _Mentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_csv.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Mention:
@@ -284,6 +291,8 @@ class _Mentions:
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
+          view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
+          keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -304,7 +313,7 @@ class _Mentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(_ops.mentions.search_mentions.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -782,6 +791,50 @@ class _Filters:
           subreddits: Reddit only; an omitted list is untouched."""
         return _result(_ops.filters.update_filters.sync_detailed(client=self._client, body=_body(_m.UpdateFiltersBody, body, fields)))
 
+class _Views:
+    """views: create, delete, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
+        """Save a view
+
+        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): Unique per workspace, case-insensitive.
+          description: What the view is for, shown under its name.
+          filter: The filter; empty selects every mention."""
+        return _result(_ops.views.create_view.sync_detailed(client=self._client, body=_body(_m.CreateViewBody, body, fields)))
+
+    def delete(self, id: str) -> Any:
+        """Delete a view
+
+        Removes the view. No mention is affected."""
+        return _result(_ops.views.delete_view.sync_detailed(id, client=self._client))
+
+    def get(self, id: str) -> _m.View:
+        """Get a view"""
+        return _result(_ops.views.get_view.sync_detailed(id, client=self._client))
+
+    def list(self) -> _m.ListViewsResponse200:
+        """List views
+
+        The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to read exactly what it selects."""
+        return _result(_ops.views.list_views.sync_detailed(client=self._client))
+
+    def update(self, id: str, body: dict[str, Any] | _m.UpdateViewBody | None = None, **fields: Any) -> _m.View:
+        """Update a view
+
+        Rename, describe or refilter a view. `filter` replaces the whole filter.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name:
+          description:
+          filter: Replaces the whole filter."""
+        return _result(_ops.views.update_view.sync_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
+
 class _Auth:
     """auth: whoami."""
 
@@ -934,6 +987,8 @@ class _AsyncMentions:
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
+          view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
+          keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -951,7 +1006,7 @@ class _AsyncMentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_csv.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Mention:
@@ -984,6 +1039,8 @@ class _AsyncMentions:
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
+          view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
+          keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -1004,7 +1061,7 @@ class _AsyncMentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(await _ops.mentions.search_mentions.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -1482,6 +1539,50 @@ class _AsyncFilters:
           subreddits: Reddit only; an omitted list is untouched."""
         return _result(await _ops.filters.update_filters.asyncio_detailed(client=self._client, body=_body(_m.UpdateFiltersBody, body, fields)))
 
+class _AsyncViews:
+    """views: create, delete, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
+        """Save a view
+
+        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): Unique per workspace, case-insensitive.
+          description: What the view is for, shown under its name.
+          filter: The filter; empty selects every mention."""
+        return _result(await _ops.views.create_view.asyncio_detailed(client=self._client, body=_body(_m.CreateViewBody, body, fields)))
+
+    async def delete(self, id: str) -> Any:
+        """Delete a view
+
+        Removes the view. No mention is affected."""
+        return _result(await _ops.views.delete_view.asyncio_detailed(id, client=self._client))
+
+    async def get(self, id: str) -> _m.View:
+        """Get a view"""
+        return _result(await _ops.views.get_view.asyncio_detailed(id, client=self._client))
+
+    async def list(self) -> _m.ListViewsResponse200:
+        """List views
+
+        The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to read exactly what it selects."""
+        return _result(await _ops.views.list_views.asyncio_detailed(client=self._client))
+
+    async def update(self, id: str, body: dict[str, Any] | _m.UpdateViewBody | None = None, **fields: Any) -> _m.View:
+        """Update a view
+
+        Rename, describe or refilter a view. `filter` replaces the whole filter.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name:
+          description:
+          filter: Replaces the whole filter."""
+        return _result(await _ops.views.update_view.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
+
 class _AsyncAuth:
     """auth: whoami."""
 
@@ -1588,6 +1689,7 @@ class Mentio:
         self.api_keys = _ApiKeys(self.client)
         self.system = _System(self.client)
         self.filters = _Filters(self.client)
+        self.views = _Views(self.client)
         self.auth = _Auth(self.client)
         self.members = _Members(self.client)
         self.usage = _Usage(self.client)
@@ -1641,6 +1743,7 @@ class AsyncMentio:
         self.api_keys = _AsyncApiKeys(self.client)
         self.system = _AsyncSystem(self.client)
         self.filters = _AsyncFilters(self.client)
+        self.views = _AsyncViews(self.client)
         self.auth = _AsyncAuth(self.client)
         self.members = _AsyncMembers(self.client)
         self.usage = _AsyncUsage(self.client)

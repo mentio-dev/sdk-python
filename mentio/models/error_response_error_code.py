@@ -7,6 +7,7 @@ class ErrorResponseErrorCode(StrEnum):
     CLASSIFICATION_PENDING = "classification_pending"
     DUPLICATE_KEYWORD = "duplicate_keyword"
     DUPLICATE_SEGMENT = "duplicate_segment"
+    DUPLICATE_VIEW = "duplicate_view"
     EMAIL_NOT_CONFIGURED = "email_not_configured"
     FORBIDDEN = "forbidden"
     INSUFFICIENT_BALANCE = "insufficient_balance"

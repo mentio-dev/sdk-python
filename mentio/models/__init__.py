@@ -110,6 +110,20 @@ from .create_segment_body_filter_platforms_item import (
 from .create_segment_body_filter_stages_item import CreateSegmentBodyFilterStagesItem
 from .create_slack_channel import CreateSlackChannel
 from .create_slack_channel_kind import CreateSlackChannelKind
+from .create_view_body import CreateViewBody
+from .create_view_body_filter import CreateViewBodyFilter
+from .create_view_body_filter_keyword_kinds_item import (
+    CreateViewBodyFilterKeywordKindsItem,
+)
+from .create_view_body_filter_not_platforms_item import (
+    CreateViewBodyFilterNotPlatformsItem,
+)
+from .create_view_body_filter_not_sentiments_item import (
+    CreateViewBodyFilterNotSentimentsItem,
+)
+from .create_view_body_filter_platforms_item import CreateViewBodyFilterPlatformsItem
+from .create_view_body_filter_sentiments_item import CreateViewBodyFilterSentimentsItem
+from .create_view_body_filter_status import CreateViewBodyFilterStatus
 from .create_webhook_channel import CreateWebhookChannel
 from .create_webhook_channel_headers import CreateWebhookChannelHeaders
 from .create_webhook_channel_kind import CreateWebhookChannelKind
@@ -122,6 +136,7 @@ from .email_channel_stats_last_7d import EmailChannelStatsLast7D
 from .error_response import ErrorResponse
 from .error_response_error import ErrorResponseError
 from .error_response_error_code import ErrorResponseErrorCode
+from .export_mentions_csv_keyword_kinds_item import ExportMentionsCsvKeywordKindsItem
 from .export_mentions_csv_not_platforms_item import ExportMentionsCsvNotPlatformsItem
 from .export_mentions_csv_not_sentiments_item import ExportMentionsCsvNotSentimentsItem
 from .export_mentions_csv_platform import ExportMentionsCsvPlatform
@@ -328,6 +343,27 @@ from .list_segments_response_200_presets_item_filter_platforms_item import (
 from .list_segments_response_200_presets_item_filter_stages_item import (
     ListSegmentsResponse200PresetsItemFilterStagesItem,
 )
+from .list_views_response_200 import ListViewsResponse200
+from .list_views_response_200_data_item import ListViewsResponse200DataItem
+from .list_views_response_200_data_item_filter import ListViewsResponse200DataItemFilter
+from .list_views_response_200_data_item_filter_keyword_kinds_item import (
+    ListViewsResponse200DataItemFilterKeywordKindsItem,
+)
+from .list_views_response_200_data_item_filter_not_platforms_item import (
+    ListViewsResponse200DataItemFilterNotPlatformsItem,
+)
+from .list_views_response_200_data_item_filter_not_sentiments_item import (
+    ListViewsResponse200DataItemFilterNotSentimentsItem,
+)
+from .list_views_response_200_data_item_filter_platforms_item import (
+    ListViewsResponse200DataItemFilterPlatformsItem,
+)
+from .list_views_response_200_data_item_filter_sentiments_item import (
+    ListViewsResponse200DataItemFilterSentimentsItem,
+)
+from .list_views_response_200_data_item_filter_status import (
+    ListViewsResponse200DataItemFilterStatus,
+)
 from .log_person_activity_body import LogPersonActivityBody
 from .log_person_activity_body_channel import LogPersonActivityBodyChannel
 from .member import Member
@@ -378,6 +414,7 @@ from .run_alert_digest_response_200_outcomes_item import (
     RunAlertDigestResponse200OutcomesItem,
 )
 from .run_alert_digest_response_200_skipped import RunAlertDigestResponse200Skipped
+from .search_mentions_keyword_kinds_item import SearchMentionsKeywordKindsItem
 from .search_mentions_not_platforms_item import SearchMentionsNotPlatformsItem
 from .search_mentions_not_sentiments_item import SearchMentionsNotSentimentsItem
 from .search_mentions_platform import SearchMentionsPlatform
@@ -459,12 +496,34 @@ from .update_segment_body_filter_platforms_item import (
     UpdateSegmentBodyFilterPlatformsItem,
 )
 from .update_segment_body_filter_stages_item import UpdateSegmentBodyFilterStagesItem
+from .update_view_body import UpdateViewBody
+from .update_view_body_filter import UpdateViewBodyFilter
+from .update_view_body_filter_keyword_kinds_item import (
+    UpdateViewBodyFilterKeywordKindsItem,
+)
+from .update_view_body_filter_not_platforms_item import (
+    UpdateViewBodyFilterNotPlatformsItem,
+)
+from .update_view_body_filter_not_sentiments_item import (
+    UpdateViewBodyFilterNotSentimentsItem,
+)
+from .update_view_body_filter_platforms_item import UpdateViewBodyFilterPlatformsItem
+from .update_view_body_filter_sentiments_item import UpdateViewBodyFilterSentimentsItem
+from .update_view_body_filter_status import UpdateViewBodyFilterStatus
 from .usage_summary import UsageSummary
 from .usage_summary_balance import UsageSummaryBalance
 from .usage_summary_balance_currency import UsageSummaryBalanceCurrency
 from .usage_summary_burn import UsageSummaryBurn
 from .usage_summary_keywords import UsageSummaryKeywords
 from .usage_summary_mentions import UsageSummaryMentions
+from .view import View
+from .view_filter import ViewFilter
+from .view_filter_keyword_kinds_item import ViewFilterKeywordKindsItem
+from .view_filter_not_platforms_item import ViewFilterNotPlatformsItem
+from .view_filter_not_sentiments_item import ViewFilterNotSentimentsItem
+from .view_filter_platforms_item import ViewFilterPlatformsItem
+from .view_filter_sentiments_item import ViewFilterSentimentsItem
+from .view_filter_status import ViewFilterStatus
 from .webhook_channel import WebhookChannel
 from .webhook_channel_config import WebhookChannelConfig
 from .webhook_channel_config_headers import WebhookChannelConfigHeaders
@@ -551,6 +610,14 @@ __all__ = (
     "CreateSegmentBodyFilterStagesItem",
     "CreateSlackChannel",
     "CreateSlackChannelKind",
+    "CreateViewBody",
+    "CreateViewBodyFilter",
+    "CreateViewBodyFilterKeywordKindsItem",
+    "CreateViewBodyFilterNotPlatformsItem",
+    "CreateViewBodyFilterNotSentimentsItem",
+    "CreateViewBodyFilterPlatformsItem",
+    "CreateViewBodyFilterSentimentsItem",
+    "CreateViewBodyFilterStatus",
     "CreateWebhookChannel",
     "CreateWebhookChannelHeaders",
     "CreateWebhookChannelKind",
@@ -563,6 +630,7 @@ __all__ = (
     "ErrorResponse",
     "ErrorResponseError",
     "ErrorResponseErrorCode",
+    "ExportMentionsCsvKeywordKindsItem",
     "ExportMentionsCsvNotPlatformsItem",
     "ExportMentionsCsvNotSentimentsItem",
     "ExportMentionsCsvPlatform",
@@ -677,6 +745,15 @@ __all__ = (
     "ListSegmentsResponse200PresetsItemFilterNotPlatformsItem",
     "ListSegmentsResponse200PresetsItemFilterPlatformsItem",
     "ListSegmentsResponse200PresetsItemFilterStagesItem",
+    "ListViewsResponse200",
+    "ListViewsResponse200DataItem",
+    "ListViewsResponse200DataItemFilter",
+    "ListViewsResponse200DataItemFilterKeywordKindsItem",
+    "ListViewsResponse200DataItemFilterNotPlatformsItem",
+    "ListViewsResponse200DataItemFilterNotSentimentsItem",
+    "ListViewsResponse200DataItemFilterPlatformsItem",
+    "ListViewsResponse200DataItemFilterSentimentsItem",
+    "ListViewsResponse200DataItemFilterStatus",
     "LogPersonActivityBody",
     "LogPersonActivityBodyChannel",
     "Member",
@@ -717,6 +794,7 @@ __all__ = (
     "RunAlertDigestResponse200",
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",
+    "SearchMentionsKeywordKindsItem",
     "SearchMentionsNotPlatformsItem",
     "SearchMentionsNotSentimentsItem",
     "SearchMentionsPlatform",
@@ -784,12 +862,28 @@ __all__ = (
     "UpdateSegmentBodyFilterNotPlatformsItem",
     "UpdateSegmentBodyFilterPlatformsItem",
     "UpdateSegmentBodyFilterStagesItem",
+    "UpdateViewBody",
+    "UpdateViewBodyFilter",
+    "UpdateViewBodyFilterKeywordKindsItem",
+    "UpdateViewBodyFilterNotPlatformsItem",
+    "UpdateViewBodyFilterNotSentimentsItem",
+    "UpdateViewBodyFilterPlatformsItem",
+    "UpdateViewBodyFilterSentimentsItem",
+    "UpdateViewBodyFilterStatus",
     "UsageSummary",
     "UsageSummaryBalance",
     "UsageSummaryBalanceCurrency",
     "UsageSummaryBurn",
     "UsageSummaryKeywords",
     "UsageSummaryMentions",
+    "View",
+    "ViewFilter",
+    "ViewFilterKeywordKindsItem",
+    "ViewFilterNotPlatformsItem",
+    "ViewFilterNotSentimentsItem",
+    "ViewFilterPlatformsItem",
+    "ViewFilterSentimentsItem",
+    "ViewFilterStatus",
     "WebhookChannel",
     "WebhookChannelConfig",
     "WebhookChannelConfigHeaders",
