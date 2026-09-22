@@ -386,6 +386,7 @@ from .mention_classification_type_0_feedback_type_0_sentiment import (
 from .mention_classification_type_0_sentiment import MentionClassificationType0Sentiment
 from .mention_keyword import MentionKeyword
 from .mention_post import MentionPost
+from .mention_post_engagement_type_0 import MentionPostEngagementType0
 from .mention_post_platform import MentionPostPlatform
 from .mention_post_reply_to_type_0 import MentionPostReplyToType0
 from .mention_status import MentionStatus
@@ -768,6 +769,7 @@ __all__ = (
     "MentionClassificationType0Sentiment",
     "MentionKeyword",
     "MentionPost",
+    "MentionPostEngagementType0",
     "MentionPostPlatform",
     "MentionPostReplyToType0",
     "MentionStatus",

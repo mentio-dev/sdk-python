@@ -27,7 +27,7 @@ MENTION = {
     "delivered": False,
     "priority": 61.5,
     "keyword": {"id": "kw_1", "term": "acme"},
-    "post": {"platform": "reddit", "url": "https://r/1", "text": "hi", "links": [], "publishedAt": "2026-09-03T08:12:44.000Z", "replyTo": None},
+    "post": {"platform": "reddit", "url": "https://r/1", "text": "hi", "links": [], "engagement": None, "publishedAt": "2026-09-03T08:12:44.000Z", "replyTo": None},
     "author": None,
     "classification": None,
     "triage": {"assignee": None, "snoozedUntil": None, "note": None},

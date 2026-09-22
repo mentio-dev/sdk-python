@@ -9,6 +9,7 @@ from attrs import field as _attrs_field
 from ..models.mention_post_platform import MentionPostPlatform
 
 if TYPE_CHECKING:
+    from ..models.mention_post_engagement_type_0 import MentionPostEngagementType0
     from ..models.mention_post_reply_to_type_0 import MentionPostReplyToType0
 
 
@@ -26,6 +27,9 @@ class MentionPost:
         links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for
             posts ingested before September 2026.
         published_at (str): When the post was published.
+        engagement (MentionPostEngagementType0 | None): Engagement counts as the platform reported them when the post
+            was ingested, usually minutes after it was written; a count the platform does not have is null. Null as a whole
+            for platforms that report none and for posts ingested before September 2026. X carries all six.
         reply_to (MentionPostReplyToType0 | None): The post this one replies to (X, Bluesky); null for top-level posts.
     """
 
@@ -34,10 +38,14 @@ class MentionPost:
     text: str
     links: list[str]
     published_at: str
+    engagement: MentionPostEngagementType0 | None
     reply_to: MentionPostReplyToType0 | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.mention_post_engagement_type_0 import (
+            MentionPostEngagementType0,
+        )
         from ..models.mention_post_reply_to_type_0 import (
             MentionPostReplyToType0,
         )
@@ -51,6 +59,12 @@ class MentionPost:
         links = self.links
 
         published_at = self.published_at
+
+        engagement: dict[str, Any] | None
+        if isinstance(self.engagement, MentionPostEngagementType0):
+            engagement = self.engagement.to_dict()
+        else:
+            engagement = self.engagement
 
         reply_to: dict[str, Any] | None
         if isinstance(self.reply_to, MentionPostReplyToType0):
@@ -67,6 +81,7 @@ class MentionPost:
                 "text": text,
                 "links": links,
                 "publishedAt": published_at,
+                "engagement": engagement,
                 "replyTo": reply_to,
             }
         )
@@ -75,6 +90,9 @@ class MentionPost:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.mention_post_engagement_type_0 import (
+            MentionPostEngagementType0,
+        )
         from ..models.mention_post_reply_to_type_0 import (
             MentionPostReplyToType0,
         )
@@ -89,6 +107,21 @@ class MentionPost:
         links = cast(list[str], d.pop("links"))
 
         published_at = d.pop("publishedAt")
+
+        def _parse_engagement(data: object) -> MentionPostEngagementType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                engagement_type_0 = MentionPostEngagementType0.from_dict(data)
+
+                return engagement_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(MentionPostEngagementType0 | None, data)
+
+        engagement = _parse_engagement(d.pop("engagement"))
 
         def _parse_reply_to(data: object) -> MentionPostReplyToType0 | None:
             if data is None:
@@ -111,6 +144,7 @@ class MentionPost:
             text=text,
             links=links,
             published_at=published_at,
+            engagement=engagement,
             reply_to=reply_to,
         )
 
