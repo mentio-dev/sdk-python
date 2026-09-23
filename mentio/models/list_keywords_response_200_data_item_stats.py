@@ -10,6 +10,9 @@ if TYPE_CHECKING:
     from ..models.list_keywords_response_200_data_item_stats_feedback import (
         ListKeywordsResponse200DataItemStatsFeedback,
     )
+    from ..models.list_keywords_response_200_data_item_stats_noise import (
+        ListKeywordsResponse200DataItemStatsNoise,
+    )
 
 
 T = TypeVar("T", bound="ListKeywordsResponse200DataItemStats")
@@ -26,6 +29,8 @@ class ListKeywordsResponse200DataItemStats:
         last_mention_at (None | str): Newest matched post; null until the first one.
         feedback (ListKeywordsResponse200DataItemStatsFeedback): Your verdicts on this keyword's mentions (PATCH
             /v1/mentions/{id} relevant).
+        noise (ListKeywordsResponse200DataItemStatsNoise): Relevance over the last 14 days of scored matches, so a
+            keyword tightened today stops being flagged within two weeks.
     """
 
     mentions: int
@@ -33,6 +38,7 @@ class ListKeywordsResponse200DataItemStats:
     last7d: int
     last_mention_at: None | str
     feedback: ListKeywordsResponse200DataItemStatsFeedback
+    noise: ListKeywordsResponse200DataItemStatsNoise
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,6 +53,8 @@ class ListKeywordsResponse200DataItemStats:
 
         feedback = self.feedback.to_dict()
 
+        noise = self.noise.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -56,6 +64,7 @@ class ListKeywordsResponse200DataItemStats:
                 "last7d": last7d,
                 "lastMentionAt": last_mention_at,
                 "feedback": feedback,
+                "noise": noise,
             }
         )
 
@@ -65,6 +74,9 @@ class ListKeywordsResponse200DataItemStats:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.list_keywords_response_200_data_item_stats_feedback import (
             ListKeywordsResponse200DataItemStatsFeedback,
+        )
+        from ..models.list_keywords_response_200_data_item_stats_noise import (
+            ListKeywordsResponse200DataItemStatsNoise,
         )
 
         d = dict(src_dict)
@@ -85,12 +97,15 @@ class ListKeywordsResponse200DataItemStats:
             d.pop("feedback")
         )
 
+        noise = ListKeywordsResponse200DataItemStatsNoise.from_dict(d.pop("noise"))
+
         list_keywords_response_200_data_item_stats = cls(
             mentions=mentions,
             relevant=relevant,
             last7d=last7d,
             last_mention_at=last_mention_at,
             feedback=feedback,
+            noise=noise,
         )
 
         list_keywords_response_200_data_item_stats.additional_properties = d

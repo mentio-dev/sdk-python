@@ -8,6 +8,7 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.keyword_stats_feedback import KeywordStatsFeedback
+    from ..models.keyword_stats_noise import KeywordStatsNoise
 
 
 T = TypeVar("T", bound="KeywordStats")
@@ -23,6 +24,8 @@ class KeywordStats:
         last7d (int): Matches published in the last 7 days.
         last_mention_at (None | str): Newest matched post; null until the first one.
         feedback (KeywordStatsFeedback): Your verdicts on this keyword's mentions (PATCH /v1/mentions/{id} relevant).
+        noise (KeywordStatsNoise): Relevance over the last 14 days of scored matches, so a keyword tightened today stops
+            being flagged within two weeks.
     """
 
     mentions: int
@@ -30,6 +33,7 @@ class KeywordStats:
     last7d: int
     last_mention_at: None | str
     feedback: KeywordStatsFeedback
+    noise: KeywordStatsNoise
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -44,6 +48,8 @@ class KeywordStats:
 
         feedback = self.feedback.to_dict()
 
+        noise = self.noise.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -53,6 +59,7 @@ class KeywordStats:
                 "last7d": last7d,
                 "lastMentionAt": last_mention_at,
                 "feedback": feedback,
+                "noise": noise,
             }
         )
 
@@ -63,6 +70,7 @@ class KeywordStats:
         from ..models.keyword_stats_feedback import (
             KeywordStatsFeedback,
         )
+        from ..models.keyword_stats_noise import KeywordStatsNoise
 
         d = dict(src_dict)
         mentions = d.pop("mentions")
@@ -80,12 +88,15 @@ class KeywordStats:
 
         feedback = KeywordStatsFeedback.from_dict(d.pop("feedback"))
 
+        noise = KeywordStatsNoise.from_dict(d.pop("noise"))
+
         keyword_stats = cls(
             mentions=mentions,
             relevant=relevant,
             last7d=last7d,
             last_mention_at=last_mention_at,
             feedback=feedback,
+            noise=noise,
         )
 
         keyword_stats.additional_properties = d

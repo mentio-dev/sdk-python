@@ -177,6 +177,7 @@ from .keyword_polling_item import KeywordPollingItem
 from .keyword_polling_item_platform import KeywordPollingItemPlatform
 from .keyword_stats import KeywordStats
 from .keyword_stats_feedback import KeywordStatsFeedback
+from .keyword_stats_noise import KeywordStatsNoise
 from .list_alerts_response_200 import ListAlertsResponse200
 from .list_alerts_response_200_data_item import ListAlertsResponse200DataItem
 from .list_alerts_response_200_data_item_channels_item import (
@@ -249,6 +250,9 @@ from .list_keywords_response_200_data_item_stats import (
 )
 from .list_keywords_response_200_data_item_stats_feedback import (
     ListKeywordsResponse200DataItemStatsFeedback,
+)
+from .list_keywords_response_200_data_item_stats_noise import (
+    ListKeywordsResponse200DataItemStatsNoise,
 )
 from .list_keywords_sort import ListKeywordsSort
 from .list_keywords_status_item import ListKeywordsStatusItem
@@ -670,6 +674,7 @@ __all__ = (
     "KeywordPollingItemPlatform",
     "KeywordStats",
     "KeywordStatsFeedback",
+    "KeywordStatsNoise",
     "ListAlertsResponse200",
     "ListAlertsResponse200DataItem",
     "ListAlertsResponse200DataItemChannelsItem",
@@ -703,6 +708,7 @@ __all__ = (
     "ListKeywordsResponse200DataItemPollingItemPlatform",
     "ListKeywordsResponse200DataItemStats",
     "ListKeywordsResponse200DataItemStatsFeedback",
+    "ListKeywordsResponse200DataItemStatsNoise",
     "ListKeywordsSort",
     "ListKeywordsStatusItem",
     "ListMembersResponse200",
