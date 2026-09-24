@@ -23,7 +23,9 @@ class CreateAlertBodyFilter:
     Attributes:
         keyword_ids (list[str] | Unset): Only these keywords.
         platforms (list[CreateAlertBodyFilterPlatformsItem] | Unset): Only posts from these platforms.
-        min_relevance (int | Unset): Only mentions scored at least this; unclassified ones never pass.
+        min_relevance (int | Unset): The rule's relevance floor. Absent, it sends relevant mentions only (scored 40 and
+            up, the classifier's line); lower, down to 0, it also receives the matches the classifier scored as noise;
+            higher, it hears less. Email channels keep the 40 line whatever the rule says. Unclassified mentions never pass.
         min_confidence (float | Unset): Only mentions whose classifier confidence is at least this, 0 to 1. A mention
             without a confidence never passes.
         sentiments (list[CreateAlertBodyFilterSentimentsItem] | Unset): Only these sentiments.
