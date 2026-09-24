@@ -169,6 +169,8 @@ from .get_health_response_200 import GetHealthResponse200
 from .get_invoice_url_response_200 import GetInvoiceUrlResponse200
 from .get_share_of_voice_platforms_item import GetShareOfVoicePlatformsItem
 from .get_share_of_voice_range import GetShareOfVoiceRange
+from .get_usage_breakdown_by import GetUsageBreakdownBy
+from .get_usage_breakdown_range import GetUsageBreakdownRange
 from .invitation import Invitation
 from .invitation_invited_by_type_0 import InvitationInvitedByType0
 from .invitation_role import InvitationRole
@@ -183,6 +185,7 @@ from .keyword_platforms_type_0_item import KeywordPlatformsType0Item
 from .keyword_polling_item import KeywordPollingItem
 from .keyword_polling_item_platform import KeywordPollingItemPlatform
 from .keyword_stats import KeywordStats
+from .keyword_stats_cost import KeywordStatsCost
 from .keyword_stats_feedback import KeywordStatsFeedback
 from .keyword_stats_noise import KeywordStatsNoise
 from .ledger_list import LedgerList
@@ -260,6 +263,9 @@ from .list_keywords_response_200_data_item_polling_item_platform import (
 )
 from .list_keywords_response_200_data_item_stats import (
     ListKeywordsResponse200DataItemStats,
+)
+from .list_keywords_response_200_data_item_stats_cost import (
+    ListKeywordsResponse200DataItemStatsCost,
 )
 from .list_keywords_response_200_data_item_stats_feedback import (
     ListKeywordsResponse200DataItemStatsFeedback,
@@ -529,6 +535,13 @@ from .update_view_body_filter_not_sentiments_item import (
 from .update_view_body_filter_platforms_item import UpdateViewBodyFilterPlatformsItem
 from .update_view_body_filter_sentiments_item import UpdateViewBodyFilterSentimentsItem
 from .update_view_body_filter_status import UpdateViewBodyFilterStatus
+from .usage_breakdown import UsageBreakdown
+from .usage_breakdown_by import UsageBreakdownBy
+from .usage_breakdown_currency import UsageBreakdownCurrency
+from .usage_breakdown_data_item import UsageBreakdownDataItem
+from .usage_breakdown_data_item_keyword_type_0 import UsageBreakdownDataItemKeywordType0
+from .usage_breakdown_totals import UsageBreakdownTotals
+from .usage_breakdown_window import UsageBreakdownWindow
 from .usage_summary import UsageSummary
 from .usage_summary_balance import UsageSummaryBalance
 from .usage_summary_balance_currency import UsageSummaryBalanceCurrency
@@ -684,6 +697,8 @@ __all__ = (
     "GetInvoiceUrlResponse200",
     "GetShareOfVoicePlatformsItem",
     "GetShareOfVoiceRange",
+    "GetUsageBreakdownBy",
+    "GetUsageBreakdownRange",
     "Invitation",
     "InvitationInvitedByType0",
     "InvitationRole",
@@ -698,6 +713,7 @@ __all__ = (
     "KeywordPollingItem",
     "KeywordPollingItemPlatform",
     "KeywordStats",
+    "KeywordStatsCost",
     "KeywordStatsFeedback",
     "KeywordStatsNoise",
     "LedgerList",
@@ -736,6 +752,7 @@ __all__ = (
     "ListKeywordsResponse200DataItemPollingItem",
     "ListKeywordsResponse200DataItemPollingItemPlatform",
     "ListKeywordsResponse200DataItemStats",
+    "ListKeywordsResponse200DataItemStatsCost",
     "ListKeywordsResponse200DataItemStatsFeedback",
     "ListKeywordsResponse200DataItemStatsNoise",
     "ListKeywordsSort",
@@ -908,6 +925,13 @@ __all__ = (
     "UpdateViewBodyFilterPlatformsItem",
     "UpdateViewBodyFilterSentimentsItem",
     "UpdateViewBodyFilterStatus",
+    "UsageBreakdown",
+    "UsageBreakdownBy",
+    "UsageBreakdownCurrency",
+    "UsageBreakdownDataItem",
+    "UsageBreakdownDataItemKeywordType0",
+    "UsageBreakdownTotals",
+    "UsageBreakdownWindow",
     "UsageSummary",
     "UsageSummaryBalance",
     "UsageSummaryBalanceCurrency",

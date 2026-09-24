@@ -7,6 +7,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
+    from ..models.keyword_stats_cost import KeywordStatsCost
     from ..models.keyword_stats_feedback import KeywordStatsFeedback
     from ..models.keyword_stats_noise import KeywordStatsNoise
 
@@ -27,6 +28,9 @@ class KeywordStats:
         feedback (KeywordStatsFeedback): Your verdicts on this keyword's mentions (PATCH /v1/mentions/{id} relevant).
         noise (KeywordStatsNoise): Relevance over the last 14 days of scored matches, so a keyword tightened today stops
             being flagged within two weeks.
+        cost (KeywordStatsCost): What this keyword has cost this calendar month (UTC) at list price: exactly its row in
+            GET /v1/usage/breakdown?month=<this month> (same tables, same rounding). The wallet's ledger, which settles once
+            a day, is what can differ from these list-price numbers, and only by cumulative rounding.
     """
 
     mentions: int
@@ -36,6 +40,7 @@ class KeywordStats:
     last_mention_at: None | str
     feedback: KeywordStatsFeedback
     noise: KeywordStatsNoise
+    cost: KeywordStatsCost
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -54,6 +59,8 @@ class KeywordStats:
 
         noise = self.noise.to_dict()
 
+        cost = self.cost.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -65,6 +72,7 @@ class KeywordStats:
                 "lastMentionAt": last_mention_at,
                 "feedback": feedback,
                 "noise": noise,
+                "cost": cost,
             }
         )
 
@@ -72,6 +80,7 @@ class KeywordStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.keyword_stats_cost import KeywordStatsCost
         from ..models.keyword_stats_feedback import (
             KeywordStatsFeedback,
         )
@@ -97,6 +106,8 @@ class KeywordStats:
 
         noise = KeywordStatsNoise.from_dict(d.pop("noise"))
 
+        cost = KeywordStatsCost.from_dict(d.pop("cost"))
+
         keyword_stats = cls(
             mentions=mentions,
             relevant=relevant,
@@ -105,6 +116,7 @@ class KeywordStats:
             last_mention_at=last_mention_at,
             feedback=feedback,
             noise=noise,
+            cost=cost,
         )
 
         keyword_stats.additional_properties = d

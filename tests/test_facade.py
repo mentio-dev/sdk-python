@@ -75,7 +75,7 @@ def test_bodies_take_fields_a_dict_or_a_model():
 
     def handler(request: httpx.Request) -> httpx.Response:
         bodies.append(json.loads(request.content))
-        return json_response(201, {"id": "kw_1", "term": "acme", "kind": "brand", "muted": False, "pausedForBalance": False, "pausedForCap": False, "cap": None, "platforms": None, "context": None, "matching": {"requiredTerms": [], "requiredMode": "any", "excludedTerms": [], "excludedAuthors": [], "caseSensitive": False}, "stats": {"mentions": 0, "relevant": 0, "last7d": 0, "thisMonth": 0, "lastMentionAt": None, "feedback": {"relevant": 0, "notRelevant": 0}, "noise": {"scored": 0, "relevant": 0, "noisy": False}}, "polling": [], "createdAt": "2026-09-03T10:04:44.881Z"})
+        return json_response(201, {"id": "kw_1", "term": "acme", "kind": "brand", "muted": False, "pausedForBalance": False, "pausedForCap": False, "cap": None, "platforms": None, "context": None, "matching": {"requiredTerms": [], "requiredMode": "any", "excludedTerms": [], "excludedAuthors": [], "caseSensitive": False}, "stats": {"mentions": 0, "relevant": 0, "last7d": 0, "thisMonth": 0, "lastMentionAt": None, "feedback": {"relevant": 0, "notRelevant": 0}, "noise": {"scored": 0, "relevant": 0, "noisy": False}, "cost": {"keywordDays": 0, "keywordCents": 0, "billableMentions": 0, "mentionCents": 0, "totalCents": 0}}, "polling": [], "createdAt": "2026-09-03T10:04:44.881Z"})
 
     client = make_client(handler)
     created = client.keywords.create(term="acme", kind="brand")

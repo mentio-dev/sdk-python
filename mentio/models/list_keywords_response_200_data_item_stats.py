@@ -7,6 +7,9 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
+    from ..models.list_keywords_response_200_data_item_stats_cost import (
+        ListKeywordsResponse200DataItemStatsCost,
+    )
     from ..models.list_keywords_response_200_data_item_stats_feedback import (
         ListKeywordsResponse200DataItemStatsFeedback,
     )
@@ -32,6 +35,10 @@ class ListKeywordsResponse200DataItemStats:
             /v1/mentions/{id} relevant).
         noise (ListKeywordsResponse200DataItemStatsNoise): Relevance over the last 14 days of scored matches, so a
             keyword tightened today stops being flagged within two weeks.
+        cost (ListKeywordsResponse200DataItemStatsCost): What this keyword has cost this calendar month (UTC) at list
+            price: exactly its row in GET /v1/usage/breakdown?month=<this month> (same tables, same rounding). The wallet's
+            ledger, which settles once a day, is what can differ from these list-price numbers, and only by cumulative
+            rounding.
     """
 
     mentions: int
@@ -41,6 +48,7 @@ class ListKeywordsResponse200DataItemStats:
     last_mention_at: None | str
     feedback: ListKeywordsResponse200DataItemStatsFeedback
     noise: ListKeywordsResponse200DataItemStatsNoise
+    cost: ListKeywordsResponse200DataItemStatsCost
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -59,6 +67,8 @@ class ListKeywordsResponse200DataItemStats:
 
         noise = self.noise.to_dict()
 
+        cost = self.cost.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -70,6 +80,7 @@ class ListKeywordsResponse200DataItemStats:
                 "lastMentionAt": last_mention_at,
                 "feedback": feedback,
                 "noise": noise,
+                "cost": cost,
             }
         )
 
@@ -77,6 +88,9 @@ class ListKeywordsResponse200DataItemStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.list_keywords_response_200_data_item_stats_cost import (
+            ListKeywordsResponse200DataItemStatsCost,
+        )
         from ..models.list_keywords_response_200_data_item_stats_feedback import (
             ListKeywordsResponse200DataItemStatsFeedback,
         )
@@ -106,6 +120,8 @@ class ListKeywordsResponse200DataItemStats:
 
         noise = ListKeywordsResponse200DataItemStatsNoise.from_dict(d.pop("noise"))
 
+        cost = ListKeywordsResponse200DataItemStatsCost.from_dict(d.pop("cost"))
+
         list_keywords_response_200_data_item_stats = cls(
             mentions=mentions,
             relevant=relevant,
@@ -114,6 +130,7 @@ class ListKeywordsResponse200DataItemStats:
             last_mention_at=last_mention_at,
             feedback=feedback,
             noise=noise,
+            cost=cost,
         )
 
         list_keywords_response_200_data_item_stats.additional_properties = d

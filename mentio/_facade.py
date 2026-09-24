@@ -149,6 +149,7 @@ import mentio.api.segments.list_segments  # noqa: F401
 import mentio.api.segments.update_segment  # noqa: F401
 import mentio.api.system.get_health  # noqa: F401
 import mentio.api.usage.get_usage  # noqa: F401
+import mentio.api.usage.get_usage_breakdown  # noqa: F401
 import mentio.api.views.create_view  # noqa: F401
 import mentio.api.views.delete_view  # noqa: F401
 import mentio.api.views.get_view  # noqa: F401
@@ -895,10 +896,24 @@ class _Members:
         return _result(_ops.members.revoke_invitation.sync_detailed(id, client=self._client))
 
 class _Usage:
-    """usage: get."""
+    """usage: breakdown, get."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
+
+    def breakdown(self, **params: Any) -> _m.UsageBreakdown:
+        """Get the usage breakdown
+
+        What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`: day, platform or keyword), in USD cents at list price, with the window's totals on every call. `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the wallet has debited so far for the window's days: mentions settle the morning after their day, so a window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read this at most 30 times a minute through its keys and tokens together.
+
+        Keyword arguments (query):
+          by: The dimension to group by: day (one row per UTC day of the window), platform, or keyword (default: the row a margin is computed from).
+          range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
+          month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
+          limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
+          offset: Skip this many rows."""
+        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange)})
+        return _result(_ops.usage.get_usage_breakdown.sync_detailed(client=self._client, **params))
 
     def get(self) -> _m.UsageSummary:
         """Get usage and balance
@@ -1689,10 +1704,24 @@ class _AsyncMembers:
         return _result(await _ops.members.revoke_invitation.asyncio_detailed(id, client=self._client))
 
 class _AsyncUsage:
-    """usage: get."""
+    """usage: breakdown, get."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
+
+    async def breakdown(self, **params: Any) -> _m.UsageBreakdown:
+        """Get the usage breakdown
+
+        What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`: day, platform or keyword), in USD cents at list price, with the window's totals on every call. `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the wallet has debited so far for the window's days: mentions settle the morning after their day, so a window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read this at most 30 times a minute through its keys and tokens together.
+
+        Keyword arguments (query):
+          by: The dimension to group by: day (one row per UTC day of the window), platform, or keyword (default: the row a margin is computed from).
+          range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
+          month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
+          limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
+          offset: Skip this many rows."""
+        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange)})
+        return _result(await _ops.usage.get_usage_breakdown.asyncio_detailed(client=self._client, **params))
 
     async def get(self) -> _m.UsageSummary:
         """Get usage and balance
