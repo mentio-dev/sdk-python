@@ -90,7 +90,7 @@ def test_a_union_body_picks_the_variant_by_kind():
 
     def handler(request: httpx.Request) -> httpx.Response:
         bodies.append(json.loads(request.content))
-        return json_response(201, {"id": "dest_1", "kind": "webhook", "label": "Production", "config": {"url": "https://example.com/hook", "headers": {}, "secret": "whsec_x"}, "stats": {"alerts": 0, "activeAlerts": 0, "lastDeliveryAt": None, "last7d": {"total": 0, "failed": 0}}, "createdAt": "2026-09-03T10:04:44.881Z"})
+        return json_response(201, {"id": "dest_1", "kind": "webhook", "label": "Production", "config": {"url": "https://example.com/hook", "headers": {}, "events": [], "secret": "whsec_x"}, "stats": {"alerts": 0, "activeAlerts": 0, "lastDeliveryAt": None, "last7d": {"total": 0, "failed": 0}}, "createdAt": "2026-09-03T10:04:44.881Z"})
 
     client = make_client(handler)
     channel = client.channels.create(kind="webhook", url="https://example.com/hook", label="Production")

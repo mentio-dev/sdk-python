@@ -1,6 +1,6 @@
 [project]
 name = "mentio"
-version = "0.8.0"
+version = "0.8.1"
 description = "Python client for the Mentio API: social listening across developer platforms."
 readme = "README.md"
 license = "MIT"

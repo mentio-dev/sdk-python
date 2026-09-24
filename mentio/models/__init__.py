@@ -128,6 +128,7 @@ from .create_view_body_filter_platforms_item import CreateViewBodyFilterPlatform
 from .create_view_body_filter_sentiments_item import CreateViewBodyFilterSentimentsItem
 from .create_view_body_filter_status import CreateViewBodyFilterStatus
 from .create_webhook_channel import CreateWebhookChannel
+from .create_webhook_channel_events_item import CreateWebhookChannelEventsItem
 from .create_webhook_channel_headers import CreateWebhookChannelHeaders
 from .create_webhook_channel_kind import CreateWebhookChannelKind
 from .email_channel import EmailChannel
@@ -486,6 +487,7 @@ from .update_alert_body_filter_sentiments_item import (
 from .update_alert_body_mode import UpdateAlertBodyMode
 from .update_alert_body_schedule_type_0 import UpdateAlertBodyScheduleType0
 from .update_channel_body import UpdateChannelBody
+from .update_channel_body_events_item import UpdateChannelBodyEventsItem
 from .update_channel_body_headers import UpdateChannelBodyHeaders
 from .update_company_body import UpdateCompanyBody
 from .update_company_body_accounts import UpdateCompanyBodyAccounts
@@ -562,6 +564,7 @@ from .wallet_currency import WalletCurrency
 from .wallet_signup_credit_type_0 import WalletSignupCreditType0
 from .webhook_channel import WebhookChannel
 from .webhook_channel_config import WebhookChannelConfig
+from .webhook_channel_config_events_item import WebhookChannelConfigEventsItem
 from .webhook_channel_config_headers import WebhookChannelConfigHeaders
 from .webhook_channel_kind import WebhookChannelKind
 from .webhook_channel_stats import WebhookChannelStats
@@ -658,6 +661,7 @@ __all__ = (
     "CreateViewBodyFilterSentimentsItem",
     "CreateViewBodyFilterStatus",
     "CreateWebhookChannel",
+    "CreateWebhookChannelEventsItem",
     "CreateWebhookChannelHeaders",
     "CreateWebhookChannelKind",
     "EmailChannel",
@@ -894,6 +898,7 @@ __all__ = (
     "UpdateAlertBodyMode",
     "UpdateAlertBodyScheduleType0",
     "UpdateChannelBody",
+    "UpdateChannelBodyEventsItem",
     "UpdateChannelBodyHeaders",
     "UpdateCompanyBody",
     "UpdateCompanyBodyAccounts",
@@ -952,6 +957,7 @@ __all__ = (
     "WalletSignupCreditType0",
     "WebhookChannel",
     "WebhookChannelConfig",
+    "WebhookChannelConfigEventsItem",
     "WebhookChannelConfigHeaders",
     "WebhookChannelKind",
     "WebhookChannelStats",

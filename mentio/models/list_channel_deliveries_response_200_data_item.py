@@ -30,20 +30,24 @@ class ListChannelDeliveriesResponse200DataItem:
     """
     Attributes:
         id (str): Delivery id (dlv_...), also the webhook payload id.
-        kind (ListChannelDeliveriesResponse200DataItemKind):
+        kind (ListChannelDeliveriesResponse200DataItemKind): mention: an instant rule's delivery. digest: a daily or
+            weekly summary. event: an account event the channel subscribed to.
+        event (str): The event name the payload carried: the rule's (mention.matched unless it set one, digest for a
+            summary) or the account event's.
         status (ListChannelDeliveriesResponse200DataItemStatus):
         attempts (int):
         error (None | str): The last failure, when there was one.
         sent_at (None | str): ISO 8601 timestamp, UTC.
         created_at (str): ISO 8601 timestamp, UTC.
         alert (ListChannelDeliveriesResponse200DataItemAlert): The alert that produced it; name only, since alerts can
-            be deleted.
+            be deleted. name is null for an account event, which no rule produces.
         mention (ListChannelDeliveriesResponse200DataItemMentionType0 | None): For mention deliveries: the post, text
             cut to 160 characters.
     """
 
     id: str
     kind: ListChannelDeliveriesResponse200DataItemKind
+    event: str
     status: ListChannelDeliveriesResponse200DataItemStatus
     attempts: int
     error: None | str
@@ -61,6 +65,8 @@ class ListChannelDeliveriesResponse200DataItem:
         id = self.id
 
         kind = self.kind.value
+
+        event = self.event
 
         status = self.status.value
 
@@ -90,6 +96,7 @@ class ListChannelDeliveriesResponse200DataItem:
             {
                 "id": id,
                 "kind": kind,
+                "event": event,
                 "status": status,
                 "attempts": attempts,
                 "error": error,
@@ -115,6 +122,8 @@ class ListChannelDeliveriesResponse200DataItem:
         id = d.pop("id")
 
         kind = ListChannelDeliveriesResponse200DataItemKind(d.pop("kind"))
+
+        event = d.pop("event")
 
         status = ListChannelDeliveriesResponse200DataItemStatus(d.pop("status"))
 
@@ -162,6 +171,7 @@ class ListChannelDeliveriesResponse200DataItem:
         list_channel_deliveries_response_200_data_item = cls(
             id=id,
             kind=kind,
+            event=event,
             status=status,
             attempts=attempts,
             error=error,

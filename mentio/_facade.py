@@ -598,7 +598,8 @@ class _Channels:
           emails: Each address gets a confirmation link; workspace members are confirmed on sight.
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
-          headers: Extra request headers to send, for your own auth."""
+          headers: Extra request headers to send, for your own auth.
+          events: Account events to receive at this endpoint (keyword and wallet state changes), on top of whatever rules send here. Omit for none."""
         return _result(_ops.alerts.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -634,7 +635,8 @@ class _Channels:
         Body: a dict, a model, or the fields as keyword arguments:
           label:
           url: Webhooks only.
-          headers: Webhooks only; replaces the whole set."""
+          headers: Webhooks only; replaces the whole set.
+          events: Webhooks only; replaces the whole set of account events the endpoint receives. An empty list unsubscribes it from all of them."""
         return _result(_ops.alerts.update_channel.sync_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _Company:
@@ -1406,7 +1408,8 @@ class _AsyncChannels:
           emails: Each address gets a confirmation link; workspace members are confirmed on sight.
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
-          headers: Extra request headers to send, for your own auth."""
+          headers: Extra request headers to send, for your own auth.
+          events: Account events to receive at this endpoint (keyword and wallet state changes), on top of whatever rules send here. Omit for none."""
         return _result(await _ops.alerts.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1442,7 +1445,8 @@ class _AsyncChannels:
         Body: a dict, a model, or the fields as keyword arguments:
           label:
           url: Webhooks only.
-          headers: Webhooks only; replaces the whole set."""
+          headers: Webhooks only; replaces the whole set.
+          events: Webhooks only; replaces the whole set of account events the endpoint receives. An empty list unsubscribes it from all of them."""
         return _result(await _ops.alerts.update_channel.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _AsyncCompany:

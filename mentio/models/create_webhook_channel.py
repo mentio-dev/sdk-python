@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.create_webhook_channel_events_item import CreateWebhookChannelEventsItem
 from ..models.create_webhook_channel_kind import CreateWebhookChannelKind
 from ..types import UNSET, Unset
 
@@ -24,12 +25,15 @@ class CreateWebhookChannel:
         url (str): Where the signed POSTs go. https in production.
         label (str | Unset): A name for the channel; the host of the URL when omitted.
         headers (CreateWebhookChannelHeaders | Unset): Extra request headers to send, for your own auth.
+        events (list[CreateWebhookChannelEventsItem] | Unset): Account events to receive at this endpoint (keyword and
+            wallet state changes), on top of whatever rules send here. Omit for none.
     """
 
     kind: CreateWebhookChannelKind
     url: str
     label: str | Unset = UNSET
     headers: CreateWebhookChannelHeaders | Unset = UNSET
+    events: list[CreateWebhookChannelEventsItem] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,6 +47,13 @@ class CreateWebhookChannel:
         if not isinstance(self.headers, Unset):
             headers = self.headers.to_dict()
 
+        events: list[str] | Unset = UNSET
+        if not isinstance(self.events, Unset):
+            events = []
+            for events_item_data in self.events:
+                events_item = events_item_data.value
+                events.append(events_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -55,6 +66,8 @@ class CreateWebhookChannel:
             field_dict["label"] = label
         if headers is not UNSET:
             field_dict["headers"] = headers
+        if events is not UNSET:
+            field_dict["events"] = events
 
         return field_dict
 
@@ -78,11 +91,21 @@ class CreateWebhookChannel:
         else:
             headers = CreateWebhookChannelHeaders.from_dict(_headers)
 
+        _events = d.pop("events", UNSET)
+        events: list[CreateWebhookChannelEventsItem] | Unset = UNSET
+        if _events is not UNSET:
+            events = []
+            for events_item_data in _events:
+                events_item = CreateWebhookChannelEventsItem(events_item_data)
+
+                events.append(events_item)
+
         create_webhook_channel = cls(
             kind=kind,
             url=url,
             label=label,
             headers=headers,
+            events=events,
         )
 
         create_webhook_channel.additional_properties = d

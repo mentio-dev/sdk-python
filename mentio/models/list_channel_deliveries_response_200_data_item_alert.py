@@ -11,10 +11,11 @@ T = TypeVar("T", bound="ListChannelDeliveriesResponse200DataItemAlert")
 
 @_attrs_define
 class ListChannelDeliveriesResponse200DataItemAlert:
-    """The alert that produced it; name only, since alerts can be deleted.
+    """The alert that produced it; name only, since alerts can be deleted. name is null for an account event, which no rule
+    produces.
 
-    Attributes:
-        name (None | str):
+        Attributes:
+            name (None | str):
     """
 
     name: None | str
