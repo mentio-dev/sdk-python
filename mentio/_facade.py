@@ -110,6 +110,11 @@ import mentio.api.api_keys.create_api_key  # noqa: F401
 import mentio.api.api_keys.list_api_keys  # noqa: F401
 import mentio.api.api_keys.revoke_api_key  # noqa: F401
 import mentio.api.auth.whoami  # noqa: F401
+import mentio.api.billing.create_top_up  # noqa: F401
+import mentio.api.billing.get_invoice_url  # noqa: F401
+import mentio.api.billing.get_wallet  # noqa: F401
+import mentio.api.billing.list_invoices  # noqa: F401
+import mentio.api.billing.list_ledger  # noqa: F401
 import mentio.api.company.get_company  # noqa: F401
 import mentio.api.company.update_company  # noqa: F401
 import mentio.api.filters.get_filters  # noqa: F401
@@ -901,6 +906,50 @@ class _Usage:
         The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged daily."""
         return _result(_ops.usage.get_usage.sync_detailed(client=self._client))
 
+class _Billing:
+    """billing: invoice_url, invoices, ledger, top_up, wallet."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def invoice_url(self, id: str) -> _m.GetInvoiceUrlResponse200:
+        """Get a receipt link
+
+        A short-lived link to the receipt PDF of one paid order (an id from the receipts list)."""
+        return _result(_ops.billing.get_invoice_url.sync_detailed(id, client=self._client))
+
+    def invoices(self) -> _m.InvoiceList:
+        """List receipts
+
+        The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this workspace's share of the billing customer's newest 100 orders. Empty before the first top-up."""
+        return _result(_ops.billing.list_invoices.sync_detailed(client=self._client))
+
+    def ledger(self, **params: Any) -> _m.LedgerList:
+        """List ledger entries
+
+        Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the cumulative units behind it. Cursor paged.
+
+        Keyword arguments (query):
+          cursor: Opaque cursor from a previous page (`nextCursor`).
+          limit: Page size, 1 to 100 (default 25)."""
+        return _result(_ops.billing.list_ledger.sync_detailed(client=self._client, **params))
+
+    def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
+        """Create a top-up checkout
+
+        Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The balance is credited when the payment lands, within a minute, and tracking the wallet had paused resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this deployment trusts; omit it for the dashboard's billing page.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          amountCents (required): Amount to add, in USD cents (2000 to 500000). Prefilled at checkout, editable there.
+          successUrl: Where the customer lands after paying: a page on an origin this deployment trusts (the dashboard). Omit it and the dashboard's billing page is used."""
+        return _result(_ops.billing.create_top_up.sync_detailed(client=self._client, body=_body(_m.CreateTopUpBody, body, fields)))
+
+    def wallet(self) -> _m.Wallet:
+        """Get the wallet
+
+        The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused, what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds and the auto-recharge settings. `GET /v1/usage` is the short form."""
+        return _result(_ops.billing.get_wallet.sync_detailed(client=self._client))
+
 class _AsyncKeywords:
     """keywords: create, delete, get, list, update."""
 
@@ -1651,6 +1700,50 @@ class _AsyncUsage:
         The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged daily."""
         return _result(await _ops.usage.get_usage.asyncio_detailed(client=self._client))
 
+class _AsyncBilling:
+    """billing: invoice_url, invoices, ledger, top_up, wallet."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def invoice_url(self, id: str) -> _m.GetInvoiceUrlResponse200:
+        """Get a receipt link
+
+        A short-lived link to the receipt PDF of one paid order (an id from the receipts list)."""
+        return _result(await _ops.billing.get_invoice_url.asyncio_detailed(id, client=self._client))
+
+    async def invoices(self) -> _m.InvoiceList:
+        """List receipts
+
+        The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this workspace's share of the billing customer's newest 100 orders. Empty before the first top-up."""
+        return _result(await _ops.billing.list_invoices.asyncio_detailed(client=self._client))
+
+    async def ledger(self, **params: Any) -> _m.LedgerList:
+        """List ledger entries
+
+        Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the cumulative units behind it. Cursor paged.
+
+        Keyword arguments (query):
+          cursor: Opaque cursor from a previous page (`nextCursor`).
+          limit: Page size, 1 to 100 (default 25)."""
+        return _result(await _ops.billing.list_ledger.asyncio_detailed(client=self._client, **params))
+
+    async def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
+        """Create a top-up checkout
+
+        Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The balance is credited when the payment lands, within a minute, and tracking the wallet had paused resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this deployment trusts; omit it for the dashboard's billing page.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          amountCents (required): Amount to add, in USD cents (2000 to 500000). Prefilled at checkout, editable there.
+          successUrl: Where the customer lands after paying: a page on an origin this deployment trusts (the dashboard). Omit it and the dashboard's billing page is used."""
+        return _result(await _ops.billing.create_top_up.asyncio_detailed(client=self._client, body=_body(_m.CreateTopUpBody, body, fields)))
+
+    async def wallet(self) -> _m.Wallet:
+        """Get the wallet
+
+        The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused, what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds and the auto-recharge settings. `GET /v1/usage` is the short form."""
+        return _result(await _ops.billing.get_wallet.asyncio_detailed(client=self._client))
+
 class Mentio:
     """The Mentio API: one object, one call per endpoint, grouped by resource.
 
@@ -1697,6 +1790,7 @@ class Mentio:
         self.auth = _Auth(self.client)
         self.members = _Members(self.client)
         self.usage = _Usage(self.client)
+        self.billing = _Billing(self.client)
 
     def __enter__(self) -> "Mentio":
         self.client.__enter__()
@@ -1751,6 +1845,7 @@ class AsyncMentio:
         self.auth = _AsyncAuth(self.client)
         self.members = _AsyncMembers(self.client)
         self.usage = _AsyncUsage(self.client)
+        self.billing = _AsyncBilling(self.client)
 
     async def __aenter__(self) -> "AsyncMentio":
         await self.client.__aenter__()
