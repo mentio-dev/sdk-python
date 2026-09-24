@@ -16,6 +16,8 @@ class UsageSummaryKeywords:
     Attributes:
         active (int): Unmuted keywords, the ones charged daily.
         paused (int): Keywords the wallet paused for lack of balance; a top-up resumes them.
+        capped (int): Unmuted keywords at their monthly mention cap: still charged daily, not matched until the month
+            turns or the cap is raised.
         limit (int): How many keywords the workspace may run right now: the self-serve ceiling when the balance covers
             one more keyword-day, else 0.
         day_cents (int): What one more day of the active keywords costs.
@@ -23,6 +25,7 @@ class UsageSummaryKeywords:
 
     active: int
     paused: int
+    capped: int
     limit: int
     day_cents: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -31,6 +34,8 @@ class UsageSummaryKeywords:
         active = self.active
 
         paused = self.paused
+
+        capped = self.capped
 
         limit = self.limit
 
@@ -42,6 +47,7 @@ class UsageSummaryKeywords:
             {
                 "active": active,
                 "paused": paused,
+                "capped": capped,
                 "limit": limit,
                 "dayCents": day_cents,
             }
@@ -56,6 +62,8 @@ class UsageSummaryKeywords:
 
         paused = d.pop("paused")
 
+        capped = d.pop("capped")
+
         limit = d.pop("limit")
 
         day_cents = d.pop("dayCents")
@@ -63,6 +71,7 @@ class UsageSummaryKeywords:
         usage_summary_keywords = cls(
             active=active,
             paused=paused,
+            capped=capped,
             limit=limit,
             day_cents=day_cents,
         )

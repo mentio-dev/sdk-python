@@ -26,6 +26,7 @@ class ListKeywordsResponse200DataItemStats:
         mentions (int): Every match ever, relevant or not: the number billing counts.
         relevant (int): Matches scored at or above the relevance threshold.
         last7d (int): Matches published in the last 7 days.
+        this_month (int): Matches recorded this calendar month (UTC), the count a cap compares against.
         last_mention_at (None | str): Newest matched post; null until the first one.
         feedback (ListKeywordsResponse200DataItemStatsFeedback): Your verdicts on this keyword's mentions (PATCH
             /v1/mentions/{id} relevant).
@@ -36,6 +37,7 @@ class ListKeywordsResponse200DataItemStats:
     mentions: int
     relevant: int
     last7d: int
+    this_month: int
     last_mention_at: None | str
     feedback: ListKeywordsResponse200DataItemStatsFeedback
     noise: ListKeywordsResponse200DataItemStatsNoise
@@ -47,6 +49,8 @@ class ListKeywordsResponse200DataItemStats:
         relevant = self.relevant
 
         last7d = self.last7d
+
+        this_month = self.this_month
 
         last_mention_at: None | str
         last_mention_at = self.last_mention_at
@@ -62,6 +66,7 @@ class ListKeywordsResponse200DataItemStats:
                 "mentions": mentions,
                 "relevant": relevant,
                 "last7d": last7d,
+                "thisMonth": this_month,
                 "lastMentionAt": last_mention_at,
                 "feedback": feedback,
                 "noise": noise,
@@ -86,6 +91,8 @@ class ListKeywordsResponse200DataItemStats:
 
         last7d = d.pop("last7d")
 
+        this_month = d.pop("thisMonth")
+
         def _parse_last_mention_at(data: object) -> None | str:
             if data is None:
                 return data
@@ -103,6 +110,7 @@ class ListKeywordsResponse200DataItemStats:
             mentions=mentions,
             relevant=relevant,
             last7d=last7d,
+            this_month=this_month,
             last_mention_at=last_mention_at,
             feedback=feedback,
             noise=noise,

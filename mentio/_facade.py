@@ -160,14 +160,15 @@ class _Keywords:
     def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
-        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only.
+        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly ceiling on its matched mentions: at the cap it stops matching until the first of the next month (UTC) or until the cap is raised, while its daily keyword charge continues.
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to track it on; omit or null for every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
-          matching: Omitted fields are untouched; an empty list clears one."""
+          matching: Omitted fields are untouched; an empty list clears one.
+          cap: A monthly mention cap; omit or null for none."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -188,7 +189,7 @@ class _Keywords:
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
           kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          status: Only keywords in these states: active, muted, paused. Repeatable, or comma-separated.
+          status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
           platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
           sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
           limit: Page size, 1 to 500. Omit for every keyword after `offset`.
@@ -199,14 +200,15 @@ class _Keywords:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply to new mentions from the next poll; stored mentions are untouched.
+        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
 
         Body: a dict, a model, or the fields as keyword arguments:
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
-          matching: Omitted fields are untouched; an empty list clears one."""
+          matching: Omitted fields are untouched; an empty list clears one.
+          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it."""
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
@@ -908,14 +910,15 @@ class _AsyncKeywords:
     async def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
-        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only.
+        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly ceiling on its matched mentions: at the cap it stops matching until the first of the next month (UTC) or until the cap is raised, while its daily keyword charge continues.
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to track it on; omit or null for every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
-          matching: Omitted fields are untouched; an empty list clears one."""
+          matching: Omitted fields are untouched; an empty list clears one.
+          cap: A monthly mention cap; omit or null for none."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -936,7 +939,7 @@ class _AsyncKeywords:
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
           kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          status: Only keywords in these states: active, muted, paused. Repeatable, or comma-separated.
+          status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
           platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
           sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
           limit: Page size, 1 to 500. Omit for every keyword after `offset`.
@@ -947,14 +950,15 @@ class _AsyncKeywords:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply to new mentions from the next poll; stored mentions are untouched.
+        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
 
         Body: a dict, a model, or the fields as keyword arguments:
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
-          matching: Omitted fields are untouched; an empty list clears one."""
+          matching: Omitted fields are untouched; an empty list clears one.
+          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it."""
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:

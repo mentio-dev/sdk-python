@@ -83,8 +83,9 @@ def sync_detailed(
     """Update a keyword
 
      Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
-    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
-    to new mentions from the next poll; stored mentions are untouched.
+    `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly
+    mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once).
+    Rules apply to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -119,8 +120,9 @@ def sync(
     """Update a keyword
 
      Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
-    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
-    to new mentions from the next poll; stored mentions are untouched.
+    `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly
+    mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once).
+    Rules apply to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -150,8 +152,9 @@ async def asyncio_detailed(
     """Update a keyword
 
      Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
-    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
-    to new mentions from the next poll; stored mentions are untouched.
+    `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly
+    mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once).
+    Rules apply to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -184,8 +187,9 @@ async def asyncio(
     """Update a keyword
 
      Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier
-    `context`, or its `matching` rules (each rule field optional; an empty list clears one). Rules apply
-    to new mentions from the next poll; stored mentions are untouched.
+    `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly
+    mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once).
+    Rules apply to new mentions from the next poll; stored mentions are untouched.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.

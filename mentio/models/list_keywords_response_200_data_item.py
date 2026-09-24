@@ -14,6 +14,9 @@ from ..models.list_keywords_response_200_data_item_platforms_type_0_item import 
 )
 
 if TYPE_CHECKING:
+    from ..models.list_keywords_response_200_data_item_cap_type_0 import (
+        ListKeywordsResponse200DataItemCapType0,
+    )
     from ..models.list_keywords_response_200_data_item_matching import (
         ListKeywordsResponse200DataItemMatching,
     )
@@ -35,9 +38,13 @@ class ListKeywordsResponse200DataItem:
         id (str): Keyword id (kw_...).
         term (str):
         kind (ListKeywordsResponse200DataItemKind):
-        muted (bool): Not polled or matched. Either paused by you or by the wallet (see pausedForBalance).
+        muted (bool): Not polled or matched. Either paused by you or by the wallet (see pausedForBalance). A keyword at
+            its mention cap is not muted (see pausedForCap).
         paused_for_balance (bool): Muted by the wallet for lack of balance; a top-up resumes it, unmuting by hand needs
             balance too.
+        paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
+            cap is raised. Not muted: it keeps its place and its daily keyword charge.
+        cap (ListKeywordsResponse200DataItemCapType0 | None): The monthly mention cap, or null for none.
         platforms (list[ListKeywordsResponse200DataItemPlatformsType0Item] | None): Platforms this keyword is tracked
             on; null means every platform.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile (at
@@ -56,6 +63,8 @@ class ListKeywordsResponse200DataItem:
     kind: ListKeywordsResponse200DataItemKind
     muted: bool
     paused_for_balance: bool
+    paused_for_cap: bool
+    cap: ListKeywordsResponse200DataItemCapType0 | None
     platforms: list[ListKeywordsResponse200DataItemPlatformsType0Item] | None
     context: None | str
     matching: ListKeywordsResponse200DataItemMatching
@@ -65,6 +74,10 @@ class ListKeywordsResponse200DataItem:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.list_keywords_response_200_data_item_cap_type_0 import (
+            ListKeywordsResponse200DataItemCapType0,
+        )
+
         id = self.id
 
         term = self.term
@@ -74,6 +87,14 @@ class ListKeywordsResponse200DataItem:
         muted = self.muted
 
         paused_for_balance = self.paused_for_balance
+
+        paused_for_cap = self.paused_for_cap
+
+        cap: dict[str, Any] | None
+        if isinstance(self.cap, ListKeywordsResponse200DataItemCapType0):
+            cap = self.cap.to_dict()
+        else:
+            cap = self.cap
 
         platforms: list[str] | None
         if isinstance(self.platforms, list):
@@ -108,6 +129,8 @@ class ListKeywordsResponse200DataItem:
                 "kind": kind,
                 "muted": muted,
                 "pausedForBalance": paused_for_balance,
+                "pausedForCap": paused_for_cap,
+                "cap": cap,
                 "platforms": platforms,
                 "context": context,
                 "matching": matching,
@@ -121,6 +144,9 @@ class ListKeywordsResponse200DataItem:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.list_keywords_response_200_data_item_cap_type_0 import (
+            ListKeywordsResponse200DataItemCapType0,
+        )
         from ..models.list_keywords_response_200_data_item_matching import (
             ListKeywordsResponse200DataItemMatching,
         )
@@ -141,6 +167,23 @@ class ListKeywordsResponse200DataItem:
         muted = d.pop("muted")
 
         paused_for_balance = d.pop("pausedForBalance")
+
+        paused_for_cap = d.pop("pausedForCap")
+
+        def _parse_cap(data: object) -> ListKeywordsResponse200DataItemCapType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                cap_type_0 = ListKeywordsResponse200DataItemCapType0.from_dict(data)
+
+                return cap_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(ListKeywordsResponse200DataItemCapType0 | None, data)
+
+        cap = _parse_cap(d.pop("cap"))
 
         def _parse_platforms(
             data: object,
@@ -198,6 +241,8 @@ class ListKeywordsResponse200DataItem:
             kind=kind,
             muted=muted,
             paused_for_balance=paused_for_balance,
+            paused_for_cap=paused_for_cap,
+            cap=cap,
             platforms=platforms,
             context=context,
             matching=matching,

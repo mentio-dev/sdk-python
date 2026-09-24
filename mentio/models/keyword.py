@@ -10,6 +10,7 @@ from ..models.keyword_kind import KeywordKind
 from ..models.keyword_platforms_type_0_item import KeywordPlatformsType0Item
 
 if TYPE_CHECKING:
+    from ..models.keyword_cap_type_0 import KeywordCapType0
     from ..models.keyword_matching import KeywordMatching
     from ..models.keyword_polling_item import KeywordPollingItem
     from ..models.keyword_stats import KeywordStats
@@ -25,9 +26,13 @@ class Keyword:
         id (str): Keyword id (kw_...).
         term (str):
         kind (KeywordKind):
-        muted (bool): Not polled or matched. Either paused by you or by the wallet (see pausedForBalance).
+        muted (bool): Not polled or matched. Either paused by you or by the wallet (see pausedForBalance). A keyword at
+            its mention cap is not muted (see pausedForCap).
         paused_for_balance (bool): Muted by the wallet for lack of balance; a top-up resumes it, unmuting by hand needs
             balance too.
+        paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
+            cap is raised. Not muted: it keeps its place and its daily keyword charge.
+        cap (KeywordCapType0 | None): The monthly mention cap, or null for none.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms this keyword is tracked on; null means every
             platform.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile (at
@@ -45,6 +50,8 @@ class Keyword:
     kind: KeywordKind
     muted: bool
     paused_for_balance: bool
+    paused_for_cap: bool
+    cap: KeywordCapType0 | None
     platforms: list[KeywordPlatformsType0Item] | None
     context: None | str
     matching: KeywordMatching
@@ -54,6 +61,8 @@ class Keyword:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.keyword_cap_type_0 import KeywordCapType0
+
         id = self.id
 
         term = self.term
@@ -63,6 +72,14 @@ class Keyword:
         muted = self.muted
 
         paused_for_balance = self.paused_for_balance
+
+        paused_for_cap = self.paused_for_cap
+
+        cap: dict[str, Any] | None
+        if isinstance(self.cap, KeywordCapType0):
+            cap = self.cap.to_dict()
+        else:
+            cap = self.cap
 
         platforms: list[str] | None
         if isinstance(self.platforms, list):
@@ -97,6 +114,8 @@ class Keyword:
                 "kind": kind,
                 "muted": muted,
                 "pausedForBalance": paused_for_balance,
+                "pausedForCap": paused_for_cap,
+                "cap": cap,
                 "platforms": platforms,
                 "context": context,
                 "matching": matching,
@@ -110,6 +129,7 @@ class Keyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.keyword_cap_type_0 import KeywordCapType0
         from ..models.keyword_matching import KeywordMatching
         from ..models.keyword_polling_item import KeywordPollingItem
         from ..models.keyword_stats import KeywordStats
@@ -124,6 +144,23 @@ class Keyword:
         muted = d.pop("muted")
 
         paused_for_balance = d.pop("pausedForBalance")
+
+        paused_for_cap = d.pop("pausedForCap")
+
+        def _parse_cap(data: object) -> KeywordCapType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                cap_type_0 = KeywordCapType0.from_dict(data)
+
+                return cap_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(KeywordCapType0 | None, data)
+
+        cap = _parse_cap(d.pop("cap"))
 
         def _parse_platforms(data: object) -> list[KeywordPlatformsType0Item] | None:
             if data is None:
@@ -173,6 +210,8 @@ class Keyword:
             kind=kind,
             muted=muted,
             paused_for_balance=paused_for_balance,
+            paused_for_cap=paused_for_cap,
+            cap=cap,
             platforms=platforms,
             context=context,
             matching=matching,

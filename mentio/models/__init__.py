@@ -85,6 +85,7 @@ from .create_email_channel_kind import CreateEmailChannelKind
 from .create_invitation_body import CreateInvitationBody
 from .create_invitation_body_role import CreateInvitationBodyRole
 from .create_keyword_body import CreateKeywordBody
+from .create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
 from .create_keyword_body_kind import CreateKeywordBodyKind
 from .create_keyword_body_matching import CreateKeywordBodyMatching
 from .create_keyword_body_matching_required_mode import (
@@ -169,6 +170,7 @@ from .invitation import Invitation
 from .invitation_invited_by_type_0 import InvitationInvitedByType0
 from .invitation_role import InvitationRole
 from .keyword import Keyword
+from .keyword_cap_type_0 import KeywordCapType0
 from .keyword_kind import KeywordKind
 from .keyword_matching import KeywordMatching
 from .keyword_matching_required_mode import KeywordMatchingRequiredMode
@@ -227,6 +229,9 @@ from .list_keywords_kind_item import ListKeywordsKindItem
 from .list_keywords_platform_item import ListKeywordsPlatformItem
 from .list_keywords_response_200 import ListKeywordsResponse200
 from .list_keywords_response_200_data_item import ListKeywordsResponse200DataItem
+from .list_keywords_response_200_data_item_cap_type_0 import (
+    ListKeywordsResponse200DataItemCapType0,
+)
 from .list_keywords_response_200_data_item_kind import (
     ListKeywordsResponse200DataItemKind,
 )
@@ -473,6 +478,7 @@ from .update_company_body_accounts import UpdateCompanyBodyAccounts
 from .update_filters_body import UpdateFiltersBody
 from .update_filters_body_subreddits import UpdateFiltersBodySubreddits
 from .update_keyword_body import UpdateKeywordBody
+from .update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
 from .update_keyword_body_kind import UpdateKeywordBodyKind
 from .update_keyword_body_matching import UpdateKeywordBodyMatching
 from .update_keyword_body_matching_required_mode import (
@@ -602,6 +608,7 @@ __all__ = (
     "CreateInvitationBody",
     "CreateInvitationBodyRole",
     "CreateKeywordBody",
+    "CreateKeywordBodyCapType0",
     "CreateKeywordBodyKind",
     "CreateKeywordBodyMatching",
     "CreateKeywordBodyMatchingRequiredMode",
@@ -666,6 +673,7 @@ __all__ = (
     "InvitationInvitedByType0",
     "InvitationRole",
     "Keyword",
+    "KeywordCapType0",
     "KeywordKind",
     "KeywordMatching",
     "KeywordMatchingRequiredMode",
@@ -700,6 +708,7 @@ __all__ = (
     "ListKeywordsPlatformItem",
     "ListKeywordsResponse200",
     "ListKeywordsResponse200DataItem",
+    "ListKeywordsResponse200DataItemCapType0",
     "ListKeywordsResponse200DataItemKind",
     "ListKeywordsResponse200DataItemMatching",
     "ListKeywordsResponse200DataItemMatchingRequiredMode",
@@ -854,6 +863,7 @@ __all__ = (
     "UpdateFiltersBody",
     "UpdateFiltersBodySubreddits",
     "UpdateKeywordBody",
+    "UpdateKeywordBodyCapType0",
     "UpdateKeywordBodyKind",
     "UpdateKeywordBodyMatching",
     "UpdateKeywordBodyMatchingRequiredMode",

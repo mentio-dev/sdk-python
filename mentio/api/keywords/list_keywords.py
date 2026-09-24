@@ -140,7 +140,7 @@ def sync_detailed(
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused. Repeatable, or comma-separated.
+            muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
             platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
@@ -198,7 +198,7 @@ def sync(
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused. Repeatable, or comma-separated.
+            muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
             platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
@@ -251,7 +251,7 @@ async def asyncio_detailed(
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused. Repeatable, or comma-separated.
+            muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
             platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
@@ -307,7 +307,7 @@ async def asyncio(
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused. Repeatable, or comma-separated.
+            muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
             platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.

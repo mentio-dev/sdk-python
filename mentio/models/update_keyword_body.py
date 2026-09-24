@@ -13,6 +13,7 @@ from ..models.update_keyword_body_platforms_type_0_item import (
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
     from ..models.update_keyword_body_matching import UpdateKeywordBodyMatching
 
 
@@ -32,6 +33,8 @@ class UpdateKeywordBody:
             profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the
             geometry word." Null clears it.
         matching (UpdateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
+        cap (None | Unset | UpdateKeywordBodyCapType0): Replaces the monthly mention cap; null removes it. A cap above
+            this month's count resumes a capped keyword at once, one at or under it pauses it.
     """
 
     kind: UpdateKeywordBodyKind | Unset = UNSET
@@ -39,9 +42,14 @@ class UpdateKeywordBody:
     platforms: list[UpdateKeywordBodyPlatformsType0Item] | None | Unset = UNSET
     context: None | str | Unset = UNSET
     matching: UpdateKeywordBodyMatching | Unset = UNSET
+    cap: None | Unset | UpdateKeywordBodyCapType0 = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.update_keyword_body_cap_type_0 import (
+            UpdateKeywordBodyCapType0,
+        )
+
         kind: str | Unset = UNSET
         if not isinstance(self.kind, Unset):
             kind = self.kind.value
@@ -70,6 +78,14 @@ class UpdateKeywordBody:
         if not isinstance(self.matching, Unset):
             matching = self.matching.to_dict()
 
+        cap: dict[str, Any] | None | Unset
+        if isinstance(self.cap, Unset):
+            cap = UNSET
+        elif isinstance(self.cap, UpdateKeywordBodyCapType0):
+            cap = self.cap.to_dict()
+        else:
+            cap = self.cap
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -83,11 +99,16 @@ class UpdateKeywordBody:
             field_dict["context"] = context
         if matching is not UNSET:
             field_dict["matching"] = matching
+        if cap is not UNSET:
+            field_dict["cap"] = cap
 
         return field_dict
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.update_keyword_body_cap_type_0 import (
+            UpdateKeywordBodyCapType0,
+        )
         from ..models.update_keyword_body_matching import (
             UpdateKeywordBodyMatching,
         )
@@ -144,12 +165,30 @@ class UpdateKeywordBody:
         else:
             matching = UpdateKeywordBodyMatching.from_dict(_matching)
 
+        def _parse_cap(data: object) -> None | Unset | UpdateKeywordBodyCapType0:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                cap_type_0 = UpdateKeywordBodyCapType0.from_dict(data)
+
+                return cap_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | Unset | UpdateKeywordBodyCapType0, data)
+
+        cap = _parse_cap(d.pop("cap", UNSET))
+
         update_keyword_body = cls(
             kind=kind,
             muted=muted,
             platforms=platforms,
             context=context,
             matching=matching,
+            cap=cap,
         )
 
         update_keyword_body.additional_properties = d
