@@ -21,7 +21,7 @@ class MentionPost:
     """
     Attributes:
         platform (MentionPostPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x, youtube,
-            news, linkedin.
+            news, linkedin, tiktok.
         url (str): Permalink of the post.
         text (str): Title and body, truncated to 8 KB at ingest.
         links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for

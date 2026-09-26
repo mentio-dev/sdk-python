@@ -10,6 +10,7 @@ class CreateKeywordBodyPlatformsType0Item(StrEnum):
     NEWS = "news"
     REDDIT = "reddit"
     STACKOVERFLOW = "stackoverflow"
+    TIKTOK = "tiktok"
     X = "x"
     YOUTUBE = "youtube"
 

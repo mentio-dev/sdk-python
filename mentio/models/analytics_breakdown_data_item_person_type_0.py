@@ -21,7 +21,7 @@ class AnalyticsBreakdownDataItemPersonType0:
         id (None | str): Person id (aut_...); null for posts ingested before people were linked.
         name (None | str): Display name as the platform shows it.
         platform (AnalyticsBreakdownDataItemPersonType0Platform): Platform: bluesky, hackernews, github, stackoverflow,
-            devto, reddit, x, youtube, news, linkedin.
+            devto, reddit, x, youtube, news, linkedin, tiktok.
         url (None | str): Profile URL.
         avatar_url (None | str): Avatar image URL, when the platform gave one.
         followers (int | None): From the audience profile; null when unknown.

@@ -17,7 +17,7 @@ class PersonAccountsItem:
     Attributes:
         id (str): The account id (aut_...); the canonical one equals the person id.
         platform (PersonAccountsItemPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x,
-            youtube, news, linkedin.
+            youtube, news, linkedin, tiktok.
         name (None | str): Display name as the platform reports it.
         handle (None | str): Platform handle derived from the profile URL, formatted as the platform shows it.
         url (None | str): Profile URL.

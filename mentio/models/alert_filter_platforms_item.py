@@ -10,6 +10,7 @@ class AlertFilterPlatformsItem(StrEnum):
     NEWS = "news"
     REDDIT = "reddit"
     STACKOVERFLOW = "stackoverflow"
+    TIKTOK = "tiktok"
     X = "x"
     YOUTUBE = "youtube"
 
