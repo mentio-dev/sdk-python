@@ -6,6 +6,7 @@ class ListKeywordsResponse200DataItemPollingItemPlatform(StrEnum):
     DEVTO = "devto"
     GITHUB = "github"
     HACKERNEWS = "hackernews"
+    INSTAGRAM = "instagram"
     LINKEDIN = "linkedin"
     NEWS = "news"
     REDDIT = "reddit"

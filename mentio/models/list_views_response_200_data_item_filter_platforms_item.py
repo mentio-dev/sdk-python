@@ -6,6 +6,7 @@ class ListViewsResponse200DataItemFilterPlatformsItem(StrEnum):
     DEVTO = "devto"
     GITHUB = "github"
     HACKERNEWS = "hackernews"
+    INSTAGRAM = "instagram"
     LINKEDIN = "linkedin"
     NEWS = "news"
     REDDIT = "reddit"
