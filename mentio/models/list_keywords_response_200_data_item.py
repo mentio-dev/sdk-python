@@ -49,9 +49,9 @@ class ListKeywordsResponse200DataItem:
         group (GroupRef): The group the keyword belongs to.
         platforms (list[ListKeywordsResponse200DataItemPlatformsType0Item] | None): Platforms this keyword is tracked
             on; null means every platform.
-        context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile (at
-            most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word."
-            Null clears it.
+        context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
+            the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our
+            browser; ignore the geometry word." Null clears it.
         matching (ListKeywordsResponse200DataItemMatching): Matching rules applied before a mention is stored; a
             rejected post is never billed.
         stats (ListKeywordsResponse200DataItemStats): Computed over this workspace's matches.

@@ -30,8 +30,8 @@ class CreateKeywordBody:
         platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to track it on; omit or null for
             every platform.
         context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
-            profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the
-            geometry word." Null clears it.
+            profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
+            is our browser; ignore the geometry word." Null clears it.
         matching (CreateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
         cap (CreateKeywordBodyCapType0 | None | Unset): A monthly mention cap; omit or null for none.
         group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may

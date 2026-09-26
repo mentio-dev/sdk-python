@@ -22,6 +22,7 @@ class Group:
         name (str): The group's name.
         external_id (None | str): Your own id for the group, or null.
         is_default (bool): The workspace's default group, where a keyword lands when no group is named.
+        context (None | str): The group's own company description for the classifier, or null for the workspace profile.
         stats (GroupStats): Computed over the group's keywords.
         created_at (str): ISO 8601 timestamp, UTC.
         updated_at (str): ISO 8601 timestamp, UTC.
@@ -31,6 +32,7 @@ class Group:
     name: str
     external_id: None | str
     is_default: bool
+    context: None | str
     stats: GroupStats
     created_at: str
     updated_at: str
@@ -46,6 +48,9 @@ class Group:
 
         is_default = self.is_default
 
+        context: None | str
+        context = self.context
+
         stats = self.stats.to_dict()
 
         created_at = self.created_at
@@ -60,6 +65,7 @@ class Group:
                 "name": name,
                 "externalId": external_id,
                 "isDefault": is_default,
+                "context": context,
                 "stats": stats,
                 "createdAt": created_at,
                 "updatedAt": updated_at,
@@ -86,6 +92,13 @@ class Group:
 
         is_default = d.pop("isDefault")
 
+        def _parse_context(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        context = _parse_context(d.pop("context"))
+
         stats = GroupStats.from_dict(d.pop("stats"))
 
         created_at = d.pop("createdAt")
@@ -97,6 +110,7 @@ class Group:
             name=name,
             external_id=external_id,
             is_default=is_default,
+            context=context,
             stats=stats,
             created_at=created_at,
             updated_at=updated_at,

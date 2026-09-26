@@ -18,10 +18,14 @@ class UpdateGroupBody:
     Attributes:
         name (str | Unset): The group's name: a customer, a campaign, a product. Unique per workspace.
         external_id (None | str | Unset): Replaces your id for the group; null clears it.
+        context (None | str | Unset): Replaces the group's company description; null clears it (the workspace profile
+            applies again). New mentions are judged with it at once; old ones are not rescored. Not on the default group
+            (400 default_group_context): that one is the workspace itself and reads the profile.
     """
 
     name: str | Unset = UNSET
     external_id: None | str | Unset = UNSET
+    context: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -33,6 +37,12 @@ class UpdateGroupBody:
         else:
             external_id = self.external_id
 
+        context: None | str | Unset
+        if isinstance(self.context, Unset):
+            context = UNSET
+        else:
+            context = self.context
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -40,6 +50,8 @@ class UpdateGroupBody:
             field_dict["name"] = name
         if external_id is not UNSET:
             field_dict["externalId"] = external_id
+        if context is not UNSET:
+            field_dict["context"] = context
 
         return field_dict
 
@@ -57,9 +69,19 @@ class UpdateGroupBody:
 
         external_id = _parse_external_id(d.pop("externalId", UNSET))
 
+        def _parse_context(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        context = _parse_context(d.pop("context", UNSET))
+
         update_group_body = cls(
             name=name,
             external_id=external_id,
+            context=context,
         )
 
         update_group_body.additional_properties = d

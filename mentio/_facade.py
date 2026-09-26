@@ -177,7 +177,7 @@ class _Keywords:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to track it on; omit or null for every platform.
-          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group."""
@@ -219,7 +219,7 @@ class _Keywords:
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform.
-          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term."""
@@ -866,11 +866,12 @@ class _Groups:
     def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Create a group
 
-        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours. Then pass the group id as `groupId` when creating a keyword.
+        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours; `context` (optional) is the group's own company description, which the classifier reads in place of the whole workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a keyword.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
-          externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=."""
+          externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=.
+          context: What the classifier reads as "the company" for this group's keywords, in place of the WHOLE workspace profile, its relevance guidelines and competitor list included (at most 4000 characters): who the business is, what it sells, for whom, what is not it, and any rule that should apply to this group ("ignore job posts"). For a group per customer, the customer's description. Null: the workspace profile, as for every keyword before groups."""
         return _result(_ops.groups.create_group.sync_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -895,11 +896,12 @@ class _Groups:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Update a group
 
-        Rename a group or change your id for it (`externalId`, null clears). The default group can be renamed like any other.
+        Rename a group, change your id for it (`externalId`, null clears) or its company description (`context`, null clears: the workspace profile applies again; new mentions are judged with it at once, old ones are not rescored). The default group can be renamed like any other but takes no description: it is the workspace itself and reads the company profile.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: The group's name: a customer, a campaign, a product. Unique per workspace.
-          externalId: Replaces your id for the group; null clears it."""
+          externalId: Replaces your id for the group; null clears it.
+          context: Replaces the group's company description; null clears it (the workspace profile applies again). New mentions are judged with it at once; old ones are not rescored. Not on the default group (400 default_group_context): that one is the workspace itself and reads the profile."""
         return _result(_ops.groups.update_group.sync_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
 
 class _Auth:
@@ -1039,7 +1041,7 @@ class _AsyncKeywords:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to track it on; omit or null for every platform.
-          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group."""
@@ -1081,7 +1083,7 @@ class _AsyncKeywords:
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform.
-          context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term."""
@@ -1728,11 +1730,12 @@ class _AsyncGroups:
     async def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Create a group
 
-        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours. Then pass the group id as `groupId` when creating a keyword.
+        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours; `context` (optional) is the group's own company description, which the classifier reads in place of the whole workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a keyword.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
-          externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=."""
+          externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=.
+          context: What the classifier reads as "the company" for this group's keywords, in place of the WHOLE workspace profile, its relevance guidelines and competitor list included (at most 4000 characters): who the business is, what it sells, for whom, what is not it, and any rule that should apply to this group ("ignore job posts"). For a group per customer, the customer's description. Null: the workspace profile, as for every keyword before groups."""
         return _result(await _ops.groups.create_group.asyncio_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1757,11 +1760,12 @@ class _AsyncGroups:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Update a group
 
-        Rename a group or change your id for it (`externalId`, null clears). The default group can be renamed like any other.
+        Rename a group, change your id for it (`externalId`, null clears) or its company description (`context`, null clears: the workspace profile applies again; new mentions are judged with it at once, old ones are not rescored). The default group can be renamed like any other but takes no description: it is the workspace itself and reads the company profile.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: The group's name: a customer, a campaign, a product. Unique per workspace.
-          externalId: Replaces your id for the group; null clears it."""
+          externalId: Replaces your id for the group; null clears it.
+          context: Replaces the group's company description; null clears it (the workspace profile applies again). New mentions are judged with it at once; old ones are not rescored. Not on the default group (400 default_group_context): that one is the workspace itself and reads the profile."""
         return _result(await _ops.groups.update_group.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
 
 class _AsyncAuth:

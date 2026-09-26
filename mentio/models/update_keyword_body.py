@@ -30,8 +30,8 @@ class UpdateKeywordBody:
         platforms (list[UpdateKeywordBodyPlatformsType0Item] | None | Unset): Replaces the platform list; null means
             every platform.
         context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
-            profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the
-            geometry word." Null clears it.
+            profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
+            is our browser; ignore the geometry word." Null clears it.
         matching (UpdateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
         cap (None | Unset | UpdateKeywordBodyCapType0): Replaces the monthly mention cap; null removes it. A cap above
             this month's count resumes a capped keyword at once, one at or under it pauses it.

@@ -18,10 +18,16 @@ class CreateGroupBody:
         name (str): The group's name: a customer, a campaign, a product. Unique per workspace.
         external_id (None | str | Unset): Your own id for the group (a customer id, say). Unique per workspace; find the
             group by it with GET /v1/groups?externalId=.
+        context (None | str | Unset): What the classifier reads as "the company" for this group's keywords, in place of
+            the WHOLE workspace profile, its relevance guidelines and competitor list included (at most 4000 characters):
+            who the business is, what it sells, for whom, what is not it, and any rule that should apply to this group
+            ("ignore job posts"). For a group per customer, the customer's description. Null: the workspace profile, as for
+            every keyword before groups.
     """
 
     name: str
     external_id: None | str | Unset = UNSET
+    context: None | str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -33,6 +39,12 @@ class CreateGroupBody:
         else:
             external_id = self.external_id
 
+        context: None | str | Unset
+        if isinstance(self.context, Unset):
+            context = UNSET
+        else:
+            context = self.context
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -42,6 +54,8 @@ class CreateGroupBody:
         )
         if external_id is not UNSET:
             field_dict["externalId"] = external_id
+        if context is not UNSET:
+            field_dict["context"] = context
 
         return field_dict
 
@@ -59,9 +73,19 @@ class CreateGroupBody:
 
         external_id = _parse_external_id(d.pop("externalId", UNSET))
 
+        def _parse_context(data: object) -> None | str | Unset:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(None | str | Unset, data)
+
+        context = _parse_context(d.pop("context", UNSET))
+
         create_group_body = cls(
             name=name,
             external_id=external_id,
+            context=context,
         )
 
         create_group_body.additional_properties = d

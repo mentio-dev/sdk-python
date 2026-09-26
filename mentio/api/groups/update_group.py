@@ -42,6 +42,11 @@ def _parse_response(
 
         return response_200
 
+    if response.status_code == 400:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
+
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
 
@@ -82,8 +87,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Group]:
     """Update a group
 
-     Rename a group or change your id for it (`externalId`, null clears). The default group can be
-    renamed like any other.
+     Rename a group, change your id for it (`externalId`, null clears) or its company description
+    (`context`, null clears: the workspace profile applies again; new mentions are judged with it at
+    once, old ones are not rescored). The default group can be renamed like any other but takes no
+    description: it is the workspace itself and reads the company profile.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.
@@ -117,8 +124,10 @@ def sync(
 ) -> ErrorResponse | Group | None:
     """Update a group
 
-     Rename a group or change your id for it (`externalId`, null clears). The default group can be
-    renamed like any other.
+     Rename a group, change your id for it (`externalId`, null clears) or its company description
+    (`context`, null clears: the workspace profile applies again; new mentions are judged with it at
+    once, old ones are not rescored). The default group can be renamed like any other but takes no
+    description: it is the workspace itself and reads the company profile.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.
@@ -147,8 +156,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Group]:
     """Update a group
 
-     Rename a group or change your id for it (`externalId`, null clears). The default group can be
-    renamed like any other.
+     Rename a group, change your id for it (`externalId`, null clears) or its company description
+    (`context`, null clears: the workspace profile applies again; new mentions are judged with it at
+    once, old ones are not rescored). The default group can be renamed like any other but takes no
+    description: it is the workspace itself and reads the company profile.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.
@@ -180,8 +191,10 @@ async def asyncio(
 ) -> ErrorResponse | Group | None:
     """Update a group
 
-     Rename a group or change your id for it (`externalId`, null clears). The default group can be
-    renamed like any other.
+     Rename a group, change your id for it (`externalId`, null clears) or its company description
+    (`context`, null clears: the workspace profile applies again; new mentions are judged with it at
+    once, old ones are not rescored). The default group can be renamed like any other but takes no
+    description: it is the workspace itself and reads the company profile.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.
