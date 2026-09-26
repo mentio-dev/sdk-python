@@ -3,6 +3,7 @@ from enum import StrEnum
 
 class GetUsageBreakdownBy(StrEnum):
     DAY = "day"
+    GROUP = "group"
     KEYWORD = "keyword"
     PLATFORM = "platform"
 

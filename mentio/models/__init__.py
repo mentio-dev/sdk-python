@@ -15,6 +15,9 @@ from .analytics_breakdown_data_item import AnalyticsBreakdownDataItem
 from .analytics_breakdown_data_item_keyword_type_0 import (
     AnalyticsBreakdownDataItemKeywordType0,
 )
+from .analytics_breakdown_data_item_keyword_type_0_group import (
+    AnalyticsBreakdownDataItemKeywordType0Group,
+)
 from .analytics_breakdown_data_item_keyword_type_0_kind import (
     AnalyticsBreakdownDataItemKeywordType0Kind,
 )
@@ -37,6 +40,9 @@ from .analytics_series_data_item import AnalyticsSeriesDataItem
 from .analytics_series_data_item_keyword_type_0 import (
     AnalyticsSeriesDataItemKeywordType0,
 )
+from .analytics_series_data_item_keyword_type_0_group import (
+    AnalyticsSeriesDataItemKeywordType0Group,
+)
 from .analytics_series_data_item_keyword_type_0_kind import (
     AnalyticsSeriesDataItemKeywordType0Kind,
 )
@@ -44,6 +50,9 @@ from .analytics_series_data_item_points_item import AnalyticsSeriesDataItemPoint
 from .analytics_series_previous_type_0_item import AnalyticsSeriesPreviousType0Item
 from .analytics_series_previous_type_0_item_keyword_type_0 import (
     AnalyticsSeriesPreviousType0ItemKeywordType0,
+)
+from .analytics_series_previous_type_0_item_keyword_type_0_group import (
+    AnalyticsSeriesPreviousType0ItemKeywordType0Group,
 )
 from .analytics_series_previous_type_0_item_keyword_type_0_kind import (
     AnalyticsSeriesPreviousType0ItemKeywordType0Kind,
@@ -82,6 +91,7 @@ from .create_api_key_response_201 import CreateApiKeyResponse201
 from .create_api_key_response_201_scope import CreateApiKeyResponse201Scope
 from .create_email_channel import CreateEmailChannel
 from .create_email_channel_kind import CreateEmailChannelKind
+from .create_group_body import CreateGroupBody
 from .create_invitation_body import CreateInvitationBody
 from .create_invitation_body_role import CreateInvitationBodyRole
 from .create_keyword_body import CreateKeywordBody
@@ -172,6 +182,9 @@ from .get_share_of_voice_platforms_item import GetShareOfVoicePlatformsItem
 from .get_share_of_voice_range import GetShareOfVoiceRange
 from .get_usage_breakdown_by import GetUsageBreakdownBy
 from .get_usage_breakdown_range import GetUsageBreakdownRange
+from .group import Group
+from .group_ref import GroupRef
+from .group_stats import GroupStats
 from .invitation import Invitation
 from .invitation_invited_by_type_0 import InvitationInvitedByType0
 from .invitation_role import InvitationRole
@@ -236,6 +249,9 @@ from .list_channel_deliveries_response_200_data_item_status import (
     ListChannelDeliveriesResponse200DataItemStatus,
 )
 from .list_channels_response_200 import ListChannelsResponse200
+from .list_groups_response_200 import ListGroupsResponse200
+from .list_groups_response_200_data_item import ListGroupsResponse200DataItem
+from .list_groups_response_200_data_item_stats import ListGroupsResponse200DataItemStats
 from .list_invitations_response_200 import ListInvitationsResponse200
 from .list_keywords_kind_item import ListKeywordsKindItem
 from .list_keywords_platform_item import ListKeywordsPlatformItem
@@ -459,6 +475,7 @@ from .segment_filter_stages_item import SegmentFilterStagesItem
 from .share_of_voice import ShareOfVoice
 from .share_of_voice_data_item import ShareOfVoiceDataItem
 from .share_of_voice_data_item_keyword import ShareOfVoiceDataItemKeyword
+from .share_of_voice_data_item_keyword_group import ShareOfVoiceDataItemKeywordGroup
 from .share_of_voice_data_item_keyword_kind import ShareOfVoiceDataItemKeywordKind
 from .share_of_voice_data_item_previous_type_0 import ShareOfVoiceDataItemPreviousType0
 from .share_of_voice_window import ShareOfVoiceWindow
@@ -493,6 +510,7 @@ from .update_company_body import UpdateCompanyBody
 from .update_company_body_accounts import UpdateCompanyBodyAccounts
 from .update_filters_body import UpdateFiltersBody
 from .update_filters_body_subreddits import UpdateFiltersBodySubreddits
+from .update_group_body import UpdateGroupBody
 from .update_keyword_body import UpdateKeywordBody
 from .update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
 from .update_keyword_body_kind import UpdateKeywordBodyKind
@@ -541,6 +559,7 @@ from .usage_breakdown import UsageBreakdown
 from .usage_breakdown_by import UsageBreakdownBy
 from .usage_breakdown_currency import UsageBreakdownCurrency
 from .usage_breakdown_data_item import UsageBreakdownDataItem
+from .usage_breakdown_data_item_group_type_0 import UsageBreakdownDataItemGroupType0
 from .usage_breakdown_data_item_keyword_type_0 import UsageBreakdownDataItemKeywordType0
 from .usage_breakdown_totals import UsageBreakdownTotals
 from .usage_breakdown_window import UsageBreakdownWindow
@@ -592,6 +611,7 @@ __all__ = (
     "AnalyticsBreakdownBy",
     "AnalyticsBreakdownDataItem",
     "AnalyticsBreakdownDataItemKeywordType0",
+    "AnalyticsBreakdownDataItemKeywordType0Group",
     "AnalyticsBreakdownDataItemKeywordType0Kind",
     "AnalyticsBreakdownDataItemPersonType0",
     "AnalyticsBreakdownDataItemPersonType0Platform",
@@ -602,10 +622,12 @@ __all__ = (
     "AnalyticsSeries",
     "AnalyticsSeriesDataItem",
     "AnalyticsSeriesDataItemKeywordType0",
+    "AnalyticsSeriesDataItemKeywordType0Group",
     "AnalyticsSeriesDataItemKeywordType0Kind",
     "AnalyticsSeriesDataItemPointsItem",
     "AnalyticsSeriesPreviousType0Item",
     "AnalyticsSeriesPreviousType0ItemKeywordType0",
+    "AnalyticsSeriesPreviousType0ItemKeywordType0Group",
     "AnalyticsSeriesPreviousType0ItemKeywordType0Kind",
     "AnalyticsSeriesPreviousType0ItemPointsItem",
     "AnalyticsSeriesWindow",
@@ -633,6 +655,7 @@ __all__ = (
     "CreateApiKeyResponse201Scope",
     "CreateEmailChannel",
     "CreateEmailChannelKind",
+    "CreateGroupBody",
     "CreateInvitationBody",
     "CreateInvitationBodyRole",
     "CreateKeywordBody",
@@ -703,6 +726,9 @@ __all__ = (
     "GetShareOfVoiceRange",
     "GetUsageBreakdownBy",
     "GetUsageBreakdownRange",
+    "Group",
+    "GroupRef",
+    "GroupStats",
     "Invitation",
     "InvitationInvitedByType0",
     "InvitationRole",
@@ -743,6 +769,9 @@ __all__ = (
     "ListChannelDeliveriesResponse200DataItemMentionType0",
     "ListChannelDeliveriesResponse200DataItemStatus",
     "ListChannelsResponse200",
+    "ListGroupsResponse200",
+    "ListGroupsResponse200DataItem",
+    "ListGroupsResponse200DataItemStats",
     "ListInvitationsResponse200",
     "ListKeywordsKindItem",
     "ListKeywordsPlatformItem",
@@ -872,6 +901,7 @@ __all__ = (
     "ShareOfVoice",
     "ShareOfVoiceDataItem",
     "ShareOfVoiceDataItemKeyword",
+    "ShareOfVoiceDataItemKeywordGroup",
     "ShareOfVoiceDataItemKeywordKind",
     "ShareOfVoiceDataItemPreviousType0",
     "ShareOfVoiceWindow",
@@ -904,6 +934,7 @@ __all__ = (
     "UpdateCompanyBodyAccounts",
     "UpdateFiltersBody",
     "UpdateFiltersBodySubreddits",
+    "UpdateGroupBody",
     "UpdateKeywordBody",
     "UpdateKeywordBodyCapType0",
     "UpdateKeywordBodyKind",
@@ -934,6 +965,7 @@ __all__ = (
     "UsageBreakdownBy",
     "UsageBreakdownCurrency",
     "UsageBreakdownDataItem",
+    "UsageBreakdownDataItemGroupType0",
     "UsageBreakdownDataItemKeywordType0",
     "UsageBreakdownTotals",
     "UsageBreakdownWindow",

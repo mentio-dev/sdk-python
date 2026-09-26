@@ -26,6 +26,8 @@ class ViewFilter:
         not_keyword_ids (list[str] | Unset): Never matches of these keywords.
         keyword_kinds (list[ViewFilterKeywordKindsItem] | Unset): Only matches of keywords of any of these kinds: brand,
             competitor, topic.
+        group_ids (list[str] | Unset): Only matches of keywords in any of these groups (grp_...).
+        not_group_ids (list[str] | Unset): Never matches of keywords in these groups.
         platforms (list[ViewFilterPlatformsItem] | Unset): Only posts from any of these platforms.
         not_platforms (list[ViewFilterNotPlatformsItem] | Unset): Never posts from these platforms.
         status (ViewFilterStatus | Unset): Only mentions in this status: open, ignored, done.
@@ -54,6 +56,8 @@ class ViewFilter:
     keyword_ids: list[str] | Unset = UNSET
     not_keyword_ids: list[str] | Unset = UNSET
     keyword_kinds: list[ViewFilterKeywordKindsItem] | Unset = UNSET
+    group_ids: list[str] | Unset = UNSET
+    not_group_ids: list[str] | Unset = UNSET
     platforms: list[ViewFilterPlatformsItem] | Unset = UNSET
     not_platforms: list[ViewFilterNotPlatformsItem] | Unset = UNSET
     status: ViewFilterStatus | Unset = UNSET
@@ -94,6 +98,14 @@ class ViewFilter:
             for keyword_kinds_item_data in self.keyword_kinds:
                 keyword_kinds_item = keyword_kinds_item_data.value
                 keyword_kinds.append(keyword_kinds_item)
+
+        group_ids: list[str] | Unset = UNSET
+        if not isinstance(self.group_ids, Unset):
+            group_ids = self.group_ids
+
+        not_group_ids: list[str] | Unset = UNSET
+        if not isinstance(self.not_group_ids, Unset):
+            not_group_ids = self.not_group_ids
 
         platforms: list[str] | Unset = UNSET
         if not isinstance(self.platforms, Unset):
@@ -188,6 +200,10 @@ class ViewFilter:
             field_dict["notKeywordIds"] = not_keyword_ids
         if keyword_kinds is not UNSET:
             field_dict["keywordKinds"] = keyword_kinds
+        if group_ids is not UNSET:
+            field_dict["groupIds"] = group_ids
+        if not_group_ids is not UNSET:
+            field_dict["notGroupIds"] = not_group_ids
         if platforms is not UNSET:
             field_dict["platforms"] = platforms
         if not_platforms is not UNSET:
@@ -250,6 +266,10 @@ class ViewFilter:
                 keyword_kinds_item = ViewFilterKeywordKindsItem(keyword_kinds_item_data)
 
                 keyword_kinds.append(keyword_kinds_item)
+
+        group_ids = cast(list[str], d.pop("groupIds", UNSET))
+
+        not_group_ids = cast(list[str], d.pop("notGroupIds", UNSET))
 
         _platforms = d.pop("platforms", UNSET)
         platforms: list[ViewFilterPlatformsItem] | Unset = UNSET
@@ -333,6 +353,8 @@ class ViewFilter:
             keyword_ids=keyword_ids,
             not_keyword_ids=not_keyword_ids,
             keyword_kinds=keyword_kinds,
+            group_ids=group_ids,
+            not_group_ids=not_group_ids,
             platforms=platforms,
             not_platforms=not_platforms,
             status=status,

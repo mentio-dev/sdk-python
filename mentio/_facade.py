@@ -119,6 +119,11 @@ import mentio.api.company.get_company  # noqa: F401
 import mentio.api.company.update_company  # noqa: F401
 import mentio.api.filters.get_filters  # noqa: F401
 import mentio.api.filters.update_filters  # noqa: F401
+import mentio.api.groups.create_group  # noqa: F401
+import mentio.api.groups.delete_group  # noqa: F401
+import mentio.api.groups.get_group  # noqa: F401
+import mentio.api.groups.list_groups  # noqa: F401
+import mentio.api.groups.update_group  # noqa: F401
 import mentio.api.keywords.create_keyword  # noqa: F401
 import mentio.api.keywords.delete_keyword  # noqa: F401
 import mentio.api.keywords.get_keyword  # noqa: F401
@@ -174,7 +179,8 @@ class _Keywords:
           platforms: Platforms to track it on; omit or null for every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: A monthly mention cap; omit or null for none."""
+          cap: A monthly mention cap; omit or null for none.
+          groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -194,6 +200,7 @@ class _Keywords:
 
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
+          group_id: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
           kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
           platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
@@ -214,7 +221,8 @@ class _Keywords:
           platforms: Replaces the platform list; null means every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it."""
+          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
+          groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term."""
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
@@ -254,6 +262,8 @@ class _Mentions:
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
           keyword_ids: Only matches of any of these keywords.
+          group_ids: Only matches of keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never matches of keywords in these groups.
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
@@ -306,6 +316,8 @@ class _Mentions:
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
           keyword_ids: Only matches of any of these keywords.
+          group_ids: Only matches of keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never matches of keywords in these groups.
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
@@ -845,6 +857,51 @@ class _Views:
           filter: Replaces the whole filter."""
         return _result(_ops.views.update_view.sync_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
+class _Groups:
+    """groups: create, delete, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
+        """Create a group
+
+        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours. Then pass the group id as `groupId` when creating a keyword.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
+          externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=."""
+        return _result(_ops.groups.create_group.sync_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
+
+    def delete(self, id: str) -> Any:
+        """Delete a group and its keywords
+
+        Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions go with it, alert rules that named it are adjusted; charges already made stay on the usage record). Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move or delete its keywords instead."""
+        return _result(_ops.groups.delete_group.sync_detailed(id, client=self._client))
+
+    def get(self, id: str) -> _m.Group:
+        """Get a group"""
+        return _result(_ops.groups.get_group.sync_detailed(id, client=self._client))
+
+    def list(self, **params: Any) -> _m.ListGroupsResponse200:
+        """List groups
+
+        The keyword groups of the workspace, the default group first, then oldest first. A group is how keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group, every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass `externalId` to find the group carrying your own id.
+
+        Keyword arguments (query):
+          external_id: Only the group carrying exactly this externalId."""
+        return _result(_ops.groups.list_groups.sync_detailed(client=self._client, **params))
+
+    def update(self, id: str, body: dict[str, Any] | _m.UpdateGroupBody | None = None, **fields: Any) -> _m.Group:
+        """Update a group
+
+        Rename a group or change your id for it (`externalId`, null clears). The default group can be renamed like any other.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: The group's name: a customer, a campaign, a product. Unique per workspace.
+          externalId: Replaces your id for the group; null clears it."""
+        return _result(_ops.groups.update_group.sync_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
+
 class _Auth:
     """auth: whoami."""
 
@@ -909,7 +966,7 @@ class _Usage:
         What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`: day, platform or keyword), in USD cents at list price, with the window's totals on every call. `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the wallet has debited so far for the window's days: mentions settle the morning after their day, so a window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read this at most 30 times a minute through its keys and tokens together.
 
         Keyword arguments (query):
-          by: The dimension to group by: day (one row per UTC day of the window), platform, or keyword (default: the row a margin is computed from).
+          by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
           range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
           month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
           limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
@@ -984,7 +1041,8 @@ class _AsyncKeywords:
           platforms: Platforms to track it on; omit or null for every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: A monthly mention cap; omit or null for none."""
+          cap: A monthly mention cap; omit or null for none.
+          groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1004,6 +1062,7 @@ class _AsyncKeywords:
 
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
+          group_id: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
           kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
           platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
@@ -1024,7 +1083,8 @@ class _AsyncKeywords:
           platforms: Replaces the platform list; null means every platform.
           context: A sentence the classifier reads for this keyword only, on top of the company profile (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it."""
+          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
+          groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term."""
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:
@@ -1064,6 +1124,8 @@ class _AsyncMentions:
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
           keyword_ids: Only matches of any of these keywords.
+          group_ids: Only matches of keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never matches of keywords in these groups.
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
@@ -1116,6 +1178,8 @@ class _AsyncMentions:
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
           keyword_ids: Only matches of any of these keywords.
+          group_ids: Only matches of keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never matches of keywords in these groups.
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
@@ -1655,6 +1719,51 @@ class _AsyncViews:
           filter: Replaces the whole filter."""
         return _result(await _ops.views.update_view.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
+class _AsyncGroups:
+    """groups: create, delete, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
+        """Create a group
+
+        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours. Then pass the group id as `groupId` when creating a keyword.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
+          externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=."""
+        return _result(await _ops.groups.create_group.asyncio_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
+
+    async def delete(self, id: str) -> Any:
+        """Delete a group and its keywords
+
+        Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions go with it, alert rules that named it are adjusted; charges already made stay on the usage record). Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move or delete its keywords instead."""
+        return _result(await _ops.groups.delete_group.asyncio_detailed(id, client=self._client))
+
+    async def get(self, id: str) -> _m.Group:
+        """Get a group"""
+        return _result(await _ops.groups.get_group.asyncio_detailed(id, client=self._client))
+
+    async def list(self, **params: Any) -> _m.ListGroupsResponse200:
+        """List groups
+
+        The keyword groups of the workspace, the default group first, then oldest first. A group is how keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group, every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass `externalId` to find the group carrying your own id.
+
+        Keyword arguments (query):
+          external_id: Only the group carrying exactly this externalId."""
+        return _result(await _ops.groups.list_groups.asyncio_detailed(client=self._client, **params))
+
+    async def update(self, id: str, body: dict[str, Any] | _m.UpdateGroupBody | None = None, **fields: Any) -> _m.Group:
+        """Update a group
+
+        Rename a group or change your id for it (`externalId`, null clears). The default group can be renamed like any other.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: The group's name: a customer, a campaign, a product. Unique per workspace.
+          externalId: Replaces your id for the group; null clears it."""
+        return _result(await _ops.groups.update_group.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
+
 class _AsyncAuth:
     """auth: whoami."""
 
@@ -1719,7 +1828,7 @@ class _AsyncUsage:
         What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`: day, platform or keyword), in USD cents at list price, with the window's totals on every call. `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the wallet has debited so far for the window's days: mentions settle the morning after their day, so a window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read this at most 30 times a minute through its keys and tokens together.
 
         Keyword arguments (query):
-          by: The dimension to group by: day (one row per UTC day of the window), platform, or keyword (default: the row a margin is computed from).
+          by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
           range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
           month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
           limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
@@ -1820,6 +1929,7 @@ class Mentio:
         self.system = _System(self.client)
         self.filters = _Filters(self.client)
         self.views = _Views(self.client)
+        self.groups = _Groups(self.client)
         self.auth = _Auth(self.client)
         self.members = _Members(self.client)
         self.usage = _Usage(self.client)
@@ -1875,6 +1985,7 @@ class AsyncMentio:
         self.system = _AsyncSystem(self.client)
         self.filters = _AsyncFilters(self.client)
         self.views = _AsyncViews(self.client)
+        self.groups = _AsyncGroups(self.client)
         self.auth = _AsyncAuth(self.client)
         self.members = _AsyncMembers(self.client)
         self.usage = _AsyncUsage(self.client)

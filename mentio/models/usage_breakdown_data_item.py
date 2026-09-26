@@ -7,6 +7,9 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
+    from ..models.usage_breakdown_data_item_group_type_0 import (
+        UsageBreakdownDataItemGroupType0,
+    )
     from ..models.usage_breakdown_data_item_keyword_type_0 import (
         UsageBreakdownDataItemKeywordType0,
     )
@@ -19,10 +22,11 @@ T = TypeVar("T", bound="UsageBreakdownDataItem")
 class UsageBreakdownDataItem:
     """
     Attributes:
-        key (str): The group: the UTC day (YYYY-MM-DD) for by=day, the platform for by=platform, the keyword id for
-            by=keyword.
-        label (str): Readable name: the keyword term, otherwise the key.
+        key (str): The row's key: the UTC day (YYYY-MM-DD) for by=day, the platform for by=platform, the keyword id for
+            by=keyword, the group id for by=group.
+        label (str): Readable name: the keyword term or the group name, otherwise the key.
         keyword (None | UsageBreakdownDataItemKeywordType0): by=keyword only; null otherwise.
+        group (None | UsageBreakdownDataItemGroupType0): by=group only; null otherwise.
         keyword_days (int | None): Keyword-days metered in this group: the days the daily tick charged for. Null for
             by=platform (a keyword-day belongs to no platform) and for a day before the first recorded tick (unknown, not
             zero); a keyword row counts only the days on record, so before window.keywordDaysFrom it is a floor, not a zero.
@@ -38,6 +42,7 @@ class UsageBreakdownDataItem:
     key: str
     label: str
     keyword: None | UsageBreakdownDataItemKeywordType0
+    group: None | UsageBreakdownDataItemGroupType0
     keyword_days: int | None
     keyword_cents: int
     matched_mentions: int
@@ -47,6 +52,9 @@ class UsageBreakdownDataItem:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.usage_breakdown_data_item_group_type_0 import (
+            UsageBreakdownDataItemGroupType0,
+        )
         from ..models.usage_breakdown_data_item_keyword_type_0 import (
             UsageBreakdownDataItemKeywordType0,
         )
@@ -60,6 +68,12 @@ class UsageBreakdownDataItem:
             keyword = self.keyword.to_dict()
         else:
             keyword = self.keyword
+
+        group: dict[str, Any] | None
+        if isinstance(self.group, UsageBreakdownDataItemGroupType0):
+            group = self.group.to_dict()
+        else:
+            group = self.group
 
         keyword_days: int | None
         keyword_days = self.keyword_days
@@ -81,6 +95,7 @@ class UsageBreakdownDataItem:
                 "key": key,
                 "label": label,
                 "keyword": keyword,
+                "group": group,
                 "keywordDays": keyword_days,
                 "keywordCents": keyword_cents,
                 "matchedMentions": matched_mentions,
@@ -94,6 +109,9 @@ class UsageBreakdownDataItem:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.usage_breakdown_data_item_group_type_0 import (
+            UsageBreakdownDataItemGroupType0,
+        )
         from ..models.usage_breakdown_data_item_keyword_type_0 import (
             UsageBreakdownDataItemKeywordType0,
         )
@@ -118,6 +136,21 @@ class UsageBreakdownDataItem:
 
         keyword = _parse_keyword(d.pop("keyword"))
 
+        def _parse_group(data: object) -> None | UsageBreakdownDataItemGroupType0:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                group_type_0 = UsageBreakdownDataItemGroupType0.from_dict(data)
+
+                return group_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | UsageBreakdownDataItemGroupType0, data)
+
+        group = _parse_group(d.pop("group"))
+
         def _parse_keyword_days(data: object) -> int | None:
             if data is None:
                 return data
@@ -139,6 +172,7 @@ class UsageBreakdownDataItem:
             key=key,
             label=label,
             keyword=keyword,
+            group=group,
             keyword_days=keyword_days,
             keyword_cents=keyword_cents,
             matched_mentions=matched_mentions,

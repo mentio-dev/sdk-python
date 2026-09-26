@@ -1,47 +1,38 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar
+from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-if TYPE_CHECKING:
-    from ..models.group_ref import GroupRef
-
-
-T = TypeVar("T", bound="MentionKeyword")
+T = TypeVar("T", bound="ListGroupsResponse200DataItemStats")
 
 
 @_attrs_define
-class MentionKeyword:
-    """The keyword this post matched, and the group it is in.
+class ListGroupsResponse200DataItemStats:
+    """Computed over the group's keywords.
 
     Attributes:
-        id (str): Keyword id (kw_...).
-        term (str): The tracked term.
-        group (GroupRef): The group the keyword belongs to.
+        keywords (int): Keywords in the group, muted ones included.
+        active (int): Keywords in the group that are tracking (not muted).
     """
 
-    id: str
-    term: str
-    group: GroupRef
+    keywords: int
+    active: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        id = self.id
+        keywords = self.keywords
 
-        term = self.term
-
-        group = self.group.to_dict()
+        active = self.active
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "id": id,
-                "term": term,
-                "group": group,
+                "keywords": keywords,
+                "active": active,
             }
         )
 
@@ -49,23 +40,18 @@ class MentionKeyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.group_ref import GroupRef
-
         d = dict(src_dict)
-        id = d.pop("id")
+        keywords = d.pop("keywords")
 
-        term = d.pop("term")
+        active = d.pop("active")
 
-        group = GroupRef.from_dict(d.pop("group"))
-
-        mention_keyword = cls(
-            id=id,
-            term=term,
-            group=group,
+        list_groups_response_200_data_item_stats = cls(
+            keywords=keywords,
+            active=active,
         )
 
-        mention_keyword.additional_properties = d
-        return mention_keyword
+        list_groups_response_200_data_item_stats.additional_properties = d
+        return list_groups_response_200_data_item_stats
 
     @property
     def additional_keys(self) -> list[str]:

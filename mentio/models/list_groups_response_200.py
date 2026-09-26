@@ -7,41 +7,35 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
-    from ..models.group_ref import GroupRef
+    from ..models.list_groups_response_200_data_item import (
+        ListGroupsResponse200DataItem,
+    )
 
 
-T = TypeVar("T", bound="MentionKeyword")
+T = TypeVar("T", bound="ListGroupsResponse200")
 
 
 @_attrs_define
-class MentionKeyword:
-    """The keyword this post matched, and the group it is in.
-
+class ListGroupsResponse200:
+    """
     Attributes:
-        id (str): Keyword id (kw_...).
-        term (str): The tracked term.
-        group (GroupRef): The group the keyword belongs to.
+        data (list[ListGroupsResponse200DataItem]): The workspace's groups, the default first, then oldest first.
     """
 
-    id: str
-    term: str
-    group: GroupRef
+    data: list[ListGroupsResponse200DataItem]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        id = self.id
-
-        term = self.term
-
-        group = self.group.to_dict()
+        data = []
+        for data_item_data in self.data:
+            data_item = data_item_data.to_dict()
+            data.append(data_item)
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "id": id,
-                "term": term,
-                "group": group,
+                "data": data,
             }
         )
 
@@ -49,23 +43,24 @@ class MentionKeyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.group_ref import GroupRef
-
-        d = dict(src_dict)
-        id = d.pop("id")
-
-        term = d.pop("term")
-
-        group = GroupRef.from_dict(d.pop("group"))
-
-        mention_keyword = cls(
-            id=id,
-            term=term,
-            group=group,
+        from ..models.list_groups_response_200_data_item import (
+            ListGroupsResponse200DataItem,
         )
 
-        mention_keyword.additional_properties = d
-        return mention_keyword
+        d = dict(src_dict)
+        data = []
+        _data = d.pop("data")
+        for data_item_data in _data:
+            data_item = ListGroupsResponse200DataItem.from_dict(data_item_data)
+
+            data.append(data_item)
+
+        list_groups_response_200 = cls(
+            data=data,
+        )
+
+        list_groups_response_200.additional_properties = d
+        return list_groups_response_200
 
     @property
     def additional_keys(self) -> list[str]:

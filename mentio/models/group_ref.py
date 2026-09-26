@@ -1,47 +1,49 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar
+from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-if TYPE_CHECKING:
-    from ..models.group_ref import GroupRef
-
-
-T = TypeVar("T", bound="MentionKeyword")
+T = TypeVar("T", bound="GroupRef")
 
 
 @_attrs_define
-class MentionKeyword:
-    """The keyword this post matched, and the group it is in.
+class GroupRef:
+    """The group the keyword belongs to.
 
     Attributes:
-        id (str): Keyword id (kw_...).
-        term (str): The tracked term.
-        group (GroupRef): The group the keyword belongs to.
+        id (str): Group id (grp_...).
+        name (str): The group's name.
+        external_id (None | str): Your own id for the group, or null.
+        is_default (bool): The workspace's default group, where a keyword lands when no group is named.
     """
 
     id: str
-    term: str
-    group: GroupRef
+    name: str
+    external_id: None | str
+    is_default: bool
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         id = self.id
 
-        term = self.term
+        name = self.name
 
-        group = self.group.to_dict()
+        external_id: None | str
+        external_id = self.external_id
+
+        is_default = self.is_default
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "id": id,
-                "term": term,
-                "group": group,
+                "name": name,
+                "externalId": external_id,
+                "isDefault": is_default,
             }
         )
 
@@ -49,23 +51,29 @@ class MentionKeyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.group_ref import GroupRef
-
         d = dict(src_dict)
         id = d.pop("id")
 
-        term = d.pop("term")
+        name = d.pop("name")
 
-        group = GroupRef.from_dict(d.pop("group"))
+        def _parse_external_id(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
 
-        mention_keyword = cls(
+        external_id = _parse_external_id(d.pop("externalId"))
+
+        is_default = d.pop("isDefault")
+
+        group_ref = cls(
             id=id,
-            term=term,
-            group=group,
+            name=name,
+            external_id=external_id,
+            is_default=is_default,
         )
 
-        mention_keyword.additional_properties = d
-        return mention_keyword
+        group_ref.additional_properties = d
+        return group_ref
 
     @property
     def additional_keys(self) -> list[str]:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar
+from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,6 +9,12 @@ from attrs import field as _attrs_field
 from ..models.share_of_voice_data_item_keyword_kind import (
     ShareOfVoiceDataItemKeywordKind,
 )
+
+if TYPE_CHECKING:
+    from ..models.share_of_voice_data_item_keyword_group import (
+        ShareOfVoiceDataItemKeywordGroup,
+    )
+
 
 T = TypeVar("T", bound="ShareOfVoiceDataItemKeyword")
 
@@ -21,11 +27,13 @@ class ShareOfVoiceDataItemKeyword:
         id (str): Keyword id (kw_...).
         term (str): The tracked term.
         kind (ShareOfVoiceDataItemKeywordKind): brand, competitor or topic.
+        group (ShareOfVoiceDataItemKeywordGroup):
     """
 
     id: str
     term: str
     kind: ShareOfVoiceDataItemKeywordKind
+    group: ShareOfVoiceDataItemKeywordGroup
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -35,6 +43,8 @@ class ShareOfVoiceDataItemKeyword:
 
         kind = self.kind.value
 
+        group = self.group.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -42,6 +52,7 @@ class ShareOfVoiceDataItemKeyword:
                 "id": id,
                 "term": term,
                 "kind": kind,
+                "group": group,
             }
         )
 
@@ -49,6 +60,10 @@ class ShareOfVoiceDataItemKeyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.share_of_voice_data_item_keyword_group import (
+            ShareOfVoiceDataItemKeywordGroup,
+        )
+
         d = dict(src_dict)
         id = d.pop("id")
 
@@ -56,10 +71,13 @@ class ShareOfVoiceDataItemKeyword:
 
         kind = ShareOfVoiceDataItemKeywordKind(d.pop("kind"))
 
+        group = ShareOfVoiceDataItemKeywordGroup.from_dict(d.pop("group"))
+
         share_of_voice_data_item_keyword = cls(
             id=id,
             term=term,
             kind=kind,
+            group=group,
         )
 
         share_of_voice_data_item_keyword.additional_properties = d

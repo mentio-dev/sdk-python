@@ -34,6 +34,8 @@ class CreateKeywordBody:
             geometry word." Null clears it.
         matching (CreateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
         cap (CreateKeywordBodyCapType0 | None | Unset): A monthly mention cap; omit or null for none.
+        group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may
+            be tracked once per group.
     """
 
     term: str
@@ -42,6 +44,7 @@ class CreateKeywordBody:
     context: None | str | Unset = UNSET
     matching: CreateKeywordBodyMatching | Unset = UNSET
     cap: CreateKeywordBodyCapType0 | None | Unset = UNSET
+    group_id: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -85,6 +88,8 @@ class CreateKeywordBody:
         else:
             cap = self.cap
 
+        group_id = self.group_id
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -102,6 +107,8 @@ class CreateKeywordBody:
             field_dict["matching"] = matching
         if cap is not UNSET:
             field_dict["cap"] = cap
+        if group_id is not UNSET:
+            field_dict["groupId"] = group_id
 
         return field_dict
 
@@ -183,6 +190,8 @@ class CreateKeywordBody:
 
         cap = _parse_cap(d.pop("cap", UNSET))
 
+        group_id = d.pop("groupId", UNSET)
+
         create_keyword_body = cls(
             term=term,
             kind=kind,
@@ -190,6 +199,7 @@ class CreateKeywordBody:
             context=context,
             matching=matching,
             cap=cap,
+            group_id=group_id,
         )
 
         create_keyword_body.additional_properties = d

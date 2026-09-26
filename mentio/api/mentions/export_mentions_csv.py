@@ -53,6 +53,8 @@ def _get_kwargs(
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
     not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
@@ -203,6 +205,26 @@ def _get_kwargs(
     else:
         json_keyword_ids = keyword_ids
     params["keywordIds"] = json_keyword_ids
+
+    json_group_ids: list[str] | None | Unset
+    if isinstance(group_ids, Unset):
+        json_group_ids = UNSET
+    elif isinstance(group_ids, list):
+        json_group_ids = group_ids
+
+    else:
+        json_group_ids = group_ids
+    params["groupIds"] = json_group_ids
+
+    json_not_group_ids: list[str] | None | Unset
+    if isinstance(not_group_ids, Unset):
+        json_not_group_ids = UNSET
+    elif isinstance(not_group_ids, list):
+        json_not_group_ids = not_group_ids
+
+    else:
+        json_not_group_ids = not_group_ids
+    params["notGroupIds"] = json_not_group_ids
 
     json_not_keyword_ids: list[str] | None | Unset
     if isinstance(not_keyword_ids, Unset):
@@ -374,6 +396,8 @@ def sync_detailed(
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
     not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
@@ -447,6 +471,9 @@ def sync_detailed(
         not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
             platforms.
         keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        group_ids (list[str] | None | Unset): Only matches of keywords in any of these groups
+            (grp_...). Repeatable, or comma-separated.
+        not_group_ids (list[str] | None | Unset): Never matches of keywords in these groups.
         not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
@@ -503,6 +530,8 @@ def sync_detailed(
         platforms=platforms,
         not_platforms=not_platforms,
         keyword_ids=keyword_ids,
+        group_ids=group_ids,
+        not_group_ids=not_group_ids,
         not_keyword_ids=not_keyword_ids,
         sentiments=sentiments,
         not_sentiments=not_sentiments,
@@ -552,6 +581,8 @@ def sync(
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
     not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
@@ -625,6 +656,9 @@ def sync(
         not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
             platforms.
         keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        group_ids (list[str] | None | Unset): Only matches of keywords in any of these groups
+            (grp_...). Repeatable, or comma-separated.
+        not_group_ids (list[str] | None | Unset): Never matches of keywords in these groups.
         not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
@@ -682,6 +716,8 @@ def sync(
         platforms=platforms,
         not_platforms=not_platforms,
         keyword_ids=keyword_ids,
+        group_ids=group_ids,
+        not_group_ids=not_group_ids,
         not_keyword_ids=not_keyword_ids,
         sentiments=sentiments,
         not_sentiments=not_sentiments,
@@ -725,6 +761,8 @@ async def asyncio_detailed(
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
     not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
@@ -798,6 +836,9 @@ async def asyncio_detailed(
         not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
             platforms.
         keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        group_ids (list[str] | None | Unset): Only matches of keywords in any of these groups
+            (grp_...). Repeatable, or comma-separated.
+        not_group_ids (list[str] | None | Unset): Never matches of keywords in these groups.
         not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
@@ -854,6 +895,8 @@ async def asyncio_detailed(
         platforms=platforms,
         not_platforms=not_platforms,
         keyword_ids=keyword_ids,
+        group_ids=group_ids,
+        not_group_ids=not_group_ids,
         not_keyword_ids=not_keyword_ids,
         sentiments=sentiments,
         not_sentiments=not_sentiments,
@@ -901,6 +944,8 @@ async def asyncio(
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
     not_platforms: list[ExportMentionsCsvNotPlatformsItem] | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
@@ -974,6 +1019,9 @@ async def asyncio(
         not_platforms (list[ExportMentionsCsvNotPlatformsItem] | Unset): Never posts from these
             platforms.
         keyword_ids (list[str] | None | Unset): Only matches of any of these keywords.
+        group_ids (list[str] | None | Unset): Only matches of keywords in any of these groups
+            (grp_...). Repeatable, or comma-separated.
+        not_group_ids (list[str] | None | Unset): Never matches of keywords in these groups.
         not_keyword_ids (list[str] | None | Unset): Never matches of these keywords.
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
@@ -1032,6 +1080,8 @@ async def asyncio(
             platforms=platforms,
             not_platforms=not_platforms,
             keyword_ids=keyword_ids,
+            group_ids=group_ids,
+            not_group_ids=not_group_ids,
             not_keyword_ids=not_keyword_ids,
             sentiments=sentiments,
             not_sentiments=not_sentiments,

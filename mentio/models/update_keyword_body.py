@@ -35,6 +35,8 @@ class UpdateKeywordBody:
         matching (UpdateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
         cap (None | Unset | UpdateKeywordBodyCapType0): Replaces the monthly mention cap; null removes it. A cap above
             this month's count resumes a capped keyword at once, one at or under it pauses it.
+        group_id (str | Unset): Moves the keyword to this group (grp_...). A 409 when that group already tracks the
+            term.
     """
 
     kind: UpdateKeywordBodyKind | Unset = UNSET
@@ -43,6 +45,7 @@ class UpdateKeywordBody:
     context: None | str | Unset = UNSET
     matching: UpdateKeywordBodyMatching | Unset = UNSET
     cap: None | Unset | UpdateKeywordBodyCapType0 = UNSET
+    group_id: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -86,6 +89,8 @@ class UpdateKeywordBody:
         else:
             cap = self.cap
 
+        group_id = self.group_id
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -101,6 +106,8 @@ class UpdateKeywordBody:
             field_dict["matching"] = matching
         if cap is not UNSET:
             field_dict["cap"] = cap
+        if group_id is not UNSET:
+            field_dict["groupId"] = group_id
 
         return field_dict
 
@@ -182,6 +189,8 @@ class UpdateKeywordBody:
 
         cap = _parse_cap(d.pop("cap", UNSET))
 
+        group_id = d.pop("groupId", UNSET)
+
         update_keyword_body = cls(
             kind=kind,
             muted=muted,
@@ -189,6 +198,7 @@ class UpdateKeywordBody:
             context=context,
             matching=matching,
             cap=cap,
+            group_id=group_id,
         )
 
         update_keyword_body.additional_properties = d

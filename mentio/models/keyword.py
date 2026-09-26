@@ -10,6 +10,7 @@ from ..models.keyword_kind import KeywordKind
 from ..models.keyword_platforms_type_0_item import KeywordPlatformsType0Item
 
 if TYPE_CHECKING:
+    from ..models.group_ref import GroupRef
     from ..models.keyword_cap_type_0 import KeywordCapType0
     from ..models.keyword_matching import KeywordMatching
     from ..models.keyword_polling_item import KeywordPollingItem
@@ -33,6 +34,7 @@ class Keyword:
         paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
             cap is raised. Not muted: it keeps its place and its daily keyword charge.
         cap (KeywordCapType0 | None): The monthly mention cap, or null for none.
+        group (GroupRef): The group the keyword belongs to.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms this keyword is tracked on; null means every
             platform.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile (at
@@ -52,6 +54,7 @@ class Keyword:
     paused_for_balance: bool
     paused_for_cap: bool
     cap: KeywordCapType0 | None
+    group: GroupRef
     platforms: list[KeywordPlatformsType0Item] | None
     context: None | str
     matching: KeywordMatching
@@ -80,6 +83,8 @@ class Keyword:
             cap = self.cap.to_dict()
         else:
             cap = self.cap
+
+        group = self.group.to_dict()
 
         platforms: list[str] | None
         if isinstance(self.platforms, list):
@@ -116,6 +121,7 @@ class Keyword:
                 "pausedForBalance": paused_for_balance,
                 "pausedForCap": paused_for_cap,
                 "cap": cap,
+                "group": group,
                 "platforms": platforms,
                 "context": context,
                 "matching": matching,
@@ -129,6 +135,7 @@ class Keyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.group_ref import GroupRef
         from ..models.keyword_cap_type_0 import KeywordCapType0
         from ..models.keyword_matching import KeywordMatching
         from ..models.keyword_polling_item import KeywordPollingItem
@@ -161,6 +168,8 @@ class Keyword:
             return cast(KeywordCapType0 | None, data)
 
         cap = _parse_cap(d.pop("cap"))
+
+        group = GroupRef.from_dict(d.pop("group"))
 
         def _parse_platforms(data: object) -> list[KeywordPlatformsType0Item] | None:
             if data is None:
@@ -212,6 +221,7 @@ class Keyword:
             paused_for_balance=paused_for_balance,
             paused_for_cap=paused_for_cap,
             cap=cap,
+            group=group,
             platforms=platforms,
             context=context,
             matching=matching,

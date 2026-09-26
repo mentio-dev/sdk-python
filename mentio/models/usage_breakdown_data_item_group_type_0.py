@@ -1,47 +1,43 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar
+from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-if TYPE_CHECKING:
-    from ..models.group_ref import GroupRef
-
-
-T = TypeVar("T", bound="MentionKeyword")
+T = TypeVar("T", bound="UsageBreakdownDataItemGroupType0")
 
 
 @_attrs_define
-class MentionKeyword:
-    """The keyword this post matched, and the group it is in.
+class UsageBreakdownDataItemGroupType0:
+    """by=group only; null otherwise.
 
     Attributes:
-        id (str): Keyword id (kw_...).
-        term (str): The tracked term.
-        group (GroupRef): The group the keyword belongs to.
+        id (str): Group id, or "none" for keyword-days metered before groups existed whose keyword is gone.
+        name (str): The group's name as it reads now, or "Deleted group" / "No group".
+        removed (bool): The group has since been deleted.
     """
 
     id: str
-    term: str
-    group: GroupRef
+    name: str
+    removed: bool
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         id = self.id
 
-        term = self.term
+        name = self.name
 
-        group = self.group.to_dict()
+        removed = self.removed
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "id": id,
-                "term": term,
-                "group": group,
+                "name": name,
+                "removed": removed,
             }
         )
 
@@ -49,23 +45,21 @@ class MentionKeyword:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.group_ref import GroupRef
-
         d = dict(src_dict)
         id = d.pop("id")
 
-        term = d.pop("term")
+        name = d.pop("name")
 
-        group = GroupRef.from_dict(d.pop("group"))
+        removed = d.pop("removed")
 
-        mention_keyword = cls(
+        usage_breakdown_data_item_group_type_0 = cls(
             id=id,
-            term=term,
-            group=group,
+            name=name,
+            removed=removed,
         )
 
-        mention_keyword.additional_properties = d
-        return mention_keyword
+        usage_breakdown_data_item_group_type_0.additional_properties = d
+        return usage_breakdown_data_item_group_type_0
 
     @property
     def additional_keys(self) -> list[str]:

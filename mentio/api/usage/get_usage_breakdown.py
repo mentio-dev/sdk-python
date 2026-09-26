@@ -122,8 +122,8 @@ def sync_detailed(
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, or keyword (default: the row a margin is computed from). Default:
-            GetUsageBreakdownBy.KEYWORD.
+            the window), platform, keyword (default: the row a margin is computed from), or group
+            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from
@@ -180,8 +180,8 @@ def sync(
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, or keyword (default: the row a margin is computed from). Default:
-            GetUsageBreakdownBy.KEYWORD.
+            the window), platform, keyword (default: the row a margin is computed from), or group
+            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from
@@ -233,8 +233,8 @@ async def asyncio_detailed(
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, or keyword (default: the row a margin is computed from). Default:
-            GetUsageBreakdownBy.KEYWORD.
+            the window), platform, keyword (default: the row a margin is computed from), or group
+            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from
@@ -289,8 +289,8 @@ async def asyncio(
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, or keyword (default: the row a margin is computed from). Default:
-            GetUsageBreakdownBy.KEYWORD.
+            the window), platform, keyword (default: the row a margin is computed from), or group
+            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from

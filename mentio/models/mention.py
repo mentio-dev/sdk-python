@@ -32,7 +32,7 @@ class Mention:
         priority (float): Attention score, one decimal, computed at read time: relevance halved, author reach on a
             follower ladder (unknown reach counts 8), the strongest intent (buy intent 20 down to praise 5), minus 2 per day
             of age floored at 20.
-        keyword (MentionKeyword): The keyword this post matched.
+        keyword (MentionKeyword): The keyword this post matched, and the group it is in.
         post (MentionPost):
         author (MentionAuthorType0 | None): Who posted it; null when the platform gave no author at all.
         classification (MentionClassificationType0 | None): The classifier verdict, as corrected by your feedback; null

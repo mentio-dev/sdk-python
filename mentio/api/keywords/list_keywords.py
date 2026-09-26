@@ -17,6 +17,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     q: str | Unset = UNSET,
+    group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
     platform: list[ListKeywordsPlatformItem] | Unset = UNSET,
@@ -28,6 +29,16 @@ def _get_kwargs(
     params: dict[str, Any] = {}
 
     params["q"] = q
+
+    json_group_id: list[str] | None | Unset
+    if isinstance(group_id, Unset):
+        json_group_id = UNSET
+    elif isinstance(group_id, list):
+        json_group_id = group_id
+
+    else:
+        json_group_id = group_id
+    params["groupId"] = json_group_id
 
     json_kind: list[str] | Unset = UNSET
     if not isinstance(kind, Unset):
@@ -121,6 +132,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
     platform: list[ListKeywordsPlatformItem] | Unset = UNSET,
@@ -137,6 +149,8 @@ def sync_detailed(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
+        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+            Repeatable, or comma-separated.
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
@@ -160,6 +174,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         q=q,
+        group_id=group_id,
         kind=kind,
         status=status,
         platform=platform,
@@ -179,6 +194,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
     platform: list[ListKeywordsPlatformItem] | Unset = UNSET,
@@ -195,6 +211,8 @@ def sync(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
+        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+            Repeatable, or comma-separated.
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
@@ -219,6 +237,7 @@ def sync(
     return sync_detailed(
         client=client,
         q=q,
+        group_id=group_id,
         kind=kind,
         status=status,
         platform=platform,
@@ -232,6 +251,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
     platform: list[ListKeywordsPlatformItem] | Unset = UNSET,
@@ -248,6 +268,8 @@ async def asyncio_detailed(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
+        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+            Repeatable, or comma-separated.
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
@@ -271,6 +293,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         q=q,
+        group_id=group_id,
         kind=kind,
         status=status,
         platform=platform,
@@ -288,6 +311,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
     platform: list[ListKeywordsPlatformItem] | Unset = UNSET,
@@ -304,6 +328,8 @@ async def asyncio(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
+        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+            Repeatable, or comma-separated.
         kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
             Repeatable, or comma-separated.
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
@@ -329,6 +355,7 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             q=q,
+            group_id=group_id,
             kind=kind,
             status=status,
             platform=platform,

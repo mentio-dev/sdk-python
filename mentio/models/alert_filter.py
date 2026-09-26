@@ -18,6 +18,7 @@ class AlertFilter:
     """
     Attributes:
         keyword_ids (list[str] | Unset): Only these keywords.
+        group_ids (list[str] | Unset): Only keywords in these groups (grp_...): one rule per customer, say.
         platforms (list[AlertFilterPlatformsItem] | Unset): Only posts from these platforms.
         min_relevance (int | Unset): The rule's relevance floor. Absent, it sends relevant mentions only (scored 40 and
             up, the classifier's line); lower, down to 0, it also receives the matches the classifier scored as noise;
@@ -38,6 +39,7 @@ class AlertFilter:
     """
 
     keyword_ids: list[str] | Unset = UNSET
+    group_ids: list[str] | Unset = UNSET
     platforms: list[AlertFilterPlatformsItem] | Unset = UNSET
     min_relevance: int | Unset = UNSET
     min_confidence: float | Unset = UNSET
@@ -55,6 +57,10 @@ class AlertFilter:
         keyword_ids: list[str] | Unset = UNSET
         if not isinstance(self.keyword_ids, Unset):
             keyword_ids = self.keyword_ids
+
+        group_ids: list[str] | Unset = UNSET
+        if not isinstance(self.group_ids, Unset):
+            group_ids = self.group_ids
 
         platforms: list[str] | Unset = UNSET
         if not isinstance(self.platforms, Unset):
@@ -103,6 +109,8 @@ class AlertFilter:
         field_dict.update({})
         if keyword_ids is not UNSET:
             field_dict["keywordIds"] = keyword_ids
+        if group_ids is not UNSET:
+            field_dict["groupIds"] = group_ids
         if platforms is not UNSET:
             field_dict["platforms"] = platforms
         if min_relevance is not UNSET:
@@ -132,6 +140,8 @@ class AlertFilter:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
         keyword_ids = cast(list[str], d.pop("keywordIds", UNSET))
+
+        group_ids = cast(list[str], d.pop("groupIds", UNSET))
 
         _platforms = d.pop("platforms", UNSET)
         platforms: list[AlertFilterPlatformsItem] | Unset = UNSET
@@ -171,6 +181,7 @@ class AlertFilter:
 
         alert_filter = cls(
             keyword_ids=keyword_ids,
+            group_ids=group_ids,
             platforms=platforms,
             min_relevance=min_relevance,
             min_confidence=min_confidence,
