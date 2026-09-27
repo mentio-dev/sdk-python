@@ -16,7 +16,8 @@ class MentionReviewType0App:
     """The app reviewed.
 
     Attributes:
-        platform (MentionReviewType0AppPlatform): appstore (Apple App Store) or googleplay (Google Play).
+        platform (MentionReviewType0AppPlatform): appstore (Apple App Store), googleplay (Google Play), trustpilot (a
+            company's Trustpilot page) or googlemaps (a place's Google reviews).
         id (str): The store's app id.
         url (str): The app's store listing.
     """

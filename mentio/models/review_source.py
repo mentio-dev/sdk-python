@@ -15,12 +15,13 @@ T = TypeVar("T", bound="ReviewSource")
 class ReviewSource:
     """
     Attributes:
-        platform (ReviewSourcePlatform): appstore (Apple App Store) or googleplay (Google Play).
-        id (str): The store's app id.
-        url (str): The app's store listing.
-        countries (list[str]): Storefronts read, lowercase two-letter codes.
-        language (None | str): Google Play's review language; null on the App Store, which answers every language.
-        connected_at (str): When this keyword started collecting the app's reviews.
+        platform (ReviewSourcePlatform): appstore (Apple App Store), googleplay (Google Play), trustpilot (a company's
+            Trustpilot page) or googlemaps (a place's Google reviews).
+        id (str): The id on the platform: app id, package name, Trustpilot domain, Google Place ID or cid.
+        url (str): The review page: the store listing, the Trustpilot page or the Google Maps place.
+        countries (list[str]): Storefronts read, lowercase two-letter codes; empty on Trustpilot and Google Maps.
+        language (None | str): Google Play's review language; null elsewhere.
+        connected_at (str): When this keyword started collecting the page's reviews.
     """
 
     platform: ReviewSourcePlatform

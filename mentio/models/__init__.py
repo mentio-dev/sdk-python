@@ -182,6 +182,9 @@ from .get_analytics_summary_platforms_item import GetAnalyticsSummaryPlatformsIt
 from .get_analytics_summary_range import GetAnalyticsSummaryRange
 from .get_health_response_200 import GetHealthResponse200
 from .get_invoice_url_response_200 import GetInvoiceUrlResponse200
+from .get_reviews_report_bucket import GetReviewsReportBucket
+from .get_reviews_report_platforms_item import GetReviewsReportPlatformsItem
+from .get_reviews_report_range import GetReviewsReportRange
 from .get_share_of_voice_platforms_item import GetShareOfVoicePlatformsItem
 from .get_share_of_voice_range import GetShareOfVoiceRange
 from .get_usage_breakdown_by import GetUsageBreakdownBy
@@ -459,6 +462,23 @@ from .person_stats import PersonStats
 from .person_stats_sentiment import PersonStatsSentiment
 from .review_source import ReviewSource
 from .review_source_platform import ReviewSourcePlatform
+from .reviews_report import ReviewsReport
+from .reviews_report_pages_item import ReviewsReportPagesItem
+from .reviews_report_pages_item_distribution import ReviewsReportPagesItemDistribution
+from .reviews_report_pages_item_platform import ReviewsReportPagesItemPlatform
+from .reviews_report_pages_item_previous_type_0 import (
+    ReviewsReportPagesItemPreviousType0,
+)
+from .reviews_report_pages_item_series_item import ReviewsReportPagesItemSeriesItem
+from .reviews_report_previous_type_0 import ReviewsReportPreviousType0
+from .reviews_report_previous_type_0_distribution import (
+    ReviewsReportPreviousType0Distribution,
+)
+from .reviews_report_tags_item import ReviewsReportTagsItem
+from .reviews_report_totals import ReviewsReportTotals
+from .reviews_report_totals_distribution import ReviewsReportTotalsDistribution
+from .reviews_report_window import ReviewsReportWindow
+from .reviews_report_window_bucket import ReviewsReportWindowBucket
 from .run_alert_digest_response_200 import RunAlertDigestResponse200
 from .run_alert_digest_response_200_outcomes_item import (
     RunAlertDigestResponse200OutcomesItem,
@@ -737,6 +757,9 @@ __all__ = (
     "GetAnalyticsSummaryRange",
     "GetHealthResponse200",
     "GetInvoiceUrlResponse200",
+    "GetReviewsReportBucket",
+    "GetReviewsReportPlatformsItem",
+    "GetReviewsReportRange",
     "GetShareOfVoicePlatformsItem",
     "GetShareOfVoiceRange",
     "GetUsageBreakdownBy",
@@ -898,6 +921,19 @@ __all__ = (
     "PersonStatsSentiment",
     "ReviewSource",
     "ReviewSourcePlatform",
+    "ReviewsReport",
+    "ReviewsReportPagesItem",
+    "ReviewsReportPagesItemDistribution",
+    "ReviewsReportPagesItemPlatform",
+    "ReviewsReportPagesItemPreviousType0",
+    "ReviewsReportPagesItemSeriesItem",
+    "ReviewsReportPreviousType0",
+    "ReviewsReportPreviousType0Distribution",
+    "ReviewsReportTagsItem",
+    "ReviewsReportTotals",
+    "ReviewsReportTotalsDistribution",
+    "ReviewsReportWindow",
+    "ReviewsReportWindowBucket",
     "RunAlertDigestResponse200",
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",

@@ -40,10 +40,11 @@ class CreateKeywordBody:
         cap (CreateKeywordBodyCapType0 | None | Unset): A monthly mention cap; omit or null for none.
         group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may
             be tracked once per group.
-        review_sources (list[CreateKeywordBodyReviewSourcesItem] | Unset): Apps whose reviews this keyword collects, at
-            most 10: every new review of one of them is a mention of the keyword, whatever its text says. Polled once a day
-            per country. A newly added app brings its last 30 days, the newest 100 reviews per country, free and never sent
-            as instant alerts; after that each review bills like any mention.
+        review_sources (list[CreateKeywordBodyReviewSourcesItem] | Unset): Review pages this keyword collects, at most
+            10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention
+            of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected
+            page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after
+            that each review bills like any mention.
     """
 
     term: str

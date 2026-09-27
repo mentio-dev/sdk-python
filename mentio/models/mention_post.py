@@ -21,7 +21,8 @@ class MentionPost:
     """
     Attributes:
         platform (MentionPostPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x, youtube,
-            news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews).
+            news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews), trustpilot
+            (Trustpilot reviews), googlemaps (Google reviews of a place).
         url (str): Permalink of the post.
         text (str): Title and body, truncated to 8 KB at ingest.
         links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for

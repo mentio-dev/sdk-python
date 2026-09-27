@@ -6,6 +6,7 @@ class AnalyticsBreakdownDataItemPersonType0Platform(StrEnum):
     BLUESKY = "bluesky"
     DEVTO = "devto"
     GITHUB = "github"
+    GOOGLEMAPS = "googlemaps"
     GOOGLEPLAY = "googleplay"
     HACKERNEWS = "hackernews"
     INSTAGRAM = "instagram"
@@ -14,6 +15,7 @@ class AnalyticsBreakdownDataItemPersonType0Platform(StrEnum):
     REDDIT = "reddit"
     STACKOVERFLOW = "stackoverflow"
     TIKTOK = "tiktok"
+    TRUSTPILOT = "trustpilot"
     X = "x"
     YOUTUBE = "youtube"
 

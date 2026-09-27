@@ -16,16 +16,20 @@ T = TypeVar("T", bound="CreateKeywordBodyReviewSourcesItem")
 
 @_attrs_define
 class CreateKeywordBodyReviewSourcesItem:
-    """An app whose reviews become this keyword's mentions: a store link, or the platform and the app id.
+    """A review page whose reviews become this keyword's mentions: its link, or the platform and the id.
 
     Attributes:
-        url (str | Unset): The app's store link: https://apps.apple.com/us/app/notion/id1232780281 or
-            https://play.google.com/store/apps/details?id=notion.id. Or give platform and id.
-        platform (CreateKeywordBodyReviewSourcesItemPlatform | Unset): appstore (Apple App Store) or googleplay (Google
-            Play).
-        id (str | Unset): The store's app id: the digits after "id" on the App Store, the package name on Google Play.
-        countries (list[str] | Unset): Storefronts to read, two-letter codes, at most 20. Default: the one in the link,
-            else us. Each is one more poll a day; the same review seen in two storefronts is one mention.
+        url (str | Unset): The review page's link: an App Store or Google Play app
+            (https://apps.apple.com/us/app/notion/id1232780281, https://play.google.com/store/apps/details?id=notion.id), a
+            Trustpilot page (https://www.trustpilot.com/review/notion.so) or a Google Maps place (its full link, or a
+            maps.app.goo.gl share link). Or give platform and id.
+        platform (CreateKeywordBodyReviewSourcesItemPlatform | Unset): appstore (Apple App Store), googleplay (Google
+            Play), trustpilot (a company's Trustpilot page) or googlemaps (a place's Google reviews).
+        id (str | Unset): The id on the platform: the digits after "id" on the App Store, the package name on Google
+            Play, the company's domain on Trustpilot (notion.so), a Place ID (ChIJ...) on Google Maps.
+        countries (list[str] | Unset): App Store and Google Play only: storefronts to read, two-letter codes, at most
+            20. Default: the one in the link, else us. Each is one more poll a day; the same review seen in two storefronts
+            is one mention. Trustpilot and Google Maps have one page for everyone and take none.
         language (str | Unset): Google Play only: the language of the reviews to read (en, es, de, pt-BR); Google Play
             answers one language at a time. Default: the link's hl, else en.
     """

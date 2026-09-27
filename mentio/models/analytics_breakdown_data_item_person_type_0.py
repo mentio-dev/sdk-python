@@ -22,7 +22,7 @@ class AnalyticsBreakdownDataItemPersonType0:
         name (None | str): Display name as the platform shows it.
         platform (AnalyticsBreakdownDataItemPersonType0Platform): Platform: bluesky, hackernews, github, stackoverflow,
             devto, reddit, x, youtube, news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google
-            Play reviews).
+            Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place).
         url (None | str): Profile URL.
         avatar_url (None | str): Avatar image URL, when the platform gave one.
         followers (int | None): From the audience profile; null when unknown.

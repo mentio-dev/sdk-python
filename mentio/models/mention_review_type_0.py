@@ -23,7 +23,10 @@ class MentionReviewType0:
             rating_max (int): The top of the scale: 5 on both stores.
             title (None | str): The review's headline; null where the store has none (Google Play).
             version (None | str): The app version the reviewer ran, when the store says.
-            country (None | str): The storefront it was read in, a lowercase two-letter code.
+            country (None | str): The storefront it was read in (App Store, Google Play) or the reviewer's country
+                (Trustpilot), a lowercase two-letter code; null where the platform gives none.
+            verified (bool | None): The platform marks the review as verified (Trustpilot); null where the platform has no
+                such mark.
             response (None | str): The developer's reply as it stood when the review was collected; null for none.
             response_at (None | str): When the developer replied.
             app (MentionReviewType0App): The app reviewed.
@@ -34,6 +37,7 @@ class MentionReviewType0:
     title: None | str
     version: None | str
     country: None | str
+    verified: bool | None
     response: None | str
     response_at: None | str
     app: MentionReviewType0App
@@ -53,6 +57,9 @@ class MentionReviewType0:
         country: None | str
         country = self.country
 
+        verified: bool | None
+        verified = self.verified
+
         response: None | str
         response = self.response
 
@@ -70,6 +77,7 @@ class MentionReviewType0:
                 "title": title,
                 "version": version,
                 "country": country,
+                "verified": verified,
                 "response": response,
                 "responseAt": response_at,
                 "app": app,
@@ -110,6 +118,13 @@ class MentionReviewType0:
 
         country = _parse_country(d.pop("country"))
 
+        def _parse_verified(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        verified = _parse_verified(d.pop("verified"))
+
         def _parse_response(data: object) -> None | str:
             if data is None:
                 return data
@@ -132,6 +147,7 @@ class MentionReviewType0:
             title=title,
             version=version,
             country=country,
+            verified=verified,
             response=response,
             response_at=response_at,
             app=app,

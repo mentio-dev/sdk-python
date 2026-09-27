@@ -38,8 +38,8 @@ class Keyword:
         group (GroupRef): The group the keyword belongs to.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms the term is searched on; null means every
             platform, [] none (the keyword only collects reviews).
-        review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps);
-            empty for none.
+        review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps,
+            Trustpilot pages, Google Maps places); empty for none.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
             the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our
             browser; ignore the geometry word." Null clears it.

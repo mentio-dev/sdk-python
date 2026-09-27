@@ -105,6 +105,7 @@ import mentio.api.alerts.update_channel  # noqa: F401
 import mentio.api.analytics.get_analytics_breakdown  # noqa: F401
 import mentio.api.analytics.get_analytics_series  # noqa: F401
 import mentio.api.analytics.get_analytics_summary  # noqa: F401
+import mentio.api.analytics.get_reviews_report  # noqa: F401
 import mentio.api.analytics.get_share_of_voice  # noqa: F401
 import mentio.api.api_keys.create_api_key  # noqa: F401
 import mentio.api.api_keys.list_api_keys  # noqa: F401
@@ -181,7 +182,7 @@ class _Keywords:
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
-          reviewSources: Apps whose reviews this keyword collects, at most 10: every new review of one of them is a mention of the keyword, whatever its text says. Polled once a day per country. A newly added app brings its last 30 days, the newest 100 reviews per country, free and never sent as instant alerts; after that each review bills like any mention."""
+          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -684,7 +685,7 @@ class _Company:
         return _result(_ops.company.update_company.sync_detailed(client=self._client, body=_body(_m.UpdateCompanyBody, body, fields)))
 
 class _Analytics:
-    """analytics: breakdown, series, share_of_voice, summary."""
+    """analytics: breakdown, reviews, series, share_of_voice, summary."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -705,6 +706,23 @@ class _Analytics:
           by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(_ops.analytics.get_analytics_breakdown.sync_detailed(client=self._client, **params))
+
+    def reviews(self, **params: Any) -> _m.ReviewsReport:
+        """Reviews: stars over a window, per review page
+
+        The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+
+        Keyword arguments (query):
+          range_: Preset window ending today. Ignored when from or to is given. Default 30d.
+          from_: First day, YYYY-MM-DD, inclusive, in `timezone`.
+          to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
+          keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
+          platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          compare: true adds the period of the same length right before the window as `previous`.
+          timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
+          bucket: Series bucket: day (default up to 90 days) or week."""
+        _coerce(params, {"range_": (_enum, _m.GetReviewsReportRange), "platforms": (_enum_list, _m.GetReviewsReportPlatformsItem), "bucket": (_enum, _m.GetReviewsReportBucket)})
+        return _result(_ops.analytics.get_reviews_report.sync_detailed(client=self._client, **params))
 
     def series(self, **params: Any) -> _m.AnalyticsSeries:
         """Mentions over time
@@ -1049,7 +1067,7 @@ class _AsyncKeywords:
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
-          reviewSources: Apps whose reviews this keyword collects, at most 10: every new review of one of them is a mention of the keyword, whatever its text says. Polled once a day per country. A newly added app brings its last 30 days, the newest 100 reviews per country, free and never sent as instant alerts; after that each review bills like any mention."""
+          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1552,7 +1570,7 @@ class _AsyncCompany:
         return _result(await _ops.company.update_company.asyncio_detailed(client=self._client, body=_body(_m.UpdateCompanyBody, body, fields)))
 
 class _AsyncAnalytics:
-    """analytics: breakdown, series, share_of_voice, summary."""
+    """analytics: breakdown, reviews, series, share_of_voice, summary."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -1573,6 +1591,23 @@ class _AsyncAnalytics:
           by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(await _ops.analytics.get_analytics_breakdown.asyncio_detailed(client=self._client, **params))
+
+    async def reviews(self, **params: Any) -> _m.ReviewsReport:
+        """Reviews: stars over a window, per review page
+
+        The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+
+        Keyword arguments (query):
+          range_: Preset window ending today. Ignored when from or to is given. Default 30d.
+          from_: First day, YYYY-MM-DD, inclusive, in `timezone`.
+          to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
+          keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
+          platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          compare: true adds the period of the same length right before the window as `previous`.
+          timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
+          bucket: Series bucket: day (default up to 90 days) or week."""
+        _coerce(params, {"range_": (_enum, _m.GetReviewsReportRange), "platforms": (_enum_list, _m.GetReviewsReportPlatformsItem), "bucket": (_enum, _m.GetReviewsReportBucket)})
+        return _result(await _ops.analytics.get_reviews_report.asyncio_detailed(client=self._client, **params))
 
     async def series(self, **params: Any) -> _m.AnalyticsSeries:
         """Mentions over time
