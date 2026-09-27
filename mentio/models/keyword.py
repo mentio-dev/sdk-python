@@ -28,10 +28,13 @@ class Keyword:
         id (str): Keyword id (kw_...).
         term (str):
         kind (KeywordKind):
-        muted (bool): Not polled or matched. Either paused by you or by the wallet (see pausedForBalance). A keyword at
-            its mention cap is not muted (see pausedForCap).
+        muted (bool): Not polled or matched. Paused by you, by the wallet (see pausedForBalance) or by the noise brake
+            (see pausedForNoise). A keyword at its mention cap is not muted (see pausedForCap).
         paused_for_balance (bool): Muted by the wallet for lack of balance; a top-up resumes it, unmuting by hand needs
             balance too.
+        paused_for_noise (bool): Muted by the noise brake: on a workspace running on its welcome credit, at least 20 of
+            its matches were scored and under 30% were relevant. A change of its required or excluded terms, platforms or
+            context resumes it (when the balance covers another day), and so does unmuting; a top-up does not.
         paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
             cap is raised. Not muted: it keeps its place and its daily keyword charge.
         cap (KeywordCapType0 | None): The monthly mention cap, or null for none.
@@ -55,6 +58,7 @@ class Keyword:
     kind: KeywordKind
     muted: bool
     paused_for_balance: bool
+    paused_for_noise: bool
     paused_for_cap: bool
     cap: KeywordCapType0 | None
     group: GroupRef
@@ -79,6 +83,8 @@ class Keyword:
         muted = self.muted
 
         paused_for_balance = self.paused_for_balance
+
+        paused_for_noise = self.paused_for_noise
 
         paused_for_cap = self.paused_for_cap
 
@@ -128,6 +134,7 @@ class Keyword:
                 "kind": kind,
                 "muted": muted,
                 "pausedForBalance": paused_for_balance,
+                "pausedForNoise": paused_for_noise,
                 "pausedForCap": paused_for_cap,
                 "cap": cap,
                 "group": group,
@@ -162,6 +169,8 @@ class Keyword:
         muted = d.pop("muted")
 
         paused_for_balance = d.pop("pausedForBalance")
+
+        paused_for_noise = d.pop("pausedForNoise")
 
         paused_for_cap = d.pop("pausedForCap")
 
@@ -237,6 +246,7 @@ class Keyword:
             kind=kind,
             muted=muted,
             paused_for_balance=paused_for_balance,
+            paused_for_noise=paused_for_noise,
             paused_for_cap=paused_for_cap,
             cap=cap,
             group=group,
