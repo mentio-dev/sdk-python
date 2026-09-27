@@ -176,11 +176,12 @@ class _Keywords:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to track it on; omit or null for every platform.
+          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews, which then needs reviewSources.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
-          groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group."""
+          groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
+          reviewSources: Apps whose reviews this keyword collects, at most 10: every new review of one of them is a mention of the keyword, whatever its text says. Polled once a day per country. A newly added app brings its last 30 days, the newest 100 reviews per country, free and never sent as instant alerts; after that each review bills like any mention."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -203,7 +204,7 @@ class _Keywords:
           group_id: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
           kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
-          platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+          platform: Only keywords tracked on any of these platforms: its term searched there (every platform when its platforms are null), or for appstore and googleplay, an app of that store among its reviewSources. Repeatable, or comma-separated.
           sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
           limit: Page size, 1 to 500. Omit for every keyword after `offset`.
           offset: Skip this many keywords."""
@@ -218,11 +219,12 @@ class _Keywords:
         Body: a dict, a model, or the fields as keyword arguments:
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
-          platforms: Replaces the platform list; null means every platform.
+          platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
-          groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term."""
+          groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
+          reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place."""
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
@@ -234,7 +236,7 @@ class _Mentions:
     def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -273,6 +275,7 @@ class _Mentions:
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -327,6 +330,7 @@ class _Mentions:
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -1040,11 +1044,12 @@ class _AsyncKeywords:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, matched case-insensitively as a phrase.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to track it on; omit or null for every platform.
+          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews, which then needs reviewSources.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
-          groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group."""
+          groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
+          reviewSources: Apps whose reviews this keyword collects, at most 10: every new review of one of them is a mention of the keyword, whatever its text says. Polled once a day per country. A newly added app brings its last 30 days, the newest 100 reviews per country, free and never sent as instant alerts; after that each review bills like any mention."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1067,7 +1072,7 @@ class _AsyncKeywords:
           group_id: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
           kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
           status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
-          platform: Only keywords tracked on any of these platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+          platform: Only keywords tracked on any of these platforms: its term searched there (every platform when its platforms are null), or for appstore and googleplay, an app of that store among its reviewSources. Repeatable, or comma-separated.
           sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
           limit: Page size, 1 to 500. Omit for every keyword after `offset`.
           offset: Skip this many keywords."""
@@ -1082,11 +1087,12 @@ class _AsyncKeywords:
         Body: a dict, a model, or the fields as keyword arguments:
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
-          platforms: Replaces the platform list; null means every platform.
+          platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
-          groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term."""
+          groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
+          reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place."""
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:
@@ -1098,7 +1104,7 @@ class _AsyncMentions:
     async def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1137,6 +1143,7 @@ class _AsyncMentions:
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -1191,6 +1198,7 @@ class _AsyncMentions:
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).

@@ -64,6 +64,7 @@ def _get_kwargs(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    ratings: list[int] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -306,6 +307,12 @@ def _get_kwargs(
 
     params["notLanguages"] = json_not_languages
 
+    json_ratings: list[int] | Unset = UNSET
+    if not isinstance(ratings, Unset):
+        json_ratings = ratings
+
+    params["ratings"] = json_ratings
+
     params["q"] = q
 
     json_since: str | Unset = UNSET
@@ -407,6 +414,7 @@ def sync_detailed(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    ratings: list[int] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -417,8 +425,9 @@ def sync_detailed(
     order they entered your feed, which can differ from the post date): id, published_at, platform,
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list.
-    At most 6 exports per minute per workspace; a 429 carries Retry-After.
+    characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000
+    rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute
+    per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -490,6 +499,8 @@ def sync_detailed(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
+            5): ratings=1,2 is the unhappy ones. Every other post fails it.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -541,6 +552,7 @@ def sync_detailed(
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
+        ratings=ratings,
         q=q,
         since=since,
         until=until,
@@ -592,6 +604,7 @@ def sync(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    ratings: list[int] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -602,8 +615,9 @@ def sync(
     order they entered your feed, which can differ from the post date): id, published_at, platform,
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list.
-    At most 6 exports per minute per workspace; a 429 carries Retry-After.
+    characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000
+    rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute
+    per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -675,6 +689,8 @@ def sync(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
+            5): ratings=1,2 is the unhappy ones. Every other post fails it.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -727,6 +743,7 @@ def sync(
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
+        ratings=ratings,
         q=q,
         since=since,
         until=until,
@@ -772,6 +789,7 @@ async def asyncio_detailed(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    ratings: list[int] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -782,8 +800,9 @@ async def asyncio_detailed(
     order they entered your feed, which can differ from the post date): id, published_at, platform,
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list.
-    At most 6 exports per minute per workspace; a 429 carries Retry-After.
+    characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000
+    rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute
+    per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -855,6 +874,8 @@ async def asyncio_detailed(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
+            5): ratings=1,2 is the unhappy ones. Every other post fails it.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -906,6 +927,7 @@ async def asyncio_detailed(
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
+        ratings=ratings,
         q=q,
         since=since,
         until=until,
@@ -955,6 +977,7 @@ async def asyncio(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    ratings: list[int] | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -965,8 +988,9 @@ async def asyncio(
     order they entered your feed, which can differ from the post date): id, published_at, platform,
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list.
-    At most 6 exports per minute per workspace; a 429 carries Retry-After.
+    characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000
+    rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute
+    per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1038,6 +1062,8 @@ async def asyncio(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
+            5): ratings=1,2 is the unhappy ones. Every other post fails it.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -1091,6 +1117,7 @@ async def asyncio(
             not_tags=not_tags,
             languages=languages,
             not_languages=not_languages,
+            ratings=ratings,
             q=q,
             since=since,
             until=until,

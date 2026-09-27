@@ -156,7 +156,9 @@ def sync_detailed(
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
             muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
-            platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+            platforms: its term searched there (every platform when its platforms are null), or for
+            appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
+            comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords
@@ -218,7 +220,9 @@ def sync(
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
             muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
-            platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+            platforms: its term searched there (every platform when its platforms are null), or for
+            appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
+            comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords
@@ -275,7 +279,9 @@ async def asyncio_detailed(
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
             muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
-            platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+            platforms: its term searched there (every platform when its platforms are null), or for
+            appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
+            comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords
@@ -335,7 +341,9 @@ async def asyncio(
         status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
             muted, paused, capped. Repeatable, or comma-separated.
         platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
-            platforms; a keyword tracked everywhere always passes. Repeatable, or comma-separated.
+            platforms: its term searched there (every platform when its platforms are null), or for
+            appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
+            comma-separated.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords

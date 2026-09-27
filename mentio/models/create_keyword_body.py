@@ -15,6 +15,9 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
     from ..models.create_keyword_body_matching import CreateKeywordBodyMatching
+    from ..models.create_keyword_body_review_sources_item import (
+        CreateKeywordBodyReviewSourcesItem,
+    )
 
 
 T = TypeVar("T", bound="CreateKeywordBody")
@@ -27,8 +30,9 @@ class CreateKeywordBody:
         term (str): The word or phrase to track, matched case-insensitively as a phrase.
         kind (CreateKeywordBodyKind | Unset): brand: your own names. competitor: theirs. topic: the space. Drives share
             of voice and segments. Default: CreateKeywordBodyKind.BRAND.
-        platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to track it on; omit or null for
-            every platform.
+        platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to search the term on; omit or
+            null for every platform. [] searches it nowhere: a keyword that only collects reviews, which then needs
+            reviewSources.
         context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
             profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
             is our browser; ignore the geometry word." Null clears it.
@@ -36,6 +40,10 @@ class CreateKeywordBody:
         cap (CreateKeywordBodyCapType0 | None | Unset): A monthly mention cap; omit or null for none.
         group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may
             be tracked once per group.
+        review_sources (list[CreateKeywordBodyReviewSourcesItem] | Unset): Apps whose reviews this keyword collects, at
+            most 10: every new review of one of them is a mention of the keyword, whatever its text says. Polled once a day
+            per country. A newly added app brings its last 30 days, the newest 100 reviews per country, free and never sent
+            as instant alerts; after that each review bills like any mention.
     """
 
     term: str
@@ -45,6 +53,7 @@ class CreateKeywordBody:
     matching: CreateKeywordBodyMatching | Unset = UNSET
     cap: CreateKeywordBodyCapType0 | None | Unset = UNSET
     group_id: str | Unset = UNSET
+    review_sources: list[CreateKeywordBodyReviewSourcesItem] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -90,6 +99,13 @@ class CreateKeywordBody:
 
         group_id = self.group_id
 
+        review_sources: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.review_sources, Unset):
+            review_sources = []
+            for review_sources_item_data in self.review_sources:
+                review_sources_item = review_sources_item_data.to_dict()
+                review_sources.append(review_sources_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -109,6 +125,8 @@ class CreateKeywordBody:
             field_dict["cap"] = cap
         if group_id is not UNSET:
             field_dict["groupId"] = group_id
+        if review_sources is not UNSET:
+            field_dict["reviewSources"] = review_sources
 
         return field_dict
 
@@ -119,6 +137,9 @@ class CreateKeywordBody:
         )
         from ..models.create_keyword_body_matching import (
             CreateKeywordBodyMatching,
+        )
+        from ..models.create_keyword_body_review_sources_item import (
+            CreateKeywordBodyReviewSourcesItem,
         )
 
         d = dict(src_dict)
@@ -192,6 +213,17 @@ class CreateKeywordBody:
 
         group_id = d.pop("groupId", UNSET)
 
+        _review_sources = d.pop("reviewSources", UNSET)
+        review_sources: list[CreateKeywordBodyReviewSourcesItem] | Unset = UNSET
+        if _review_sources is not UNSET:
+            review_sources = []
+            for review_sources_item_data in _review_sources:
+                review_sources_item = CreateKeywordBodyReviewSourcesItem.from_dict(
+                    review_sources_item_data
+                )
+
+                review_sources.append(review_sources_item)
+
         create_keyword_body = cls(
             term=term,
             kind=kind,
@@ -200,6 +232,7 @@ class CreateKeywordBody:
             matching=matching,
             cap=cap,
             group_id=group_id,
+            review_sources=review_sources,
         )
 
         create_keyword_body.additional_properties = d

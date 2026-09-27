@@ -15,6 +15,9 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
     from ..models.update_keyword_body_matching import UpdateKeywordBodyMatching
+    from ..models.update_keyword_body_review_sources_item import (
+        UpdateKeywordBodyReviewSourcesItem,
+    )
 
 
 T = TypeVar("T", bound="UpdateKeywordBody")
@@ -28,7 +31,7 @@ class UpdateKeywordBody:
         kind (UpdateKeywordBodyKind | Unset): Reclassify it as brand, competitor or topic.
         muted (bool | Unset): A muted keyword stops polling and matching; its mentions stay.
         platforms (list[UpdateKeywordBodyPlatformsType0Item] | None | Unset): Replaces the platform list; null means
-            every platform.
+            every platform, [] none (reviews only, when the keyword has reviewSources).
         context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
             profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
             is our browser; ignore the geometry word." Null clears it.
@@ -37,6 +40,9 @@ class UpdateKeywordBody:
             this month's count resumes a capped keyword at once, one at or under it pauses it.
         group_id (str | Unset): Moves the keyword to this group (grp_...). A 409 when that group already tracks the
             term.
+        review_sources (list[UpdateKeywordBodyReviewSourcesItem] | Unset): Replaces the list of apps whose reviews this
+            keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free
+            30-day look-back; one already listed keeps its place.
     """
 
     kind: UpdateKeywordBodyKind | Unset = UNSET
@@ -46,6 +52,7 @@ class UpdateKeywordBody:
     matching: UpdateKeywordBodyMatching | Unset = UNSET
     cap: None | Unset | UpdateKeywordBodyCapType0 = UNSET
     group_id: str | Unset = UNSET
+    review_sources: list[UpdateKeywordBodyReviewSourcesItem] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -91,6 +98,13 @@ class UpdateKeywordBody:
 
         group_id = self.group_id
 
+        review_sources: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.review_sources, Unset):
+            review_sources = []
+            for review_sources_item_data in self.review_sources:
+                review_sources_item = review_sources_item_data.to_dict()
+                review_sources.append(review_sources_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -108,6 +122,8 @@ class UpdateKeywordBody:
             field_dict["cap"] = cap
         if group_id is not UNSET:
             field_dict["groupId"] = group_id
+        if review_sources is not UNSET:
+            field_dict["reviewSources"] = review_sources
 
         return field_dict
 
@@ -118,6 +134,9 @@ class UpdateKeywordBody:
         )
         from ..models.update_keyword_body_matching import (
             UpdateKeywordBodyMatching,
+        )
+        from ..models.update_keyword_body_review_sources_item import (
+            UpdateKeywordBodyReviewSourcesItem,
         )
 
         d = dict(src_dict)
@@ -191,6 +210,17 @@ class UpdateKeywordBody:
 
         group_id = d.pop("groupId", UNSET)
 
+        _review_sources = d.pop("reviewSources", UNSET)
+        review_sources: list[UpdateKeywordBodyReviewSourcesItem] | Unset = UNSET
+        if _review_sources is not UNSET:
+            review_sources = []
+            for review_sources_item_data in _review_sources:
+                review_sources_item = UpdateKeywordBodyReviewSourcesItem.from_dict(
+                    review_sources_item_data
+                )
+
+                review_sources.append(review_sources_item)
+
         update_keyword_body = cls(
             kind=kind,
             muted=muted,
@@ -199,6 +229,7 @@ class UpdateKeywordBody:
             matching=matching,
             cap=cap,
             group_id=group_id,
+            review_sources=review_sources,
         )
 
         update_keyword_body.additional_properties = d

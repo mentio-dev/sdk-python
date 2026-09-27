@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from ..models.keyword_matching import KeywordMatching
     from ..models.keyword_polling_item import KeywordPollingItem
     from ..models.keyword_stats import KeywordStats
+    from ..models.review_source import ReviewSource
 
 
 T = TypeVar("T", bound="Keyword")
@@ -35,8 +36,10 @@ class Keyword:
             cap is raised. Not muted: it keeps its place and its daily keyword charge.
         cap (KeywordCapType0 | None): The monthly mention cap, or null for none.
         group (GroupRef): The group the keyword belongs to.
-        platforms (list[KeywordPlatformsType0Item] | None): Platforms this keyword is tracked on; null means every
-            platform.
+        platforms (list[KeywordPlatformsType0Item] | None): Platforms the term is searched on; null means every
+            platform, [] none (the keyword only collects reviews).
+        review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps);
+            empty for none.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
             the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our
             browser; ignore the geometry word." Null clears it.
@@ -56,6 +59,7 @@ class Keyword:
     cap: KeywordCapType0 | None
     group: GroupRef
     platforms: list[KeywordPlatformsType0Item] | None
+    review_sources: list[ReviewSource]
     context: None | str
     matching: KeywordMatching
     stats: KeywordStats
@@ -96,6 +100,11 @@ class Keyword:
         else:
             platforms = self.platforms
 
+        review_sources = []
+        for review_sources_item_data in self.review_sources:
+            review_sources_item = review_sources_item_data.to_dict()
+            review_sources.append(review_sources_item)
+
         context: None | str
         context = self.context
 
@@ -123,6 +132,7 @@ class Keyword:
                 "cap": cap,
                 "group": group,
                 "platforms": platforms,
+                "reviewSources": review_sources,
                 "context": context,
                 "matching": matching,
                 "stats": stats,
@@ -140,6 +150,7 @@ class Keyword:
         from ..models.keyword_matching import KeywordMatching
         from ..models.keyword_polling_item import KeywordPollingItem
         from ..models.keyword_stats import KeywordStats
+        from ..models.review_source import ReviewSource
 
         d = dict(src_dict)
         id = d.pop("id")
@@ -193,6 +204,13 @@ class Keyword:
 
         platforms = _parse_platforms(d.pop("platforms"))
 
+        review_sources = []
+        _review_sources = d.pop("reviewSources")
+        for review_sources_item_data in _review_sources:
+            review_sources_item = ReviewSource.from_dict(review_sources_item_data)
+
+            review_sources.append(review_sources_item)
+
         def _parse_context(data: object) -> None | str:
             if data is None:
                 return data
@@ -223,6 +241,7 @@ class Keyword:
             cap=cap,
             group=group,
             platforms=platforms,
+            review_sources=review_sources,
             context=context,
             matching=matching,
             stats=stats,

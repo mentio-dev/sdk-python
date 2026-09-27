@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from ..models.mention_classification_type_0 import MentionClassificationType0
     from ..models.mention_keyword import MentionKeyword
     from ..models.mention_post import MentionPost
+    from ..models.mention_review_type_0 import MentionReviewType0
     from ..models.mention_triage import MentionTriage
 
 
@@ -35,6 +36,9 @@ class Mention:
         keyword (MentionKeyword): The keyword this post matched, and the group it is in.
         post (MentionPost):
         author (MentionAuthorType0 | None): Who posted it; null when the platform gave no author at all.
+        review (MentionReviewType0 | None): An app store review's facts; null for every other post. Its sentiment comes
+            from the stars (4 and 5 positive, 3 neutral, 1 and 2 negative) and it always counts as relevant, since you chose
+            the app.
         classification (MentionClassificationType0 | None): The classifier verdict, as corrected by your feedback; null
             while the post is still queued for classification.
         triage (MentionTriage):
@@ -49,6 +53,7 @@ class Mention:
     keyword: MentionKeyword
     post: MentionPost
     author: MentionAuthorType0 | None
+    review: MentionReviewType0 | None
     classification: MentionClassificationType0 | None
     triage: MentionTriage
     created_at: str
@@ -59,6 +64,7 @@ class Mention:
         from ..models.mention_classification_type_0 import (
             MentionClassificationType0,
         )
+        from ..models.mention_review_type_0 import MentionReviewType0
 
         id = self.id
 
@@ -79,6 +85,12 @@ class Mention:
             author = self.author.to_dict()
         else:
             author = self.author
+
+        review: dict[str, Any] | None
+        if isinstance(self.review, MentionReviewType0):
+            review = self.review.to_dict()
+        else:
+            review = self.review
 
         classification: dict[str, Any] | None
         if isinstance(self.classification, MentionClassificationType0):
@@ -102,6 +114,7 @@ class Mention:
                 "keyword": keyword,
                 "post": post,
                 "author": author,
+                "review": review,
                 "classification": classification,
                 "triage": triage,
                 "createdAt": created_at,
@@ -118,6 +131,7 @@ class Mention:
         )
         from ..models.mention_keyword import MentionKeyword
         from ..models.mention_post import MentionPost
+        from ..models.mention_review_type_0 import MentionReviewType0
         from ..models.mention_triage import MentionTriage
 
         d = dict(src_dict)
@@ -150,6 +164,21 @@ class Mention:
 
         author = _parse_author(d.pop("author"))
 
+        def _parse_review(data: object) -> MentionReviewType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                review_type_0 = MentionReviewType0.from_dict(data)
+
+                return review_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(MentionReviewType0 | None, data)
+
+        review = _parse_review(d.pop("review"))
+
         def _parse_classification(data: object) -> MentionClassificationType0 | None:
             if data is None:
                 return data
@@ -178,6 +207,7 @@ class Mention:
             keyword=keyword,
             post=post,
             author=author,
+            review=review,
             classification=classification,
             triage=triage,
             created_at=created_at,

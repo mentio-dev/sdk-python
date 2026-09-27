@@ -2,9 +2,11 @@ from enum import StrEnum
 
 
 class ListKeywordsPlatformItem(StrEnum):
+    APPSTORE = "appstore"
     BLUESKY = "bluesky"
     DEVTO = "devto"
     GITHUB = "github"
+    GOOGLEPLAY = "googleplay"
     HACKERNEWS = "hackernews"
     INSTAGRAM = "instagram"
     LINKEDIN = "linkedin"

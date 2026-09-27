@@ -104,6 +104,10 @@ from .create_keyword_body_matching_required_mode import (
 from .create_keyword_body_platforms_type_0_item import (
     CreateKeywordBodyPlatformsType0Item,
 )
+from .create_keyword_body_review_sources_item import CreateKeywordBodyReviewSourcesItem
+from .create_keyword_body_review_sources_item_platform import (
+    CreateKeywordBodyReviewSourcesItemPlatform,
+)
 from .create_segment_body import CreateSegmentBody
 from .create_segment_body_filter import CreateSegmentBodyFilter
 from .create_segment_body_filter_keyword_kinds_item import (
@@ -429,6 +433,9 @@ from .mention_post import MentionPost
 from .mention_post_engagement_type_0 import MentionPostEngagementType0
 from .mention_post_platform import MentionPostPlatform
 from .mention_post_reply_to_type_0 import MentionPostReplyToType0
+from .mention_review_type_0 import MentionReviewType0
+from .mention_review_type_0_app import MentionReviewType0App
+from .mention_review_type_0_app_platform import MentionReviewType0AppPlatform
 from .mention_status import MentionStatus
 from .mention_triage import MentionTriage
 from .mention_triage_assignee_type_0 import MentionTriageAssigneeType0
@@ -450,6 +457,8 @@ from .person_profile_type_0_links_item import PersonProfileType0LinksItem
 from .person_reach import PersonReach
 from .person_stats import PersonStats
 from .person_stats_sentiment import PersonStatsSentiment
+from .review_source import ReviewSource
+from .review_source_platform import ReviewSourcePlatform
 from .run_alert_digest_response_200 import RunAlertDigestResponse200
 from .run_alert_digest_response_200_outcomes_item import (
     RunAlertDigestResponse200OutcomesItem,
@@ -520,6 +529,10 @@ from .update_keyword_body_matching_required_mode import (
 )
 from .update_keyword_body_platforms_type_0_item import (
     UpdateKeywordBodyPlatformsType0Item,
+)
+from .update_keyword_body_review_sources_item import UpdateKeywordBodyReviewSourcesItem
+from .update_keyword_body_review_sources_item_platform import (
+    UpdateKeywordBodyReviewSourcesItemPlatform,
 )
 from .update_mention_body import UpdateMentionBody
 from .update_mention_body_sentiment import UpdateMentionBodySentiment
@@ -664,6 +677,8 @@ __all__ = (
     "CreateKeywordBodyMatching",
     "CreateKeywordBodyMatchingRequiredMode",
     "CreateKeywordBodyPlatformsType0Item",
+    "CreateKeywordBodyReviewSourcesItem",
+    "CreateKeywordBodyReviewSourcesItemPlatform",
     "CreateSegmentBody",
     "CreateSegmentBodyFilter",
     "CreateSegmentBodyFilterKeywordKindsItem",
@@ -857,6 +872,9 @@ __all__ = (
     "MentionPostEngagementType0",
     "MentionPostPlatform",
     "MentionPostReplyToType0",
+    "MentionReviewType0",
+    "MentionReviewType0App",
+    "MentionReviewType0AppPlatform",
     "MentionStatus",
     "MentionTriage",
     "MentionTriageAssigneeType0",
@@ -878,6 +896,8 @@ __all__ = (
     "PersonReach",
     "PersonStats",
     "PersonStatsSentiment",
+    "ReviewSource",
+    "ReviewSourcePlatform",
     "RunAlertDigestResponse200",
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",
@@ -941,6 +961,8 @@ __all__ = (
     "UpdateKeywordBodyMatching",
     "UpdateKeywordBodyMatchingRequiredMode",
     "UpdateKeywordBodyPlatformsType0Item",
+    "UpdateKeywordBodyReviewSourcesItem",
+    "UpdateKeywordBodyReviewSourcesItemPlatform",
     "UpdateMentionBody",
     "UpdateMentionBodySentiment",
     "UpdateMentionBodyStatus",

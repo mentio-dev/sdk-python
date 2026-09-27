@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from ..models.list_keywords_response_200_data_item_stats import (
         ListKeywordsResponse200DataItemStats,
     )
+    from ..models.review_source import ReviewSource
 
 
 T = TypeVar("T", bound="ListKeywordsResponse200DataItem")
@@ -47,8 +48,10 @@ class ListKeywordsResponse200DataItem:
             cap is raised. Not muted: it keeps its place and its daily keyword charge.
         cap (ListKeywordsResponse200DataItemCapType0 | None): The monthly mention cap, or null for none.
         group (GroupRef): The group the keyword belongs to.
-        platforms (list[ListKeywordsResponse200DataItemPlatformsType0Item] | None): Platforms this keyword is tracked
-            on; null means every platform.
+        platforms (list[ListKeywordsResponse200DataItemPlatformsType0Item] | None): Platforms the term is searched on;
+            null means every platform, [] none (the keyword only collects reviews).
+        review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps);
+            empty for none.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
             the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our
             browser; ignore the geometry word." Null clears it.
@@ -69,6 +72,7 @@ class ListKeywordsResponse200DataItem:
     cap: ListKeywordsResponse200DataItemCapType0 | None
     group: GroupRef
     platforms: list[ListKeywordsResponse200DataItemPlatformsType0Item] | None
+    review_sources: list[ReviewSource]
     context: None | str
     matching: ListKeywordsResponse200DataItemMatching
     stats: ListKeywordsResponse200DataItemStats
@@ -111,6 +115,11 @@ class ListKeywordsResponse200DataItem:
         else:
             platforms = self.platforms
 
+        review_sources = []
+        for review_sources_item_data in self.review_sources:
+            review_sources_item = review_sources_item_data.to_dict()
+            review_sources.append(review_sources_item)
+
         context: None | str
         context = self.context
 
@@ -138,6 +147,7 @@ class ListKeywordsResponse200DataItem:
                 "cap": cap,
                 "group": group,
                 "platforms": platforms,
+                "reviewSources": review_sources,
                 "context": context,
                 "matching": matching,
                 "stats": stats,
@@ -163,6 +173,7 @@ class ListKeywordsResponse200DataItem:
         from ..models.list_keywords_response_200_data_item_stats import (
             ListKeywordsResponse200DataItemStats,
         )
+        from ..models.review_source import ReviewSource
 
         d = dict(src_dict)
         id = d.pop("id")
@@ -222,6 +233,13 @@ class ListKeywordsResponse200DataItem:
 
         platforms = _parse_platforms(d.pop("platforms"))
 
+        review_sources = []
+        _review_sources = d.pop("reviewSources")
+        for review_sources_item_data in _review_sources:
+            review_sources_item = ReviewSource.from_dict(review_sources_item_data)
+
+            review_sources.append(review_sources_item)
+
         def _parse_context(data: object) -> None | str:
             if data is None:
                 return data
@@ -254,6 +272,7 @@ class ListKeywordsResponse200DataItem:
             cap=cap,
             group=group,
             platforms=platforms,
+            review_sources=review_sources,
             context=context,
             matching=matching,
             stats=stats,

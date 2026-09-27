@@ -36,6 +36,8 @@ class AlertFilter:
             language is unknown never passes.
         automated (bool | Unset): true: only posts that read as machine-made (bots, templated posts); false: only the
             rest. Omit for both.
+        ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to 5): [1, 2] sends the
+            unhappy ones. Every other post fails it.
     """
 
     keyword_ids: list[str] | Unset = UNSET
@@ -51,6 +53,7 @@ class AlertFilter:
     link_hosts: list[str] | Unset = UNSET
     languages: list[str] | Unset = UNSET
     automated: bool | Unset = UNSET
+    ratings: list[int] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -104,6 +107,10 @@ class AlertFilter:
 
         automated = self.automated
 
+        ratings: list[int] | Unset = UNSET
+        if not isinstance(self.ratings, Unset):
+            ratings = self.ratings
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -133,6 +140,8 @@ class AlertFilter:
             field_dict["languages"] = languages
         if automated is not UNSET:
             field_dict["automated"] = automated
+        if ratings is not UNSET:
+            field_dict["ratings"] = ratings
 
         return field_dict
 
@@ -179,6 +188,8 @@ class AlertFilter:
 
         automated = d.pop("automated", UNSET)
 
+        ratings = cast(list[int], d.pop("ratings", UNSET))
+
         alert_filter = cls(
             keyword_ids=keyword_ids,
             group_ids=group_ids,
@@ -193,6 +204,7 @@ class AlertFilter:
             link_hosts=link_hosts,
             languages=languages,
             automated=automated,
+            ratings=ratings,
         )
 
         alert_filter.additional_properties = d

@@ -2,9 +2,11 @@ from enum import StrEnum
 
 
 class ViewFilterPlatformsItem(StrEnum):
+    APPSTORE = "appstore"
     BLUESKY = "bluesky"
     DEVTO = "devto"
     GITHUB = "github"
+    GOOGLEPLAY = "googleplay"
     HACKERNEWS = "hackernews"
     INSTAGRAM = "instagram"
     LINKEDIN = "linkedin"

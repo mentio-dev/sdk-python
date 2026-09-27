@@ -16,7 +16,7 @@ class KeywordPollingItem:
     """
     Attributes:
         platform (KeywordPollingItemPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x,
-            youtube, news, linkedin, tiktok, instagram.
+            youtube, news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews).
         last_polled_at (None | str): Newest poll of this platform for the term; null until the first one.
         empty_polls (int): Consecutive polls that found nothing new; the scheduler slows down as it grows.
     """

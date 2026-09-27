@@ -64,6 +64,7 @@ class ListViewsResponse200DataItemFilter:
         max_followers (int | Unset): Only authors with at most this many followers; unknown reach never passes.
         is_reply (bool | Unset): true: only replies and comments; false: only top-level posts.
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
+        ratings (list[int] | Unset): Only app store reviews with any of these star ratings; every other post fails it.
     """
 
     q: str | Unset = UNSET
@@ -99,6 +100,7 @@ class ListViewsResponse200DataItemFilter:
     max_followers: int | Unset = UNSET
     is_reply: bool | Unset = UNSET
     exclude_authors: list[str] | Unset = UNSET
+    ratings: list[int] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -209,6 +211,10 @@ class ListViewsResponse200DataItemFilter:
         if not isinstance(self.exclude_authors, Unset):
             exclude_authors = self.exclude_authors
 
+        ratings: list[int] | Unset = UNSET
+        if not isinstance(self.ratings, Unset):
+            ratings = self.ratings
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -266,6 +272,8 @@ class ListViewsResponse200DataItemFilter:
             field_dict["isReply"] = is_reply
         if exclude_authors is not UNSET:
             field_dict["excludeAuthors"] = exclude_authors
+        if ratings is not UNSET:
+            field_dict["ratings"] = ratings
 
         return field_dict
 
@@ -386,6 +394,8 @@ class ListViewsResponse200DataItemFilter:
 
         exclude_authors = cast(list[str], d.pop("excludeAuthors", UNSET))
 
+        ratings = cast(list[int], d.pop("ratings", UNSET))
+
         list_views_response_200_data_item_filter = cls(
             q=q,
             keyword_ids=keyword_ids,
@@ -414,6 +424,7 @@ class ListViewsResponse200DataItemFilter:
             max_followers=max_followers,
             is_reply=is_reply,
             exclude_authors=exclude_authors,
+            ratings=ratings,
         )
 
         list_views_response_200_data_item_filter.additional_properties = d
