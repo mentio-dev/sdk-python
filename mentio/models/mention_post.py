@@ -25,6 +25,12 @@ class MentionPost:
             (Trustpilot reviews), googlemaps (Google reviews of a place).
         url (str): Permalink of the post.
         text (str): Title and body, truncated to 8 KB at ingest.
+        title (None | str): The post's own title where the platform has one: a Hacker News story, a Reddit thread, a
+            GitHub issue or pull request, a Stack Overflow question, a DEV article, a YouTube video, a news article, a
+            titled review. Null for platforms without titles (X, Bluesky, LinkedIn) and for posts ingested before October
+            2026.
+        image_url (None | str): A preview image of the post, when the platform sent one with it: a YouTube thumbnail, a
+            DEV cover, a news article's sharing image, a Bluesky link card or image. Null otherwise.
         links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for
             posts ingested before September 2026.
         published_at (str): When the post was published.
@@ -37,6 +43,8 @@ class MentionPost:
     platform: MentionPostPlatform
     url: str
     text: str
+    title: None | str
+    image_url: None | str
     links: list[str]
     published_at: str
     engagement: MentionPostEngagementType0 | None
@@ -56,6 +64,12 @@ class MentionPost:
         url = self.url
 
         text = self.text
+
+        title: None | str
+        title = self.title
+
+        image_url: None | str
+        image_url = self.image_url
 
         links = self.links
 
@@ -80,6 +94,8 @@ class MentionPost:
                 "platform": platform,
                 "url": url,
                 "text": text,
+                "title": title,
+                "imageUrl": image_url,
                 "links": links,
                 "publishedAt": published_at,
                 "engagement": engagement,
@@ -104,6 +120,20 @@ class MentionPost:
         url = d.pop("url")
 
         text = d.pop("text")
+
+        def _parse_title(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        title = _parse_title(d.pop("title"))
+
+        def _parse_image_url(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        image_url = _parse_image_url(d.pop("imageUrl"))
 
         links = cast(list[str], d.pop("links"))
 
@@ -143,6 +173,8 @@ class MentionPost:
             platform=platform,
             url=url,
             text=text,
+            title=title,
+            image_url=image_url,
             links=links,
             published_at=published_at,
             engagement=engagement,

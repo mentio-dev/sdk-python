@@ -61,6 +61,14 @@ def _get_kwargs(
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
+    not_ratings: list[int] | Unset = UNSET,
+    min_likes: int | None | Unset = UNSET,
+    min_reposts: int | None | Unset = UNSET,
+    min_replies: int | None | Unset = UNSET,
+    min_quotes: int | None | Unset = UNSET,
+    min_views: int | None | Unset = UNSET,
+    min_bookmarks: int | None | Unset = UNSET,
+    any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -312,6 +320,56 @@ def _get_kwargs(
 
     params["ratings"] = json_ratings
 
+    json_not_ratings: list[int] | Unset = UNSET
+    if not isinstance(not_ratings, Unset):
+        json_not_ratings = not_ratings
+
+    params["notRatings"] = json_not_ratings
+
+    json_min_likes: int | None | Unset
+    if isinstance(min_likes, Unset):
+        json_min_likes = UNSET
+    else:
+        json_min_likes = min_likes
+    params["minLikes"] = json_min_likes
+
+    json_min_reposts: int | None | Unset
+    if isinstance(min_reposts, Unset):
+        json_min_reposts = UNSET
+    else:
+        json_min_reposts = min_reposts
+    params["minReposts"] = json_min_reposts
+
+    json_min_replies: int | None | Unset
+    if isinstance(min_replies, Unset):
+        json_min_replies = UNSET
+    else:
+        json_min_replies = min_replies
+    params["minReplies"] = json_min_replies
+
+    json_min_quotes: int | None | Unset
+    if isinstance(min_quotes, Unset):
+        json_min_quotes = UNSET
+    else:
+        json_min_quotes = min_quotes
+    params["minQuotes"] = json_min_quotes
+
+    json_min_views: int | None | Unset
+    if isinstance(min_views, Unset):
+        json_min_views = UNSET
+    else:
+        json_min_views = min_views
+    params["minViews"] = json_min_views
+
+    json_min_bookmarks: int | None | Unset
+    if isinstance(min_bookmarks, Unset):
+        json_min_bookmarks = UNSET
+    else:
+        json_min_bookmarks = min_bookmarks
+    params["minBookmarks"] = json_min_bookmarks
+
+    params["anyOf"] = any_of
+
     params["q"] = q
 
     json_since: str | Unset = UNSET
@@ -420,6 +478,14 @@ def sync_detailed(
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
+    not_ratings: list[int] | Unset = UNSET,
+    min_likes: int | None | Unset = UNSET,
+    min_reposts: int | None | Unset = UNSET,
+    min_replies: int | None | Unset = UNSET,
+    min_quotes: int | None | Unset = UNSET,
+    min_views: int | None | Unset = UNSET,
+    min_bookmarks: int | None | Unset = UNSET,
+    any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -432,7 +498,8 @@ def sync_detailed(
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
     the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send.
+    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
+    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -444,7 +511,7 @@ def sync_detailed(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
             question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional).
+            promotional, testimonial, industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -506,6 +573,30 @@ def sync_detailed(
             is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
+        not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
+            notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+        min_likes (int | None | Unset): Only posts with at least this many likes (upvotes,
+            reactions), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_reposts (int | None | Unset): Only posts with at least this many reposts (shares,
+            retweets), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_replies (int | None | Unset): Only posts with at least this many replies (comments),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        min_quotes (int | None | Unset): Only posts with at least this many quotes, as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_views (int | None | Unset): Only posts with at least this many views (plays), as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
+            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
+            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
+            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
+            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
+            nesting.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -564,6 +655,14 @@ def sync_detailed(
         languages=languages,
         not_languages=not_languages,
         ratings=ratings,
+        not_ratings=not_ratings,
+        min_likes=min_likes,
+        min_reposts=min_reposts,
+        min_replies=min_replies,
+        min_quotes=min_quotes,
+        min_views=min_views,
+        min_bookmarks=min_bookmarks,
+        any_of=any_of,
         q=q,
         since=since,
         until=until,
@@ -619,6 +718,14 @@ def sync(
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
+    not_ratings: list[int] | Unset = UNSET,
+    min_likes: int | None | Unset = UNSET,
+    min_reposts: int | None | Unset = UNSET,
+    min_replies: int | None | Unset = UNSET,
+    min_quotes: int | None | Unset = UNSET,
+    min_views: int | None | Unset = UNSET,
+    min_bookmarks: int | None | Unset = UNSET,
+    any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -631,7 +738,8 @@ def sync(
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
     the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send.
+    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
+    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -643,7 +751,7 @@ def sync(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
             question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional).
+            promotional, testimonial, industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -705,6 +813,30 @@ def sync(
             is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
+        not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
+            notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+        min_likes (int | None | Unset): Only posts with at least this many likes (upvotes,
+            reactions), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_reposts (int | None | Unset): Only posts with at least this many reposts (shares,
+            retweets), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_replies (int | None | Unset): Only posts with at least this many replies (comments),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        min_quotes (int | None | Unset): Only posts with at least this many quotes, as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_views (int | None | Unset): Only posts with at least this many views (plays), as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
+            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
+            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
+            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
+            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
+            nesting.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -764,6 +896,14 @@ def sync(
         languages=languages,
         not_languages=not_languages,
         ratings=ratings,
+        not_ratings=not_ratings,
+        min_likes=min_likes,
+        min_reposts=min_reposts,
+        min_replies=min_replies,
+        min_quotes=min_quotes,
+        min_views=min_views,
+        min_bookmarks=min_bookmarks,
+        any_of=any_of,
         q=q,
         since=since,
         until=until,
@@ -813,6 +953,14 @@ async def asyncio_detailed(
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
+    not_ratings: list[int] | Unset = UNSET,
+    min_likes: int | None | Unset = UNSET,
+    min_reposts: int | None | Unset = UNSET,
+    min_replies: int | None | Unset = UNSET,
+    min_quotes: int | None | Unset = UNSET,
+    min_views: int | None | Unset = UNSET,
+    min_bookmarks: int | None | Unset = UNSET,
+    any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -825,7 +973,8 @@ async def asyncio_detailed(
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
     the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send.
+    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
+    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -837,7 +986,7 @@ async def asyncio_detailed(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
             question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional).
+            promotional, testimonial, industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -899,6 +1048,30 @@ async def asyncio_detailed(
             is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
+        not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
+            notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+        min_likes (int | None | Unset): Only posts with at least this many likes (upvotes,
+            reactions), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_reposts (int | None | Unset): Only posts with at least this many reposts (shares,
+            retweets), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_replies (int | None | Unset): Only posts with at least this many replies (comments),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        min_quotes (int | None | Unset): Only posts with at least this many quotes, as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_views (int | None | Unset): Only posts with at least this many views (plays), as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
+            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
+            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
+            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
+            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
+            nesting.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -957,6 +1130,14 @@ async def asyncio_detailed(
         languages=languages,
         not_languages=not_languages,
         ratings=ratings,
+        not_ratings=not_ratings,
+        min_likes=min_likes,
+        min_reposts=min_reposts,
+        min_replies=min_replies,
+        min_quotes=min_quotes,
+        min_views=min_views,
+        min_bookmarks=min_bookmarks,
+        any_of=any_of,
         q=q,
         since=since,
         until=until,
@@ -1010,6 +1191,14 @@ async def asyncio(
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
+    not_ratings: list[int] | Unset = UNSET,
+    min_likes: int | None | Unset = UNSET,
+    min_reposts: int | None | Unset = UNSET,
+    min_replies: int | None | Unset = UNSET,
+    min_quotes: int | None | Unset = UNSET,
+    min_views: int | None | Unset = UNSET,
+    min_bookmarks: int | None | Unset = UNSET,
+    any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
@@ -1022,7 +1211,8 @@ async def asyncio(
      Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
     sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
     the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send.
+    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
+    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1034,7 +1224,7 @@ async def asyncio(
         sentiment (SearchMentionsSentiment | Unset): Only this sentiment.
         intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
             question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional).
+            promotional, testimonial, industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -1096,6 +1286,30 @@ async def asyncio(
             is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
+        not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
+            notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+        min_likes (int | None | Unset): Only posts with at least this many likes (upvotes,
+            reactions), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_reposts (int | None | Unset): Only posts with at least this many reposts (shares,
+            retweets), as the platform reported them when the post was found. A post without that
+            count never passes.
+        min_replies (int | None | Unset): Only posts with at least this many replies (comments),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        min_quotes (int | None | Unset): Only posts with at least this many quotes, as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_views (int | None | Unset): Only posts with at least this many views (plays), as the
+            platform reported them when the post was found. A post without that count never passes.
+        min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
+            as the platform reported them when the post was found. A post without that count never
+            passes.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
+            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
+            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
+            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
+            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
+            nesting.
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -1156,6 +1370,14 @@ async def asyncio(
             languages=languages,
             not_languages=not_languages,
             ratings=ratings,
+            not_ratings=not_ratings,
+            min_likes=min_likes,
+            min_reposts=min_reposts,
+            min_replies=min_replies,
+            min_quotes=min_quotes,
+            min_views=min_views,
+            min_bookmarks=min_bookmarks,
+            any_of=any_of,
             q=q,
             since=since,
             until=until,

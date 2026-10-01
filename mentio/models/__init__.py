@@ -162,6 +162,17 @@ from .export_mentions_csv_platforms_item import ExportMentionsCsvPlatformsItem
 from .export_mentions_csv_sentiment import ExportMentionsCsvSentiment
 from .export_mentions_csv_sentiments_item import ExportMentionsCsvSentimentsItem
 from .export_mentions_csv_status import ExportMentionsCsvStatus
+from .export_mentions_json_keyword_kinds_item import ExportMentionsJsonKeywordKindsItem
+from .export_mentions_json_not_platforms_item import ExportMentionsJsonNotPlatformsItem
+from .export_mentions_json_not_sentiments_item import (
+    ExportMentionsJsonNotSentimentsItem,
+)
+from .export_mentions_json_platform import ExportMentionsJsonPlatform
+from .export_mentions_json_platforms_item import ExportMentionsJsonPlatformsItem
+from .export_mentions_json_response_200 import ExportMentionsJsonResponse200
+from .export_mentions_json_sentiment import ExportMentionsJsonSentiment
+from .export_mentions_json_sentiments_item import ExportMentionsJsonSentimentsItem
+from .export_mentions_json_status import ExportMentionsJsonStatus
 from .export_people_csv_keyword_kinds_item import ExportPeopleCsvKeywordKindsItem
 from .export_people_csv_never_keyword_kinds_item import (
     ExportPeopleCsvNeverKeywordKindsItem,
@@ -171,6 +182,13 @@ from .export_people_csv_platform import ExportPeopleCsvPlatform
 from .export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from .export_people_csv_sort import ExportPeopleCsvSort
 from .export_people_csv_stages_item import ExportPeopleCsvStagesItem
+from .filter_group import FilterGroup
+from .filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
+from .filter_group_not_platforms_item import FilterGroupNotPlatformsItem
+from .filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
+from .filter_group_platforms_item import FilterGroupPlatformsItem
+from .filter_group_sentiments_item import FilterGroupSentimentsItem
+from .filter_group_status import FilterGroupStatus
 from .get_analytics_breakdown_by import GetAnalyticsBreakdownBy
 from .get_analytics_breakdown_platforms_item import GetAnalyticsBreakdownPlatformsItem
 from .get_analytics_breakdown_range import GetAnalyticsBreakdownRange
@@ -182,6 +200,7 @@ from .get_analytics_summary_platforms_item import GetAnalyticsSummaryPlatformsIt
 from .get_analytics_summary_range import GetAnalyticsSummaryRange
 from .get_health_response_200 import GetHealthResponse200
 from .get_invoice_url_response_200 import GetInvoiceUrlResponse200
+from .get_keyword_health_range import GetKeywordHealthRange
 from .get_reviews_report_bucket import GetReviewsReportBucket
 from .get_reviews_report_platforms_item import GetReviewsReportPlatformsItem
 from .get_reviews_report_range import GetReviewsReportRange
@@ -199,6 +218,22 @@ from .invoice_list import InvoiceList
 from .invoice_list_data_item import InvoiceListDataItem
 from .keyword import Keyword
 from .keyword_cap_type_0 import KeywordCapType0
+from .keyword_health import KeywordHealth
+from .keyword_health_ai import KeywordHealthAi
+from .keyword_health_ai_status import KeywordHealthAiStatus
+from .keyword_health_keyword import KeywordHealthKeyword
+from .keyword_health_noise_authors_item import KeywordHealthNoiseAuthorsItem
+from .keyword_health_noise_terms_item import KeywordHealthNoiseTermsItem
+from .keyword_health_sample import KeywordHealthSample
+from .keyword_health_stats import KeywordHealthStats
+from .keyword_health_stats_by_platform_item import KeywordHealthStatsByPlatformItem
+from .keyword_health_stats_by_platform_item_platform import (
+    KeywordHealthStatsByPlatformItemPlatform,
+)
+from .keyword_health_stats_cost import KeywordHealthStatsCost
+from .keyword_health_stats_weekly_item import KeywordHealthStatsWeeklyItem
+from .keyword_health_status import KeywordHealthStatus
+from .keyword_health_window import KeywordHealthWindow
 from .keyword_kind import KeywordKind
 from .keyword_matching import KeywordMatching
 from .keyword_matching_required_mode import KeywordMatchingRequiredMode
@@ -208,7 +243,29 @@ from .keyword_polling_item_platform import KeywordPollingItemPlatform
 from .keyword_stats import KeywordStats
 from .keyword_stats_cost import KeywordStatsCost
 from .keyword_stats_feedback import KeywordStatsFeedback
+from .keyword_stats_health import KeywordStatsHealth
 from .keyword_stats_noise import KeywordStatsNoise
+from .keyword_suggestion import KeywordSuggestion
+from .keyword_suggestion_effect_type_0 import KeywordSuggestionEffectType0
+from .keyword_suggestion_effect_type_0_sample import KeywordSuggestionEffectType0Sample
+from .keyword_suggestion_patch import KeywordSuggestionPatch
+from .keyword_suggestion_patch_cap_type_0 import KeywordSuggestionPatchCapType0
+from .keyword_suggestion_patch_kind import KeywordSuggestionPatchKind
+from .keyword_suggestion_patch_matching import KeywordSuggestionPatchMatching
+from .keyword_suggestion_patch_matching_required_mode import (
+    KeywordSuggestionPatchMatchingRequiredMode,
+)
+from .keyword_suggestion_patch_platforms_type_0_item import (
+    KeywordSuggestionPatchPlatformsType0Item,
+)
+from .keyword_suggestion_patch_review_sources_item import (
+    KeywordSuggestionPatchReviewSourcesItem,
+)
+from .keyword_suggestion_patch_review_sources_item_platform import (
+    KeywordSuggestionPatchReviewSourcesItemPlatform,
+)
+from .keyword_suggestion_source import KeywordSuggestionSource
+from .keyword_suggestion_type import KeywordSuggestionType
 from .ledger_list import LedgerList
 from .ledger_list_data_item import LedgerListDataItem
 from .ledger_list_data_item_kind import LedgerListDataItemKind
@@ -293,6 +350,9 @@ from .list_keywords_response_200_data_item_stats_cost import (
 )
 from .list_keywords_response_200_data_item_stats_feedback import (
     ListKeywordsResponse200DataItemStatsFeedback,
+)
+from .list_keywords_response_200_data_item_stats_health import (
+    ListKeywordsResponse200DataItemStatsHealth,
 )
 from .list_keywords_response_200_data_item_stats_noise import (
     ListKeywordsResponse200DataItemStatsNoise,
@@ -739,6 +799,15 @@ __all__ = (
     "ExportMentionsCsvSentiment",
     "ExportMentionsCsvSentimentsItem",
     "ExportMentionsCsvStatus",
+    "ExportMentionsJsonKeywordKindsItem",
+    "ExportMentionsJsonNotPlatformsItem",
+    "ExportMentionsJsonNotSentimentsItem",
+    "ExportMentionsJsonPlatform",
+    "ExportMentionsJsonPlatformsItem",
+    "ExportMentionsJsonResponse200",
+    "ExportMentionsJsonSentiment",
+    "ExportMentionsJsonSentimentsItem",
+    "ExportMentionsJsonStatus",
     "ExportPeopleCsvKeywordKindsItem",
     "ExportPeopleCsvNeverKeywordKindsItem",
     "ExportPeopleCsvNotPlatformsItem",
@@ -746,6 +815,13 @@ __all__ = (
     "ExportPeopleCsvPlatformsItem",
     "ExportPeopleCsvSort",
     "ExportPeopleCsvStagesItem",
+    "FilterGroup",
+    "FilterGroupKeywordKindsItem",
+    "FilterGroupNotPlatformsItem",
+    "FilterGroupNotSentimentsItem",
+    "FilterGroupPlatformsItem",
+    "FilterGroupSentimentsItem",
+    "FilterGroupStatus",
     "GetAnalyticsBreakdownBy",
     "GetAnalyticsBreakdownPlatformsItem",
     "GetAnalyticsBreakdownRange",
@@ -757,6 +833,7 @@ __all__ = (
     "GetAnalyticsSummaryRange",
     "GetHealthResponse200",
     "GetInvoiceUrlResponse200",
+    "GetKeywordHealthRange",
     "GetReviewsReportBucket",
     "GetReviewsReportPlatformsItem",
     "GetReviewsReportRange",
@@ -774,6 +851,20 @@ __all__ = (
     "InvoiceListDataItem",
     "Keyword",
     "KeywordCapType0",
+    "KeywordHealth",
+    "KeywordHealthAi",
+    "KeywordHealthAiStatus",
+    "KeywordHealthKeyword",
+    "KeywordHealthNoiseAuthorsItem",
+    "KeywordHealthNoiseTermsItem",
+    "KeywordHealthSample",
+    "KeywordHealthStats",
+    "KeywordHealthStatsByPlatformItem",
+    "KeywordHealthStatsByPlatformItemPlatform",
+    "KeywordHealthStatsCost",
+    "KeywordHealthStatsWeeklyItem",
+    "KeywordHealthStatus",
+    "KeywordHealthWindow",
     "KeywordKind",
     "KeywordMatching",
     "KeywordMatchingRequiredMode",
@@ -783,7 +874,21 @@ __all__ = (
     "KeywordStats",
     "KeywordStatsCost",
     "KeywordStatsFeedback",
+    "KeywordStatsHealth",
     "KeywordStatsNoise",
+    "KeywordSuggestion",
+    "KeywordSuggestionEffectType0",
+    "KeywordSuggestionEffectType0Sample",
+    "KeywordSuggestionPatch",
+    "KeywordSuggestionPatchCapType0",
+    "KeywordSuggestionPatchKind",
+    "KeywordSuggestionPatchMatching",
+    "KeywordSuggestionPatchMatchingRequiredMode",
+    "KeywordSuggestionPatchPlatformsType0Item",
+    "KeywordSuggestionPatchReviewSourcesItem",
+    "KeywordSuggestionPatchReviewSourcesItemPlatform",
+    "KeywordSuggestionSource",
+    "KeywordSuggestionType",
     "LedgerList",
     "LedgerListDataItem",
     "LedgerListDataItemKind",
@@ -825,6 +930,7 @@ __all__ = (
     "ListKeywordsResponse200DataItemStats",
     "ListKeywordsResponse200DataItemStatsCost",
     "ListKeywordsResponse200DataItemStatsFeedback",
+    "ListKeywordsResponse200DataItemStatsHealth",
     "ListKeywordsResponse200DataItemStatsNoise",
     "ListKeywordsSort",
     "ListKeywordsStatusItem",

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -13,6 +13,10 @@ from ..models.list_alerts_response_200_data_item_filter_sentiments_item import (
     ListAlertsResponse200DataItemFilterSentimentsItem,
 )
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.filter_group import FilterGroup
+
 
 T = TypeVar("T", bound="ListAlertsResponse200DataItemFilter")
 
@@ -42,6 +46,24 @@ class ListAlertsResponse200DataItemFilter:
             rest. Omit for both.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to 5): [1, 2] sends the
             unhappy ones. Every other post fails it.
+        not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5): [5] keeps the five star reviews
+            out. Posts that are not reviews still pass.
+        min_likes (int | Unset): Only posts with at least this many likes (upvotes, reactions), as the platform reported
+            them when the post was found. A post without that count never passes.
+        min_reposts (int | Unset): Only posts with at least this many reposts (shares, retweets), as the platform
+            reported them when the post was found. A post without that count never passes.
+        min_replies (int | Unset): Only posts with at least this many replies (comments), as the platform reported them
+            when the post was found. A post without that count never passes.
+        min_quotes (int | Unset): Only posts with at least this many quotes, as the platform reported them when the post
+            was found. A post without that count never passes.
+        min_views (int | Unset): Only posts with at least this many views (plays), as the platform reported them when
+            the post was found. A post without that count never passes.
+        min_bookmarks (int | Unset): Only posts with at least this many bookmarks (saves), as the platform reported them
+            when the post was found. A post without that count never passes.
+        any_of (list[FilterGroup] | Unset): OR across groups: a mention passes when it meets every condition of at least
+            one group (1 to 10 groups). The other conditions still apply to every mention: the whole filter is (other
+            conditions) AND (group 1 OR group 2 ...). A group takes the conditions of a view filter (platforms, sentiments,
+            intents, keywordKinds, the not lists ...), with no anyOf of its own.
     """
 
     keyword_ids: list[str] | Unset = UNSET
@@ -58,6 +80,14 @@ class ListAlertsResponse200DataItemFilter:
     languages: list[str] | Unset = UNSET
     automated: bool | Unset = UNSET
     ratings: list[int] | Unset = UNSET
+    not_ratings: list[int] | Unset = UNSET
+    min_likes: int | Unset = UNSET
+    min_reposts: int | Unset = UNSET
+    min_replies: int | Unset = UNSET
+    min_quotes: int | Unset = UNSET
+    min_views: int | Unset = UNSET
+    min_bookmarks: int | Unset = UNSET
+    any_of: list[FilterGroup] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -115,6 +145,29 @@ class ListAlertsResponse200DataItemFilter:
         if not isinstance(self.ratings, Unset):
             ratings = self.ratings
 
+        not_ratings: list[int] | Unset = UNSET
+        if not isinstance(self.not_ratings, Unset):
+            not_ratings = self.not_ratings
+
+        min_likes = self.min_likes
+
+        min_reposts = self.min_reposts
+
+        min_replies = self.min_replies
+
+        min_quotes = self.min_quotes
+
+        min_views = self.min_views
+
+        min_bookmarks = self.min_bookmarks
+
+        any_of: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.any_of, Unset):
+            any_of = []
+            for any_of_item_data in self.any_of:
+                any_of_item = any_of_item_data.to_dict()
+                any_of.append(any_of_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -146,11 +199,29 @@ class ListAlertsResponse200DataItemFilter:
             field_dict["automated"] = automated
         if ratings is not UNSET:
             field_dict["ratings"] = ratings
+        if not_ratings is not UNSET:
+            field_dict["notRatings"] = not_ratings
+        if min_likes is not UNSET:
+            field_dict["minLikes"] = min_likes
+        if min_reposts is not UNSET:
+            field_dict["minReposts"] = min_reposts
+        if min_replies is not UNSET:
+            field_dict["minReplies"] = min_replies
+        if min_quotes is not UNSET:
+            field_dict["minQuotes"] = min_quotes
+        if min_views is not UNSET:
+            field_dict["minViews"] = min_views
+        if min_bookmarks is not UNSET:
+            field_dict["minBookmarks"] = min_bookmarks
+        if any_of is not UNSET:
+            field_dict["anyOf"] = any_of
 
         return field_dict
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.filter_group import FilterGroup
+
         d = dict(src_dict)
         keyword_ids = cast(list[str], d.pop("keywordIds", UNSET))
 
@@ -202,6 +273,29 @@ class ListAlertsResponse200DataItemFilter:
 
         ratings = cast(list[int], d.pop("ratings", UNSET))
 
+        not_ratings = cast(list[int], d.pop("notRatings", UNSET))
+
+        min_likes = d.pop("minLikes", UNSET)
+
+        min_reposts = d.pop("minReposts", UNSET)
+
+        min_replies = d.pop("minReplies", UNSET)
+
+        min_quotes = d.pop("minQuotes", UNSET)
+
+        min_views = d.pop("minViews", UNSET)
+
+        min_bookmarks = d.pop("minBookmarks", UNSET)
+
+        _any_of = d.pop("anyOf", UNSET)
+        any_of: list[FilterGroup] | Unset = UNSET
+        if _any_of is not UNSET:
+            any_of = []
+            for any_of_item_data in _any_of:
+                any_of_item = FilterGroup.from_dict(any_of_item_data)
+
+                any_of.append(any_of_item)
+
         list_alerts_response_200_data_item_filter = cls(
             keyword_ids=keyword_ids,
             group_ids=group_ids,
@@ -217,6 +311,14 @@ class ListAlertsResponse200DataItemFilter:
             languages=languages,
             automated=automated,
             ratings=ratings,
+            not_ratings=not_ratings,
+            min_likes=min_likes,
+            min_reposts=min_reposts,
+            min_replies=min_replies,
+            min_quotes=min_quotes,
+            min_views=min_views,
+            min_bookmarks=min_bookmarks,
+            any_of=any_of,
         )
 
         list_alerts_response_200_data_item_filter.additional_properties = d

@@ -38,6 +38,11 @@ def _parse_response(
 
         return response_201
 
+    if response.status_code == 400:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
+
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
 
@@ -73,8 +78,9 @@ def sync_detailed(
     """Save a view
 
      Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is
-    materialized: the view selects whatever matches when it is read.
+    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
+    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
+    selects whatever matches when it is read.
 
     Args:
         body (CreateViewBody):
@@ -106,8 +112,9 @@ def sync(
     """Save a view
 
      Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is
-    materialized: the view selects whatever matches when it is read.
+    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
+    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
+    selects whatever matches when it is read.
 
     Args:
         body (CreateViewBody):
@@ -134,8 +141,9 @@ async def asyncio_detailed(
     """Save a view
 
      Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is
-    materialized: the view selects whatever matches when it is read.
+    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
+    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
+    selects whatever matches when it is read.
 
     Args:
         body (CreateViewBody):
@@ -165,8 +173,9 @@ async def asyncio(
     """Save a view
 
      Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is
-    materialized: the view selects whatever matches when it is read.
+    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
+    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
+    selects whatever matches when it is read.
 
     Args:
         body (CreateViewBody):

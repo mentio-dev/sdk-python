@@ -24,6 +24,7 @@ def _get_kwargs(
     *,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
+    handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
@@ -59,6 +60,8 @@ def _get_kwargs(
     params["platform"] = json_platform
 
     params["q"] = q
+
+    params["handle"] = handle
 
     params["tag"] = tag
 
@@ -269,6 +272,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
+    handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
@@ -306,6 +310,10 @@ def sync_detailed(
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
+        handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
+            jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
+            accounts included; combine with platform to pick one platform. A link names its own
+            platform.
         tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
         since (datetime.datetime | Unset): Only people whose first matched mention is at or after
@@ -359,6 +367,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         platform=platform,
         q=q,
+        handle=handle,
         tag=tag,
         muted=muted,
         since=since,
@@ -397,6 +406,7 @@ def sync(
     client: AuthenticatedClient,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
+    handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
@@ -434,6 +444,10 @@ def sync(
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
+        handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
+            jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
+            accounts included; combine with platform to pick one platform. A link names its own
+            platform.
         tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
         since (datetime.datetime | Unset): Only people whose first matched mention is at or after
@@ -488,6 +502,7 @@ def sync(
         client=client,
         platform=platform,
         q=q,
+        handle=handle,
         tag=tag,
         muted=muted,
         since=since,
@@ -520,6 +535,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
+    handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
@@ -557,6 +573,10 @@ async def asyncio_detailed(
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
+        handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
+            jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
+            accounts included; combine with platform to pick one platform. A link names its own
+            platform.
         tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
         since (datetime.datetime | Unset): Only people whose first matched mention is at or after
@@ -610,6 +630,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         platform=platform,
         q=q,
+        handle=handle,
         tag=tag,
         muted=muted,
         since=since,
@@ -646,6 +667,7 @@ async def asyncio(
     client: AuthenticatedClient,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
+    handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
@@ -683,6 +705,10 @@ async def asyncio(
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
+        handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
+            jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
+            accounts included; combine with platform to pick one platform. A link names its own
+            platform.
         tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
         since (datetime.datetime | Unset): Only people whose first matched mention is at or after
@@ -738,6 +764,7 @@ async def asyncio(
             client=client,
             platform=platform,
             q=q,
+            handle=handle,
             tag=tag,
             muted=muted,
             since=since,

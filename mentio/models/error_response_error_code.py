@@ -12,6 +12,7 @@ class ErrorResponseErrorCode(StrEnum):
     DUPLICATE_SEGMENT = "duplicate_segment"
     DUPLICATE_VIEW = "duplicate_view"
     EMAIL_NOT_CONFIGURED = "email_not_configured"
+    FILTER_TOO_COMPLEX = "filter_too_complex"
     FORBIDDEN = "forbidden"
     GROUP_CHANGED = "group_changed"
     INSUFFICIENT_BALANCE = "insufficient_balance"

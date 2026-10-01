@@ -6,6 +6,10 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.list_keywords_response_200_data_item_stats_health import (
+    ListKeywordsResponse200DataItemStatsHealth,
+)
+
 if TYPE_CHECKING:
     from ..models.list_keywords_response_200_data_item_stats_cost import (
         ListKeywordsResponse200DataItemStatsCost,
@@ -35,6 +39,14 @@ class ListKeywordsResponse200DataItemStats:
             /v1/mentions/{id} relevant).
         noise (ListKeywordsResponse200DataItemStatsNoise): Relevance over the last 14 days of scored matches, so a
             keyword tightened today stops being flagged within two weeks.
+        health (ListKeywordsResponse200DataItemStatsHealth): The keyword's health over the same 14 days as `noise`, by
+            the rule GET /v1/keywords/{id}/health applies to its own window: paused (muted), capped (at its mention cap),
+            noisy (20 or more scored matches, under 30% relevant), new (under 7 days old and not noisy, or changed in the
+            last 7 days with under 20 scored matches since), quiet (7 days or older, nothing relevant), else healthy. Judged
+            on the matches since the keyword's last change to its matching rules, platforms or context (or its unmute) when
+            that is inside the 14 days, so a keyword tightened today is not flagged on the noise the change removed; `noise`
+            itself keeps the whole 14 days. Always 14 days, while the endpoint reads 30 by default, so the two can differ
+            for the same keyword. The health endpoint says why and what to change.
         cost (ListKeywordsResponse200DataItemStatsCost): What this keyword has cost this calendar month (UTC) at list
             price: exactly its row in GET /v1/usage/breakdown?month=<this month> (same tables, same rounding). The wallet's
             ledger, which settles once a day, is what can differ from these list-price numbers, and only by cumulative
@@ -48,6 +60,7 @@ class ListKeywordsResponse200DataItemStats:
     last_mention_at: None | str
     feedback: ListKeywordsResponse200DataItemStatsFeedback
     noise: ListKeywordsResponse200DataItemStatsNoise
+    health: ListKeywordsResponse200DataItemStatsHealth
     cost: ListKeywordsResponse200DataItemStatsCost
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -67,6 +80,8 @@ class ListKeywordsResponse200DataItemStats:
 
         noise = self.noise.to_dict()
 
+        health = self.health.value
+
         cost = self.cost.to_dict()
 
         field_dict: dict[str, Any] = {}
@@ -80,6 +95,7 @@ class ListKeywordsResponse200DataItemStats:
                 "lastMentionAt": last_mention_at,
                 "feedback": feedback,
                 "noise": noise,
+                "health": health,
                 "cost": cost,
             }
         )
@@ -120,6 +136,8 @@ class ListKeywordsResponse200DataItemStats:
 
         noise = ListKeywordsResponse200DataItemStatsNoise.from_dict(d.pop("noise"))
 
+        health = ListKeywordsResponse200DataItemStatsHealth(d.pop("health"))
+
         cost = ListKeywordsResponse200DataItemStatsCost.from_dict(d.pop("cost"))
 
         list_keywords_response_200_data_item_stats = cls(
@@ -130,6 +148,7 @@ class ListKeywordsResponse200DataItemStats:
             last_mention_at=last_mention_at,
             feedback=feedback,
             noise=noise,
+            health=health,
             cost=cost,
         )
 

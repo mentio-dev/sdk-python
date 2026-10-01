@@ -27,7 +27,9 @@ class MentionClassificationType0:
         relevance (int | None): 0 to 100; null only when classification failed.
         sentiment (MentionClassificationType0Sentiment): Classifier sentiment.
         intents (list[str]): Intent and topic tags: buy_intent, question, complaint, praise, comparison, churn_intent
-            (leaving or replacing the keyword), bug_report, pricing, hiring, event, promotional.
+            (leaving or replacing the keyword), bug_report, pricing, hiring, event, promotional, testimonial (a customer
+            vouching for it from their own use), industry_insight (analysis or data about the field), launch (a product or
+            feature launch announcement), feedback (a suggestion or request about it).
         automated (bool): The post reads as machine-made: a bot or app account, a scheduled or templated post, an
             obvious AI-written summary. A label only: automated mentions stay in the feed, are delivered as usual and are
             billed like any other match. false while unjudged.

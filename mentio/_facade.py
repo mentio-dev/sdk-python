@@ -128,6 +128,7 @@ import mentio.api.groups.update_group  # noqa: F401
 import mentio.api.keywords.create_keyword  # noqa: F401
 import mentio.api.keywords.delete_keyword  # noqa: F401
 import mentio.api.keywords.get_keyword  # noqa: F401
+import mentio.api.keywords.get_keyword_health  # noqa: F401
 import mentio.api.keywords.list_keywords  # noqa: F401
 import mentio.api.keywords.update_keyword  # noqa: F401
 import mentio.api.members.create_invitation  # noqa: F401
@@ -136,6 +137,7 @@ import mentio.api.members.list_members  # noqa: F401
 import mentio.api.members.remove_member  # noqa: F401
 import mentio.api.members.revoke_invitation  # noqa: F401
 import mentio.api.mentions.export_mentions_csv  # noqa: F401
+import mentio.api.mentions.export_mentions_json  # noqa: F401
 import mentio.api.mentions.get_mention  # noqa: F401
 import mentio.api.mentions.search_mentions  # noqa: F401
 import mentio.api.mentions.update_mention  # noqa: F401
@@ -164,7 +166,7 @@ import mentio.api.views.update_view  # noqa: F401
 
 
 class _Keywords:
-    """keywords: create, delete, get, list, update."""
+    """keywords: create, delete, get, health, list, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -194,6 +196,17 @@ class _Keywords:
     def get(self, id: str) -> _m.Keyword:
         """Get a keyword"""
         return _result(_ops.keywords.get_keyword.sync_detailed(id, client=self._client))
+
+    def health(self, id: str, **params: Any) -> _m.KeywordHealth:
+        """Get a keyword's health
+
+        Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a fresh one. At most 30 reads a minute per workspace.
+
+        Keyword arguments (query):
+          range_: Trailing window of UTC days ending today, by match time: 7d, 30d, 90d (default 30d).
+          ai: true: also ask a language model for a rewritten context (cached a day per keyword and window, at most 20 model calls an hour per workspace). Default false: every suggestion comes from the rules alone."""
+        _coerce(params, {"range_": (_enum, _m.GetKeywordHealthRange)})
+        return _result(_ops.keywords.get_keyword_health.sync_detailed(id, client=self._client, **params))
 
     def list(self, **params: Any) -> _m.ListKeywordsResponse200:
         """List keywords
@@ -229,7 +242,7 @@ class _Keywords:
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
-    """mentions: export, get, search, update."""
+    """mentions: export, export_json, get, search, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -237,7 +250,7 @@ class _Mentions:
     def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -245,7 +258,7 @@ class _Mentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -277,11 +290,76 @@ class _Mentions:
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
+          not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+          min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
+          min_reposts: Only posts with at least this many reposts (shares, retweets), as the platform reported them when the post was found. A post without that count never passes.
+          min_replies: Only posts with at least this many replies (comments), as the platform reported them when the post was found. A post without that count never passes.
+          min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
+          min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
+          min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
+          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
         _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_csv.sync_detailed(client=self._client, **params))
+
+    def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
+        """Export mentions as JSON
+
+        The same mentions GET /v1/mentions would list for these filters, in one response, newest matched first (the order they entered your feed): every row is the full Mention object the list returns, text included. Capped at 10,000 mentions; `truncated` (and the X-Mentions-Truncated header) says when the cap cut the list. Shares the CSV export's limit: at most 6 exports per minute per workspace, either format; a 429 carries Retry-After.
+
+        Keyword arguments (query):
+          keyword_id: Only matches of this keyword.
+          platform: Only posts from this platform.
+          status: Only mentions in this status. Omit for every status.
+          relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
+          sentiment: Only this sentiment.
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
+          include_muted: true: include mentions by people you muted, hidden by default.
+          assignee_id: Only mentions assigned to this workspace member (user id).
+          snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
+          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          min_relevance: Only mentions scored at least this; unclassified ones are excluded.
+          min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
+          min_followers: Only authors with at least this many followers. Unknown reach never passes.
+          max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
+          alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
+          view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
+          keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
+          platforms: Only posts from any of these platforms.
+          not_platforms: Never posts from these platforms.
+          keyword_ids: Only matches of any of these keywords.
+          group_ids: Only matches of keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never matches of keywords in these groups.
+          not_keyword_ids: Never matches of these keywords.
+          sentiments: Only these sentiments.
+          not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          intents: Only mentions carrying any of these intent or topic tags.
+          not_intents: Never mentions carrying these intent or topic tags.
+          not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          not_tags: Never authors your workspace tagged with any of these.
+          languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
+          not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
+          not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+          min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
+          min_reposts: Only posts with at least this many reposts (shares, retweets), as the platform reported them when the post was found. A post without that count never passes.
+          min_replies: Only posts with at least this many replies (comments), as the platform reported them when the post was found. A post without that count never passes.
+          min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
+          min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
+          min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
+          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          q: Substring search in the post text or the author's name.
+          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        return _result(_ops.mentions.export_mentions_json.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Mention:
         """Get a mention
@@ -292,7 +370,7 @@ class _Mentions:
     def search(self, **params: Any) -> _m.SearchMentionsResponse200:
         """List mentions
 
-        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send.
+        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -300,7 +378,7 @@ class _Mentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -332,6 +410,14 @@ class _Mentions:
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
+          not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+          min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
+          min_reposts: Only posts with at least this many reposts (shares, retweets), as the platform reported them when the post was found. A post without that count never passes.
+          min_replies: Only posts with at least this many replies (comments), as the platform reported them when the post was found. A post without that count never passes.
+          min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
+          min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
+          min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
+          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -381,6 +467,7 @@ class _People:
         Keyword arguments (query):
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
+          handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
           tag: Only people carrying this tag (exact, case-sensitive).
           muted: true: only muted people; false: only unmuted; omitted: everyone.
           since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
@@ -420,6 +507,7 @@ class _People:
         Keyword arguments (query):
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
+          handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
           tag: Only people carrying this tag (exact, case-sensitive).
           muted: true: only muted people; false: only unmuted; omitted: everyone.
           since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
@@ -536,7 +624,7 @@ class _Alerts:
     def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
-        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday).
+        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
@@ -844,7 +932,7 @@ class _Views:
     def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
         """Save a view
 
-        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
+        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of which at least one must hold; an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): Unique per workspace, case-insensitive.
@@ -1049,7 +1137,7 @@ class _Billing:
         return _result(_ops.billing.get_wallet.sync_detailed(client=self._client))
 
 class _AsyncKeywords:
-    """keywords: create, delete, get, list, update."""
+    """keywords: create, delete, get, health, list, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -1079,6 +1167,17 @@ class _AsyncKeywords:
     async def get(self, id: str) -> _m.Keyword:
         """Get a keyword"""
         return _result(await _ops.keywords.get_keyword.asyncio_detailed(id, client=self._client))
+
+    async def health(self, id: str, **params: Any) -> _m.KeywordHealth:
+        """Get a keyword's health
+
+        Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a fresh one. At most 30 reads a minute per workspace.
+
+        Keyword arguments (query):
+          range_: Trailing window of UTC days ending today, by match time: 7d, 30d, 90d (default 30d).
+          ai: true: also ask a language model for a rewritten context (cached a day per keyword and window, at most 20 model calls an hour per workspace). Default false: every suggestion comes from the rules alone."""
+        _coerce(params, {"range_": (_enum, _m.GetKeywordHealthRange)})
+        return _result(await _ops.keywords.get_keyword_health.asyncio_detailed(id, client=self._client, **params))
 
     async def list(self, **params: Any) -> _m.ListKeywordsResponse200:
         """List keywords
@@ -1114,7 +1213,7 @@ class _AsyncKeywords:
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:
-    """mentions: export, get, search, update."""
+    """mentions: export, export_json, get, search, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -1122,7 +1221,7 @@ class _AsyncMentions:
     async def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1130,7 +1229,7 @@ class _AsyncMentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -1162,11 +1261,76 @@ class _AsyncMentions:
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
+          not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+          min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
+          min_reposts: Only posts with at least this many reposts (shares, retweets), as the platform reported them when the post was found. A post without that count never passes.
+          min_replies: Only posts with at least this many replies (comments), as the platform reported them when the post was found. A post without that count never passes.
+          min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
+          min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
+          min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
+          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
         _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_csv.asyncio_detailed(client=self._client, **params))
+
+    async def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
+        """Export mentions as JSON
+
+        The same mentions GET /v1/mentions would list for these filters, in one response, newest matched first (the order they entered your feed): every row is the full Mention object the list returns, text included. Capped at 10,000 mentions; `truncated` (and the X-Mentions-Truncated header) says when the cap cut the list. Shares the CSV export's limit: at most 6 exports per minute per workspace, either format; a 429 carries Retry-After.
+
+        Keyword arguments (query):
+          keyword_id: Only matches of this keyword.
+          platform: Only posts from this platform.
+          status: Only mentions in this status. Omit for every status.
+          relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
+          sentiment: Only this sentiment.
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
+          include_muted: true: include mentions by people you muted, hidden by default.
+          assignee_id: Only mentions assigned to this workspace member (user id).
+          snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
+          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          min_relevance: Only mentions scored at least this; unclassified ones are excluded.
+          min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
+          min_followers: Only authors with at least this many followers. Unknown reach never passes.
+          max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
+          alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
+          view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
+          keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
+          platforms: Only posts from any of these platforms.
+          not_platforms: Never posts from these platforms.
+          keyword_ids: Only matches of any of these keywords.
+          group_ids: Only matches of keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never matches of keywords in these groups.
+          not_keyword_ids: Never matches of these keywords.
+          sentiments: Only these sentiments.
+          not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          intents: Only mentions carrying any of these intent or topic tags.
+          not_intents: Never mentions carrying these intent or topic tags.
+          not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          not_tags: Never authors your workspace tagged with any of these.
+          languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
+          not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
+          not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+          min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
+          min_reposts: Only posts with at least this many reposts (shares, retweets), as the platform reported them when the post was found. A post without that count never passes.
+          min_replies: Only posts with at least this many replies (comments), as the platform reported them when the post was found. A post without that count never passes.
+          min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
+          min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
+          min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
+          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          q: Substring search in the post text or the author's name.
+          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        return _result(await _ops.mentions.export_mentions_json.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Mention:
         """Get a mention
@@ -1177,7 +1341,7 @@ class _AsyncMentions:
     async def search(self, **params: Any) -> _m.SearchMentionsResponse200:
         """List mentions
 
-        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send.
+        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1185,7 +1349,7 @@ class _AsyncMentions:
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
           sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional).
+          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
@@ -1217,6 +1381,14 @@ class _AsyncMentions:
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
+          not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
+          min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
+          min_reposts: Only posts with at least this many reposts (shares, retweets), as the platform reported them when the post was found. A post without that count never passes.
+          min_replies: Only posts with at least this many replies (comments), as the platform reported them when the post was found. A post without that count never passes.
+          min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
+          min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
+          min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
+          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -1266,6 +1438,7 @@ class _AsyncPeople:
         Keyword arguments (query):
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
+          handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
           tag: Only people carrying this tag (exact, case-sensitive).
           muted: true: only muted people; false: only unmuted; omitted: everyone.
           since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
@@ -1305,6 +1478,7 @@ class _AsyncPeople:
         Keyword arguments (query):
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
+          handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
           tag: Only people carrying this tag (exact, case-sensitive).
           muted: true: only muted people; false: only unmuted; omitted: everyone.
           since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
@@ -1421,7 +1595,7 @@ class _AsyncAlerts:
     async def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
-        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday).
+        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
@@ -1729,7 +1903,7 @@ class _AsyncViews:
     async def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
         """Save a view
 
-        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed); an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
+        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of which at least one must hold; an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): Unique per workspace, case-insensitive.
