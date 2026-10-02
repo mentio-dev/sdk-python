@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.email_channel_config_events_item import EmailChannelConfigEventsItem
+
 if TYPE_CHECKING:
     from ..models.email_channel_config_recipients_item import (
         EmailChannelConfigRecipientsItem,
@@ -20,9 +22,12 @@ class EmailChannelConfig:
     """
     Attributes:
         recipients (list[EmailChannelConfigRecipientsItem]): Every address on the list and whether it confirmed.
+        events (list[EmailChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
+            involved: one short message when an item opens (GET /v1/attention). Empty when it receives none.
     """
 
     recipients: list[EmailChannelConfigRecipientsItem]
+    events: list[EmailChannelConfigEventsItem]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -31,11 +36,17 @@ class EmailChannelConfig:
             recipients_item = recipients_item_data.to_dict()
             recipients.append(recipients_item)
 
+        events = []
+        for events_item_data in self.events:
+            events_item = events_item_data.value
+            events.append(events_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "recipients": recipients,
+                "events": events,
             }
         )
 
@@ -57,8 +68,16 @@ class EmailChannelConfig:
 
             recipients.append(recipients_item)
 
+        events = []
+        _events = d.pop("events")
+        for events_item_data in _events:
+            events_item = EmailChannelConfigEventsItem(events_item_data)
+
+            events.append(events_item)
+
         email_channel_config = cls(
             recipients=recipients,
+            events=events,
         )
 
         email_channel_config.additional_properties = d

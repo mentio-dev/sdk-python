@@ -13,7 +13,7 @@ T = TypeVar("T", bound="AlertScheduleType0")
 
 @_attrs_define
 class AlertScheduleType0:
-    """Daily and weekly alerts only.
+    """Daily and weekly alerts only; null for instant and hourly ones.
 
     Attributes:
         hour (int):

@@ -3,6 +3,7 @@ from enum import StrEnum
 
 class ListAlertsResponse200DataItemMode(StrEnum):
     DAILY = "daily"
+    HOURLY = "hourly"
     INSTANT = "instant"
     WEEKLY = "weekly"
 

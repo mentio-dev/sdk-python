@@ -7,6 +7,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.telegram_channel_config_chat_type import TelegramChannelConfigChatType
+from ..models.telegram_channel_config_events_item import TelegramChannelConfigEventsItem
 
 T = TypeVar("T", bound="TelegramChannelConfig")
 
@@ -17,10 +18,13 @@ class TelegramChannelConfig:
     Attributes:
         chat_id (str): Telegram chat id.
         chat_type (TelegramChannelConfigChatType):
+        events (list[TelegramChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
+            involved: one short message when an item opens (GET /v1/attention). Empty when it receives none.
     """
 
     chat_id: str
     chat_type: TelegramChannelConfigChatType
+    events: list[TelegramChannelConfigEventsItem]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -28,12 +32,18 @@ class TelegramChannelConfig:
 
         chat_type = self.chat_type.value
 
+        events = []
+        for events_item_data in self.events:
+            events_item = events_item_data.value
+            events.append(events_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "chatId": chat_id,
                 "chatType": chat_type,
+                "events": events,
             }
         )
 
@@ -46,9 +56,17 @@ class TelegramChannelConfig:
 
         chat_type = TelegramChannelConfigChatType(d.pop("chatType"))
 
+        events = []
+        _events = d.pop("events")
+        for events_item_data in _events:
+            events_item = TelegramChannelConfigEventsItem(events_item_data)
+
+            events.append(events_item)
+
         telegram_channel_config = cls(
             chat_id=chat_id,
             chat_type=chat_type,
+            events=events,
         )
 
         telegram_channel_config.additional_properties = d

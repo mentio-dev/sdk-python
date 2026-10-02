@@ -3,6 +3,7 @@ from enum import StrEnum
 
 class AlertMode(StrEnum):
     DAILY = "daily"
+    HOURLY = "hourly"
     INSTANT = "instant"
     WEEKLY = "weekly"
 

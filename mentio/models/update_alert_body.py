@@ -26,7 +26,8 @@ class UpdateAlertBody:
         enabled (bool | Unset):
         mode (UpdateAlertBodyMode | Unset):
         filter_ (UpdateAlertBodyFilter | Unset): Replaces the whole filter.
-        schedule (None | Unset | UpdateAlertBodyScheduleType0):
+        schedule (None | Unset | UpdateAlertBodyScheduleType0): Daily and weekly alerts. Ignored on an hourly one,
+            except a weekday, which is refused.
         event (None | str | Unset):
         channel_ids (list[str] | Unset): Replaces the whole list.
     """

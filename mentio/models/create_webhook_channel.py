@@ -26,7 +26,7 @@ class CreateWebhookChannel:
         label (str | Unset): A name for the channel; the host of the URL when omitted.
         headers (CreateWebhookChannelHeaders | Unset): Extra request headers to send, for your own auth.
         events (list[CreateWebhookChannelEventsItem] | Unset): Account events to receive at this endpoint (keyword and
-            wallet state changes), on top of whatever rules send here. Omit for none.
+            wallet state changes, attention events), on top of whatever rules send here. Omit for none.
     """
 
     kind: CreateWebhookChannelKind

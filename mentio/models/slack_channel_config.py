@@ -6,6 +6,8 @@ from typing import Any, Self, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.slack_channel_config_events_item import SlackChannelConfigEventsItem
+
 T = TypeVar("T", bound="SlackChannelConfig")
 
 
@@ -15,10 +17,13 @@ class SlackChannelConfig:
     Attributes:
         channel_id (str): Slack channel id.
         channel_name (str): Slack channel name, without the #.
+        events (list[SlackChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
+            involved: one short message when an item opens (GET /v1/attention). Empty when it receives none.
     """
 
     channel_id: str
     channel_name: str
+    events: list[SlackChannelConfigEventsItem]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -26,12 +31,18 @@ class SlackChannelConfig:
 
         channel_name = self.channel_name
 
+        events = []
+        for events_item_data in self.events:
+            events_item = events_item_data.value
+            events.append(events_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "channelId": channel_id,
                 "channelName": channel_name,
+                "events": events,
             }
         )
 
@@ -44,9 +55,17 @@ class SlackChannelConfig:
 
         channel_name = d.pop("channelName")
 
+        events = []
+        _events = d.pop("events")
+        for events_item_data in _events:
+            events_item = SlackChannelConfigEventsItem(events_item_data)
+
+            events.append(events_item)
+
         slack_channel_config = cls(
             channel_id=channel_id,
             channel_name=channel_name,
+            events=events,
         )
 
         slack_channel_config.additional_properties = d

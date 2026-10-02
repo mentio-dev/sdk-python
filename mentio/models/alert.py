@@ -25,10 +25,12 @@ class Alert:
         id (str): Alert id (feed_...).
         name (str):
         enabled (bool):
-        mode (AlertMode): instant: each matching mention as it happens. daily: one digest at the scheduled local time.
-            weekly: one digest a week, on schedule.weekday.
+        mode (AlertMode): instant: each matching mention as it happens. hourly: one digest each UTC hour (five minutes
+            past, so the last mentions of the hour are scored) covering the previous full hour, nothing when that hour has
+            no mention at or over the rule's relevance floor; Slack, Telegram and webhook channels only. daily: one digest
+            at the scheduled local time. weekly: one digest a week, on schedule.weekday.
         filter_ (AlertFilter):
-        schedule (AlertScheduleType0 | None): Daily and weekly alerts only.
+        schedule (AlertScheduleType0 | None): Daily and weekly alerts only; null for instant and hourly ones.
         event (str): Event name carried in webhook payloads; the mode default unless you set one.
         channels (list[AlertChannelsItem]): Where it sends.
         stats (AlertStats): Computed over this workspace's deliveries.

@@ -23,8 +23,8 @@ class WebhookChannelConfig:
         url (str): Where the signed POSTs go.
         headers (WebhookChannelConfigHeaders): Extra request headers you configured.
         events (list[WebhookChannelConfigEventsItem]): The account events this endpoint receives on its own, no rule
-            involved: keyword and wallet state changes. Empty when it receives none; mention and digest deliveries come
-            through rules as before.
+            involved: keyword and wallet state changes and the attention events. Empty when it receives none; mention and
+            digest deliveries come through rules as before.
         secret (str | Unset): Only on creation and rotation. Signs every request: X-Mentions-Signature-V2 is v2= plus
             the hex HMAC-SHA256 of "<X-Mentions-Timestamp>.<raw body>" (reject a timestamp older than a few minutes);
             X-Mentions-Signature, the hex HMAC-SHA256 of the raw body alone, stays for older verifiers.

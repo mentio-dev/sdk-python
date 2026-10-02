@@ -15,6 +15,7 @@ class ErrorResponseErrorCode(StrEnum):
     FILTER_TOO_COMPLEX = "filter_too_complex"
     FORBIDDEN = "forbidden"
     GROUP_CHANGED = "group_changed"
+    HOURLY_EMAIL_UNSUPPORTED = "hourly_email_unsupported"
     INSUFFICIENT_BALANCE = "insufficient_balance"
     INTERNAL_ERROR = "internal_error"
     INVALID_ASSIGNEE = "invalid_assignee"

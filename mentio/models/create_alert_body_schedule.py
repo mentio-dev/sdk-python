@@ -13,15 +13,16 @@ T = TypeVar("T", bound="CreateAlertBodySchedule")
 
 @_attrs_define
 class CreateAlertBodySchedule:
-    """Required for daily and weekly alerts (weekly ones also need schedule.weekday).
+    """Required for daily and weekly alerts (weekly ones also need schedule.weekday). Hourly alerts take none: they send
+    every UTC hour, so a time of day and a zone are ignored and a weekday is refused.
 
-    Attributes:
-        hour (int):
-        timezone (str):
-        minute (int | Unset):  Default: 0.
-        skip_empty (bool | Unset):  Default: True.
-        weekday (int | Unset): Weekly rules: the day it sends, 0 Sunday to 6 Saturday. Required for mode weekly; ignored
-            on daily rules.
+        Attributes:
+            hour (int):
+            timezone (str):
+            minute (int | Unset):  Default: 0.
+            skip_empty (bool | Unset):  Default: True.
+            weekday (int | Unset): Weekly rules: the day it sends, 0 Sunday to 6 Saturday. Required for mode weekly; ignored
+                on daily rules.
     """
 
     hour: int

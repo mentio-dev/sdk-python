@@ -75,6 +75,14 @@ from .analytics_summary_reach import AnalyticsSummaryReach
 from .analytics_summary_sentiment import AnalyticsSummarySentiment
 from .analytics_summary_triage import AnalyticsSummaryTriage
 from .analytics_summary_window import AnalyticsSummaryWindow
+from .attention_item import AttentionItem
+from .attention_item_kind import AttentionItemKind
+from .attention_item_status import AttentionItemStatus
+from .attention_item_subject import AttentionItemSubject
+from .attention_item_subject_type import AttentionItemSubjectType
+from .channel_failing_event_data import ChannelFailingEventData
+from .channel_failing_event_data_channel import ChannelFailingEventDataChannel
+from .channel_failing_event_data_channel_kind import ChannelFailingEventDataChannelKind
 from .company import Company
 from .company_accounts import CompanyAccounts
 from .create_alert_body import CreateAlertBody
@@ -90,6 +98,7 @@ from .create_api_key_body_scope import CreateApiKeyBodyScope
 from .create_api_key_response_201 import CreateApiKeyResponse201
 from .create_api_key_response_201_scope import CreateApiKeyResponse201Scope
 from .create_email_channel import CreateEmailChannel
+from .create_email_channel_events_item import CreateEmailChannelEventsItem
 from .create_email_channel_kind import CreateEmailChannelKind
 from .create_group_body import CreateGroupBody
 from .create_invitation_body import CreateInvitationBody
@@ -124,6 +133,7 @@ from .create_segment_body_filter_platforms_item import (
 )
 from .create_segment_body_filter_stages_item import CreateSegmentBodyFilterStagesItem
 from .create_slack_channel import CreateSlackChannel
+from .create_slack_channel_events_item import CreateSlackChannelEventsItem
 from .create_slack_channel_kind import CreateSlackChannelKind
 from .create_top_up_body import CreateTopUpBody
 from .create_top_up_response_200 import CreateTopUpResponse200
@@ -147,6 +157,7 @@ from .create_webhook_channel_headers import CreateWebhookChannelHeaders
 from .create_webhook_channel_kind import CreateWebhookChannelKind
 from .email_channel import EmailChannel
 from .email_channel_config import EmailChannelConfig
+from .email_channel_config_events_item import EmailChannelConfigEventsItem
 from .email_channel_config_recipients_item import EmailChannelConfigRecipientsItem
 from .email_channel_kind import EmailChannelKind
 from .email_channel_stats import EmailChannelStats
@@ -237,6 +248,9 @@ from .keyword_health_window import KeywordHealthWindow
 from .keyword_kind import KeywordKind
 from .keyword_matching import KeywordMatching
 from .keyword_matching_required_mode import KeywordMatchingRequiredMode
+from .keyword_noisy_event_data import KeywordNoisyEventData
+from .keyword_noisy_event_data_keyword import KeywordNoisyEventDataKeyword
+from .keyword_noisy_event_data_keyword_kind import KeywordNoisyEventDataKeywordKind
 from .keyword_platforms_type_0_item import KeywordPlatformsType0Item
 from .keyword_polling_item import KeywordPollingItem
 from .keyword_polling_item_platform import KeywordPollingItemPlatform
@@ -296,6 +310,8 @@ from .list_api_keys_response_200_data_item import ListApiKeysResponse200DataItem
 from .list_api_keys_response_200_data_item_scope import (
     ListApiKeysResponse200DataItemScope,
 )
+from .list_attention_response_200 import ListAttentionResponse200
+from .list_attention_status import ListAttentionStatus
 from .list_channel_deliveries_response_200 import ListChannelDeliveriesResponse200
 from .list_channel_deliveries_response_200_data_item import (
     ListChannelDeliveriesResponse200DataItem,
@@ -499,11 +515,21 @@ from .mention_post_reply_to_type_0 import MentionPostReplyToType0
 from .mention_review_type_0 import MentionReviewType0
 from .mention_review_type_0_app import MentionReviewType0App
 from .mention_review_type_0_app_platform import MentionReviewType0AppPlatform
+from .mention_spike_event_data import MentionSpikeEventData
+from .mention_spike_event_data_baseline import MentionSpikeEventDataBaseline
+from .mention_spike_event_data_keyword import MentionSpikeEventDataKeyword
+from .mention_spike_event_data_keyword_kind import MentionSpikeEventDataKeywordKind
+from .mention_spike_event_data_window import MentionSpikeEventDataWindow
 from .mention_status import MentionStatus
 from .mention_triage import MentionTriage
 from .mention_triage_assignee_type_0 import MentionTriageAssigneeType0
 from .merge_people_body import MergePeopleBody
 from .mute_alert_authors_body import MuteAlertAuthorsBody
+from .negative_spike_event_data import NegativeSpikeEventData
+from .negative_spike_event_data_baseline import NegativeSpikeEventDataBaseline
+from .negative_spike_event_data_keyword import NegativeSpikeEventDataKeyword
+from .negative_spike_event_data_keyword_kind import NegativeSpikeEventDataKeywordKind
+from .negative_spike_event_data_window import NegativeSpikeEventDataWindow
 from .person import Person
 from .person_accounts_item import PersonAccountsItem
 from .person_accounts_item_platform import PersonAccountsItemPlatform
@@ -570,12 +596,14 @@ from .share_of_voice_data_item_previous_type_0 import ShareOfVoiceDataItemPrevio
 from .share_of_voice_window import ShareOfVoiceWindow
 from .slack_channel import SlackChannel
 from .slack_channel_config import SlackChannelConfig
+from .slack_channel_config_events_item import SlackChannelConfigEventsItem
 from .slack_channel_kind import SlackChannelKind
 from .slack_channel_stats import SlackChannelStats
 from .slack_channel_stats_last_7d import SlackChannelStatsLast7D
 from .telegram_channel import TelegramChannel
 from .telegram_channel_config import TelegramChannelConfig
 from .telegram_channel_config_chat_type import TelegramChannelConfigChatType
+from .telegram_channel_config_events_item import TelegramChannelConfigEventsItem
 from .telegram_channel_kind import TelegramChannelKind
 from .telegram_channel_stats import TelegramChannelStats
 from .telegram_channel_stats_last_7d import TelegramChannelStatsLast7D
@@ -734,6 +762,14 @@ __all__ = (
     "AnalyticsSummarySentiment",
     "AnalyticsSummaryTriage",
     "AnalyticsSummaryWindow",
+    "AttentionItem",
+    "AttentionItemKind",
+    "AttentionItemStatus",
+    "AttentionItemSubject",
+    "AttentionItemSubjectType",
+    "ChannelFailingEventData",
+    "ChannelFailingEventDataChannel",
+    "ChannelFailingEventDataChannelKind",
     "Company",
     "CompanyAccounts",
     "CreateAlertBody",
@@ -747,6 +783,7 @@ __all__ = (
     "CreateApiKeyResponse201",
     "CreateApiKeyResponse201Scope",
     "CreateEmailChannel",
+    "CreateEmailChannelEventsItem",
     "CreateEmailChannelKind",
     "CreateGroupBody",
     "CreateInvitationBody",
@@ -767,6 +804,7 @@ __all__ = (
     "CreateSegmentBodyFilterPlatformsItem",
     "CreateSegmentBodyFilterStagesItem",
     "CreateSlackChannel",
+    "CreateSlackChannelEventsItem",
     "CreateSlackChannelKind",
     "CreateTopUpBody",
     "CreateTopUpResponse200",
@@ -784,6 +822,7 @@ __all__ = (
     "CreateWebhookChannelKind",
     "EmailChannel",
     "EmailChannelConfig",
+    "EmailChannelConfigEventsItem",
     "EmailChannelConfigRecipientsItem",
     "EmailChannelKind",
     "EmailChannelStats",
@@ -868,6 +907,9 @@ __all__ = (
     "KeywordKind",
     "KeywordMatching",
     "KeywordMatchingRequiredMode",
+    "KeywordNoisyEventData",
+    "KeywordNoisyEventDataKeyword",
+    "KeywordNoisyEventDataKeywordKind",
     "KeywordPlatformsType0Item",
     "KeywordPollingItem",
     "KeywordPollingItemPlatform",
@@ -905,6 +947,8 @@ __all__ = (
     "ListApiKeysResponse200",
     "ListApiKeysResponse200DataItem",
     "ListApiKeysResponse200DataItemScope",
+    "ListAttentionResponse200",
+    "ListAttentionStatus",
     "ListChannelDeliveriesResponse200",
     "ListChannelDeliveriesResponse200DataItem",
     "ListChannelDeliveriesResponse200DataItemAlert",
@@ -1004,11 +1048,21 @@ __all__ = (
     "MentionReviewType0",
     "MentionReviewType0App",
     "MentionReviewType0AppPlatform",
+    "MentionSpikeEventData",
+    "MentionSpikeEventDataBaseline",
+    "MentionSpikeEventDataKeyword",
+    "MentionSpikeEventDataKeywordKind",
+    "MentionSpikeEventDataWindow",
     "MentionStatus",
     "MentionTriage",
     "MentionTriageAssigneeType0",
     "MergePeopleBody",
     "MuteAlertAuthorsBody",
+    "NegativeSpikeEventData",
+    "NegativeSpikeEventDataBaseline",
+    "NegativeSpikeEventDataKeyword",
+    "NegativeSpikeEventDataKeywordKind",
+    "NegativeSpikeEventDataWindow",
     "Person",
     "PersonAccountsItem",
     "PersonAccountsItemPlatform",
@@ -1069,12 +1123,14 @@ __all__ = (
     "ShareOfVoiceWindow",
     "SlackChannel",
     "SlackChannelConfig",
+    "SlackChannelConfigEventsItem",
     "SlackChannelKind",
     "SlackChannelStats",
     "SlackChannelStatsLast7D",
     "TelegramChannel",
     "TelegramChannelConfig",
     "TelegramChannelConfigChatType",
+    "TelegramChannelConfigEventsItem",
     "TelegramChannelKind",
     "TelegramChannelStats",
     "TelegramChannelStatsLast7D",

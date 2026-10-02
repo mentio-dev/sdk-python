@@ -13,7 +13,8 @@ T = TypeVar("T", bound="UpdateAlertBodyScheduleType0")
 
 @_attrs_define
 class UpdateAlertBodyScheduleType0:
-    """
+    """Daily and weekly alerts. Ignored on an hourly one, except a weekday, which is refused.
+
     Attributes:
         hour (int):
         timezone (str):

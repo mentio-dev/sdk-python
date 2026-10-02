@@ -110,6 +110,8 @@ import mentio.api.analytics.get_share_of_voice  # noqa: F401
 import mentio.api.api_keys.create_api_key  # noqa: F401
 import mentio.api.api_keys.list_api_keys  # noqa: F401
 import mentio.api.api_keys.revoke_api_key  # noqa: F401
+import mentio.api.attention.dismiss_attention  # noqa: F401
+import mentio.api.attention.list_attention  # noqa: F401
 import mentio.api.auth.whoami  # noqa: F401
 import mentio.api.billing.create_top_up  # noqa: F401
 import mentio.api.billing.get_invoice_url  # noqa: F401
@@ -624,14 +626,14 @@ class _Alerts:
     def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
-        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour, nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
           enabled:
           mode:
           filter:
-          schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday).
+          schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday). Hourly alerts take none: they send every UTC hour, so a time of day and a zone are ignored and a weekday is refused.
           event: Custom event name for webhook payloads; null for the mode default.
           channelIds: Channel ids from GET /v1/channels."""
         return _result(_ops.alerts.create_alert.sync_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields)))
@@ -682,7 +684,7 @@ class _Alerts:
           enabled:
           mode:
           filter: Replaces the whole filter.
-          schedule:
+          schedule: Daily and weekly alerts. Ignored on an hourly one, except a weekday, which is refused.
           event:
           channelIds: Replaces the whole list."""
         return _result(_ops.alerts.update_alert.sync_detailed(id, client=self._client, body=_body(_m.UpdateAlertBody, body, fields)))
@@ -700,11 +702,11 @@ class _Channels:
           kind:
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
+          events: Attention events to receive here, on top of whatever rules send. Omit for none.
           emails: Each address gets a confirmation link; workspace members are confirmed on sight.
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
-          headers: Extra request headers to send, for your own auth.
-          events: Account events to receive at this endpoint (keyword and wallet state changes), on top of whatever rules send here. Omit for none."""
+          headers: Extra request headers to send, for your own auth."""
         return _result(_ops.alerts.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -741,7 +743,7 @@ class _Channels:
           label:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
-          events: Webhooks only; replaces the whole set of account events the endpoint receives. An empty list unsubscribes it from all of them."""
+          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing). An empty list unsubscribes it from all of them."""
         return _result(_ops.alerts.update_channel.sync_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _Company:
@@ -966,6 +968,31 @@ class _Views:
           description:
           filter: Replaces the whole filter."""
         return _result(_ops.views.update_view.sync_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
+
+class _Attention:
+    """attention: dismiss, list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def dismiss(self, id: str) -> _m.AttentionItem:
+        """Dismiss an attention item
+
+        Put an item away. It leaves the open list and does not come back while its condition lasts; once the condition clears, a new episode may open a new item. Idempotent."""
+        return _result(_ops.attention.dismiss_attention.sync_detailed(id, client=self._client))
+
+    def list(self, **params: Any) -> _m.ListAttentionResponse200:
+        """List attention items
+
+        What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike), whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour; an item opens when its condition starts and resolves on its own when the condition is gone. Open items by default; `status=all` reads the history. Each opening is also an account event of the same name, which webhook, Slack, email and Telegram channels can subscribe to.
+
+        Keyword arguments (query):
+          status: open (default), resolved, dismissed, or all.
+          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing.
+          limit: Items per page, newest first; 50 by default, at most 100.
+          cursor: nextCursor from the previous page."""
+        _coerce(params, {"status": (_enum, _m.ListAttentionStatus)})
+        return _result(_ops.attention.list_attention.sync_detailed(client=self._client, **params))
 
 class _Groups:
     """groups: create, delete, get, list, update."""
@@ -1595,14 +1622,14 @@ class _AsyncAlerts:
     async def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
-        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour, nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
           enabled:
           mode:
           filter:
-          schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday).
+          schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday). Hourly alerts take none: they send every UTC hour, so a time of day and a zone are ignored and a weekday is refused.
           event: Custom event name for webhook payloads; null for the mode default.
           channelIds: Channel ids from GET /v1/channels."""
         return _result(await _ops.alerts.create_alert.asyncio_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields)))
@@ -1653,7 +1680,7 @@ class _AsyncAlerts:
           enabled:
           mode:
           filter: Replaces the whole filter.
-          schedule:
+          schedule: Daily and weekly alerts. Ignored on an hourly one, except a weekday, which is refused.
           event:
           channelIds: Replaces the whole list."""
         return _result(await _ops.alerts.update_alert.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateAlertBody, body, fields)))
@@ -1671,11 +1698,11 @@ class _AsyncChannels:
           kind:
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
+          events: Attention events to receive here, on top of whatever rules send. Omit for none.
           emails: Each address gets a confirmation link; workspace members are confirmed on sight.
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
-          headers: Extra request headers to send, for your own auth.
-          events: Account events to receive at this endpoint (keyword and wallet state changes), on top of whatever rules send here. Omit for none."""
+          headers: Extra request headers to send, for your own auth."""
         return _result(await _ops.alerts.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1712,7 +1739,7 @@ class _AsyncChannels:
           label:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
-          events: Webhooks only; replaces the whole set of account events the endpoint receives. An empty list unsubscribes it from all of them."""
+          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing). An empty list unsubscribes it from all of them."""
         return _result(await _ops.alerts.update_channel.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _AsyncCompany:
@@ -1938,6 +1965,31 @@ class _AsyncViews:
           filter: Replaces the whole filter."""
         return _result(await _ops.views.update_view.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
+class _AsyncAttention:
+    """attention: dismiss, list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def dismiss(self, id: str) -> _m.AttentionItem:
+        """Dismiss an attention item
+
+        Put an item away. It leaves the open list and does not come back while its condition lasts; once the condition clears, a new episode may open a new item. Idempotent."""
+        return _result(await _ops.attention.dismiss_attention.asyncio_detailed(id, client=self._client))
+
+    async def list(self, **params: Any) -> _m.ListAttentionResponse200:
+        """List attention items
+
+        What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike), whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour; an item opens when its condition starts and resolves on its own when the condition is gone. Open items by default; `status=all` reads the history. Each opening is also an account event of the same name, which webhook, Slack, email and Telegram channels can subscribe to.
+
+        Keyword arguments (query):
+          status: open (default), resolved, dismissed, or all.
+          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing.
+          limit: Items per page, newest first; 50 by default, at most 100.
+          cursor: nextCursor from the previous page."""
+        _coerce(params, {"status": (_enum, _m.ListAttentionStatus)})
+        return _result(await _ops.attention.list_attention.asyncio_detailed(client=self._client, **params))
+
 class _AsyncGroups:
     """groups: create, delete, get, list, update."""
 
@@ -2150,6 +2202,7 @@ class Mentio:
         self.system = _System(self.client)
         self.filters = _Filters(self.client)
         self.views = _Views(self.client)
+        self.attention = _Attention(self.client)
         self.groups = _Groups(self.client)
         self.auth = _Auth(self.client)
         self.members = _Members(self.client)
@@ -2206,6 +2259,7 @@ class AsyncMentio:
         self.system = _AsyncSystem(self.client)
         self.filters = _AsyncFilters(self.client)
         self.views = _AsyncViews(self.client)
+        self.attention = _AsyncAttention(self.client)
         self.groups = _AsyncGroups(self.client)
         self.auth = _AsyncAuth(self.client)
         self.members = _AsyncMembers(self.client)

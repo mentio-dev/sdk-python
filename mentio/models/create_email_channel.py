@@ -6,7 +6,9 @@ from typing import Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.create_email_channel_events_item import CreateEmailChannelEventsItem
 from ..models.create_email_channel_kind import CreateEmailChannelKind
+from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="CreateEmailChannel")
 
@@ -17,16 +19,26 @@ class CreateEmailChannel:
     Attributes:
         kind (CreateEmailChannelKind):
         emails (list[str]): Each address gets a confirmation link; workspace members are confirmed on sight.
+        events (list[CreateEmailChannelEventsItem] | Unset): Attention events to receive here, on top of whatever rules
+            send. Omit for none.
     """
 
     kind: CreateEmailChannelKind
     emails: list[str]
+    events: list[CreateEmailChannelEventsItem] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         kind = self.kind.value
 
         emails = self.emails
+
+        events: list[str] | Unset = UNSET
+        if not isinstance(self.events, Unset):
+            events = []
+            for events_item_data in self.events:
+                events_item = events_item_data.value
+                events.append(events_item)
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -36,6 +48,8 @@ class CreateEmailChannel:
                 "emails": emails,
             }
         )
+        if events is not UNSET:
+            field_dict["events"] = events
 
         return field_dict
 
@@ -46,9 +60,19 @@ class CreateEmailChannel:
 
         emails = cast(list[str], d.pop("emails"))
 
+        _events = d.pop("events", UNSET)
+        events: list[CreateEmailChannelEventsItem] | Unset = UNSET
+        if _events is not UNSET:
+            events = []
+            for events_item_data in _events:
+                events_item = CreateEmailChannelEventsItem(events_item_data)
+
+                events.append(events_item)
+
         create_email_channel = cls(
             kind=kind,
             emails=emails,
+            events=events,
         )
 
         create_email_channel.additional_properties = d
