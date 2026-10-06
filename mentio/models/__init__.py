@@ -508,6 +508,7 @@ from .mention_classification_type_0_feedback_type_0_sentiment import (
 )
 from .mention_classification_type_0_sentiment import MentionClassificationType0Sentiment
 from .mention_keyword import MentionKeyword
+from .mention_keyword_matched_as import MentionKeywordMatchedAs
 from .mention_post import MentionPost
 from .mention_post_engagement_type_0 import MentionPostEngagementType0
 from .mention_post_platform import MentionPostPlatform
@@ -1041,6 +1042,7 @@ __all__ = (
     "MentionClassificationType0FeedbackType0Sentiment",
     "MentionClassificationType0Sentiment",
     "MentionKeyword",
+    "MentionKeywordMatchedAs",
     "MentionPost",
     "MentionPostEngagementType0",
     "MentionPostPlatform",

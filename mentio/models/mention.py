@@ -33,7 +33,7 @@ class Mention:
         priority (float): Attention score, one decimal, computed at read time: relevance halved, author reach on a
             follower ladder (unknown reach counts 8), the strongest intent (buy intent 20 down to praise 5), minus 2 per day
             of age floored at 20.
-        keyword (MentionKeyword): The keyword this post matched, and the group it is in.
+        keyword (MentionKeyword): The keyword this post matched, the group it is in, and how it matched.
         post (MentionPost):
         author (MentionAuthorType0 | None): Who posted it; null when the platform gave no author at all.
         review (MentionReviewType0 | None): An app store review's facts; null for every other post. Its sentiment comes

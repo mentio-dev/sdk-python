@@ -29,6 +29,10 @@ class KeywordSuggestionPatchMatching:
             u/names, Bluesky DIDs or display names, stored in canonical form like an alert's muted list.
         case_sensitive (bool | Unset): true: the term must appear in the case it was typed (RAG, never rag). Default
             false.
+        exact_phrase (bool | Unset): true: only the exact phrase matches. false (default): a multi-word keyword also
+            matches a post holding its words close together, in any order, plurals and spellings (non-profit, nonprofit)
+            included; such a match is kept and billed only when the classifier scores it relevant. A term sent in double
+            quotes sets this to true.
     """
 
     required_terms: list[str] | Unset = UNSET
@@ -36,6 +40,7 @@ class KeywordSuggestionPatchMatching:
     excluded_terms: list[str] | Unset = UNSET
     excluded_authors: list[str] | Unset = UNSET
     case_sensitive: bool | Unset = UNSET
+    exact_phrase: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,6 +62,8 @@ class KeywordSuggestionPatchMatching:
 
         case_sensitive = self.case_sensitive
 
+        exact_phrase = self.exact_phrase
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -70,6 +77,8 @@ class KeywordSuggestionPatchMatching:
             field_dict["excludedAuthors"] = excluded_authors
         if case_sensitive is not UNSET:
             field_dict["caseSensitive"] = case_sensitive
+        if exact_phrase is not UNSET:
+            field_dict["exactPhrase"] = exact_phrase
 
         return field_dict
 
@@ -91,12 +100,15 @@ class KeywordSuggestionPatchMatching:
 
         case_sensitive = d.pop("caseSensitive", UNSET)
 
+        exact_phrase = d.pop("exactPhrase", UNSET)
+
         keyword_suggestion_patch_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
             excluded_terms=excluded_terms,
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,
+            exact_phrase=exact_phrase,
         )
 
         keyword_suggestion_patch_matching.additional_properties = d

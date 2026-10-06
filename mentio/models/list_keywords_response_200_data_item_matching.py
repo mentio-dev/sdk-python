@@ -27,6 +27,10 @@ class ListKeywordsResponse200DataItemMatching:
         excluded_authors (list[str]): Posts by these authors are dropped: profile or post links, @handles, u/names,
             Bluesky DIDs or display names, stored in canonical form like an alert's muted list.
         case_sensitive (bool): true: the term must appear in the case it was typed (RAG, never rag). Default false.
+        exact_phrase (bool): true: only the exact phrase matches. false (default): a multi-word keyword also matches a
+            post holding its words close together, in any order, plurals and spellings (non-profit, nonprofit) included;
+            such a match is kept and billed only when the classifier scores it relevant. A term sent in double quotes sets
+            this to true.
     """
 
     required_terms: list[str]
@@ -34,6 +38,7 @@ class ListKeywordsResponse200DataItemMatching:
     excluded_terms: list[str]
     excluded_authors: list[str]
     case_sensitive: bool
+    exact_phrase: bool
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -47,6 +52,8 @@ class ListKeywordsResponse200DataItemMatching:
 
         case_sensitive = self.case_sensitive
 
+        exact_phrase = self.exact_phrase
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -56,6 +63,7 @@ class ListKeywordsResponse200DataItemMatching:
                 "excludedTerms": excluded_terms,
                 "excludedAuthors": excluded_authors,
                 "caseSensitive": case_sensitive,
+                "exactPhrase": exact_phrase,
             }
         )
 
@@ -76,12 +84,15 @@ class ListKeywordsResponse200DataItemMatching:
 
         case_sensitive = d.pop("caseSensitive")
 
+        exact_phrase = d.pop("exactPhrase")
+
         list_keywords_response_200_data_item_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
             excluded_terms=excluded_terms,
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,
+            exact_phrase=exact_phrase,
         )
 
         list_keywords_response_200_data_item_matching.additional_properties = d

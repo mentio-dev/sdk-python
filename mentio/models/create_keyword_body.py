@@ -27,7 +27,8 @@ T = TypeVar("T", bound="CreateKeywordBody")
 class CreateKeywordBody:
     """
     Attributes:
-        term (str): The word or phrase to track, matched case-insensitively as a phrase.
+        term (str): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its
+            words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
         kind (CreateKeywordBodyKind | Unset): brand: your own names. competitor: theirs. topic: the space. Drives share
             of voice and segments. Default: CreateKeywordBodyKind.BRAND.
         platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to search the term on; omit or
