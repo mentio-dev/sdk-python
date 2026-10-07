@@ -7,6 +7,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.mention_keyword_matched_as import MentionKeywordMatchedAs
+from ..models.mention_keyword_matched_in import MentionKeywordMatchedIn
 
 if TYPE_CHECKING:
     from ..models.group_ref import GroupRef
@@ -26,12 +27,16 @@ class MentionKeyword:
         matched_as (MentionKeywordMatchedAs): phrase: the post holds the term as written. close_words: it holds the
             term's words close together, in another order or form (kept and billed only because the classifier scored it
             relevant).
+        matched_in (MentionKeywordMatchedIn): text: the term is in the post itself (its text, caption, hashtags or
+            review). speech: it is only in what is said in the video (TikTok), whose transcript follows the 🎙 mark in
+            post.text.
     """
 
     id: str
     term: str
     group: GroupRef
     matched_as: MentionKeywordMatchedAs
+    matched_in: MentionKeywordMatchedIn
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,6 +48,8 @@ class MentionKeyword:
 
         matched_as = self.matched_as.value
 
+        matched_in = self.matched_in.value
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -51,6 +58,7 @@ class MentionKeyword:
                 "term": term,
                 "group": group,
                 "matchedAs": matched_as,
+                "matchedIn": matched_in,
             }
         )
 
@@ -69,11 +77,14 @@ class MentionKeyword:
 
         matched_as = MentionKeywordMatchedAs(d.pop("matchedAs"))
 
+        matched_in = MentionKeywordMatchedIn(d.pop("matchedIn"))
+
         mention_keyword = cls(
             id=id,
             term=term,
             group=group,
             matched_as=matched_as,
+            matched_in=matched_in,
         )
 
         mention_keyword.additional_properties = d

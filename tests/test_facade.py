@@ -26,7 +26,7 @@ MENTION = {
     "relevant": True,
     "delivered": False,
     "priority": 61.5,
-    "keyword": {"id": "kw_1", "term": "acme", "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}, "matchedAs": "phrase"},
+    "keyword": {"id": "kw_1", "term": "acme", "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}, "matchedAs": "phrase", "matchedIn": "text"},
     "post": {"platform": "reddit", "url": "https://r/1", "title": None, "text": "hi", "imageUrl": None, "links": [], "engagement": None, "publishedAt": "2026-09-03T08:12:44.000Z", "replyTo": None},
     "author": None,
     "review": None,
