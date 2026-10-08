@@ -12,6 +12,7 @@ from ..models.mention_post_platform import MentionPostPlatform
 if TYPE_CHECKING:
     from ..models.mention_post_engagement_type_0 import MentionPostEngagementType0
     from ..models.mention_post_reply_to_type_0 import MentionPostReplyToType0
+    from ..models.mention_post_repository_type_0 import MentionPostRepositoryType0
 
 
 T = TypeVar("T", bound="MentionPost")
@@ -25,7 +26,8 @@ class MentionPost:
             news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews), trustpilot
             (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a keyword reads).
         kind (MentionPostKind): post: a top-level post. comment: an item that answers a post or another comment (a
-            Reddit or Hacker News comment, an X or Bluesky reply, a Stack Overflow answer, a YouTube comment).
+            Reddit or Hacker News comment, an X or Bluesky reply, a Stack Overflow answer, a YouTube comment). repository:
+            an event about a GitHub repository naming the keyword (see post.repository).
         url (str): Permalink of the post.
         text (str): Title and body, truncated to 8 KB at ingest.
         title (None | str): The post's own title where the platform has one: a Hacker News story, a Reddit thread, a
@@ -38,6 +40,8 @@ class MentionPost:
             platform.
         flair (None | str): A Reddit post's flair, when its subreddit uses them (Question, Show and Tell). Null
             otherwise.
+        repository (MentionPostRepositoryType0 | None): A GitHub repository event's facts, on a mention whose kind is
+            repository; null on every other mention. The sentence is post.title.
         links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for
             posts ingested before September 2026.
         published_at (str): When the post was published.
@@ -55,6 +59,7 @@ class MentionPost:
     image_url: None | str
     subreddit: None | str
     flair: None | str
+    repository: MentionPostRepositoryType0 | None
     links: list[str]
     published_at: str
     engagement: MentionPostEngagementType0 | None
@@ -67,6 +72,9 @@ class MentionPost:
         )
         from ..models.mention_post_reply_to_type_0 import (
             MentionPostReplyToType0,
+        )
+        from ..models.mention_post_repository_type_0 import (
+            MentionPostRepositoryType0,
         )
 
         platform = self.platform.value
@@ -88,6 +96,12 @@ class MentionPost:
 
         flair: None | str
         flair = self.flair
+
+        repository: dict[str, Any] | None
+        if isinstance(self.repository, MentionPostRepositoryType0):
+            repository = self.repository.to_dict()
+        else:
+            repository = self.repository
 
         links = self.links
 
@@ -117,6 +131,7 @@ class MentionPost:
                 "imageUrl": image_url,
                 "subreddit": subreddit,
                 "flair": flair,
+                "repository": repository,
                 "links": links,
                 "publishedAt": published_at,
                 "engagement": engagement,
@@ -133,6 +148,9 @@ class MentionPost:
         )
         from ..models.mention_post_reply_to_type_0 import (
             MentionPostReplyToType0,
+        )
+        from ..models.mention_post_repository_type_0 import (
+            MentionPostRepositoryType0,
         )
 
         d = dict(src_dict)
@@ -171,6 +189,21 @@ class MentionPost:
             return cast(None | str, data)
 
         flair = _parse_flair(d.pop("flair"))
+
+        def _parse_repository(data: object) -> MentionPostRepositoryType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                repository_type_0 = MentionPostRepositoryType0.from_dict(data)
+
+                return repository_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(MentionPostRepositoryType0 | None, data)
+
+        repository = _parse_repository(d.pop("repository"))
 
         links = cast(list[str], d.pop("links"))
 
@@ -215,6 +248,7 @@ class MentionPost:
             image_url=image_url,
             subreddit=subreddit,
             flair=flair,
+            repository=repository,
             links=links,
             published_at=published_at,
             engagement=engagement,

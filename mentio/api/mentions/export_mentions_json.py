@@ -568,8 +568,8 @@ def sync_detailed(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
-        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
-            Omitted: both.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post), only comments (comment) or only
+            GitHub repository events (repository). Omitted: all.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
@@ -814,8 +814,8 @@ def sync(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
-        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
-            Omitted: both.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post), only comments (comment) or only
+            GitHub repository events (repository). Omitted: all.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
@@ -1055,8 +1055,8 @@ async def asyncio_detailed(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
-        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
-            Omitted: both.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post), only comments (comment) or only
+            GitHub repository events (repository). Omitted: all.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
@@ -1299,8 +1299,8 @@ async def asyncio(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
-        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
-            Omitted: both.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post), only comments (comment) or only
+            GitHub repository events (repository). Omitted: all.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of

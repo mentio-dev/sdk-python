@@ -109,6 +109,12 @@ from .create_keyword_body_comments import CreateKeywordBodyComments
 from .create_keyword_body_feeds_item import CreateKeywordBodyFeedsItem
 from .create_keyword_body_kind import CreateKeywordBodyKind
 from .create_keyword_body_matching import CreateKeywordBodyMatching
+from .create_keyword_body_matching_repositories import (
+    CreateKeywordBodyMatchingRepositories,
+)
+from .create_keyword_body_matching_repositories_events_item import (
+    CreateKeywordBodyMatchingRepositoriesEventsItem,
+)
 from .create_keyword_body_matching_required_mode import (
     CreateKeywordBodyMatchingRequiredMode,
 )
@@ -256,6 +262,10 @@ from .keyword_health_status import KeywordHealthStatus
 from .keyword_health_window import KeywordHealthWindow
 from .keyword_kind import KeywordKind
 from .keyword_matching import KeywordMatching
+from .keyword_matching_repositories import KeywordMatchingRepositories
+from .keyword_matching_repositories_events_item import (
+    KeywordMatchingRepositoriesEventsItem,
+)
 from .keyword_matching_required_mode import KeywordMatchingRequiredMode
 from .keyword_matching_subreddits import KeywordMatchingSubreddits
 from .keyword_noisy_event_data import KeywordNoisyEventData
@@ -278,6 +288,12 @@ from .keyword_suggestion_patch_comments import KeywordSuggestionPatchComments
 from .keyword_suggestion_patch_feeds_item import KeywordSuggestionPatchFeedsItem
 from .keyword_suggestion_patch_kind import KeywordSuggestionPatchKind
 from .keyword_suggestion_patch_matching import KeywordSuggestionPatchMatching
+from .keyword_suggestion_patch_matching_repositories import (
+    KeywordSuggestionPatchMatchingRepositories,
+)
+from .keyword_suggestion_patch_matching_repositories_events_item import (
+    KeywordSuggestionPatchMatchingRepositoriesEventsItem,
+)
 from .keyword_suggestion_patch_matching_required_mode import (
     KeywordSuggestionPatchMatchingRequiredMode,
 )
@@ -363,6 +379,12 @@ from .list_keywords_response_200_data_item_kind import (
 )
 from .list_keywords_response_200_data_item_matching import (
     ListKeywordsResponse200DataItemMatching,
+)
+from .list_keywords_response_200_data_item_matching_repositories import (
+    ListKeywordsResponse200DataItemMatchingRepositories,
+)
+from .list_keywords_response_200_data_item_matching_repositories_events_item import (
+    ListKeywordsResponse200DataItemMatchingRepositoriesEventsItem,
 )
 from .list_keywords_response_200_data_item_matching_required_mode import (
     ListKeywordsResponse200DataItemMatchingRequiredMode,
@@ -549,6 +571,8 @@ from .mention_post_engagement_type_0 import MentionPostEngagementType0
 from .mention_post_kind import MentionPostKind
 from .mention_post_platform import MentionPostPlatform
 from .mention_post_reply_to_type_0 import MentionPostReplyToType0
+from .mention_post_repository_type_0 import MentionPostRepositoryType0
+from .mention_post_repository_type_0_event import MentionPostRepositoryType0Event
 from .mention_review_type_0 import MentionReviewType0
 from .mention_review_type_0_app import MentionReviewType0App
 from .mention_review_type_0_app_platform import MentionReviewType0AppPlatform
@@ -673,6 +697,12 @@ from .update_keyword_body_comments import UpdateKeywordBodyComments
 from .update_keyword_body_feeds_item import UpdateKeywordBodyFeedsItem
 from .update_keyword_body_kind import UpdateKeywordBodyKind
 from .update_keyword_body_matching import UpdateKeywordBodyMatching
+from .update_keyword_body_matching_repositories import (
+    UpdateKeywordBodyMatchingRepositories,
+)
+from .update_keyword_body_matching_repositories_events_item import (
+    UpdateKeywordBodyMatchingRepositoriesEventsItem,
+)
 from .update_keyword_body_matching_required_mode import (
     UpdateKeywordBodyMatchingRequiredMode,
 )
@@ -838,6 +868,8 @@ __all__ = (
     "CreateKeywordBodyFeedsItem",
     "CreateKeywordBodyKind",
     "CreateKeywordBodyMatching",
+    "CreateKeywordBodyMatchingRepositories",
+    "CreateKeywordBodyMatchingRepositoriesEventsItem",
     "CreateKeywordBodyMatchingRequiredMode",
     "CreateKeywordBodyMatchingSubreddits",
     "CreateKeywordBodyPlatformsType0Item",
@@ -959,6 +991,8 @@ __all__ = (
     "KeywordHealthWindow",
     "KeywordKind",
     "KeywordMatching",
+    "KeywordMatchingRepositories",
+    "KeywordMatchingRepositoriesEventsItem",
     "KeywordMatchingRequiredMode",
     "KeywordMatchingSubreddits",
     "KeywordNoisyEventData",
@@ -981,6 +1015,8 @@ __all__ = (
     "KeywordSuggestionPatchFeedsItem",
     "KeywordSuggestionPatchKind",
     "KeywordSuggestionPatchMatching",
+    "KeywordSuggestionPatchMatchingRepositories",
+    "KeywordSuggestionPatchMatchingRepositoriesEventsItem",
     "KeywordSuggestionPatchMatchingRequiredMode",
     "KeywordSuggestionPatchMatchingSubreddits",
     "KeywordSuggestionPatchPlatformsType0Item",
@@ -1025,6 +1061,8 @@ __all__ = (
     "ListKeywordsResponse200DataItemComments",
     "ListKeywordsResponse200DataItemKind",
     "ListKeywordsResponse200DataItemMatching",
+    "ListKeywordsResponse200DataItemMatchingRepositories",
+    "ListKeywordsResponse200DataItemMatchingRepositoriesEventsItem",
     "ListKeywordsResponse200DataItemMatchingRequiredMode",
     "ListKeywordsResponse200DataItemMatchingSubreddits",
     "ListKeywordsResponse200DataItemPlatformsType0Item",
@@ -1116,6 +1154,8 @@ __all__ = (
     "MentionPostKind",
     "MentionPostPlatform",
     "MentionPostReplyToType0",
+    "MentionPostRepositoryType0",
+    "MentionPostRepositoryType0Event",
     "MentionReviewType0",
     "MentionReviewType0App",
     "MentionReviewType0AppPlatform",
@@ -1232,6 +1272,8 @@ __all__ = (
     "UpdateKeywordBodyFeedsItem",
     "UpdateKeywordBodyKind",
     "UpdateKeywordBodyMatching",
+    "UpdateKeywordBodyMatchingRepositories",
+    "UpdateKeywordBodyMatchingRepositoriesEventsItem",
     "UpdateKeywordBodyMatchingRequiredMode",
     "UpdateKeywordBodyMatchingSubreddits",
     "UpdateKeywordBodyPlatformsType0Item",

@@ -287,7 +287,7 @@ class _Mentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
-          kind: Only posts (post) or only comments (comment). Omitted: both.
+          kind: Only posts (post), only comments (comment) or only GitHub repository events (repository). Omitted: all.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -348,7 +348,7 @@ class _Mentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
-          kind: Only posts (post) or only comments (comment). Omitted: both.
+          kind: Only posts (post), only comments (comment) or only GitHub repository events (repository). Omitted: all.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -415,7 +415,7 @@ class _Mentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
-          kind: Only posts (post) or only comments (comment). Omitted: both.
+          kind: Only posts (post), only comments (comment) or only GitHub repository events (repository). Omitted: all.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -1309,7 +1309,7 @@ class _AsyncMentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
-          kind: Only posts (post) or only comments (comment). Omitted: both.
+          kind: Only posts (post), only comments (comment) or only GitHub repository events (repository). Omitted: all.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -1370,7 +1370,7 @@ class _AsyncMentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
-          kind: Only posts (post) or only comments (comment). Omitted: both.
+          kind: Only posts (post), only comments (comment) or only GitHub repository events (repository). Omitted: all.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -1437,7 +1437,7 @@ class _AsyncMentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
-          kind: Only posts (post) or only comments (comment). Omitted: both.
+          kind: Only posts (post), only comments (comment) or only GitHub repository events (repository). Omitted: all.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.

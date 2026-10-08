@@ -11,6 +11,9 @@ from ..models.list_keywords_response_200_data_item_matching_required_mode import
 )
 
 if TYPE_CHECKING:
+    from ..models.list_keywords_response_200_data_item_matching_repositories import (
+        ListKeywordsResponse200DataItemMatchingRepositories,
+    )
     from ..models.list_keywords_response_200_data_item_matching_subreddits import (
         ListKeywordsResponse200DataItemMatchingSubreddits,
     )
@@ -40,6 +43,8 @@ class ListKeywordsResponse200DataItemMatching:
         subreddits (ListKeywordsResponse200DataItemMatchingSubreddits): Reddit only, for this keyword alone; the
             workspace filters' own subreddit lists (GET /v1/filters) still apply to every keyword, and a post must pass
             both.
+        repositories (ListKeywordsResponse200DataItemMatchingRepositories): GitHub only: which repository events naming
+            this keyword become mentions. An event outside the rule is dropped before it is stored, so it is never billed.
     """
 
     required_terms: list[str]
@@ -49,6 +54,7 @@ class ListKeywordsResponse200DataItemMatching:
     case_sensitive: bool
     exact_phrase: bool
     subreddits: ListKeywordsResponse200DataItemMatchingSubreddits
+    repositories: ListKeywordsResponse200DataItemMatchingRepositories
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -66,6 +72,8 @@ class ListKeywordsResponse200DataItemMatching:
 
         subreddits = self.subreddits.to_dict()
 
+        repositories = self.repositories.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -77,6 +85,7 @@ class ListKeywordsResponse200DataItemMatching:
                 "caseSensitive": case_sensitive,
                 "exactPhrase": exact_phrase,
                 "subreddits": subreddits,
+                "repositories": repositories,
             }
         )
 
@@ -84,6 +93,9 @@ class ListKeywordsResponse200DataItemMatching:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.list_keywords_response_200_data_item_matching_repositories import (
+            ListKeywordsResponse200DataItemMatchingRepositories,
+        )
         from ..models.list_keywords_response_200_data_item_matching_subreddits import (
             ListKeywordsResponse200DataItemMatchingSubreddits,
         )
@@ -107,6 +119,10 @@ class ListKeywordsResponse200DataItemMatching:
             d.pop("subreddits")
         )
 
+        repositories = ListKeywordsResponse200DataItemMatchingRepositories.from_dict(
+            d.pop("repositories")
+        )
+
         list_keywords_response_200_data_item_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
@@ -115,6 +131,7 @@ class ListKeywordsResponse200DataItemMatching:
             case_sensitive=case_sensitive,
             exact_phrase=exact_phrase,
             subreddits=subreddits,
+            repositories=repositories,
         )
 
         list_keywords_response_200_data_item_matching.additional_properties = d

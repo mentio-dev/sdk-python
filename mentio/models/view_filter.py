@@ -58,7 +58,8 @@ class ViewFilter:
         min_followers (int | Unset): Only authors with at least this many followers; unknown reach never passes.
         max_followers (int | Unset): Only authors with at most this many followers; unknown reach never passes.
         is_reply (bool | Unset): true: only replies and comments; false: only top-level posts.
-        kind (ViewFilterKind | Unset): Only posts (post) or only comments (comment).
+        kind (ViewFilterKind | Unset): Only posts (post), only comments (comment) or only GitHub repository events
+            (repository).
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings; every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings; posts that are not reviews still pass.

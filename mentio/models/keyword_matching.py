@@ -9,6 +9,7 @@ from attrs import field as _attrs_field
 from ..models.keyword_matching_required_mode import KeywordMatchingRequiredMode
 
 if TYPE_CHECKING:
+    from ..models.keyword_matching_repositories import KeywordMatchingRepositories
     from ..models.keyword_matching_subreddits import KeywordMatchingSubreddits
 
 
@@ -34,6 +35,8 @@ class KeywordMatching:
             this to true.
         subreddits (KeywordMatchingSubreddits): Reddit only, for this keyword alone; the workspace filters' own
             subreddit lists (GET /v1/filters) still apply to every keyword, and a post must pass both.
+        repositories (KeywordMatchingRepositories): GitHub only: which repository events naming this keyword become
+            mentions. An event outside the rule is dropped before it is stored, so it is never billed.
     """
 
     required_terms: list[str]
@@ -43,6 +46,7 @@ class KeywordMatching:
     case_sensitive: bool
     exact_phrase: bool
     subreddits: KeywordMatchingSubreddits
+    repositories: KeywordMatchingRepositories
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -60,6 +64,8 @@ class KeywordMatching:
 
         subreddits = self.subreddits.to_dict()
 
+        repositories = self.repositories.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -71,6 +77,7 @@ class KeywordMatching:
                 "caseSensitive": case_sensitive,
                 "exactPhrase": exact_phrase,
                 "subreddits": subreddits,
+                "repositories": repositories,
             }
         )
 
@@ -78,6 +85,9 @@ class KeywordMatching:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.keyword_matching_repositories import (
+            KeywordMatchingRepositories,
+        )
         from ..models.keyword_matching_subreddits import (
             KeywordMatchingSubreddits,
         )
@@ -97,6 +107,8 @@ class KeywordMatching:
 
         subreddits = KeywordMatchingSubreddits.from_dict(d.pop("subreddits"))
 
+        repositories = KeywordMatchingRepositories.from_dict(d.pop("repositories"))
+
         keyword_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
@@ -105,6 +117,7 @@ class KeywordMatching:
             case_sensitive=case_sensitive,
             exact_phrase=exact_phrase,
             subreddits=subreddits,
+            repositories=repositories,
         )
 
         keyword_matching.additional_properties = d
