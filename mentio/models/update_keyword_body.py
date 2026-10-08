@@ -30,6 +30,9 @@ class UpdateKeywordBody:
     """Omitted fields are untouched.
 
     Attributes:
+        term (str | Unset): Renames the keyword: the new term is tracked from now on, with no look-back, and the keyword
+            keeps its id, its settings and the mentions the old term found. Wrap it in double quotes for the exact phrase
+            only. A 409 when its group already tracks the new term.
         kind (UpdateKeywordBodyKind | Unset): Reclassify it as brand, competitor or topic.
         muted (bool | Unset): A muted keyword stops polling and matching; its mentions stay.
         platforms (list[UpdateKeywordBodyPlatformsType0Item] | None | Unset): Replaces the platform list; null means
@@ -52,6 +55,7 @@ class UpdateKeywordBody:
             days; one already listed keeps its place.
     """
 
+    term: str | Unset = UNSET
     kind: UpdateKeywordBodyKind | Unset = UNSET
     muted: bool | Unset = UNSET
     platforms: list[UpdateKeywordBodyPlatformsType0Item] | None | Unset = UNSET
@@ -68,6 +72,8 @@ class UpdateKeywordBody:
         from ..models.update_keyword_body_cap_type_0 import (
             UpdateKeywordBodyCapType0,
         )
+
+        term = self.term
 
         kind: str | Unset = UNSET
         if not isinstance(self.kind, Unset):
@@ -128,6 +134,8 @@ class UpdateKeywordBody:
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if term is not UNSET:
+            field_dict["term"] = term
         if kind is not UNSET:
             field_dict["kind"] = kind
         if muted is not UNSET:
@@ -170,6 +178,8 @@ class UpdateKeywordBody:
         )
 
         d = dict(src_dict)
+        term = d.pop("term", UNSET)
+
         _kind = d.pop("kind", UNSET)
         kind: UpdateKeywordBodyKind | Unset
         if isinstance(_kind, Unset):
@@ -268,6 +278,7 @@ class UpdateKeywordBody:
                 feeds.append(feeds_item)
 
         update_keyword_body = cls(
+            term=term,
             kind=kind,
             muted=muted,
             platforms=platforms,

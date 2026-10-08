@@ -39,6 +39,9 @@ class KeywordSuggestionPatch:
     kept.
 
         Attributes:
+            term (str | Unset): Renames the keyword: the new term is tracked from now on, with no look-back, and the keyword
+                keeps its id, its settings and the mentions the old term found. Wrap it in double quotes for the exact phrase
+                only. A 409 when its group already tracks the new term.
             kind (KeywordSuggestionPatchKind | Unset): Reclassify it as brand, competitor or topic.
             muted (bool | Unset): A muted keyword stops polling and matching; its mentions stay.
             platforms (list[KeywordSuggestionPatchPlatformsType0Item] | None | Unset): Replaces the platform list; null
@@ -61,6 +64,7 @@ class KeywordSuggestionPatch:
                 last 30 days; one already listed keeps its place.
     """
 
+    term: str | Unset = UNSET
     kind: KeywordSuggestionPatchKind | Unset = UNSET
     muted: bool | Unset = UNSET
     platforms: list[KeywordSuggestionPatchPlatformsType0Item] | None | Unset = UNSET
@@ -77,6 +81,8 @@ class KeywordSuggestionPatch:
         from ..models.keyword_suggestion_patch_cap_type_0 import (
             KeywordSuggestionPatchCapType0,
         )
+
+        term = self.term
 
         kind: str | Unset = UNSET
         if not isinstance(self.kind, Unset):
@@ -137,6 +143,8 @@ class KeywordSuggestionPatch:
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
+        if term is not UNSET:
+            field_dict["term"] = term
         if kind is not UNSET:
             field_dict["kind"] = kind
         if muted is not UNSET:
@@ -179,6 +187,8 @@ class KeywordSuggestionPatch:
         )
 
         d = dict(src_dict)
+        term = d.pop("term", UNSET)
+
         _kind = d.pop("kind", UNSET)
         kind: KeywordSuggestionPatchKind | Unset
         if isinstance(_kind, Unset):
@@ -279,6 +289,7 @@ class KeywordSuggestionPatch:
                 feeds.append(feeds_item)
 
         keyword_suggestion_patch = cls(
+            term=term,
             kind=kind,
             muted=muted,
             platforms=platforms,

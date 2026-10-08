@@ -129,6 +129,7 @@ import mentio.api.groups.list_groups  # noqa: F401
 import mentio.api.groups.update_group  # noqa: F401
 import mentio.api.keywords.create_keyword  # noqa: F401
 import mentio.api.keywords.delete_keyword  # noqa: F401
+import mentio.api.keywords.duplicate_keyword  # noqa: F401
 import mentio.api.keywords.get_keyword  # noqa: F401
 import mentio.api.keywords.get_keyword_health  # noqa: F401
 import mentio.api.keywords.list_keywords  # noqa: F401
@@ -169,7 +170,7 @@ import mentio.api.views.update_view  # noqa: F401
 
 
 class _Keywords:
-    """keywords: create, delete, get, health, list, update."""
+    """keywords: create, delete, duplicate, get, health, list, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -197,6 +198,17 @@ class _Keywords:
 
         Removes the keyword and its matches. Posts also matched by another keyword stay."""
         return _result(_ops.keywords.delete_keyword.sync_detailed(id, client=self._client))
+
+    def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
+        """Duplicate a keyword
+
+        A new keyword with this one's settings and a new `term` (or the same term in another group): its kind, platforms, context, every matching rule, its monthly mention cap and its comments setting. Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month, and the newest posts of the last 30 days come in at once, as with any new keyword.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          term (required): The term of the copy. The same term as the original only in another group (groupId): a term is tracked once per group. Wrap it in double quotes for the exact phrase only.
+          groupId: The group of the copy (grp_...); omit for the original's group.
+          include: Also copy these: reviewSources (its review apps) and feeds (its RSS or Atom feeds). Off by default, since two keywords on one app or feed collect, and bill, every review or item twice."""
+        return _result(_ops.keywords.duplicate_keyword.sync_detailed(id, client=self._client, body=_body(_m.DuplicateKeywordBody, body, fields)))
 
     def get(self, id: str) -> _m.Keyword:
         """Get a keyword"""
@@ -233,9 +245,10 @@ class _Keywords:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+        Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
 
         Body: a dict, a model, or the fields as keyword arguments:
+          term: Renames the keyword: the new term is tracked from now on, with no look-back, and the keyword keeps its id, its settings and the mentions the old term found. Wrap it in double quotes for the exact phrase only. A 409 when its group already tracks the new term.
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
@@ -1196,7 +1209,7 @@ class _Billing:
         return _result(_ops.billing.get_wallet.sync_detailed(client=self._client))
 
 class _AsyncKeywords:
-    """keywords: create, delete, get, health, list, update."""
+    """keywords: create, delete, duplicate, get, health, list, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -1224,6 +1237,17 @@ class _AsyncKeywords:
 
         Removes the keyword and its matches. Posts also matched by another keyword stay."""
         return _result(await _ops.keywords.delete_keyword.asyncio_detailed(id, client=self._client))
+
+    async def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
+        """Duplicate a keyword
+
+        A new keyword with this one's settings and a new `term` (or the same term in another group): its kind, platforms, context, every matching rule, its monthly mention cap and its comments setting. Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month, and the newest posts of the last 30 days come in at once, as with any new keyword.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          term (required): The term of the copy. The same term as the original only in another group (groupId): a term is tracked once per group. Wrap it in double quotes for the exact phrase only.
+          groupId: The group of the copy (grp_...); omit for the original's group.
+          include: Also copy these: reviewSources (its review apps) and feeds (its RSS or Atom feeds). Off by default, since two keywords on one app or feed collect, and bill, every review or item twice."""
+        return _result(await _ops.keywords.duplicate_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.DuplicateKeywordBody, body, fields)))
 
     async def get(self, id: str) -> _m.Keyword:
         """Get a keyword"""
@@ -1260,9 +1284,10 @@ class _AsyncKeywords:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+        Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
 
         Body: a dict, a model, or the fields as keyword arguments:
+          term: Renames the keyword: the new term is tracked from now on, with no look-back, and the keyword keeps its id, its settings and the mentions the old term found. Wrap it in double quotes for the exact phrase only. A 409 when its group already tracks the new term.
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).

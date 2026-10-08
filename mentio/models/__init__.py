@@ -165,6 +165,8 @@ from .create_webhook_channel import CreateWebhookChannel
 from .create_webhook_channel_events_item import CreateWebhookChannelEventsItem
 from .create_webhook_channel_headers import CreateWebhookChannelHeaders
 from .create_webhook_channel_kind import CreateWebhookChannelKind
+from .duplicate_keyword_body import DuplicateKeywordBody
+from .duplicate_keyword_body_include_item import DuplicateKeywordBodyIncludeItem
 from .email_channel import EmailChannel
 from .email_channel_config import EmailChannelConfig
 from .email_channel_config_events_item import EmailChannelConfigEventsItem
@@ -901,6 +903,8 @@ __all__ = (
     "CreateWebhookChannelEventsItem",
     "CreateWebhookChannelHeaders",
     "CreateWebhookChannelKind",
+    "DuplicateKeywordBody",
+    "DuplicateKeywordBodyIncludeItem",
     "EmailChannel",
     "EmailChannelConfig",
     "EmailChannelConfigEventsItem",

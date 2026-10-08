@@ -6,22 +6,22 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.duplicate_keyword_body import DuplicateKeywordBody
 from ...models.error_response import ErrorResponse
 from ...models.keyword import Keyword
-from ...models.update_keyword_body import UpdateKeywordBody
 from ...types import Response
 
 
 def _get_kwargs(
     id: str,
     *,
-    body: UpdateKeywordBody,
+    body: DuplicateKeywordBody,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
-        "method": "patch",
-        "url": "/v1/keywords/{id}".format(
+        "method": "post",
+        "url": "/v1/keywords/{id}/duplicate".format(
             id=quote(str(id), safe=""),
         ),
     }
@@ -37,10 +37,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ErrorResponse | Keyword | None:
-    if response.status_code == 200:
-        response_200 = Keyword.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = Keyword.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
@@ -83,19 +83,18 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdateKeywordBody,
+    body: DuplicateKeywordBody,
 ) -> Response[ErrorResponse | Keyword]:
-    """Update a keyword
+    """Duplicate a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     A new keyword with this one's settings and a new `term` (or the same term in another group): its
+    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
+    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
+    and the newest posts of the last 30 days come in at once, as with any new keyword.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
-        body (UpdateKeywordBody): Omitted fields are untouched.
+        body (DuplicateKeywordBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -121,19 +120,18 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdateKeywordBody,
+    body: DuplicateKeywordBody,
 ) -> ErrorResponse | Keyword | None:
-    """Update a keyword
+    """Duplicate a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     A new keyword with this one's settings and a new `term` (or the same term in another group): its
+    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
+    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
+    and the newest posts of the last 30 days come in at once, as with any new keyword.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
-        body (UpdateKeywordBody): Omitted fields are untouched.
+        body (DuplicateKeywordBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -154,19 +152,18 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdateKeywordBody,
+    body: DuplicateKeywordBody,
 ) -> Response[ErrorResponse | Keyword]:
-    """Update a keyword
+    """Duplicate a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     A new keyword with this one's settings and a new `term` (or the same term in another group): its
+    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
+    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
+    and the newest posts of the last 30 days come in at once, as with any new keyword.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
-        body (UpdateKeywordBody): Omitted fields are untouched.
+        body (DuplicateKeywordBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -190,19 +187,18 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    body: UpdateKeywordBody,
+    body: DuplicateKeywordBody,
 ) -> ErrorResponse | Keyword | None:
-    """Update a keyword
+    """Duplicate a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     A new keyword with this one's settings and a new `term` (or the same term in another group): its
+    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
+    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
+    and the newest posts of the last 30 days come in at once, as with any new keyword.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
-        body (UpdateKeywordBody): Omitted fields are untouched.
+        body (DuplicateKeywordBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
