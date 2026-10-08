@@ -1135,9 +1135,14 @@ class _Usage:
           by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
           range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
           month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
+          from_: First UTC day of a custom window, YYYY-MM-DD, inclusive; with `to` (default today). At most 366 days. Wins over `range` and `month`.
+          to: Last UTC day of a custom window, YYYY-MM-DD, inclusive; never after today. Needs `from`.
+          keyword_ids: Only these keywords (kw_...), deleted ones included. Repeatable, or comma-separated.
+          group_ids: Only these groups (grp_...): a keyword-day by the group it was metered under, a mention or a comment by its keyword's group as it is now. Repeatable, or comma-separated.
+          platforms: Only these platforms. A keyword-day belongs to no platform, so with this filter the keyword line reads 0 and only mentions and comments count. Repeatable, or comma-separated.
           limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
           offset: Skip this many rows."""
-        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange)})
+        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange), "platforms": (_enum_list, _m.GetUsageBreakdownPlatformsItem)})
         return _result(_ops.usage.get_usage_breakdown.sync_detailed(client=self._client, **params))
 
     def get(self) -> _m.UsageSummary:
@@ -2157,9 +2162,14 @@ class _AsyncUsage:
           by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
           range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
           month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
+          from_: First UTC day of a custom window, YYYY-MM-DD, inclusive; with `to` (default today). At most 366 days. Wins over `range` and `month`.
+          to: Last UTC day of a custom window, YYYY-MM-DD, inclusive; never after today. Needs `from`.
+          keyword_ids: Only these keywords (kw_...), deleted ones included. Repeatable, or comma-separated.
+          group_ids: Only these groups (grp_...): a keyword-day by the group it was metered under, a mention or a comment by its keyword's group as it is now. Repeatable, or comma-separated.
+          platforms: Only these platforms. A keyword-day belongs to no platform, so with this filter the keyword line reads 0 and only mentions and comments count. Repeatable, or comma-separated.
           limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
           offset: Skip this many rows."""
-        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange)})
+        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange), "platforms": (_enum_list, _m.GetUsageBreakdownPlatformsItem)})
         return _result(await _ops.usage.get_usage_breakdown.asyncio_detailed(client=self._client, **params))
 
     async def get(self) -> _m.UsageSummary:

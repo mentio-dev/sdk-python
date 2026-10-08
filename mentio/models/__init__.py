@@ -231,6 +231,7 @@ from .get_reviews_report_range import GetReviewsReportRange
 from .get_share_of_voice_platforms_item import GetShareOfVoicePlatformsItem
 from .get_share_of_voice_range import GetShareOfVoiceRange
 from .get_usage_breakdown_by import GetUsageBreakdownBy
+from .get_usage_breakdown_platforms_item import GetUsageBreakdownPlatformsItem
 from .get_usage_breakdown_range import GetUsageBreakdownRange
 from .group import Group
 from .group_ref import GroupRef
@@ -962,6 +963,7 @@ __all__ = (
     "GetShareOfVoicePlatformsItem",
     "GetShareOfVoiceRange",
     "GetUsageBreakdownBy",
+    "GetUsageBreakdownPlatformsItem",
     "GetUsageBreakdownRange",
     "Group",
     "GroupRef",

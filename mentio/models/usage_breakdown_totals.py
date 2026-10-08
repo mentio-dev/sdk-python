@@ -29,9 +29,9 @@ class UsageBreakdownTotals:
         comment_cents (int): The billed comments at $0.008 each, rounded once on the total.
         total_cents (int): keywordCents plus mentionCents plus commentCents.
         ledger_debit_cents (int): What the ledger has debited so far for the days of the window, each debit by the day
-            it settled. Mentions settle the morning after their day, so a window ending today lags totalCents by today's
-            mentions (and yesterday's before the tick at 00:05 UTC); a closed month differs from totalCents only by
-            cumulative rounding.
+            it settled, for the whole workspace whatever the filters. Mentions settle the morning after their day, so a
+            window ending today lags totalCents by today's mentions (and yesterday's before the tick at 00:05 UTC); a closed
+            month differs from totalCents only by cumulative rounding.
         unattributed_billable (int): Billed mentions whose match row is gone (deleted keyword), so no platform or
             keyword row can claim them. Charged all the same. Comments carry their keyword and platform on the billed row,
             so they are never unattributed (by=group puts a deleted keyword's comments on the no-group row).

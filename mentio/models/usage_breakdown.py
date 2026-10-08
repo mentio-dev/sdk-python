@@ -24,6 +24,8 @@ class UsageBreakdown:
     Attributes:
         window (UsageBreakdownWindow): The window the report covers, in UTC days.
         by (UsageBreakdownBy): The dimension the rows are grouped by.
+        filtered (bool): true when keywordIds, groupIds or platforms narrowed the report: totals and rows count only
+            what passes them, except totals.ledgerDebitCents, which is the whole workspace's.
         currency (UsageBreakdownCurrency): Every amount is in USD cents.
         totals (UsageBreakdownTotals): The whole window as one line, the same for every dimension.
         data (list[UsageBreakdownDataItem]): by=day: chronological. by=platform and by=keyword: most expensive first,
@@ -33,6 +35,7 @@ class UsageBreakdown:
 
     window: UsageBreakdownWindow
     by: UsageBreakdownBy
+    filtered: bool
     currency: UsageBreakdownCurrency
     totals: UsageBreakdownTotals
     data: list[UsageBreakdownDataItem]
@@ -43,6 +46,8 @@ class UsageBreakdown:
         window = self.window.to_dict()
 
         by = self.by.value
+
+        filtered = self.filtered
 
         currency = self.currency.value
 
@@ -61,6 +66,7 @@ class UsageBreakdown:
             {
                 "window": window,
                 "by": by,
+                "filtered": filtered,
                 "currency": currency,
                 "totals": totals,
                 "data": data,
@@ -87,6 +93,8 @@ class UsageBreakdown:
 
         by = UsageBreakdownBy(d.pop("by"))
 
+        filtered = d.pop("filtered")
+
         currency = UsageBreakdownCurrency(d.pop("currency"))
 
         totals = UsageBreakdownTotals.from_dict(d.pop("totals"))
@@ -103,6 +111,7 @@ class UsageBreakdown:
         usage_breakdown = cls(
             window=window,
             by=by,
+            filtered=filtered,
             currency=currency,
             totals=totals,
             data=data,
