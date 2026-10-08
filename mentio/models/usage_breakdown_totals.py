@@ -20,24 +20,32 @@ class UsageBreakdownTotals:
         matched_mentions (int): Matches recorded in the window, relevant or not.
         billable_mentions (int): Of the matches billed in the window (every scored match, relevant or not), the ones in
             this group.
+        unclassified_mentions (int): Matches recorded in the window that are never charged: no score yet (still being
+            scored, or classification failed), or a free review from the look-back of a newly connected app. Every other
+            match is charged, on the mentions line or, for a comment, on the comments line.
         mention_cents (int): The billed mentions at $0.008 each, rounded once on the total.
-        total_cents (int): keywordCents plus mentionCents.
-        unclassified_mentions (int): Matched but never scored (classification failed): never charged.
+        billable_comments (int): Comments billed in the window (the comments line): comments delivered under your
+            mentions and comments that matched a keyword, each once per workspace.
+        comment_cents (int): The billed comments at $0.008 each, rounded once on the total.
+        total_cents (int): keywordCents plus mentionCents plus commentCents.
         ledger_debit_cents (int): What the ledger has debited so far for the days of the window, each debit by the day
             it settled. Mentions settle the morning after their day, so a window ending today lags totalCents by today's
             mentions (and yesterday's before the tick at 00:05 UTC); a closed month differs from totalCents only by
             cumulative rounding.
         unattributed_billable (int): Billed mentions whose match row is gone (deleted keyword), so no platform or
-            keyword row can claim them. Charged all the same.
+            keyword row can claim them. Charged all the same. Comments carry their keyword and platform on the billed row,
+            so they are never unattributed (by=group puts a deleted keyword's comments on the no-group row).
     """
 
     keyword_days: int
     keyword_cents: int
     matched_mentions: int
     billable_mentions: int
-    mention_cents: int
-    total_cents: int
     unclassified_mentions: int
+    mention_cents: int
+    billable_comments: int
+    comment_cents: int
+    total_cents: int
     ledger_debit_cents: int
     unattributed_billable: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -51,11 +59,15 @@ class UsageBreakdownTotals:
 
         billable_mentions = self.billable_mentions
 
+        unclassified_mentions = self.unclassified_mentions
+
         mention_cents = self.mention_cents
 
-        total_cents = self.total_cents
+        billable_comments = self.billable_comments
 
-        unclassified_mentions = self.unclassified_mentions
+        comment_cents = self.comment_cents
+
+        total_cents = self.total_cents
 
         ledger_debit_cents = self.ledger_debit_cents
 
@@ -69,9 +81,11 @@ class UsageBreakdownTotals:
                 "keywordCents": keyword_cents,
                 "matchedMentions": matched_mentions,
                 "billableMentions": billable_mentions,
-                "mentionCents": mention_cents,
-                "totalCents": total_cents,
                 "unclassifiedMentions": unclassified_mentions,
+                "mentionCents": mention_cents,
+                "billableComments": billable_comments,
+                "commentCents": comment_cents,
+                "totalCents": total_cents,
                 "ledgerDebitCents": ledger_debit_cents,
                 "unattributedBillable": unattributed_billable,
             }
@@ -90,11 +104,15 @@ class UsageBreakdownTotals:
 
         billable_mentions = d.pop("billableMentions")
 
+        unclassified_mentions = d.pop("unclassifiedMentions")
+
         mention_cents = d.pop("mentionCents")
 
-        total_cents = d.pop("totalCents")
+        billable_comments = d.pop("billableComments")
 
-        unclassified_mentions = d.pop("unclassifiedMentions")
+        comment_cents = d.pop("commentCents")
+
+        total_cents = d.pop("totalCents")
 
         ledger_debit_cents = d.pop("ledgerDebitCents")
 
@@ -105,9 +123,11 @@ class UsageBreakdownTotals:
             keyword_cents=keyword_cents,
             matched_mentions=matched_mentions,
             billable_mentions=billable_mentions,
-            mention_cents=mention_cents,
-            total_cents=total_cents,
             unclassified_mentions=unclassified_mentions,
+            mention_cents=mention_cents,
+            billable_comments=billable_comments,
+            comment_cents=comment_cents,
+            total_cents=total_cents,
             ledger_debit_cents=ledger_debit_cents,
             unattributed_billable=unattributed_billable,
         )

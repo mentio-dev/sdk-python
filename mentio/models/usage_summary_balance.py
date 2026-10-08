@@ -17,7 +17,7 @@ class UsageSummaryBalance:
 
     Attributes:
         cents (int): Ledger balance: every credit minus every settled debit.
-        pending_cents (int): Mentions matched since the last daily settlement, priced but not yet debited.
+        pending_cents (int): Mentions and comments billed since the last daily settlement, priced but not yet debited.
         effective_cents (int): cents minus pendingCents: what the stop rule and the keyword gate look at.
         currency (UsageSummaryBalanceCurrency):
     """

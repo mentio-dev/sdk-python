@@ -7,6 +7,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.view_filter_keyword_kinds_item import ViewFilterKeywordKindsItem
+from ..models.view_filter_kind import ViewFilterKind
 from ..models.view_filter_not_platforms_item import ViewFilterNotPlatformsItem
 from ..models.view_filter_not_sentiments_item import ViewFilterNotSentimentsItem
 from ..models.view_filter_platforms_item import ViewFilterPlatformsItem
@@ -50,9 +51,14 @@ class ViewFilter:
         not_tags (list[str] | Unset): Never authors tagged with any of these.
         link_hosts (list[str] | Unset): Only posts linking to any of these hosts, the host itself or a subdomain of it.
         not_link_hosts (list[str] | Unset): Never posts linking to these hosts.
+        subreddits (list[str] | Unset): Only Reddit posts from any of these subreddits (names without the r/, any case);
+            every other post fails it.
+        not_subreddits (list[str] | Unset): Never Reddit posts from these subreddits; posts from other platforms still
+            pass.
         min_followers (int | Unset): Only authors with at least this many followers; unknown reach never passes.
         max_followers (int | Unset): Only authors with at most this many followers; unknown reach never passes.
         is_reply (bool | Unset): true: only replies and comments; false: only top-level posts.
+        kind (ViewFilterKind | Unset): Only posts (post) or only comments (comment).
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings; every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings; posts that are not reviews still pass.
@@ -97,9 +103,12 @@ class ViewFilter:
     not_tags: list[str] | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
     not_link_hosts: list[str] | Unset = UNSET
+    subreddits: list[str] | Unset = UNSET
+    not_subreddits: list[str] | Unset = UNSET
     min_followers: int | Unset = UNSET
     max_followers: int | Unset = UNSET
     is_reply: bool | Unset = UNSET
+    kind: ViewFilterKind | Unset = UNSET
     exclude_authors: list[str] | Unset = UNSET
     ratings: list[int] | Unset = UNSET
     not_ratings: list[int] | Unset = UNSET
@@ -210,11 +219,23 @@ class ViewFilter:
         if not isinstance(self.not_link_hosts, Unset):
             not_link_hosts = self.not_link_hosts
 
+        subreddits: list[str] | Unset = UNSET
+        if not isinstance(self.subreddits, Unset):
+            subreddits = self.subreddits
+
+        not_subreddits: list[str] | Unset = UNSET
+        if not isinstance(self.not_subreddits, Unset):
+            not_subreddits = self.not_subreddits
+
         min_followers = self.min_followers
 
         max_followers = self.max_followers
 
         is_reply = self.is_reply
+
+        kind: str | Unset = UNSET
+        if not isinstance(self.kind, Unset):
+            kind = self.kind.value
 
         exclude_authors: list[str] | Unset = UNSET
         if not isinstance(self.exclude_authors, Unset):
@@ -296,12 +317,18 @@ class ViewFilter:
             field_dict["linkHosts"] = link_hosts
         if not_link_hosts is not UNSET:
             field_dict["notLinkHosts"] = not_link_hosts
+        if subreddits is not UNSET:
+            field_dict["subreddits"] = subreddits
+        if not_subreddits is not UNSET:
+            field_dict["notSubreddits"] = not_subreddits
         if min_followers is not UNSET:
             field_dict["minFollowers"] = min_followers
         if max_followers is not UNSET:
             field_dict["maxFollowers"] = max_followers
         if is_reply is not UNSET:
             field_dict["isReply"] = is_reply
+        if kind is not UNSET:
+            field_dict["kind"] = kind
         if exclude_authors is not UNSET:
             field_dict["excludeAuthors"] = exclude_authors
         if ratings is not UNSET:
@@ -418,11 +445,22 @@ class ViewFilter:
 
         not_link_hosts = cast(list[str], d.pop("notLinkHosts", UNSET))
 
+        subreddits = cast(list[str], d.pop("subreddits", UNSET))
+
+        not_subreddits = cast(list[str], d.pop("notSubreddits", UNSET))
+
         min_followers = d.pop("minFollowers", UNSET)
 
         max_followers = d.pop("maxFollowers", UNSET)
 
         is_reply = d.pop("isReply", UNSET)
+
+        _kind = d.pop("kind", UNSET)
+        kind: ViewFilterKind | Unset
+        if isinstance(_kind, Unset):
+            kind = UNSET
+        else:
+            kind = ViewFilterKind(_kind)
 
         exclude_authors = cast(list[str], d.pop("excludeAuthors", UNSET))
 
@@ -475,9 +513,12 @@ class ViewFilter:
             not_tags=not_tags,
             link_hosts=link_hosts,
             not_link_hosts=not_link_hosts,
+            subreddits=subreddits,
+            not_subreddits=not_subreddits,
             min_followers=min_followers,
             max_followers=max_followers,
             is_reply=is_reply,
+            kind=kind,
             exclude_authors=exclude_authors,
             ratings=ratings,
             not_ratings=not_ratings,

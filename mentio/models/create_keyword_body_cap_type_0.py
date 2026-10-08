@@ -14,8 +14,9 @@ class CreateKeywordBodyCapType0:
     """A monthly mention cap; omit or null for none.
 
     Attributes:
-        mentions (int): Matched mentions allowed per calendar month (UTC). Every match counts, relevant or not, the
-            look-back a new keyword gets included, because every match bills.
+        mentions (int): Charged items allowed per calendar month (UTC): matched mentions plus the thread comments
+            delivered under them. Every match counts, relevant or not, the look-back a new keyword gets included, because
+            every match bills.
     """
 
     mentions: int

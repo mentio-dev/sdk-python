@@ -15,8 +15,9 @@ class KeywordSuggestionPatchCapType0:
     one at or under it pauses it.
 
         Attributes:
-            mentions (int): Matched mentions allowed per calendar month (UTC). Every match counts, relevant or not, the
-                look-back a new keyword gets included, because every match bills.
+            mentions (int): Charged items allowed per calendar month (UTC): matched mentions plus the thread comments
+                delivered under them. Every match counts, relevant or not, the look-back a new keyword gets included, because
+                every match bills.
     """
 
     mentions: int

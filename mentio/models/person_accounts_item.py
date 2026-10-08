@@ -18,7 +18,8 @@ class PersonAccountsItem:
         id (str): The account id (aut_...); the canonical one equals the person id.
         platform (PersonAccountsItemPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x,
             youtube, news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews),
-            trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place).
+            trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a keyword
+            reads).
         name (None | str): Display name as the platform reports it.
         handle (None | str): Platform handle derived from the profile URL, formatted as the platform shows it.
         url (None | str): Profile URL.

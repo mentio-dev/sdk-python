@@ -12,6 +12,8 @@ from ..models.keyword_platforms_type_0_item import KeywordPlatformsType0Item
 if TYPE_CHECKING:
     from ..models.group_ref import GroupRef
     from ..models.keyword_cap_type_0 import KeywordCapType0
+    from ..models.keyword_comments import KeywordComments
+    from ..models.keyword_feed import KeywordFeed
     from ..models.keyword_matching import KeywordMatching
     from ..models.keyword_polling_item import KeywordPollingItem
     from ..models.keyword_stats import KeywordStats
@@ -38,9 +40,15 @@ class Keyword:
         paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
             cap is raised. Not muted: it keeps its place and its daily keyword charge.
         cap (KeywordCapType0 | None): The monthly mention cap, or null for none.
+        comments (KeywordComments): Comments under this keyword's mentions: when enabled, the comments of every mention
+            scored relevant are read from 30 minutes after the post, on a schedule per platform (for a day on Reddit, Hacker
+            News and Bluesky, a week on GitHub, Stack Overflow and DEV, a month on YouTube) (new comments only, at most
+            maxPerPost a thread, comments of fewer than three words dropped), on Hacker News, Bluesky, GitHub, Stack
+            Overflow, DEV, YouTube and Reddit. List them with GET /v1/mentions/{id}/comments.
         group (GroupRef): The group the keyword belongs to.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms the term is searched on; null means every
             platform, [] none (the keyword only collects reviews).
+        feeds (list[KeywordFeed]): RSS and Atom feeds this keyword reads; empty for none.
         review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps,
             Trustpilot pages, Google Maps places); empty for none.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
@@ -61,8 +69,10 @@ class Keyword:
     paused_for_noise: bool
     paused_for_cap: bool
     cap: KeywordCapType0 | None
+    comments: KeywordComments
     group: GroupRef
     platforms: list[KeywordPlatformsType0Item] | None
+    feeds: list[KeywordFeed]
     review_sources: list[ReviewSource]
     context: None | str
     matching: KeywordMatching
@@ -94,6 +104,8 @@ class Keyword:
         else:
             cap = self.cap
 
+        comments = self.comments.to_dict()
+
         group = self.group.to_dict()
 
         platforms: list[str] | None
@@ -105,6 +117,11 @@ class Keyword:
 
         else:
             platforms = self.platforms
+
+        feeds = []
+        for feeds_item_data in self.feeds:
+            feeds_item = feeds_item_data.to_dict()
+            feeds.append(feeds_item)
 
         review_sources = []
         for review_sources_item_data in self.review_sources:
@@ -137,8 +154,10 @@ class Keyword:
                 "pausedForNoise": paused_for_noise,
                 "pausedForCap": paused_for_cap,
                 "cap": cap,
+                "comments": comments,
                 "group": group,
                 "platforms": platforms,
+                "feeds": feeds,
                 "reviewSources": review_sources,
                 "context": context,
                 "matching": matching,
@@ -154,6 +173,8 @@ class Keyword:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.group_ref import GroupRef
         from ..models.keyword_cap_type_0 import KeywordCapType0
+        from ..models.keyword_comments import KeywordComments
+        from ..models.keyword_feed import KeywordFeed
         from ..models.keyword_matching import KeywordMatching
         from ..models.keyword_polling_item import KeywordPollingItem
         from ..models.keyword_stats import KeywordStats
@@ -189,6 +210,8 @@ class Keyword:
 
         cap = _parse_cap(d.pop("cap"))
 
+        comments = KeywordComments.from_dict(d.pop("comments"))
+
         group = GroupRef.from_dict(d.pop("group"))
 
         def _parse_platforms(data: object) -> list[KeywordPlatformsType0Item] | None:
@@ -212,6 +235,13 @@ class Keyword:
             return cast(list[KeywordPlatformsType0Item] | None, data)
 
         platforms = _parse_platforms(d.pop("platforms"))
+
+        feeds = []
+        _feeds = d.pop("feeds")
+        for feeds_item_data in _feeds:
+            feeds_item = KeywordFeed.from_dict(feeds_item_data)
+
+            feeds.append(feeds_item)
 
         review_sources = []
         _review_sources = d.pop("reviewSources")
@@ -249,8 +279,10 @@ class Keyword:
             paused_for_noise=paused_for_noise,
             paused_for_cap=paused_for_cap,
             cap=cap,
+            comments=comments,
             group=group,
             platforms=platforms,
+            feeds=feeds,
             review_sources=review_sources,
             context=context,
             matching=matching,

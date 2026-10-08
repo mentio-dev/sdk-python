@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -9,6 +9,12 @@ from attrs import field as _attrs_field
 from ..models.list_keywords_response_200_data_item_matching_required_mode import (
     ListKeywordsResponse200DataItemMatchingRequiredMode,
 )
+
+if TYPE_CHECKING:
+    from ..models.list_keywords_response_200_data_item_matching_subreddits import (
+        ListKeywordsResponse200DataItemMatchingSubreddits,
+    )
+
 
 T = TypeVar("T", bound="ListKeywordsResponse200DataItemMatching")
 
@@ -31,6 +37,9 @@ class ListKeywordsResponse200DataItemMatching:
             post holding its words close together, in any order, plurals and spellings (non-profit, nonprofit) included;
             such a match is kept and billed only when the classifier scores it relevant. A term sent in double quotes sets
             this to true.
+        subreddits (ListKeywordsResponse200DataItemMatchingSubreddits): Reddit only, for this keyword alone; the
+            workspace filters' own subreddit lists (GET /v1/filters) still apply to every keyword, and a post must pass
+            both.
     """
 
     required_terms: list[str]
@@ -39,6 +48,7 @@ class ListKeywordsResponse200DataItemMatching:
     excluded_authors: list[str]
     case_sensitive: bool
     exact_phrase: bool
+    subreddits: ListKeywordsResponse200DataItemMatchingSubreddits
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -54,6 +64,8 @@ class ListKeywordsResponse200DataItemMatching:
 
         exact_phrase = self.exact_phrase
 
+        subreddits = self.subreddits.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -64,6 +76,7 @@ class ListKeywordsResponse200DataItemMatching:
                 "excludedAuthors": excluded_authors,
                 "caseSensitive": case_sensitive,
                 "exactPhrase": exact_phrase,
+                "subreddits": subreddits,
             }
         )
 
@@ -71,6 +84,10 @@ class ListKeywordsResponse200DataItemMatching:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.list_keywords_response_200_data_item_matching_subreddits import (
+            ListKeywordsResponse200DataItemMatchingSubreddits,
+        )
+
         d = dict(src_dict)
         required_terms = cast(list[str], d.pop("requiredTerms"))
 
@@ -86,6 +103,10 @@ class ListKeywordsResponse200DataItemMatching:
 
         exact_phrase = d.pop("exactPhrase")
 
+        subreddits = ListKeywordsResponse200DataItemMatchingSubreddits.from_dict(
+            d.pop("subreddits")
+        )
+
         list_keywords_response_200_data_item_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
@@ -93,6 +114,7 @@ class ListKeywordsResponse200DataItemMatching:
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,
             exact_phrase=exact_phrase,
+            subreddits=subreddits,
         )
 
         list_keywords_response_200_data_item_matching.additional_properties = d

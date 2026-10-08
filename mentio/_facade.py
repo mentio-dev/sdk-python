@@ -141,6 +141,7 @@ import mentio.api.members.revoke_invitation  # noqa: F401
 import mentio.api.mentions.export_mentions_csv  # noqa: F401
 import mentio.api.mentions.export_mentions_json  # noqa: F401
 import mentio.api.mentions.get_mention  # noqa: F401
+import mentio.api.mentions.list_mention_comments  # noqa: F401
 import mentio.api.mentions.search_mentions  # noqa: F401
 import mentio.api.mentions.update_mention  # noqa: F401
 import mentio.api.people.delete_person_activity  # noqa: F401
@@ -181,12 +182,14 @@ class _Keywords:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews, which then needs reviewSources.
+          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
+          comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
-          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention."""
+          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
+          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -239,20 +242,32 @@ class _Keywords:
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
+          comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
-          reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place."""
+          reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.
+          feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place."""
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
-    """mentions: export, export_json, get, search, update."""
+    """mentions: comments, export, export_json, get, search, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
+    def comments(self, id: str, **params: Any) -> _m.ListMentionCommentsResponse200:
+        """List the comments of a mention
+
+        The comments under a mention's post, newest first: every comment in the thread, whether or not it names your keyword. Read once, about a day after the post, for mentions scored relevant whose keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the same thread.
+
+        Keyword arguments (query):
+          cursor: nextCursor from the previous page.
+          limit: Page size, 1 to 100."""
+        return _result(_ops.mentions.list_mention_comments.sync_detailed(id, client=self._client, **params))
+
     def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), kind (post or comment), parent_url (the post a comment answers) and comments (comments of it delivered to you). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -264,6 +279,7 @@ class _Mentions:
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
+          include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
@@ -271,6 +287,7 @@ class _Mentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          kind: Only posts (post) or only comments (comment). Omitted: both.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -288,6 +305,8 @@ class _Mentions:
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
+          not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
@@ -303,7 +322,7 @@ class _Mentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_csv.sync_detailed(client=self._client, **params))
 
     def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -321,6 +340,7 @@ class _Mentions:
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
+          include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
@@ -328,6 +348,7 @@ class _Mentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          kind: Only posts (post) or only comments (comment). Omitted: both.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -345,6 +366,8 @@ class _Mentions:
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
+          not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
@@ -360,7 +383,7 @@ class _Mentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_json.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Mention:
@@ -384,6 +407,7 @@ class _Mentions:
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
+          include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
@@ -391,6 +415,7 @@ class _Mentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          kind: Only posts (post) or only comments (comment). Omitted: both.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -408,6 +433,8 @@ class _Mentions:
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
+          not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
@@ -426,7 +453,7 @@ class _Mentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(_ops.mentions.search_mentions.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -793,7 +820,7 @@ class _Analytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one)."""
+          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(_ops.analytics.get_analytics_breakdown.sync_detailed(client=self._client, **params))
 
@@ -1177,12 +1204,14 @@ class _AsyncKeywords:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews, which then needs reviewSources.
+          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A monthly mention cap; omit or null for none.
+          comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
-          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention."""
+          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
+          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1235,20 +1264,32 @@ class _AsyncKeywords:
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
+          comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
-          reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place."""
+          reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.
+          feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place."""
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:
-    """mentions: export, export_json, get, search, update."""
+    """mentions: comments, export, export_json, get, search, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
+    async def comments(self, id: str, **params: Any) -> _m.ListMentionCommentsResponse200:
+        """List the comments of a mention
+
+        The comments under a mention's post, newest first: every comment in the thread, whether or not it names your keyword. Read once, about a day after the post, for mentions scored relevant whose keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the same thread.
+
+        Keyword arguments (query):
+          cursor: nextCursor from the previous page.
+          limit: Page size, 1 to 100."""
+        return _result(await _ops.mentions.list_mention_comments.asyncio_detailed(id, client=self._client, **params))
+
     async def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), kind (post or comment), parent_url (the post a comment answers) and comments (comments of it delivered to you). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1260,6 +1301,7 @@ class _AsyncMentions:
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
+          include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
@@ -1267,6 +1309,7 @@ class _AsyncMentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          kind: Only posts (post) or only comments (comment). Omitted: both.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -1284,6 +1327,8 @@ class _AsyncMentions:
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
+          not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
@@ -1299,7 +1344,7 @@ class _AsyncMentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_csv.asyncio_detailed(client=self._client, **params))
 
     async def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -1317,6 +1362,7 @@ class _AsyncMentions:
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
+          include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
@@ -1324,6 +1370,7 @@ class _AsyncMentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          kind: Only posts (post) or only comments (comment). Omitted: both.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -1341,6 +1388,8 @@ class _AsyncMentions:
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
+          not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
@@ -1356,7 +1405,7 @@ class _AsyncMentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_json.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Mention:
@@ -1380,6 +1429,7 @@ class _AsyncMentions:
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default.
+          include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
           exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
@@ -1387,6 +1437,7 @@ class _AsyncMentions:
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
           max_followers: Only authors with at most this many followers. Unknown reach never passes.
+          kind: Only posts (post) or only comments (comment). Omitted: both.
           is_reply: true: only replies and comments (posts answering another post); false: only top-level posts. Omitted: both.
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
@@ -1404,6 +1455,8 @@ class _AsyncMentions:
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
+          subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
+          not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors your workspace tagged with any of these.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
@@ -1422,7 +1475,7 @@ class _AsyncMentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(await _ops.mentions.search_mentions.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -1789,7 +1842,7 @@ class _AsyncAnalytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one)."""
+          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(await _ops.analytics.get_analytics_breakdown.asyncio_detailed(client=self._client, **params))
 

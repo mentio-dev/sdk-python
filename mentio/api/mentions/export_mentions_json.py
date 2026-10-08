@@ -10,6 +10,7 @@ from ...models.error_response import ErrorResponse
 from ...models.export_mentions_json_keyword_kinds_item import (
     ExportMentionsJsonKeywordKindsItem,
 )
+from ...models.export_mentions_json_kind import ExportMentionsJsonKind
 from ...models.export_mentions_json_not_platforms_item import (
     ExportMentionsJsonNotPlatformsItem,
 )
@@ -40,6 +41,7 @@ def _get_kwargs(
     automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
@@ -47,6 +49,7 @@ def _get_kwargs(
     min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
+    kind: ExportMentionsJsonKind | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
@@ -64,6 +67,8 @@ def _get_kwargs(
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
+    subreddits: list[str] | None | Unset = UNSET,
+    not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
@@ -113,6 +118,8 @@ def _get_kwargs(
 
     params["includeMuted"] = include_muted
 
+    params["includeDuplicates"] = include_duplicates
+
     params["assigneeId"] = assignee_id
 
     params["snoozed"] = snoozed
@@ -154,6 +161,12 @@ def _get_kwargs(
     else:
         json_max_followers = max_followers
     params["maxFollowers"] = json_max_followers
+
+    json_kind: str | Unset = UNSET
+    if not isinstance(kind, Unset):
+        json_kind = kind.value
+
+    params["kind"] = json_kind
 
     params["isReply"] = is_reply
 
@@ -295,6 +308,26 @@ def _get_kwargs(
     else:
         json_not_link_hosts = not_link_hosts
     params["notLinkHosts"] = json_not_link_hosts
+
+    json_subreddits: list[str] | None | Unset
+    if isinstance(subreddits, Unset):
+        json_subreddits = UNSET
+    elif isinstance(subreddits, list):
+        json_subreddits = subreddits
+
+    else:
+        json_subreddits = subreddits
+    params["subreddits"] = json_subreddits
+
+    json_not_subreddits: list[str] | None | Unset
+    if isinstance(not_subreddits, Unset):
+        json_not_subreddits = UNSET
+    elif isinstance(not_subreddits, list):
+        json_not_subreddits = not_subreddits
+
+    else:
+        json_not_subreddits = not_subreddits
+    params["notSubreddits"] = json_not_subreddits
 
     json_not_tags: list[str] | None | Unset
     if isinstance(not_tags, Unset):
@@ -449,6 +482,7 @@ def sync_detailed(
     automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
@@ -456,6 +490,7 @@ def sync_detailed(
     min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
+    kind: ExportMentionsJsonKind | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
@@ -473,6 +508,8 @@ def sync_detailed(
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
+    subreddits: list[str] | None | Unset = UNSET,
+    not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
@@ -515,6 +552,9 @@ def sync_detailed(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default.
+        include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
+            set) as mentions of their own. By default each is listed only in its original's
+            duplicates.
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
@@ -528,6 +568,8 @@ def sync_detailed(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
+            Omitted: both.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
@@ -561,6 +603,11 @@ def sync_detailed(
             tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
+        subreddits (list[str] | None | Unset): Only Reddit posts from any of these subreddits:
+            subreddits=SaaS,startups (names without the r/, any case). Every other post fails it.
+            Repeatable, or comma-separated.
+        not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
+            from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
@@ -617,6 +664,7 @@ def sync_detailed(
         automated=automated,
         person_id=person_id,
         include_muted=include_muted,
+        include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
         exclude_authors=exclude_authors,
@@ -624,6 +672,7 @@ def sync_detailed(
         min_confidence=min_confidence,
         min_followers=min_followers,
         max_followers=max_followers,
+        kind=kind,
         is_reply=is_reply,
         alert_id=alert_id,
         view_id=view_id,
@@ -641,6 +690,8 @@ def sync_detailed(
         intents=intents,
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
+        subreddits=subreddits,
+        not_subreddits=not_subreddits,
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
@@ -677,6 +728,7 @@ def sync(
     automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
@@ -684,6 +736,7 @@ def sync(
     min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
+    kind: ExportMentionsJsonKind | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
@@ -701,6 +754,8 @@ def sync(
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
+    subreddits: list[str] | None | Unset = UNSET,
+    not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
@@ -743,6 +798,9 @@ def sync(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default.
+        include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
+            set) as mentions of their own. By default each is listed only in its original's
+            duplicates.
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
@@ -756,6 +814,8 @@ def sync(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
+            Omitted: both.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
@@ -789,6 +849,11 @@ def sync(
             tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
+        subreddits (list[str] | None | Unset): Only Reddit posts from any of these subreddits:
+            subreddits=SaaS,startups (names without the r/, any case). Every other post fails it.
+            Repeatable, or comma-separated.
+        not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
+            from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
@@ -846,6 +911,7 @@ def sync(
         automated=automated,
         person_id=person_id,
         include_muted=include_muted,
+        include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
         exclude_authors=exclude_authors,
@@ -853,6 +919,7 @@ def sync(
         min_confidence=min_confidence,
         min_followers=min_followers,
         max_followers=max_followers,
+        kind=kind,
         is_reply=is_reply,
         alert_id=alert_id,
         view_id=view_id,
@@ -870,6 +937,8 @@ def sync(
         intents=intents,
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
+        subreddits=subreddits,
+        not_subreddits=not_subreddits,
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
@@ -900,6 +969,7 @@ async def asyncio_detailed(
     automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
@@ -907,6 +977,7 @@ async def asyncio_detailed(
     min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
+    kind: ExportMentionsJsonKind | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
@@ -924,6 +995,8 @@ async def asyncio_detailed(
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
+    subreddits: list[str] | None | Unset = UNSET,
+    not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
@@ -966,6 +1039,9 @@ async def asyncio_detailed(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default.
+        include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
+            set) as mentions of their own. By default each is listed only in its original's
+            duplicates.
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
@@ -979,6 +1055,8 @@ async def asyncio_detailed(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
+            Omitted: both.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
@@ -1012,6 +1090,11 @@ async def asyncio_detailed(
             tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
+        subreddits (list[str] | None | Unset): Only Reddit posts from any of these subreddits:
+            subreddits=SaaS,startups (names without the r/, any case). Every other post fails it.
+            Repeatable, or comma-separated.
+        not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
+            from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
@@ -1068,6 +1151,7 @@ async def asyncio_detailed(
         automated=automated,
         person_id=person_id,
         include_muted=include_muted,
+        include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
         exclude_authors=exclude_authors,
@@ -1075,6 +1159,7 @@ async def asyncio_detailed(
         min_confidence=min_confidence,
         min_followers=min_followers,
         max_followers=max_followers,
+        kind=kind,
         is_reply=is_reply,
         alert_id=alert_id,
         view_id=view_id,
@@ -1092,6 +1177,8 @@ async def asyncio_detailed(
         intents=intents,
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
+        subreddits=subreddits,
+        not_subreddits=not_subreddits,
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
@@ -1126,6 +1213,7 @@ async def asyncio(
     automated: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
@@ -1133,6 +1221,7 @@ async def asyncio(
     min_confidence: float | None | Unset = UNSET,
     min_followers: int | None | Unset = UNSET,
     max_followers: int | None | Unset = UNSET,
+    kind: ExportMentionsJsonKind | Unset = UNSET,
     is_reply: bool | Unset = UNSET,
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
@@ -1150,6 +1239,8 @@ async def asyncio(
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
+    subreddits: list[str] | None | Unset = UNSET,
+    not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
@@ -1192,6 +1283,9 @@ async def asyncio(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default.
+        include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
+            set) as mentions of their own. By default each is listed only in its original's
+            duplicates.
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
@@ -1205,6 +1299,8 @@ async def asyncio(
             Unknown reach never passes.
         max_followers (int | None | Unset): Only authors with at most this many followers. Unknown
             reach never passes.
+        kind (ExportMentionsJsonKind | Unset): Only posts (post) or only comments (comment).
+            Omitted: both.
         is_reply (bool | Unset): true: only replies and comments (posts answering another post);
             false: only top-level posts. Omitted: both.
         alert_id (str | Unset): Apply an alert rule's filter (an id from GET /v1/alerts) on top of
@@ -1238,6 +1334,11 @@ async def asyncio(
             tags.
         not_link_hosts (list[str] | None | Unset): Never posts linking to these hosts, the host
             itself or a subdomain of it.
+        subreddits (list[str] | None | Unset): Only Reddit posts from any of these subreddits:
+            subreddits=SaaS,startups (names without the r/, any case). Every other post fails it.
+            Repeatable, or comma-separated.
+        not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
+            from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
             these.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
@@ -1296,6 +1397,7 @@ async def asyncio(
             automated=automated,
             person_id=person_id,
             include_muted=include_muted,
+            include_duplicates=include_duplicates,
             assignee_id=assignee_id,
             snoozed=snoozed,
             exclude_authors=exclude_authors,
@@ -1303,6 +1405,7 @@ async def asyncio(
             min_confidence=min_confidence,
             min_followers=min_followers,
             max_followers=max_followers,
+            kind=kind,
             is_reply=is_reply,
             alert_id=alert_id,
             view_id=view_id,
@@ -1320,6 +1423,8 @@ async def asyncio(
             intents=intents,
             not_intents=not_intents,
             not_link_hosts=not_link_hosts,
+            subreddits=subreddits,
+            not_subreddits=not_subreddits,
             not_tags=not_tags,
             languages=languages,
             not_languages=not_languages,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -10,6 +10,12 @@ from ..models.update_keyword_body_matching_required_mode import (
     UpdateKeywordBodyMatchingRequiredMode,
 )
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.update_keyword_body_matching_subreddits import (
+        UpdateKeywordBodyMatchingSubreddits,
+    )
+
 
 T = TypeVar("T", bound="UpdateKeywordBodyMatching")
 
@@ -33,6 +39,8 @@ class UpdateKeywordBodyMatching:
             matches a post holding its words close together, in any order, plurals and spellings (non-profit, nonprofit)
             included; such a match is kept and billed only when the classifier scores it relevant. A term sent in double
             quotes sets this to true.
+        subreddits (UpdateKeywordBodyMatchingSubreddits | Unset): Reddit only, for this keyword alone: each list is
+            replaced when sent, kept when omitted.
     """
 
     required_terms: list[str] | Unset = UNSET
@@ -41,6 +49,7 @@ class UpdateKeywordBodyMatching:
     excluded_authors: list[str] | Unset = UNSET
     case_sensitive: bool | Unset = UNSET
     exact_phrase: bool | Unset = UNSET
+    subreddits: UpdateKeywordBodyMatchingSubreddits | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -64,6 +73,10 @@ class UpdateKeywordBodyMatching:
 
         exact_phrase = self.exact_phrase
 
+        subreddits: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.subreddits, Unset):
+            subreddits = self.subreddits.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -79,11 +92,17 @@ class UpdateKeywordBodyMatching:
             field_dict["caseSensitive"] = case_sensitive
         if exact_phrase is not UNSET:
             field_dict["exactPhrase"] = exact_phrase
+        if subreddits is not UNSET:
+            field_dict["subreddits"] = subreddits
 
         return field_dict
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.update_keyword_body_matching_subreddits import (
+            UpdateKeywordBodyMatchingSubreddits,
+        )
+
         d = dict(src_dict)
         required_terms = cast(list[str], d.pop("requiredTerms", UNSET))
 
@@ -102,6 +121,13 @@ class UpdateKeywordBodyMatching:
 
         exact_phrase = d.pop("exactPhrase", UNSET)
 
+        _subreddits = d.pop("subreddits", UNSET)
+        subreddits: UpdateKeywordBodyMatchingSubreddits | Unset
+        if isinstance(_subreddits, Unset):
+            subreddits = UNSET
+        else:
+            subreddits = UpdateKeywordBodyMatchingSubreddits.from_dict(_subreddits)
+
         update_keyword_body_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
@@ -109,6 +135,7 @@ class UpdateKeywordBodyMatching:
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,
             exact_phrase=exact_phrase,
+            subreddits=subreddits,
         )
 
         update_keyword_body_matching.additional_properties = d

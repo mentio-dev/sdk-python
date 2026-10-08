@@ -19,7 +19,8 @@ class KeywordHealthStatsByPlatformItem:
     Attributes:
         platform (KeywordHealthStatsByPlatformItemPlatform): Platform: bluesky, hackernews, github, stackoverflow,
             devto, reddit, x, youtube, news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google
-            Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place).
+            Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds
+            a keyword reads).
         matches (int): Matches on this platform in the window.
         relevant (int): Of those, scored at or above the relevance line (40).
         filtered (int): Of those, scored under the line: the noise.

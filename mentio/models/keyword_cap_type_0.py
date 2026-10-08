@@ -14,8 +14,9 @@ class KeywordCapType0:
     """The monthly mention cap, or null for none.
 
     Attributes:
-        mentions (int): Matched mentions allowed per calendar month (UTC). Every match counts, relevant or not, the
-            look-back a new keyword gets included, because every match bills.
+        mentions (int): Charged items allowed per calendar month (UTC): matched mentions plus the thread comments
+            delivered under them. Every match counts, relevant or not, the look-back a new keyword gets included, because
+            every match bills.
         welcome (bool): Set by Mentio, not you: a workspace on its welcome credit collects at most 200 mentions a
             keyword a month. The first top-up removes it.
         own (int | None): Your own cap. With welcome true, the cap the keyword gets back at the first top-up (null for

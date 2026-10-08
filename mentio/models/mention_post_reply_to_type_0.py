@@ -11,7 +11,7 @@ T = TypeVar("T", bound="MentionPostReplyToType0")
 
 @_attrs_define
 class MentionPostReplyToType0:
-    """The post this one replies to (X, Bluesky); null for top-level posts.
+    """The post or comment this one answers; null for top-level posts.
 
     Attributes:
         author (None | str): Parent post author as the platform names them.

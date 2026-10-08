@@ -27,7 +27,11 @@ MENTION = {
     "delivered": False,
     "priority": 61.5,
     "keyword": {"id": "kw_1", "term": "acme", "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}, "matchedAs": "phrase", "matchedIn": "text"},
-    "post": {"platform": "reddit", "url": "https://r/1", "title": None, "text": "hi", "imageUrl": None, "links": [], "engagement": None, "publishedAt": "2026-09-03T08:12:44.000Z", "replyTo": None},
+    "post": {"platform": "reddit", "url": "https://r/1", "title": None, "text": "hi", "kind": "post", "imageUrl": None, "subreddit": "SaaS", "flair": None, "links": [], "engagement": None, "publishedAt": "2026-09-03T08:12:44.000Z", "replyTo": None},
+    "parentMentionId": None,
+    "duplicateOf": None,
+    "duplicates": [],
+    "stats": {"comments": 0},
     "author": None,
     "review": None,
     "classification": None,
@@ -76,7 +80,7 @@ def test_bodies_take_fields_a_dict_or_a_model():
 
     def handler(request: httpx.Request) -> httpx.Response:
         bodies.append(json.loads(request.content))
-        return json_response(201, {"id": "kw_1", "term": "acme", "kind": "brand", "muted": False, "pausedForBalance": False, "pausedForNoise": False, "pausedForCap": False, "cap": None, "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}, "platforms": None, "reviewSources": [], "context": None, "matching": {"requiredTerms": [], "requiredMode": "any", "excludedTerms": [], "excludedAuthors": [], "caseSensitive": False, "exactPhrase": False}, "stats": {"mentions": 0, "relevant": 0, "last7d": 0, "thisMonth": 0, "lastMentionAt": None, "feedback": {"relevant": 0, "notRelevant": 0}, "noise": {"scored": 0, "relevant": 0, "noisy": False}, "health": "new", "cost": {"keywordDays": 0, "keywordCents": 0, "billableMentions": 0, "mentionCents": 0, "totalCents": 0}}, "polling": [], "createdAt": "2026-09-03T10:04:44.881Z"})
+        return json_response(201, {"id": "kw_1", "term": "acme", "kind": "brand", "muted": False, "pausedForBalance": False, "pausedForNoise": False, "pausedForCap": False, "cap": None, "comments": {"enabled": False, "maxPerPost": 20}, "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}, "platforms": None, "feeds": [], "reviewSources": [], "context": None, "matching": {"requiredTerms": [], "requiredMode": "any", "excludedTerms": [], "excludedAuthors": [], "caseSensitive": False, "exactPhrase": False, "subreddits": {"only": [], "excluded": []}}, "stats": {"mentions": 0, "relevant": 0, "last7d": 0, "thisMonth": 0, "lastMentionAt": None, "feedback": {"relevant": 0, "notRelevant": 0}, "noise": {"scored": 0, "relevant": 0, "noisy": False}, "health": "new", "cost": {"keywordDays": 0, "keywordCents": 0, "billableMentions": 0, "mentionCents": 0, "billableComments": 0, "commentCents": 0, "totalCents": 0}}, "polling": [], "createdAt": "2026-09-03T10:04:44.881Z"})
 
     client = make_client(handler)
     created = client.keywords.create(term="acme", kind="brand")

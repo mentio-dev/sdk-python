@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.keyword_matching_required_mode import KeywordMatchingRequiredMode
+
+if TYPE_CHECKING:
+    from ..models.keyword_matching_subreddits import KeywordMatchingSubreddits
+
 
 T = TypeVar("T", bound="KeywordMatching")
 
@@ -28,6 +32,8 @@ class KeywordMatching:
             post holding its words close together, in any order, plurals and spellings (non-profit, nonprofit) included;
             such a match is kept and billed only when the classifier scores it relevant. A term sent in double quotes sets
             this to true.
+        subreddits (KeywordMatchingSubreddits): Reddit only, for this keyword alone; the workspace filters' own
+            subreddit lists (GET /v1/filters) still apply to every keyword, and a post must pass both.
     """
 
     required_terms: list[str]
@@ -36,6 +42,7 @@ class KeywordMatching:
     excluded_authors: list[str]
     case_sensitive: bool
     exact_phrase: bool
+    subreddits: KeywordMatchingSubreddits
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -51,6 +58,8 @@ class KeywordMatching:
 
         exact_phrase = self.exact_phrase
 
+        subreddits = self.subreddits.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -61,6 +70,7 @@ class KeywordMatching:
                 "excludedAuthors": excluded_authors,
                 "caseSensitive": case_sensitive,
                 "exactPhrase": exact_phrase,
+                "subreddits": subreddits,
             }
         )
 
@@ -68,6 +78,10 @@ class KeywordMatching:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.keyword_matching_subreddits import (
+            KeywordMatchingSubreddits,
+        )
+
         d = dict(src_dict)
         required_terms = cast(list[str], d.pop("requiredTerms"))
 
@@ -81,6 +95,8 @@ class KeywordMatching:
 
         exact_phrase = d.pop("exactPhrase")
 
+        subreddits = KeywordMatchingSubreddits.from_dict(d.pop("subreddits"))
+
         keyword_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
@@ -88,6 +104,7 @@ class KeywordMatching:
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,
             exact_phrase=exact_phrase,
+            subreddits=subreddits,
         )
 
         keyword_matching.additional_properties = d

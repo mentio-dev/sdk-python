@@ -35,8 +35,14 @@ class UsageBreakdownDataItem:
         matched_mentions (int): Matches recorded in the window, relevant or not.
         billable_mentions (int): Of the matches billed in the window (every scored match, relevant or not), the ones in
             this group.
+        unclassified_mentions (int): Matches recorded in the window that are never charged: no score yet (still being
+            scored, or classification failed), or a free review from the look-back of a newly connected app. Every other
+            match is charged, on the mentions line or, for a comment, on the comments line.
         mention_cents (int): The billed mentions at $0.008 each, rounded once on the total.
-        total_cents (int): keywordCents plus mentionCents.
+        billable_comments (int): Comments billed in the window (the comments line): comments delivered under your
+            mentions and comments that matched a keyword, each once per workspace.
+        comment_cents (int): The billed comments at $0.008 each, rounded once on the total.
+        total_cents (int): keywordCents plus mentionCents plus commentCents.
     """
 
     key: str
@@ -47,7 +53,10 @@ class UsageBreakdownDataItem:
     keyword_cents: int
     matched_mentions: int
     billable_mentions: int
+    unclassified_mentions: int
     mention_cents: int
+    billable_comments: int
+    comment_cents: int
     total_cents: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -84,7 +93,13 @@ class UsageBreakdownDataItem:
 
         billable_mentions = self.billable_mentions
 
+        unclassified_mentions = self.unclassified_mentions
+
         mention_cents = self.mention_cents
+
+        billable_comments = self.billable_comments
+
+        comment_cents = self.comment_cents
 
         total_cents = self.total_cents
 
@@ -100,7 +115,10 @@ class UsageBreakdownDataItem:
                 "keywordCents": keyword_cents,
                 "matchedMentions": matched_mentions,
                 "billableMentions": billable_mentions,
+                "unclassifiedMentions": unclassified_mentions,
                 "mentionCents": mention_cents,
+                "billableComments": billable_comments,
+                "commentCents": comment_cents,
                 "totalCents": total_cents,
             }
         )
@@ -164,7 +182,13 @@ class UsageBreakdownDataItem:
 
         billable_mentions = d.pop("billableMentions")
 
+        unclassified_mentions = d.pop("unclassifiedMentions")
+
         mention_cents = d.pop("mentionCents")
+
+        billable_comments = d.pop("billableComments")
+
+        comment_cents = d.pop("commentCents")
 
         total_cents = d.pop("totalCents")
 
@@ -177,7 +201,10 @@ class UsageBreakdownDataItem:
             keyword_cents=keyword_cents,
             matched_mentions=matched_mentions,
             billable_mentions=billable_mentions,
+            unclassified_mentions=unclassified_mentions,
             mention_cents=mention_cents,
+            billable_comments=billable_comments,
+            comment_cents=comment_cents,
             total_cents=total_cents,
         )
 

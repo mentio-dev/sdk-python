@@ -13,6 +13,7 @@ class ExportMentionsJsonPlatformsItem(StrEnum):
     LINKEDIN = "linkedin"
     NEWS = "news"
     REDDIT = "reddit"
+    RSS = "rss"
     STACKOVERFLOW = "stackoverflow"
     TIKTOK = "tiktok"
     TRUSTPILOT = "trustpilot"

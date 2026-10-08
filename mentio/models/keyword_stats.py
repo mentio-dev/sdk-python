@@ -25,7 +25,8 @@ class KeywordStats:
         mentions (int): Every match ever, relevant or not: the number billing counts.
         relevant (int): Matches scored at or above the relevance threshold.
         last7d (int): Matches published in the last 7 days.
-        this_month (int): Matches recorded this calendar month (UTC), the count a cap compares against.
+        this_month (int): Matches recorded this calendar month (UTC), plus the thread comments delivered under this
+            keyword's mentions: the count a cap compares against.
         last_mention_at (None | str): Newest matched post; null until the first one.
         feedback (KeywordStatsFeedback): Your verdicts on this keyword's mentions (PATCH /v1/mentions/{id} relevant).
         noise (KeywordStatsNoise): Relevance over the last 14 days of scored matches, so a keyword tightened today stops

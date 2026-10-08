@@ -105,11 +105,14 @@ from .create_invitation_body import CreateInvitationBody
 from .create_invitation_body_role import CreateInvitationBodyRole
 from .create_keyword_body import CreateKeywordBody
 from .create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
+from .create_keyword_body_comments import CreateKeywordBodyComments
+from .create_keyword_body_feeds_item import CreateKeywordBodyFeedsItem
 from .create_keyword_body_kind import CreateKeywordBodyKind
 from .create_keyword_body_matching import CreateKeywordBodyMatching
 from .create_keyword_body_matching_required_mode import (
     CreateKeywordBodyMatchingRequiredMode,
 )
+from .create_keyword_body_matching_subreddits import CreateKeywordBodyMatchingSubreddits
 from .create_keyword_body_platforms_type_0_item import (
     CreateKeywordBodyPlatformsType0Item,
 )
@@ -142,6 +145,7 @@ from .create_view_body_filter import CreateViewBodyFilter
 from .create_view_body_filter_keyword_kinds_item import (
     CreateViewBodyFilterKeywordKindsItem,
 )
+from .create_view_body_filter_kind import CreateViewBodyFilterKind
 from .create_view_body_filter_not_platforms_item import (
     CreateViewBodyFilterNotPlatformsItem,
 )
@@ -166,6 +170,7 @@ from .error_response import ErrorResponse
 from .error_response_error import ErrorResponseError
 from .error_response_error_code import ErrorResponseErrorCode
 from .export_mentions_csv_keyword_kinds_item import ExportMentionsCsvKeywordKindsItem
+from .export_mentions_csv_kind import ExportMentionsCsvKind
 from .export_mentions_csv_not_platforms_item import ExportMentionsCsvNotPlatformsItem
 from .export_mentions_csv_not_sentiments_item import ExportMentionsCsvNotSentimentsItem
 from .export_mentions_csv_platform import ExportMentionsCsvPlatform
@@ -174,6 +179,7 @@ from .export_mentions_csv_sentiment import ExportMentionsCsvSentiment
 from .export_mentions_csv_sentiments_item import ExportMentionsCsvSentimentsItem
 from .export_mentions_csv_status import ExportMentionsCsvStatus
 from .export_mentions_json_keyword_kinds_item import ExportMentionsJsonKeywordKindsItem
+from .export_mentions_json_kind import ExportMentionsJsonKind
 from .export_mentions_json_not_platforms_item import ExportMentionsJsonNotPlatformsItem
 from .export_mentions_json_not_sentiments_item import (
     ExportMentionsJsonNotSentimentsItem,
@@ -195,6 +201,7 @@ from .export_people_csv_sort import ExportPeopleCsvSort
 from .export_people_csv_stages_item import ExportPeopleCsvStagesItem
 from .filter_group import FilterGroup
 from .filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
+from .filter_group_kind import FilterGroupKind
 from .filter_group_not_platforms_item import FilterGroupNotPlatformsItem
 from .filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
 from .filter_group_platforms_item import FilterGroupPlatformsItem
@@ -229,6 +236,8 @@ from .invoice_list import InvoiceList
 from .invoice_list_data_item import InvoiceListDataItem
 from .keyword import Keyword
 from .keyword_cap_type_0 import KeywordCapType0
+from .keyword_comments import KeywordComments
+from .keyword_feed import KeywordFeed
 from .keyword_health import KeywordHealth
 from .keyword_health_ai import KeywordHealthAi
 from .keyword_health_ai_status import KeywordHealthAiStatus
@@ -248,6 +257,7 @@ from .keyword_health_window import KeywordHealthWindow
 from .keyword_kind import KeywordKind
 from .keyword_matching import KeywordMatching
 from .keyword_matching_required_mode import KeywordMatchingRequiredMode
+from .keyword_matching_subreddits import KeywordMatchingSubreddits
 from .keyword_noisy_event_data import KeywordNoisyEventData
 from .keyword_noisy_event_data_keyword import KeywordNoisyEventDataKeyword
 from .keyword_noisy_event_data_keyword_kind import KeywordNoisyEventDataKeywordKind
@@ -264,10 +274,15 @@ from .keyword_suggestion_effect_type_0 import KeywordSuggestionEffectType0
 from .keyword_suggestion_effect_type_0_sample import KeywordSuggestionEffectType0Sample
 from .keyword_suggestion_patch import KeywordSuggestionPatch
 from .keyword_suggestion_patch_cap_type_0 import KeywordSuggestionPatchCapType0
+from .keyword_suggestion_patch_comments import KeywordSuggestionPatchComments
+from .keyword_suggestion_patch_feeds_item import KeywordSuggestionPatchFeedsItem
 from .keyword_suggestion_patch_kind import KeywordSuggestionPatchKind
 from .keyword_suggestion_patch_matching import KeywordSuggestionPatchMatching
 from .keyword_suggestion_patch_matching_required_mode import (
     KeywordSuggestionPatchMatchingRequiredMode,
+)
+from .keyword_suggestion_patch_matching_subreddits import (
+    KeywordSuggestionPatchMatchingSubreddits,
 )
 from .keyword_suggestion_patch_platforms_type_0_item import (
     KeywordSuggestionPatchPlatformsType0Item,
@@ -340,6 +355,9 @@ from .list_keywords_response_200_data_item import ListKeywordsResponse200DataIte
 from .list_keywords_response_200_data_item_cap_type_0 import (
     ListKeywordsResponse200DataItemCapType0,
 )
+from .list_keywords_response_200_data_item_comments import (
+    ListKeywordsResponse200DataItemComments,
+)
 from .list_keywords_response_200_data_item_kind import (
     ListKeywordsResponse200DataItemKind,
 )
@@ -348,6 +366,9 @@ from .list_keywords_response_200_data_item_matching import (
 )
 from .list_keywords_response_200_data_item_matching_required_mode import (
     ListKeywordsResponse200DataItemMatchingRequiredMode,
+)
+from .list_keywords_response_200_data_item_matching_subreddits import (
+    ListKeywordsResponse200DataItemMatchingSubreddits,
 )
 from .list_keywords_response_200_data_item_platforms_type_0_item import (
     ListKeywordsResponse200DataItemPlatformsType0Item,
@@ -376,6 +397,7 @@ from .list_keywords_response_200_data_item_stats_noise import (
 from .list_keywords_sort import ListKeywordsSort
 from .list_keywords_status_item import ListKeywordsStatusItem
 from .list_members_response_200 import ListMembersResponse200
+from .list_mention_comments_response_200 import ListMentionCommentsResponse200
 from .list_people_keyword_kinds_item import ListPeopleKeywordKindsItem
 from .list_people_never_keyword_kinds_item import ListPeopleNeverKeywordKindsItem
 from .list_people_not_platforms_item import ListPeopleNotPlatformsItem
@@ -472,6 +494,9 @@ from .list_views_response_200_data_item_filter import ListViewsResponse200DataIt
 from .list_views_response_200_data_item_filter_keyword_kinds_item import (
     ListViewsResponse200DataItemFilterKeywordKindsItem,
 )
+from .list_views_response_200_data_item_filter_kind import (
+    ListViewsResponse200DataItemFilterKind,
+)
 from .list_views_response_200_data_item_filter_not_platforms_item import (
     ListViewsResponse200DataItemFilterNotPlatformsItem,
 )
@@ -507,11 +532,21 @@ from .mention_classification_type_0_feedback_type_0_sentiment import (
     MentionClassificationType0FeedbackType0Sentiment,
 )
 from .mention_classification_type_0_sentiment import MentionClassificationType0Sentiment
+from .mention_comment import MentionComment
+from .mention_comment_author_type_0 import MentionCommentAuthorType0
+from .mention_comment_classification_type_0 import MentionCommentClassificationType0
+from .mention_comment_classification_type_0_sentiment import (
+    MentionCommentClassificationType0Sentiment,
+)
+from .mention_comment_engagement_type_0 import MentionCommentEngagementType0
+from .mention_duplicates_item import MentionDuplicatesItem
+from .mention_duplicates_item_platform import MentionDuplicatesItemPlatform
 from .mention_keyword import MentionKeyword
 from .mention_keyword_matched_as import MentionKeywordMatchedAs
 from .mention_keyword_matched_in import MentionKeywordMatchedIn
 from .mention_post import MentionPost
 from .mention_post_engagement_type_0 import MentionPostEngagementType0
+from .mention_post_kind import MentionPostKind
 from .mention_post_platform import MentionPostPlatform
 from .mention_post_reply_to_type_0 import MentionPostReplyToType0
 from .mention_review_type_0 import MentionReviewType0
@@ -522,6 +557,7 @@ from .mention_spike_event_data_baseline import MentionSpikeEventDataBaseline
 from .mention_spike_event_data_keyword import MentionSpikeEventDataKeyword
 from .mention_spike_event_data_keyword_kind import MentionSpikeEventDataKeywordKind
 from .mention_spike_event_data_window import MentionSpikeEventDataWindow
+from .mention_stats import MentionStats
 from .mention_status import MentionStatus
 from .mention_triage import MentionTriage
 from .mention_triage_assignee_type_0 import MentionTriageAssigneeType0
@@ -573,6 +609,7 @@ from .run_alert_digest_response_200_outcomes_item import (
 )
 from .run_alert_digest_response_200_skipped import RunAlertDigestResponse200Skipped
 from .search_mentions_keyword_kinds_item import SearchMentionsKeywordKindsItem
+from .search_mentions_kind import SearchMentionsKind
 from .search_mentions_not_platforms_item import SearchMentionsNotPlatformsItem
 from .search_mentions_not_sentiments_item import SearchMentionsNotSentimentsItem
 from .search_mentions_platform import SearchMentionsPlatform
@@ -632,11 +669,14 @@ from .update_filters_body_subreddits import UpdateFiltersBodySubreddits
 from .update_group_body import UpdateGroupBody
 from .update_keyword_body import UpdateKeywordBody
 from .update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
+from .update_keyword_body_comments import UpdateKeywordBodyComments
+from .update_keyword_body_feeds_item import UpdateKeywordBodyFeedsItem
 from .update_keyword_body_kind import UpdateKeywordBodyKind
 from .update_keyword_body_matching import UpdateKeywordBodyMatching
 from .update_keyword_body_matching_required_mode import (
     UpdateKeywordBodyMatchingRequiredMode,
 )
+from .update_keyword_body_matching_subreddits import UpdateKeywordBodyMatchingSubreddits
 from .update_keyword_body_platforms_type_0_item import (
     UpdateKeywordBodyPlatformsType0Item,
 )
@@ -669,6 +709,7 @@ from .update_view_body_filter import UpdateViewBodyFilter
 from .update_view_body_filter_keyword_kinds_item import (
     UpdateViewBodyFilterKeywordKindsItem,
 )
+from .update_view_body_filter_kind import UpdateViewBodyFilterKind
 from .update_view_body_filter_not_platforms_item import (
     UpdateViewBodyFilterNotPlatformsItem,
 )
@@ -695,6 +736,7 @@ from .usage_summary_mentions import UsageSummaryMentions
 from .view import View
 from .view_filter import ViewFilter
 from .view_filter_keyword_kinds_item import ViewFilterKeywordKindsItem
+from .view_filter_kind import ViewFilterKind
 from .view_filter_not_platforms_item import ViewFilterNotPlatformsItem
 from .view_filter_not_sentiments_item import ViewFilterNotSentimentsItem
 from .view_filter_platforms_item import ViewFilterPlatformsItem
@@ -792,9 +834,12 @@ __all__ = (
     "CreateInvitationBodyRole",
     "CreateKeywordBody",
     "CreateKeywordBodyCapType0",
+    "CreateKeywordBodyComments",
+    "CreateKeywordBodyFeedsItem",
     "CreateKeywordBodyKind",
     "CreateKeywordBodyMatching",
     "CreateKeywordBodyMatchingRequiredMode",
+    "CreateKeywordBodyMatchingSubreddits",
     "CreateKeywordBodyPlatformsType0Item",
     "CreateKeywordBodyReviewSourcesItem",
     "CreateKeywordBodyReviewSourcesItemPlatform",
@@ -813,6 +858,7 @@ __all__ = (
     "CreateViewBody",
     "CreateViewBodyFilter",
     "CreateViewBodyFilterKeywordKindsItem",
+    "CreateViewBodyFilterKind",
     "CreateViewBodyFilterNotPlatformsItem",
     "CreateViewBodyFilterNotSentimentsItem",
     "CreateViewBodyFilterPlatformsItem",
@@ -833,6 +879,7 @@ __all__ = (
     "ErrorResponseError",
     "ErrorResponseErrorCode",
     "ExportMentionsCsvKeywordKindsItem",
+    "ExportMentionsCsvKind",
     "ExportMentionsCsvNotPlatformsItem",
     "ExportMentionsCsvNotSentimentsItem",
     "ExportMentionsCsvPlatform",
@@ -841,6 +888,7 @@ __all__ = (
     "ExportMentionsCsvSentimentsItem",
     "ExportMentionsCsvStatus",
     "ExportMentionsJsonKeywordKindsItem",
+    "ExportMentionsJsonKind",
     "ExportMentionsJsonNotPlatformsItem",
     "ExportMentionsJsonNotSentimentsItem",
     "ExportMentionsJsonPlatform",
@@ -858,6 +906,7 @@ __all__ = (
     "ExportPeopleCsvStagesItem",
     "FilterGroup",
     "FilterGroupKeywordKindsItem",
+    "FilterGroupKind",
     "FilterGroupNotPlatformsItem",
     "FilterGroupNotSentimentsItem",
     "FilterGroupPlatformsItem",
@@ -892,6 +941,8 @@ __all__ = (
     "InvoiceListDataItem",
     "Keyword",
     "KeywordCapType0",
+    "KeywordComments",
+    "KeywordFeed",
     "KeywordHealth",
     "KeywordHealthAi",
     "KeywordHealthAiStatus",
@@ -909,6 +960,7 @@ __all__ = (
     "KeywordKind",
     "KeywordMatching",
     "KeywordMatchingRequiredMode",
+    "KeywordMatchingSubreddits",
     "KeywordNoisyEventData",
     "KeywordNoisyEventDataKeyword",
     "KeywordNoisyEventDataKeywordKind",
@@ -925,9 +977,12 @@ __all__ = (
     "KeywordSuggestionEffectType0Sample",
     "KeywordSuggestionPatch",
     "KeywordSuggestionPatchCapType0",
+    "KeywordSuggestionPatchComments",
+    "KeywordSuggestionPatchFeedsItem",
     "KeywordSuggestionPatchKind",
     "KeywordSuggestionPatchMatching",
     "KeywordSuggestionPatchMatchingRequiredMode",
+    "KeywordSuggestionPatchMatchingSubreddits",
     "KeywordSuggestionPatchPlatformsType0Item",
     "KeywordSuggestionPatchReviewSourcesItem",
     "KeywordSuggestionPatchReviewSourcesItemPlatform",
@@ -967,9 +1022,11 @@ __all__ = (
     "ListKeywordsResponse200",
     "ListKeywordsResponse200DataItem",
     "ListKeywordsResponse200DataItemCapType0",
+    "ListKeywordsResponse200DataItemComments",
     "ListKeywordsResponse200DataItemKind",
     "ListKeywordsResponse200DataItemMatching",
     "ListKeywordsResponse200DataItemMatchingRequiredMode",
+    "ListKeywordsResponse200DataItemMatchingSubreddits",
     "ListKeywordsResponse200DataItemPlatformsType0Item",
     "ListKeywordsResponse200DataItemPollingItem",
     "ListKeywordsResponse200DataItemPollingItemPlatform",
@@ -981,6 +1038,7 @@ __all__ = (
     "ListKeywordsSort",
     "ListKeywordsStatusItem",
     "ListMembersResponse200",
+    "ListMentionCommentsResponse200",
     "ListPeopleKeywordKindsItem",
     "ListPeopleNeverKeywordKindsItem",
     "ListPeopleNotPlatformsItem",
@@ -1025,6 +1083,7 @@ __all__ = (
     "ListViewsResponse200DataItem",
     "ListViewsResponse200DataItemFilter",
     "ListViewsResponse200DataItemFilterKeywordKindsItem",
+    "ListViewsResponse200DataItemFilterKind",
     "ListViewsResponse200DataItemFilterNotPlatformsItem",
     "ListViewsResponse200DataItemFilterNotSentimentsItem",
     "ListViewsResponse200DataItemFilterPlatformsItem",
@@ -1042,11 +1101,19 @@ __all__ = (
     "MentionClassificationType0FeedbackType0OriginalSentiment",
     "MentionClassificationType0FeedbackType0Sentiment",
     "MentionClassificationType0Sentiment",
+    "MentionComment",
+    "MentionCommentAuthorType0",
+    "MentionCommentClassificationType0",
+    "MentionCommentClassificationType0Sentiment",
+    "MentionCommentEngagementType0",
+    "MentionDuplicatesItem",
+    "MentionDuplicatesItemPlatform",
     "MentionKeyword",
     "MentionKeywordMatchedAs",
     "MentionKeywordMatchedIn",
     "MentionPost",
     "MentionPostEngagementType0",
+    "MentionPostKind",
     "MentionPostPlatform",
     "MentionPostReplyToType0",
     "MentionReviewType0",
@@ -1057,6 +1124,7 @@ __all__ = (
     "MentionSpikeEventDataKeyword",
     "MentionSpikeEventDataKeywordKind",
     "MentionSpikeEventDataWindow",
+    "MentionStats",
     "MentionStatus",
     "MentionTriage",
     "MentionTriageAssigneeType0",
@@ -1102,6 +1170,7 @@ __all__ = (
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",
     "SearchMentionsKeywordKindsItem",
+    "SearchMentionsKind",
     "SearchMentionsNotPlatformsItem",
     "SearchMentionsNotSentimentsItem",
     "SearchMentionsPlatform",
@@ -1159,9 +1228,12 @@ __all__ = (
     "UpdateGroupBody",
     "UpdateKeywordBody",
     "UpdateKeywordBodyCapType0",
+    "UpdateKeywordBodyComments",
+    "UpdateKeywordBodyFeedsItem",
     "UpdateKeywordBodyKind",
     "UpdateKeywordBodyMatching",
     "UpdateKeywordBodyMatchingRequiredMode",
+    "UpdateKeywordBodyMatchingSubreddits",
     "UpdateKeywordBodyPlatformsType0Item",
     "UpdateKeywordBodyReviewSourcesItem",
     "UpdateKeywordBodyReviewSourcesItemPlatform",
@@ -1180,6 +1252,7 @@ __all__ = (
     "UpdateViewBody",
     "UpdateViewBodyFilter",
     "UpdateViewBodyFilterKeywordKindsItem",
+    "UpdateViewBodyFilterKind",
     "UpdateViewBodyFilterNotPlatformsItem",
     "UpdateViewBodyFilterNotSentimentsItem",
     "UpdateViewBodyFilterPlatformsItem",
@@ -1202,6 +1275,7 @@ __all__ = (
     "View",
     "ViewFilter",
     "ViewFilterKeywordKindsItem",
+    "ViewFilterKind",
     "ViewFilterNotPlatformsItem",
     "ViewFilterNotSentimentsItem",
     "ViewFilterPlatformsItem",

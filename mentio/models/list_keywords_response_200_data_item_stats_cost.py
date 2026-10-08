@@ -22,13 +22,19 @@ class ListKeywordsResponse200DataItemStatsCost:
             billable_mentions (int): Matches billed this month, counted when they were scored (the clock the ledger settles
                 by), so it can trail thisMonth by the matches still being scored and never counts one that failed to score.
             mention_cents (int): Those matches at $0.008 each, rounded once on the total.
-            total_cents (int): keywordCents plus mentionCents: what this keyword has cost this month, in USD cents.
+            billable_comments (int): Comments billed this month under this keyword: comments delivered in its threads and
+                comments it matched, each once per workspace.
+            comment_cents (int): Those comments at $0.008 each, rounded once on the total.
+            total_cents (int): keywordCents plus mentionCents plus commentCents: what this keyword has cost this month, in
+                USD cents.
     """
 
     keyword_days: int
     keyword_cents: int
     billable_mentions: int
     mention_cents: int
+    billable_comments: int
+    comment_cents: int
     total_cents: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -41,6 +47,10 @@ class ListKeywordsResponse200DataItemStatsCost:
 
         mention_cents = self.mention_cents
 
+        billable_comments = self.billable_comments
+
+        comment_cents = self.comment_cents
+
         total_cents = self.total_cents
 
         field_dict: dict[str, Any] = {}
@@ -51,6 +61,8 @@ class ListKeywordsResponse200DataItemStatsCost:
                 "keywordCents": keyword_cents,
                 "billableMentions": billable_mentions,
                 "mentionCents": mention_cents,
+                "billableComments": billable_comments,
+                "commentCents": comment_cents,
                 "totalCents": total_cents,
             }
         )
@@ -68,6 +80,10 @@ class ListKeywordsResponse200DataItemStatsCost:
 
         mention_cents = d.pop("mentionCents")
 
+        billable_comments = d.pop("billableComments")
+
+        comment_cents = d.pop("commentCents")
+
         total_cents = d.pop("totalCents")
 
         list_keywords_response_200_data_item_stats_cost = cls(
@@ -75,6 +91,8 @@ class ListKeywordsResponse200DataItemStatsCost:
             keyword_cents=keyword_cents,
             billable_mentions=billable_mentions,
             mention_cents=mention_cents,
+            billable_comments=billable_comments,
+            comment_cents=comment_cents,
             total_cents=total_cents,
         )
 

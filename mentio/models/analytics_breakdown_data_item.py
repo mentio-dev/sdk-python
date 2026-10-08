@@ -31,9 +31,10 @@ T = TypeVar("T", bound="AnalyticsBreakdownDataItem")
 class AnalyticsBreakdownDataItem:
     """
     Attributes:
-        key (str): The group: platform name, keyword id, sentiment, intent, status, "weekday-hour" for by=hour, or an
-            opaque person key.
-        label (str): Readable name: the keyword term, the person name, otherwise the key.
+        key (str): The group: platform name, keyword id, sentiment, intent, status, "weekday-hour" for by=hour, an
+            opaque person key, or the subreddit in lowercase.
+        label (str): Readable name: the keyword term, the person name, the subreddit as Reddit spells it, otherwise the
+            key.
         keyword (AnalyticsBreakdownDataItemKeywordType0 | None): by=keyword only; null otherwise.
         person (AnalyticsBreakdownDataItemPersonType0 | None): by=person only; null otherwise.
         slot (AnalyticsBreakdownDataItemSlotType0 | None): by=hour only: the weekday and hour of day in `timezone`; null

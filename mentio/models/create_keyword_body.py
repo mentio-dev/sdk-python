@@ -14,6 +14,8 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
+    from ..models.create_keyword_body_comments import CreateKeywordBodyComments
+    from ..models.create_keyword_body_feeds_item import CreateKeywordBodyFeedsItem
     from ..models.create_keyword_body_matching import CreateKeywordBodyMatching
     from ..models.create_keyword_body_review_sources_item import (
         CreateKeywordBodyReviewSourcesItem,
@@ -32,13 +34,15 @@ class CreateKeywordBody:
         kind (CreateKeywordBodyKind | Unset): brand: your own names. competitor: theirs. topic: the space. Drives share
             of voice and segments. Default: CreateKeywordBodyKind.BRAND.
         platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to search the term on; omit or
-            null for every platform. [] searches it nowhere: a keyword that only collects reviews, which then needs
-            reviewSources.
+            null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then
+            needs reviewSources or feeds.
         context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
             profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
             is our browser; ignore the geometry word." Null clears it.
         matching (CreateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
         cap (CreateKeywordBodyCapType0 | None | Unset): A monthly mention cap; omit or null for none.
+        comments (CreateKeywordBodyComments | Unset): Comments under this keyword's mentions; omitted fields are
+            untouched (on create: off, 20 per post).
         group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may
             be tracked once per group.
         review_sources (list[CreateKeywordBodyReviewSourcesItem] | Unset): Review pages this keyword collects, at most
@@ -46,6 +50,12 @@ class CreateKeywordBody:
             of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected
             page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after
             that each review bills like any mention.
+        feeds (list[CreateKeywordBodyFeedsItem] | Unset): RSS or Atom feeds this keyword reads, at most 20, each { url
+            }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used,
+            else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour;
+            an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of
+            keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold
+            the term, billed like any mention and never sent as instant alerts.
     """
 
     term: str
@@ -54,8 +64,10 @@ class CreateKeywordBody:
     context: None | str | Unset = UNSET
     matching: CreateKeywordBodyMatching | Unset = UNSET
     cap: CreateKeywordBodyCapType0 | None | Unset = UNSET
+    comments: CreateKeywordBodyComments | Unset = UNSET
     group_id: str | Unset = UNSET
     review_sources: list[CreateKeywordBodyReviewSourcesItem] | Unset = UNSET
+    feeds: list[CreateKeywordBodyFeedsItem] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -99,6 +111,10 @@ class CreateKeywordBody:
         else:
             cap = self.cap
 
+        comments: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.comments, Unset):
+            comments = self.comments.to_dict()
+
         group_id = self.group_id
 
         review_sources: list[dict[str, Any]] | Unset = UNSET
@@ -107,6 +123,13 @@ class CreateKeywordBody:
             for review_sources_item_data in self.review_sources:
                 review_sources_item = review_sources_item_data.to_dict()
                 review_sources.append(review_sources_item)
+
+        feeds: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.feeds, Unset):
+            feeds = []
+            for feeds_item_data in self.feeds:
+                feeds_item = feeds_item_data.to_dict()
+                feeds.append(feeds_item)
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -125,10 +148,14 @@ class CreateKeywordBody:
             field_dict["matching"] = matching
         if cap is not UNSET:
             field_dict["cap"] = cap
+        if comments is not UNSET:
+            field_dict["comments"] = comments
         if group_id is not UNSET:
             field_dict["groupId"] = group_id
         if review_sources is not UNSET:
             field_dict["reviewSources"] = review_sources
+        if feeds is not UNSET:
+            field_dict["feeds"] = feeds
 
         return field_dict
 
@@ -136,6 +163,12 @@ class CreateKeywordBody:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.create_keyword_body_cap_type_0 import (
             CreateKeywordBodyCapType0,
+        )
+        from ..models.create_keyword_body_comments import (
+            CreateKeywordBodyComments,
+        )
+        from ..models.create_keyword_body_feeds_item import (
+            CreateKeywordBodyFeedsItem,
         )
         from ..models.create_keyword_body_matching import (
             CreateKeywordBodyMatching,
@@ -213,6 +246,13 @@ class CreateKeywordBody:
 
         cap = _parse_cap(d.pop("cap", UNSET))
 
+        _comments = d.pop("comments", UNSET)
+        comments: CreateKeywordBodyComments | Unset
+        if isinstance(_comments, Unset):
+            comments = UNSET
+        else:
+            comments = CreateKeywordBodyComments.from_dict(_comments)
+
         group_id = d.pop("groupId", UNSET)
 
         _review_sources = d.pop("reviewSources", UNSET)
@@ -226,6 +266,15 @@ class CreateKeywordBody:
 
                 review_sources.append(review_sources_item)
 
+        _feeds = d.pop("feeds", UNSET)
+        feeds: list[CreateKeywordBodyFeedsItem] | Unset = UNSET
+        if _feeds is not UNSET:
+            feeds = []
+            for feeds_item_data in _feeds:
+                feeds_item = CreateKeywordBodyFeedsItem.from_dict(feeds_item_data)
+
+                feeds.append(feeds_item)
+
         create_keyword_body = cls(
             term=term,
             kind=kind,
@@ -233,8 +282,10 @@ class CreateKeywordBody:
             context=context,
             matching=matching,
             cap=cap,
+            comments=comments,
             group_id=group_id,
             review_sources=review_sources,
+            feeds=feeds,
         )
 
         create_keyword_body.additional_properties = d

@@ -16,6 +16,12 @@ if TYPE_CHECKING:
     from ..models.keyword_suggestion_patch_cap_type_0 import (
         KeywordSuggestionPatchCapType0,
     )
+    from ..models.keyword_suggestion_patch_comments import (
+        KeywordSuggestionPatchComments,
+    )
+    from ..models.keyword_suggestion_patch_feeds_item import (
+        KeywordSuggestionPatchFeedsItem,
+    )
     from ..models.keyword_suggestion_patch_matching import (
         KeywordSuggestionPatchMatching,
     )
@@ -43,11 +49,16 @@ class KeywordSuggestionPatch:
             matching (KeywordSuggestionPatchMatching | Unset): Omitted fields are untouched; an empty list clears one.
             cap (KeywordSuggestionPatchCapType0 | None | Unset): Replaces the monthly mention cap; null removes it. A cap
                 above this month's count resumes a capped keyword at once, one at or under it pauses it.
+            comments (KeywordSuggestionPatchComments | Unset): Comments under this keyword's mentions; omitted fields are
+                untouched (on create: off, 20 per post).
             group_id (str | Unset): Moves the keyword to this group (grp_...). A 409 when that group already tracks the
                 term.
             review_sources (list[KeywordSuggestionPatchReviewSourcesItem] | Unset): Replaces the list of apps whose reviews
                 this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free
                 30-day look-back; one already listed keeps its place.
+            feeds (list[KeywordSuggestionPatchFeedsItem] | Unset): Replaces the feeds this keyword reads; [] disconnects
+                them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the
+                last 30 days; one already listed keeps its place.
     """
 
     kind: KeywordSuggestionPatchKind | Unset = UNSET
@@ -56,8 +67,10 @@ class KeywordSuggestionPatch:
     context: None | str | Unset = UNSET
     matching: KeywordSuggestionPatchMatching | Unset = UNSET
     cap: KeywordSuggestionPatchCapType0 | None | Unset = UNSET
+    comments: KeywordSuggestionPatchComments | Unset = UNSET
     group_id: str | Unset = UNSET
     review_sources: list[KeywordSuggestionPatchReviewSourcesItem] | Unset = UNSET
+    feeds: list[KeywordSuggestionPatchFeedsItem] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -101,6 +114,10 @@ class KeywordSuggestionPatch:
         else:
             cap = self.cap
 
+        comments: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.comments, Unset):
+            comments = self.comments.to_dict()
+
         group_id = self.group_id
 
         review_sources: list[dict[str, Any]] | Unset = UNSET
@@ -109,6 +126,13 @@ class KeywordSuggestionPatch:
             for review_sources_item_data in self.review_sources:
                 review_sources_item = review_sources_item_data.to_dict()
                 review_sources.append(review_sources_item)
+
+        feeds: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.feeds, Unset):
+            feeds = []
+            for feeds_item_data in self.feeds:
+                feeds_item = feeds_item_data.to_dict()
+                feeds.append(feeds_item)
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -125,10 +149,14 @@ class KeywordSuggestionPatch:
             field_dict["matching"] = matching
         if cap is not UNSET:
             field_dict["cap"] = cap
+        if comments is not UNSET:
+            field_dict["comments"] = comments
         if group_id is not UNSET:
             field_dict["groupId"] = group_id
         if review_sources is not UNSET:
             field_dict["reviewSources"] = review_sources
+        if feeds is not UNSET:
+            field_dict["feeds"] = feeds
 
         return field_dict
 
@@ -136,6 +164,12 @@ class KeywordSuggestionPatch:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.keyword_suggestion_patch_cap_type_0 import (
             KeywordSuggestionPatchCapType0,
+        )
+        from ..models.keyword_suggestion_patch_comments import (
+            KeywordSuggestionPatchComments,
+        )
+        from ..models.keyword_suggestion_patch_feeds_item import (
+            KeywordSuggestionPatchFeedsItem,
         )
         from ..models.keyword_suggestion_patch_matching import (
             KeywordSuggestionPatchMatching,
@@ -215,6 +249,13 @@ class KeywordSuggestionPatch:
 
         cap = _parse_cap(d.pop("cap", UNSET))
 
+        _comments = d.pop("comments", UNSET)
+        comments: KeywordSuggestionPatchComments | Unset
+        if isinstance(_comments, Unset):
+            comments = UNSET
+        else:
+            comments = KeywordSuggestionPatchComments.from_dict(_comments)
+
         group_id = d.pop("groupId", UNSET)
 
         _review_sources = d.pop("reviewSources", UNSET)
@@ -228,6 +269,15 @@ class KeywordSuggestionPatch:
 
                 review_sources.append(review_sources_item)
 
+        _feeds = d.pop("feeds", UNSET)
+        feeds: list[KeywordSuggestionPatchFeedsItem] | Unset = UNSET
+        if _feeds is not UNSET:
+            feeds = []
+            for feeds_item_data in _feeds:
+                feeds_item = KeywordSuggestionPatchFeedsItem.from_dict(feeds_item_data)
+
+                feeds.append(feeds_item)
+
         keyword_suggestion_patch = cls(
             kind=kind,
             muted=muted,
@@ -235,8 +285,10 @@ class KeywordSuggestionPatch:
             context=context,
             matching=matching,
             cap=cap,
+            comments=comments,
             group_id=group_id,
             review_sources=review_sources,
+            feeds=feeds,
         )
 
         keyword_suggestion_patch.additional_properties = d

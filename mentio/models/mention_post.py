@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.mention_post_kind import MentionPostKind
 from ..models.mention_post_platform import MentionPostPlatform
 
 if TYPE_CHECKING:
@@ -22,7 +23,9 @@ class MentionPost:
     Attributes:
         platform (MentionPostPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x, youtube,
             news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews), trustpilot
-            (Trustpilot reviews), googlemaps (Google reviews of a place).
+            (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a keyword reads).
+        kind (MentionPostKind): post: a top-level post. comment: an item that answers a post or another comment (a
+            Reddit or Hacker News comment, an X or Bluesky reply, a Stack Overflow answer, a YouTube comment).
         url (str): Permalink of the post.
         text (str): Title and body, truncated to 8 KB at ingest.
         title (None | str): The post's own title where the platform has one: a Hacker News story, a Reddit thread, a
@@ -31,20 +34,27 @@ class MentionPost:
             2026.
         image_url (None | str): A preview image of the post, when the platform sent one with it: a YouTube thumbnail, a
             DEV cover, a news article's sharing image, a Bluesky link card or image. Null otherwise.
+        subreddit (None | str): The subreddit a Reddit post was written in, without the r/ (SaaS). Null on every other
+            platform.
+        flair (None | str): A Reddit post's flair, when its subreddit uses them (Question, Show and Tell). Null
+            otherwise.
         links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for
             posts ingested before September 2026.
         published_at (str): When the post was published.
         engagement (MentionPostEngagementType0 | None): Engagement counts as the platform reported them when the post
             was ingested, usually minutes after it was written; a count the platform does not have is null. Null as a whole
             for platforms that report none and for posts ingested before September 2026. X carries all six.
-        reply_to (MentionPostReplyToType0 | None): The post this one replies to (X, Bluesky); null for top-level posts.
+        reply_to (MentionPostReplyToType0 | None): The post or comment this one answers; null for top-level posts.
     """
 
     platform: MentionPostPlatform
+    kind: MentionPostKind
     url: str
     text: str
     title: None | str
     image_url: None | str
+    subreddit: None | str
+    flair: None | str
     links: list[str]
     published_at: str
     engagement: MentionPostEngagementType0 | None
@@ -61,6 +71,8 @@ class MentionPost:
 
         platform = self.platform.value
 
+        kind = self.kind.value
+
         url = self.url
 
         text = self.text
@@ -70,6 +82,12 @@ class MentionPost:
 
         image_url: None | str
         image_url = self.image_url
+
+        subreddit: None | str
+        subreddit = self.subreddit
+
+        flair: None | str
+        flair = self.flair
 
         links = self.links
 
@@ -92,10 +110,13 @@ class MentionPost:
         field_dict.update(
             {
                 "platform": platform,
+                "kind": kind,
                 "url": url,
                 "text": text,
                 "title": title,
                 "imageUrl": image_url,
+                "subreddit": subreddit,
+                "flair": flair,
                 "links": links,
                 "publishedAt": published_at,
                 "engagement": engagement,
@@ -117,6 +138,8 @@ class MentionPost:
         d = dict(src_dict)
         platform = MentionPostPlatform(d.pop("platform"))
 
+        kind = MentionPostKind(d.pop("kind"))
+
         url = d.pop("url")
 
         text = d.pop("text")
@@ -134,6 +157,20 @@ class MentionPost:
             return cast(None | str, data)
 
         image_url = _parse_image_url(d.pop("imageUrl"))
+
+        def _parse_subreddit(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        subreddit = _parse_subreddit(d.pop("subreddit"))
+
+        def _parse_flair(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        flair = _parse_flair(d.pop("flair"))
 
         links = cast(list[str], d.pop("links"))
 
@@ -171,10 +208,13 @@ class MentionPost:
 
         mention_post = cls(
             platform=platform,
+            kind=kind,
             url=url,
             text=text,
             title=title,
             image_url=image_url,
+            subreddit=subreddit,
+            flair=flair,
             links=links,
             published_at=published_at,
             engagement=engagement,

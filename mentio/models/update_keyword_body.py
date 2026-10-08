@@ -14,6 +14,8 @@ from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
     from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
+    from ..models.update_keyword_body_comments import UpdateKeywordBodyComments
+    from ..models.update_keyword_body_feeds_item import UpdateKeywordBodyFeedsItem
     from ..models.update_keyword_body_matching import UpdateKeywordBodyMatching
     from ..models.update_keyword_body_review_sources_item import (
         UpdateKeywordBodyReviewSourcesItem,
@@ -38,11 +40,16 @@ class UpdateKeywordBody:
         matching (UpdateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
         cap (None | Unset | UpdateKeywordBodyCapType0): Replaces the monthly mention cap; null removes it. A cap above
             this month's count resumes a capped keyword at once, one at or under it pauses it.
+        comments (UpdateKeywordBodyComments | Unset): Comments under this keyword's mentions; omitted fields are
+            untouched (on create: off, 20 per post).
         group_id (str | Unset): Moves the keyword to this group (grp_...). A 409 when that group already tracks the
             term.
         review_sources (list[UpdateKeywordBodyReviewSourcesItem] | Unset): Replaces the list of apps whose reviews this
             keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free
             30-day look-back; one already listed keeps its place.
+        feeds (list[UpdateKeywordBodyFeedsItem] | Unset): Replaces the feeds this keyword reads; [] disconnects them all
+            (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30
+            days; one already listed keeps its place.
     """
 
     kind: UpdateKeywordBodyKind | Unset = UNSET
@@ -51,8 +58,10 @@ class UpdateKeywordBody:
     context: None | str | Unset = UNSET
     matching: UpdateKeywordBodyMatching | Unset = UNSET
     cap: None | Unset | UpdateKeywordBodyCapType0 = UNSET
+    comments: UpdateKeywordBodyComments | Unset = UNSET
     group_id: str | Unset = UNSET
     review_sources: list[UpdateKeywordBodyReviewSourcesItem] | Unset = UNSET
+    feeds: list[UpdateKeywordBodyFeedsItem] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -96,6 +105,10 @@ class UpdateKeywordBody:
         else:
             cap = self.cap
 
+        comments: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.comments, Unset):
+            comments = self.comments.to_dict()
+
         group_id = self.group_id
 
         review_sources: list[dict[str, Any]] | Unset = UNSET
@@ -104,6 +117,13 @@ class UpdateKeywordBody:
             for review_sources_item_data in self.review_sources:
                 review_sources_item = review_sources_item_data.to_dict()
                 review_sources.append(review_sources_item)
+
+        feeds: list[dict[str, Any]] | Unset = UNSET
+        if not isinstance(self.feeds, Unset):
+            feeds = []
+            for feeds_item_data in self.feeds:
+                feeds_item = feeds_item_data.to_dict()
+                feeds.append(feeds_item)
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -120,10 +140,14 @@ class UpdateKeywordBody:
             field_dict["matching"] = matching
         if cap is not UNSET:
             field_dict["cap"] = cap
+        if comments is not UNSET:
+            field_dict["comments"] = comments
         if group_id is not UNSET:
             field_dict["groupId"] = group_id
         if review_sources is not UNSET:
             field_dict["reviewSources"] = review_sources
+        if feeds is not UNSET:
+            field_dict["feeds"] = feeds
 
         return field_dict
 
@@ -131,6 +155,12 @@ class UpdateKeywordBody:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.update_keyword_body_cap_type_0 import (
             UpdateKeywordBodyCapType0,
+        )
+        from ..models.update_keyword_body_comments import (
+            UpdateKeywordBodyComments,
+        )
+        from ..models.update_keyword_body_feeds_item import (
+            UpdateKeywordBodyFeedsItem,
         )
         from ..models.update_keyword_body_matching import (
             UpdateKeywordBodyMatching,
@@ -208,6 +238,13 @@ class UpdateKeywordBody:
 
         cap = _parse_cap(d.pop("cap", UNSET))
 
+        _comments = d.pop("comments", UNSET)
+        comments: UpdateKeywordBodyComments | Unset
+        if isinstance(_comments, Unset):
+            comments = UNSET
+        else:
+            comments = UpdateKeywordBodyComments.from_dict(_comments)
+
         group_id = d.pop("groupId", UNSET)
 
         _review_sources = d.pop("reviewSources", UNSET)
@@ -221,6 +258,15 @@ class UpdateKeywordBody:
 
                 review_sources.append(review_sources_item)
 
+        _feeds = d.pop("feeds", UNSET)
+        feeds: list[UpdateKeywordBodyFeedsItem] | Unset = UNSET
+        if _feeds is not UNSET:
+            feeds = []
+            for feeds_item_data in _feeds:
+                feeds_item = UpdateKeywordBodyFeedsItem.from_dict(feeds_item_data)
+
+                feeds.append(feeds_item)
+
         update_keyword_body = cls(
             kind=kind,
             muted=muted,
@@ -228,8 +274,10 @@ class UpdateKeywordBody:
             context=context,
             matching=matching,
             cap=cap,
+            comments=comments,
             group_id=group_id,
             review_sources=review_sources,
+            feeds=feeds,
         )
 
         update_keyword_body.additional_properties = d
