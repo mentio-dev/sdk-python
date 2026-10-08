@@ -2,6 +2,7 @@
 
 import datetime as dt
 import json
+import pathlib
 
 import httpx
 import pytest
@@ -20,24 +21,89 @@ def json_response(status: int, payload) -> httpx.Response:
     return httpx.Response(status, json=payload, headers={"content-type": "application/json"})
 
 
-MENTION = {
-    "id": "mm_1",
-    "status": "open",
-    "relevant": True,
-    "delivered": False,
-    "priority": 61.5,
-    "keyword": {"id": "kw_1", "term": "acme", "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}, "matchedAs": "phrase", "matchedIn": "text"},
-    "post": {"platform": "reddit", "url": "https://r/1", "title": None, "text": "hi", "kind": "post", "imageUrl": None, "subreddit": "SaaS", "flair": None, "links": [], "engagement": None, "publishedAt": "2026-09-03T08:12:44.000Z", "replyTo": None},
-    "parentMentionId": None,
-    "duplicateOf": None,
-    "duplicates": [],
-    "stats": {"comments": 0},
-    "author": None,
-    "review": None,
-    "classification": None,
-    "triage": {"assignee": None, "snoozedUntil": None, "note": None},
-    "createdAt": "2026-09-03T08:15:02.113Z",
-}
+# The API's own description of its responses. The sample mention and keyword
+# below are BUILT from it: every field the API marks required is filled with
+# a minimal value of its type, and a test names only the values it reads.
+# Hand-written samples broke the release each time a response gained a
+# required field (feeds, comments, cross-posts: four failed releases in a
+# row on 2026-10-07), with nothing to say so before the merge.
+SPEC = json.loads((pathlib.Path(__file__).parent.parent.parent / "sdk" / "openapi.json").read_text())
+SCHEMAS = SPEC["components"]["schemas"]
+
+
+def _resolve(schema: dict) -> dict:
+    while "$ref" in schema:
+        schema = SCHEMAS[schema["$ref"].rsplit("/", 1)[-1]]
+    return schema
+
+
+def _minimal(schema: dict):
+    """The smallest value the schema accepts: null where it may be null."""
+    schema = _resolve(schema)
+    if schema.get("nullable") or schema.get("type") == "null":
+        return None
+    for key in ("anyOf", "oneOf"):
+        if key in schema:
+            options = [_resolve(o) for o in schema[key]]
+            if any(o.get("type") == "null" or o.get("nullable") for o in options):
+                return None
+            return _minimal(options[0])
+    if "allOf" in schema:
+        merged: dict = {}
+        for part in schema["allOf"]:
+            value = _minimal(part)
+            if isinstance(value, dict):
+                merged.update(value)
+        return merged
+    if "enum" in schema:
+        return schema["enum"][0]
+    kind = schema.get("type")
+    if isinstance(kind, list):
+        return None if "null" in kind else _minimal({**schema, "type": kind[0]})
+    if kind == "object" or "properties" in schema:
+        props = schema.get("properties", {})
+        return {name: _minimal(props[name]) for name in schema.get("required", []) if name in props}
+    if kind == "array":
+        return []
+    if kind == "boolean":
+        return False
+    if kind in ("integer", "number"):
+        return 0
+    if schema.get("format") == "date-time":
+        return "2026-09-03T08:15:02.113Z"
+    return "x"
+
+
+def _merge(base, overrides):
+    if isinstance(base, dict) and isinstance(overrides, dict):
+        return {**base, **{k: _merge(base.get(k), v) for k, v in overrides.items()}}
+    return overrides
+
+
+def sample(name: str, **overrides):
+    """A response of this schema with every required field, then the test's own values."""
+    return _merge(_minimal(SCHEMAS[name]), overrides)
+
+
+MENTION = sample(
+    "Mention",
+    id="mm_1",
+    status="open",
+    relevant=True,
+    priority=61.5,
+    keyword={"id": "kw_1", "term": "acme", "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}},
+    post={"platform": "reddit", "url": "https://r/1", "text": "hi", "subreddit": "SaaS", "publishedAt": "2026-09-03T08:12:44.000Z"},
+)
+KEYWORD = sample("Keyword", id="kw_1", term="acme", kind="brand", createdAt="2026-09-03T10:04:44.881Z")
+
+
+def test_the_samples_carry_every_required_field():
+    # What the generated models insist on, read off the spec: a response
+    # that gains a required field gets it here without anyone editing a test.
+    for name, value in (("Mention", MENTION), ("Keyword", KEYWORD)):
+        assert set(SCHEMAS[name]["required"]) <= set(value), name
+    assert KEYWORD["matching"]["subreddits"] == {"only": [], "excluded": []}
+    assert KEYWORD["feeds"] == []
 
 
 def test_search_sends_the_key_and_coerces_strings_into_the_typed_query():
@@ -80,7 +146,7 @@ def test_bodies_take_fields_a_dict_or_a_model():
 
     def handler(request: httpx.Request) -> httpx.Response:
         bodies.append(json.loads(request.content))
-        return json_response(201, {"id": "kw_1", "term": "acme", "kind": "brand", "muted": False, "pausedForBalance": False, "pausedForNoise": False, "pausedForCap": False, "cap": None, "comments": {"enabled": False, "maxPerPost": 20}, "group": {"id": "grp_1", "name": "Default", "externalId": None, "isDefault": True}, "platforms": None, "feeds": [], "reviewSources": [], "context": None, "matching": {"requiredTerms": [], "requiredMode": "any", "excludedTerms": [], "excludedAuthors": [], "caseSensitive": False, "exactPhrase": False, "subreddits": {"only": [], "excluded": []}}, "stats": {"mentions": 0, "relevant": 0, "last7d": 0, "thisMonth": 0, "lastMentionAt": None, "feedback": {"relevant": 0, "notRelevant": 0}, "noise": {"scored": 0, "relevant": 0, "noisy": False}, "health": "new", "cost": {"keywordDays": 0, "keywordCents": 0, "billableMentions": 0, "mentionCents": 0, "billableComments": 0, "commentCents": 0, "totalCents": 0}}, "polling": [], "createdAt": "2026-09-03T10:04:44.881Z"})
+        return json_response(201, KEYWORD)
 
     client = make_client(handler)
     created = client.keywords.create(term="acme", kind="brand")
