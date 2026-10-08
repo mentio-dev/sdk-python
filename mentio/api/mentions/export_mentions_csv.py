@@ -529,10 +529,11 @@ def sync_detailed(
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), kind (post or comment), parent_url (the post a comment
-    answers) and comments (comments of it delivered to you). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
+    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
+    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
+    subreddit and flair (Reddit only). Capped at 10,000 rows; the X-Mentions-Truncated header says when
+    the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -779,10 +780,11 @@ def sync(
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), kind (post or comment), parent_url (the post a comment
-    answers) and comments (comments of it delivered to you). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
+    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
+    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
+    subreddit and flair (Reddit only). Capped at 10,000 rows; the X-Mentions-Truncated header says when
+    the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1024,10 +1026,11 @@ async def asyncio_detailed(
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), kind (post or comment), parent_url (the post a comment
-    answers) and comments (comments of it delivered to you). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
+    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
+    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
+    subreddit and flair (Reddit only). Capped at 10,000 rows; the X-Mentions-Truncated header says when
+    the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1272,10 +1275,11 @@ async def asyncio(
     keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), kind (post or comment), parent_url (the post a comment
-    answers) and comments (comments of it delivered to you). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
+    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
+    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
+    subreddit and flair (Reddit only). Capped at 10,000 rows; the X-Mentions-Truncated header says when
+    the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
