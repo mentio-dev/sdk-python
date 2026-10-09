@@ -40,7 +40,8 @@ class CreateKeywordBody:
             profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
             is our browser; ignore the geometry word." Null clears it.
         matching (CreateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
-        cap (CreateKeywordBodyCapType0 | None | Unset): A monthly mention cap; omit or null for none.
+        cap (CreateKeywordBodyCapType0 | None | Unset): A mention cap per day, week or month (per, default month); omit
+            or null for none.
         comments (CreateKeywordBodyComments | Unset): Comments under this keyword's mentions; omitted fields are
             untouched (on create: off, 20 per post).
         group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may

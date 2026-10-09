@@ -186,7 +186,7 @@ class _Keywords:
           platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: A monthly mention cap; omit or null for none.
+          cap: A mention cap per day, week or month (per, default month); omit or null for none.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
           reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
@@ -254,7 +254,7 @@ class _Keywords:
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
+          cap: Replaces the mention cap and its period (per, default month); null removes it. A cap above the current period's count resumes a capped keyword at once, one at or under it pauses it.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
           reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.
@@ -1225,7 +1225,7 @@ class _AsyncKeywords:
           platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: A monthly mention cap; omit or null for none.
+          cap: A mention cap per day, week or month (per, default month); omit or null for none.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
           reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
@@ -1293,7 +1293,7 @@ class _AsyncKeywords:
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
           context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
-          cap: Replaces the monthly mention cap; null removes it. A cap above this month's count resumes a capped keyword at once, one at or under it pauses it.
+          cap: Replaces the mention cap and its period (per, default month); null removes it. A cap above the current period's count resumes a capped keyword at once, one at or under it pauses it.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
           reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.

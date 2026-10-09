@@ -41,8 +41,9 @@ class UpdateKeywordBody:
             profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
             is our browser; ignore the geometry word." Null clears it.
         matching (UpdateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
-        cap (None | Unset | UpdateKeywordBodyCapType0): Replaces the monthly mention cap; null removes it. A cap above
-            this month's count resumes a capped keyword at once, one at or under it pauses it.
+        cap (None | Unset | UpdateKeywordBodyCapType0): Replaces the mention cap and its period (per, default month);
+            null removes it. A cap above the current period's count resumes a capped keyword at once, one at or under it
+            pauses it.
         comments (UpdateKeywordBodyComments | Unset): Comments under this keyword's mentions; omitted fields are
             untouched (on create: off, 20 per post).
         group_id (str | Unset): Moves the keyword to this group (grp_...). A 409 when that group already tracks the

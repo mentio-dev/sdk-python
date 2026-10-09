@@ -105,6 +105,7 @@ from .create_invitation_body import CreateInvitationBody
 from .create_invitation_body_role import CreateInvitationBodyRole
 from .create_keyword_body import CreateKeywordBody
 from .create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
+from .create_keyword_body_cap_type_0_per import CreateKeywordBodyCapType0Per
 from .create_keyword_body_comments import CreateKeywordBodyComments
 from .create_keyword_body_feeds_item import CreateKeywordBodyFeedsItem
 from .create_keyword_body_kind import CreateKeywordBodyKind
@@ -245,6 +246,8 @@ from .invoice_list import InvoiceList
 from .invoice_list_data_item import InvoiceListDataItem
 from .keyword import Keyword
 from .keyword_cap_type_0 import KeywordCapType0
+from .keyword_cap_type_0_own_per import KeywordCapType0OwnPer
+from .keyword_cap_type_0_per import KeywordCapType0Per
 from .keyword_comments import KeywordComments
 from .keyword_feed import KeywordFeed
 from .keyword_health import KeywordHealth
@@ -287,6 +290,7 @@ from .keyword_suggestion_effect_type_0 import KeywordSuggestionEffectType0
 from .keyword_suggestion_effect_type_0_sample import KeywordSuggestionEffectType0Sample
 from .keyword_suggestion_patch import KeywordSuggestionPatch
 from .keyword_suggestion_patch_cap_type_0 import KeywordSuggestionPatchCapType0
+from .keyword_suggestion_patch_cap_type_0_per import KeywordSuggestionPatchCapType0Per
 from .keyword_suggestion_patch_comments import KeywordSuggestionPatchComments
 from .keyword_suggestion_patch_feeds_item import KeywordSuggestionPatchFeedsItem
 from .keyword_suggestion_patch_kind import KeywordSuggestionPatchKind
@@ -373,6 +377,12 @@ from .list_keywords_response_200 import ListKeywordsResponse200
 from .list_keywords_response_200_data_item import ListKeywordsResponse200DataItem
 from .list_keywords_response_200_data_item_cap_type_0 import (
     ListKeywordsResponse200DataItemCapType0,
+)
+from .list_keywords_response_200_data_item_cap_type_0_own_per import (
+    ListKeywordsResponse200DataItemCapType0OwnPer,
+)
+from .list_keywords_response_200_data_item_cap_type_0_per import (
+    ListKeywordsResponse200DataItemCapType0Per,
 )
 from .list_keywords_response_200_data_item_comments import (
     ListKeywordsResponse200DataItemComments,
@@ -696,6 +706,7 @@ from .update_filters_body_subreddits import UpdateFiltersBodySubreddits
 from .update_group_body import UpdateGroupBody
 from .update_keyword_body import UpdateKeywordBody
 from .update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
+from .update_keyword_body_cap_type_0_per import UpdateKeywordBodyCapType0Per
 from .update_keyword_body_comments import UpdateKeywordBodyComments
 from .update_keyword_body_feeds_item import UpdateKeywordBodyFeedsItem
 from .update_keyword_body_kind import UpdateKeywordBodyKind
@@ -867,6 +878,7 @@ __all__ = (
     "CreateInvitationBodyRole",
     "CreateKeywordBody",
     "CreateKeywordBodyCapType0",
+    "CreateKeywordBodyCapType0Per",
     "CreateKeywordBodyComments",
     "CreateKeywordBodyFeedsItem",
     "CreateKeywordBodyKind",
@@ -979,6 +991,8 @@ __all__ = (
     "InvoiceListDataItem",
     "Keyword",
     "KeywordCapType0",
+    "KeywordCapType0OwnPer",
+    "KeywordCapType0Per",
     "KeywordComments",
     "KeywordFeed",
     "KeywordHealth",
@@ -1017,6 +1031,7 @@ __all__ = (
     "KeywordSuggestionEffectType0Sample",
     "KeywordSuggestionPatch",
     "KeywordSuggestionPatchCapType0",
+    "KeywordSuggestionPatchCapType0Per",
     "KeywordSuggestionPatchComments",
     "KeywordSuggestionPatchFeedsItem",
     "KeywordSuggestionPatchKind",
@@ -1064,6 +1079,8 @@ __all__ = (
     "ListKeywordsResponse200",
     "ListKeywordsResponse200DataItem",
     "ListKeywordsResponse200DataItemCapType0",
+    "ListKeywordsResponse200DataItemCapType0OwnPer",
+    "ListKeywordsResponse200DataItemCapType0Per",
     "ListKeywordsResponse200DataItemComments",
     "ListKeywordsResponse200DataItemKind",
     "ListKeywordsResponse200DataItemMatching",
@@ -1274,6 +1291,7 @@ __all__ = (
     "UpdateGroupBody",
     "UpdateKeywordBody",
     "UpdateKeywordBodyCapType0",
+    "UpdateKeywordBodyCapType0Per",
     "UpdateKeywordBodyComments",
     "UpdateKeywordBodyFeedsItem",
     "UpdateKeywordBodyKind",

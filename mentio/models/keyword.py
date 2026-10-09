@@ -39,7 +39,7 @@ class Keyword:
             context resumes it (when the balance covers another day), and so does unmuting; a top-up does not.
         paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
             cap is raised. Not muted: it keeps its place and its daily keyword charge.
-        cap (KeywordCapType0 | None): The monthly mention cap, or null for none.
+        cap (KeywordCapType0 | None): The mention cap and its period, or null for none.
         comments (KeywordComments): Comments under this keyword's mentions: when enabled, the comments of every mention
             scored relevant are read from 30 minutes after the post, on a schedule per platform (for a day on Reddit, Hacker
             News and Bluesky, a week on GitHub, Stack Overflow and DEV, a month on YouTube) (new comments only, at most
