@@ -78,9 +78,7 @@ class MentionSpikeEventData:
         from ..models.mention_spike_event_data_keyword import (
             MentionSpikeEventDataKeyword,
         )
-        from ..models.mention_spike_event_data_window import (
-            MentionSpikeEventDataWindow,
-        )
+        from ..models.mention_spike_event_data_window import MentionSpikeEventDataWindow
 
         d = dict(src_dict)
         attention_id = d.pop("attentionId")

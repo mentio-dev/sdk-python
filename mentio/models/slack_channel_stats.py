@@ -55,9 +55,7 @@ class SlackChannelStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.slack_channel_stats_last_7d import (
-            SlackChannelStatsLast7D,
-        )
+        from ..models.slack_channel_stats_last_7d import SlackChannelStatsLast7D
 
         d = dict(src_dict)
         alerts = d.pop("alerts")

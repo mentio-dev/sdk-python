@@ -67,15 +67,9 @@ class MentionPost:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.mention_post_engagement_type_0 import (
-            MentionPostEngagementType0,
-        )
-        from ..models.mention_post_reply_to_type_0 import (
-            MentionPostReplyToType0,
-        )
-        from ..models.mention_post_repository_type_0 import (
-            MentionPostRepositoryType0,
-        )
+        from ..models.mention_post_engagement_type_0 import MentionPostEngagementType0
+        from ..models.mention_post_reply_to_type_0 import MentionPostReplyToType0
+        from ..models.mention_post_repository_type_0 import MentionPostRepositoryType0
 
         platform = self.platform.value
 
@@ -143,15 +137,9 @@ class MentionPost:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.mention_post_engagement_type_0 import (
-            MentionPostEngagementType0,
-        )
-        from ..models.mention_post_reply_to_type_0 import (
-            MentionPostReplyToType0,
-        )
-        from ..models.mention_post_repository_type_0 import (
-            MentionPostRepositoryType0,
-        )
+        from ..models.mention_post_engagement_type_0 import MentionPostEngagementType0
+        from ..models.mention_post_reply_to_type_0 import MentionPostReplyToType0
+        from ..models.mention_post_repository_type_0 import MentionPostRepositoryType0
 
         d = dict(src_dict)
         platform = MentionPostPlatform(d.pop("platform"))

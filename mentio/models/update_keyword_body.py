@@ -70,9 +70,7 @@ class UpdateKeywordBody:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.update_keyword_body_cap_type_0 import (
-            UpdateKeywordBodyCapType0,
-        )
+        from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
 
         term = self.term
 
@@ -162,18 +160,10 @@ class UpdateKeywordBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.update_keyword_body_cap_type_0 import (
-            UpdateKeywordBodyCapType0,
-        )
-        from ..models.update_keyword_body_comments import (
-            UpdateKeywordBodyComments,
-        )
-        from ..models.update_keyword_body_feeds_item import (
-            UpdateKeywordBodyFeedsItem,
-        )
-        from ..models.update_keyword_body_matching import (
-            UpdateKeywordBodyMatching,
-        )
+        from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
+        from ..models.update_keyword_body_comments import UpdateKeywordBodyComments
+        from ..models.update_keyword_body_feeds_item import UpdateKeywordBodyFeedsItem
+        from ..models.update_keyword_body_matching import UpdateKeywordBodyMatching
         from ..models.update_keyword_body_review_sources_item import (
             UpdateKeywordBodyReviewSourcesItem,
         )

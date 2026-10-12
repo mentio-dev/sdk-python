@@ -145,9 +145,7 @@ class Wallet:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.wallet_auto_recharge import WalletAutoRecharge
-        from ..models.wallet_signup_credit_type_0 import (
-            WalletSignupCreditType0,
-        )
+        from ..models.wallet_signup_credit_type_0 import WalletSignupCreditType0
 
         d = dict(src_dict)
         balance_cents = d.pop("balanceCents")

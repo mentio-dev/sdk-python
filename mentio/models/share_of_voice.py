@@ -47,9 +47,7 @@ class ShareOfVoice:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.share_of_voice_data_item import (
-            ShareOfVoiceDataItem,
-        )
+        from ..models.share_of_voice_data_item import ShareOfVoiceDataItem
         from ..models.share_of_voice_window import ShareOfVoiceWindow
 
         d = dict(src_dict)

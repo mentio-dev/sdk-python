@@ -104,9 +104,7 @@ class KeywordHealthStats:
         from ..models.keyword_health_stats_by_platform_item import (
             KeywordHealthStatsByPlatformItem,
         )
-        from ..models.keyword_health_stats_cost import (
-            KeywordHealthStatsCost,
-        )
+        from ..models.keyword_health_stats_cost import KeywordHealthStatsCost
         from ..models.keyword_health_stats_weekly_item import (
             KeywordHealthStatsWeeklyItem,
         )

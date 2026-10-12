@@ -96,9 +96,7 @@ class KeywordStats:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.keyword_stats_cost import KeywordStatsCost
-        from ..models.keyword_stats_feedback import (
-            KeywordStatsFeedback,
-        )
+        from ..models.keyword_stats_feedback import KeywordStatsFeedback
         from ..models.keyword_stats_noise import KeywordStatsNoise
 
         d = dict(src_dict)

@@ -88,9 +88,7 @@ class MentionReviewType0:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.mention_review_type_0_app import (
-            MentionReviewType0App,
-        )
+        from ..models.mention_review_type_0_app import MentionReviewType0App
 
         d = dict(src_dict)
         rating = d.pop("rating")

@@ -85,12 +85,8 @@ class KeywordMatching:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.keyword_matching_repositories import (
-            KeywordMatchingRepositories,
-        )
-        from ..models.keyword_matching_subreddits import (
-            KeywordMatchingSubreddits,
-        )
+        from ..models.keyword_matching_repositories import KeywordMatchingRepositories
+        from ..models.keyword_matching_subreddits import KeywordMatchingSubreddits
 
         d = dict(src_dict)
         required_terms = cast(list[str], d.pop("requiredTerms"))

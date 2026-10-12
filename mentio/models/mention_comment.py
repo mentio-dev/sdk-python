@@ -50,9 +50,7 @@ class MentionComment:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.mention_comment_author_type_0 import (
-            MentionCommentAuthorType0,
-        )
+        from ..models.mention_comment_author_type_0 import MentionCommentAuthorType0
         from ..models.mention_comment_classification_type_0 import (
             MentionCommentClassificationType0,
         )
@@ -112,9 +110,7 @@ class MentionComment:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.mention_comment_author_type_0 import (
-            MentionCommentAuthorType0,
-        )
+        from ..models.mention_comment_author_type_0 import MentionCommentAuthorType0
         from ..models.mention_comment_classification_type_0 import (
             MentionCommentClassificationType0,
         )

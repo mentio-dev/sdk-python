@@ -59,9 +59,7 @@ class PersonStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.person_stats_sentiment import (
-            PersonStatsSentiment,
-        )
+        from ..models.person_stats_sentiment import PersonStatsSentiment
 
         d = dict(src_dict)
         mentions = d.pop("mentions")

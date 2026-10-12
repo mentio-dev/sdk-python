@@ -73,9 +73,7 @@ class CreateWebhookChannel:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.create_webhook_channel_headers import (
-            CreateWebhookChannelHeaders,
-        )
+        from ..models.create_webhook_channel_headers import CreateWebhookChannelHeaders
 
         d = dict(src_dict)
         kind = CreateWebhookChannelKind(d.pop("kind"))

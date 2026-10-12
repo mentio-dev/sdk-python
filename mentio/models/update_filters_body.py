@@ -65,9 +65,7 @@ class UpdateFiltersBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.update_filters_body_subreddits import (
-            UpdateFiltersBodySubreddits,
-        )
+        from ..models.update_filters_body_subreddits import UpdateFiltersBodySubreddits
 
         d = dict(src_dict)
         excluded_terms = cast(list[str], d.pop("excludedTerms", UNSET))

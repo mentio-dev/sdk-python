@@ -66,9 +66,7 @@ class WebhookChannel:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.webhook_channel_config import (
-            WebhookChannelConfig,
-        )
+        from ..models.webhook_channel_config import WebhookChannelConfig
         from ..models.webhook_channel_stats import WebhookChannelStats
 
         d = dict(src_dict)

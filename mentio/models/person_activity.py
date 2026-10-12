@@ -40,9 +40,7 @@ class PersonActivity:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.person_activity_member_type_0 import (
-            PersonActivityMemberType0,
-        )
+        from ..models.person_activity_member_type_0 import PersonActivityMemberType0
 
         id = self.id
 
@@ -80,9 +78,7 @@ class PersonActivity:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.person_activity_member_type_0 import (
-            PersonActivityMemberType0,
-        )
+        from ..models.person_activity_member_type_0 import PersonActivityMemberType0
 
         d = dict(src_dict)
         id = d.pop("id")

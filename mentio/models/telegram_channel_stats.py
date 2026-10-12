@@ -55,9 +55,7 @@ class TelegramChannelStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.telegram_channel_stats_last_7d import (
-            TelegramChannelStatsLast7D,
-        )
+        from ..models.telegram_channel_stats_last_7d import TelegramChannelStatsLast7D
 
         d = dict(src_dict)
         alerts = d.pop("alerts")

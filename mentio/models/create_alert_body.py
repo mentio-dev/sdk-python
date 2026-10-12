@@ -92,12 +92,8 @@ class CreateAlertBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.create_alert_body_filter import (
-            CreateAlertBodyFilter,
-        )
-        from ..models.create_alert_body_schedule import (
-            CreateAlertBodySchedule,
-        )
+        from ..models.create_alert_body_filter import CreateAlertBodyFilter
+        from ..models.create_alert_body_schedule import CreateAlertBodySchedule
 
         d = dict(src_dict)
         name = d.pop("name")

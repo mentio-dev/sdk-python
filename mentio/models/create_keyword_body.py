@@ -72,9 +72,7 @@ class CreateKeywordBody:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.create_keyword_body_cap_type_0 import (
-            CreateKeywordBodyCapType0,
-        )
+        from ..models.create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
 
         term = self.term
 
@@ -162,18 +160,10 @@ class CreateKeywordBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.create_keyword_body_cap_type_0 import (
-            CreateKeywordBodyCapType0,
-        )
-        from ..models.create_keyword_body_comments import (
-            CreateKeywordBodyComments,
-        )
-        from ..models.create_keyword_body_feeds_item import (
-            CreateKeywordBodyFeedsItem,
-        )
-        from ..models.create_keyword_body_matching import (
-            CreateKeywordBodyMatching,
-        )
+        from ..models.create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
+        from ..models.create_keyword_body_comments import CreateKeywordBodyComments
+        from ..models.create_keyword_body_feeds_item import CreateKeywordBodyFeedsItem
+        from ..models.create_keyword_body_matching import CreateKeywordBodyMatching
         from ..models.create_keyword_body_review_sources_item import (
             CreateKeywordBodyReviewSourcesItem,
         )

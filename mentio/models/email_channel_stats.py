@@ -55,9 +55,7 @@ class EmailChannelStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.email_channel_stats_last_7d import (
-            EmailChannelStatsLast7D,
-        )
+        from ..models.email_channel_stats_last_7d import EmailChannelStatsLast7D
 
         d = dict(src_dict)
         alerts = d.pop("alerts")

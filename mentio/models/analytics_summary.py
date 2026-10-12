@@ -104,18 +104,10 @@ class AnalyticsSummary:
         from ..models.analytics_summary_previous_type_0 import (
             AnalyticsSummaryPreviousType0,
         )
-        from ..models.analytics_summary_reach import (
-            AnalyticsSummaryReach,
-        )
-        from ..models.analytics_summary_sentiment import (
-            AnalyticsSummarySentiment,
-        )
-        from ..models.analytics_summary_triage import (
-            AnalyticsSummaryTriage,
-        )
-        from ..models.analytics_summary_window import (
-            AnalyticsSummaryWindow,
-        )
+        from ..models.analytics_summary_reach import AnalyticsSummaryReach
+        from ..models.analytics_summary_sentiment import AnalyticsSummarySentiment
+        from ..models.analytics_summary_triage import AnalyticsSummaryTriage
+        from ..models.analytics_summary_window import AnalyticsSummaryWindow
 
         d = dict(src_dict)
         window = AnalyticsSummaryWindow.from_dict(d.pop("window"))

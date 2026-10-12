@@ -76,9 +76,7 @@ class Mention:
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.mention_author_type_0 import MentionAuthorType0
-        from ..models.mention_classification_type_0 import (
-            MentionClassificationType0,
-        )
+        from ..models.mention_classification_type_0 import MentionClassificationType0
         from ..models.mention_review_type_0 import MentionReviewType0
 
         id = self.id
@@ -158,12 +156,8 @@ class Mention:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.mention_author_type_0 import MentionAuthorType0
-        from ..models.mention_classification_type_0 import (
-            MentionClassificationType0,
-        )
-        from ..models.mention_duplicates_item import (
-            MentionDuplicatesItem,
-        )
+        from ..models.mention_classification_type_0 import MentionClassificationType0
+        from ..models.mention_duplicates_item import MentionDuplicatesItem
         from ..models.mention_keyword import MentionKeyword
         from ..models.mention_post import MentionPost
         from ..models.mention_review_type_0 import MentionReviewType0

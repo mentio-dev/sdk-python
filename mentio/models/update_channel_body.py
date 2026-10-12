@@ -68,9 +68,7 @@ class UpdateChannelBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.update_channel_body_headers import (
-            UpdateChannelBodyHeaders,
-        )
+        from ..models.update_channel_body_headers import UpdateChannelBodyHeaders
 
         d = dict(src_dict)
         label = d.pop("label", UNSET)

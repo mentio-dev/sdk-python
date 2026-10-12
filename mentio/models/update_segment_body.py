@@ -53,9 +53,7 @@ class UpdateSegmentBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.update_segment_body_filter import (
-            UpdateSegmentBodyFilter,
-        )
+        from ..models.update_segment_body_filter import UpdateSegmentBodyFilter
 
         d = dict(src_dict)
         name = d.pop("name", UNSET)

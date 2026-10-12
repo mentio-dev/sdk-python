@@ -54,9 +54,7 @@ class CreateViewBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.create_view_body_filter import (
-            CreateViewBodyFilter,
-        )
+        from ..models.create_view_body_filter import CreateViewBodyFilter
 
         d = dict(src_dict)
         name = d.pop("name")

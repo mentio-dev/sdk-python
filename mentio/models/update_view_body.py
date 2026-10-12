@@ -52,9 +52,7 @@ class UpdateViewBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.update_view_body_filter import (
-            UpdateViewBodyFilter,
-        )
+        from ..models.update_view_body_filter import UpdateViewBodyFilter
 
         d = dict(src_dict)
         name = d.pop("name", UNSET)

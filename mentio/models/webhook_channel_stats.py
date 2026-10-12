@@ -55,9 +55,7 @@ class WebhookChannelStats:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.webhook_channel_stats_last_7d import (
-            WebhookChannelStatsLast7D,
-        )
+        from ..models.webhook_channel_stats_last_7d import WebhookChannelStatsLast7D
 
         d = dict(src_dict)
         alerts = d.pop("alerts")

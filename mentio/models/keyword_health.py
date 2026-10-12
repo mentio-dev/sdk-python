@@ -118,15 +118,11 @@ class KeywordHealth:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.keyword_health_ai import KeywordHealthAi
-        from ..models.keyword_health_keyword import (
-            KeywordHealthKeyword,
-        )
+        from ..models.keyword_health_keyword import KeywordHealthKeyword
         from ..models.keyword_health_noise_authors_item import (
             KeywordHealthNoiseAuthorsItem,
         )
-        from ..models.keyword_health_noise_terms_item import (
-            KeywordHealthNoiseTermsItem,
-        )
+        from ..models.keyword_health_noise_terms_item import KeywordHealthNoiseTermsItem
         from ..models.keyword_health_sample import KeywordHealthSample
         from ..models.keyword_health_stats import KeywordHealthStats
         from ..models.keyword_health_window import KeywordHealthWindow

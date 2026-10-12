@@ -63,9 +63,7 @@ class WorkspaceFilters:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.workspace_filters_subreddits import (
-            WorkspaceFiltersSubreddits,
-        )
+        from ..models.workspace_filters_subreddits import WorkspaceFiltersSubreddits
 
         d = dict(src_dict)
         excluded_terms = cast(list[str], d.pop("excludedTerms"))

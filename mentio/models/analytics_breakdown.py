@@ -55,12 +55,8 @@ class AnalyticsBreakdown:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.analytics_breakdown_data_item import (
-            AnalyticsBreakdownDataItem,
-        )
-        from ..models.analytics_breakdown_window import (
-            AnalyticsBreakdownWindow,
-        )
+        from ..models.analytics_breakdown_data_item import AnalyticsBreakdownDataItem
+        from ..models.analytics_breakdown_window import AnalyticsBreakdownWindow
 
         d = dict(src_dict)
         window = AnalyticsBreakdownWindow.from_dict(d.pop("window"))

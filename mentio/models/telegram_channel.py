@@ -66,12 +66,8 @@ class TelegramChannel:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.telegram_channel_config import (
-            TelegramChannelConfig,
-        )
-        from ..models.telegram_channel_stats import (
-            TelegramChannelStats,
-        )
+        from ..models.telegram_channel_config import TelegramChannelConfig
+        from ..models.telegram_channel_stats import TelegramChannelStats
 
         d = dict(src_dict)
         id = d.pop("id")

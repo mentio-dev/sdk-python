@@ -108,21 +108,11 @@ class AttentionItem:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.attention_item_subject import (
-            AttentionItemSubject,
-        )
-        from ..models.channel_failing_event_data import (
-            ChannelFailingEventData,
-        )
-        from ..models.keyword_noisy_event_data import (
-            KeywordNoisyEventData,
-        )
-        from ..models.mention_spike_event_data import (
-            MentionSpikeEventData,
-        )
-        from ..models.negative_spike_event_data import (
-            NegativeSpikeEventData,
-        )
+        from ..models.attention_item_subject import AttentionItemSubject
+        from ..models.channel_failing_event_data import ChannelFailingEventData
+        from ..models.keyword_noisy_event_data import KeywordNoisyEventData
+        from ..models.mention_spike_event_data import MentionSpikeEventData
+        from ..models.negative_spike_event_data import NegativeSpikeEventData
 
         d = dict(src_dict)
         id = d.pop("id")

@@ -78,15 +78,9 @@ class UsageBreakdown:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.usage_breakdown_data_item import (
-            UsageBreakdownDataItem,
-        )
-        from ..models.usage_breakdown_totals import (
-            UsageBreakdownTotals,
-        )
-        from ..models.usage_breakdown_window import (
-            UsageBreakdownWindow,
-        )
+        from ..models.usage_breakdown_data_item import UsageBreakdownDataItem
+        from ..models.usage_breakdown_totals import UsageBreakdownTotals
+        from ..models.usage_breakdown_window import UsageBreakdownWindow
 
         d = dict(src_dict)
         window = UsageBreakdownWindow.from_dict(d.pop("window"))

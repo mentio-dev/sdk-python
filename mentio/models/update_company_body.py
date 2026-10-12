@@ -95,9 +95,7 @@ class UpdateCompanyBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.update_company_body_accounts import (
-            UpdateCompanyBodyAccounts,
-        )
+        from ..models.update_company_body_accounts import UpdateCompanyBodyAccounts
 
         d = dict(src_dict)
         name = d.pop("name", UNSET)

@@ -29,9 +29,7 @@ class MentionTriage:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.mention_triage_assignee_type_0 import (
-            MentionTriageAssigneeType0,
-        )
+        from ..models.mention_triage_assignee_type_0 import MentionTriageAssigneeType0
 
         assignee: dict[str, Any] | None
         if isinstance(self.assignee, MentionTriageAssigneeType0):
@@ -59,9 +57,7 @@ class MentionTriage:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.mention_triage_assignee_type_0 import (
-            MentionTriageAssigneeType0,
-        )
+        from ..models.mention_triage_assignee_type_0 import MentionTriageAssigneeType0
 
         d = dict(src_dict)
 

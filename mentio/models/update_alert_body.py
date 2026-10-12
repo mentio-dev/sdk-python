@@ -98,9 +98,7 @@ class UpdateAlertBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.update_alert_body_filter import (
-            UpdateAlertBodyFilter,
-        )
+        from ..models.update_alert_body_filter import UpdateAlertBodyFilter
         from ..models.update_alert_body_schedule_type_0 import (
             UpdateAlertBodyScheduleType0,
         )

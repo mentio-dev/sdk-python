@@ -64,9 +64,7 @@ class WebhookChannelConfig:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.webhook_channel_config_headers import (
-            WebhookChannelConfigHeaders,
-        )
+        from ..models.webhook_channel_config_headers import WebhookChannelConfigHeaders
 
         d = dict(src_dict)
         url = d.pop("url")

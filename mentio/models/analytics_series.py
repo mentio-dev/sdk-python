@@ -66,15 +66,11 @@ class AnalyticsSeries:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.analytics_series_data_item import (
-            AnalyticsSeriesDataItem,
-        )
+        from ..models.analytics_series_data_item import AnalyticsSeriesDataItem
         from ..models.analytics_series_previous_type_0_item import (
             AnalyticsSeriesPreviousType0Item,
         )
-        from ..models.analytics_series_window import (
-            AnalyticsSeriesWindow,
-        )
+        from ..models.analytics_series_window import AnalyticsSeriesWindow
 
         d = dict(src_dict)
         window = AnalyticsSeriesWindow.from_dict(d.pop("window"))

@@ -36,9 +36,7 @@ class Invitation:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.invitation_invited_by_type_0 import (
-            InvitationInvitedByType0,
-        )
+        from ..models.invitation_invited_by_type_0 import InvitationInvitedByType0
 
         id = self.id
 
@@ -73,9 +71,7 @@ class Invitation:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.invitation_invited_by_type_0 import (
-            InvitationInvitedByType0,
-        )
+        from ..models.invitation_invited_by_type_0 import InvitationInvitedByType0
 
         d = dict(src_dict)
         id = d.pop("id")

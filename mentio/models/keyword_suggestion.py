@@ -83,9 +83,7 @@ class KeywordSuggestion:
         from ..models.keyword_suggestion_effect_type_0 import (
             KeywordSuggestionEffectType0,
         )
-        from ..models.keyword_suggestion_patch import (
-            KeywordSuggestionPatch,
-        )
+        from ..models.keyword_suggestion_patch import KeywordSuggestionPatch
 
         d = dict(src_dict)
         type_ = KeywordSuggestionType(d.pop("type"))

@@ -74,12 +74,8 @@ class UsageSummary:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.usage_summary_balance import UsageSummaryBalance
         from ..models.usage_summary_burn import UsageSummaryBurn
-        from ..models.usage_summary_keywords import (
-            UsageSummaryKeywords,
-        )
-        from ..models.usage_summary_mentions import (
-            UsageSummaryMentions,
-        )
+        from ..models.usage_summary_keywords import UsageSummaryKeywords
+        from ..models.usage_summary_mentions import UsageSummaryMentions
 
         d = dict(src_dict)
         balance = UsageSummaryBalance.from_dict(d.pop("balance"))

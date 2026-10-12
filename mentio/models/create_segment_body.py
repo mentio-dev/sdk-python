@@ -54,9 +54,7 @@ class CreateSegmentBody:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.create_segment_body_filter import (
-            CreateSegmentBodyFilter,
-        )
+        from ..models.create_segment_body_filter import CreateSegmentBodyFilter
 
         d = dict(src_dict)
         name = d.pop("name")

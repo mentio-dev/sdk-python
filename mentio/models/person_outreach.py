@@ -34,9 +34,7 @@ class PersonOutreach:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.person_outreach_owner_type_0 import (
-            PersonOutreachOwnerType0,
-        )
+        from ..models.person_outreach_owner_type_0 import PersonOutreachOwnerType0
 
         owner: dict[str, Any] | None
         if isinstance(self.owner, PersonOutreachOwnerType0):
@@ -63,9 +61,7 @@ class PersonOutreach:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.person_outreach_owner_type_0 import (
-            PersonOutreachOwnerType0,
-        )
+        from ..models.person_outreach_owner_type_0 import PersonOutreachOwnerType0
 
         d = dict(src_dict)
 

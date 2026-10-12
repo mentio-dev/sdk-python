@@ -76,15 +76,9 @@ class ReviewsReport:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.reviews_report_pages_item import (
-            ReviewsReportPagesItem,
-        )
-        from ..models.reviews_report_previous_type_0 import (
-            ReviewsReportPreviousType0,
-        )
-        from ..models.reviews_report_tags_item import (
-            ReviewsReportTagsItem,
-        )
+        from ..models.reviews_report_pages_item import ReviewsReportPagesItem
+        from ..models.reviews_report_previous_type_0 import ReviewsReportPreviousType0
+        from ..models.reviews_report_tags_item import ReviewsReportTagsItem
         from ..models.reviews_report_totals import ReviewsReportTotals
         from ..models.reviews_report_window import ReviewsReportWindow
 
