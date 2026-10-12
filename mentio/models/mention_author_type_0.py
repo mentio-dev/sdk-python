@@ -21,7 +21,8 @@ class MentionAuthorType0:
         url (None | str): Profile URL.
         avatar_url (None | str): Profile picture; null where the platform has none.
         followers (int | None): Follower count as of their newest post; null where the platform has none.
-        tags (list[str]): Your workspace tags on this person.
+        tags (list[str]): Your tags on this person: the workspace's, then those the mention's own keyword group gave
+            them (set with groupId on /v1/people), each once.
     """
 
     id: None | str

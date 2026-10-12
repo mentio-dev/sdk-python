@@ -43,8 +43,10 @@ class FilterGroup:
         automated (bool | Unset): true: only posts that read as machine-made; false: only the rest.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1).
         not_languages (list[str] | Unset): Never posts in these languages; an unknown language still passes.
-        tags (list[str] | Unset): Only authors your workspace tagged with any of these.
-        not_tags (list[str] | Unset): Never authors tagged with any of these.
+        tags (list[str] | Unset): Only authors tagged with any of these, in the workspace's tags or those of the
+            mention's own keyword group.
+        not_tags (list[str] | Unset): Never authors tagged with any of these, in the workspace's tags or those of the
+            mention's own keyword group.
         link_hosts (list[str] | Unset): Only posts linking to any of these hosts, the host itself or a subdomain of it.
         not_link_hosts (list[str] | Unset): Never posts linking to these hosts.
         subreddits (list[str] | Unset): Only Reddit posts from any of these subreddits (names without the r/, any case);

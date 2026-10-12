@@ -38,7 +38,8 @@ class UpdateAlertBodyFilter:
         intents (list[str] | Unset): At least one of these intent or topic tags.
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
         min_followers (int | Unset): Only authors with at least this many followers. Unknown reach never passes.
-        tags (list[str] | Unset): Only authors your workspace tagged with any of these.
+        tags (list[str] | Unset): Only authors tagged with any of these, in the workspace's tags or those of the
+            mention's own keyword group.
         link_hosts (list[str] | Unset): Only posts linking to any of these hosts, the host itself or a subdomain of it
             (octolens.com also matches blog.octolens.com). A post with no links never passes.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es, de). A post whose

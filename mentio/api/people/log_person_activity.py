@@ -95,14 +95,14 @@ def sync_detailed(
     an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
     and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
     logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, merges and activities, apart from the
+    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
     workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (LogPersonActivityBody):
 
     Raises:
@@ -139,14 +139,14 @@ def sync(
     an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
     and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
     logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, merges and activities, apart from the
+    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
     workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (LogPersonActivityBody):
 
     Raises:
@@ -178,14 +178,14 @@ async def asyncio_detailed(
     an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
     and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
     logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, merges and activities, apart from the
+    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
     workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (LogPersonActivityBody):
 
     Raises:
@@ -220,14 +220,14 @@ async def asyncio(
     an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
     and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
     logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, merges and activities, apart from the
+    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
     workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (LogPersonActivityBody):
 
     Raises:

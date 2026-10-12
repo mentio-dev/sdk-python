@@ -78,14 +78,14 @@ def sync_detailed(
     """Undo a merge
 
      The account becomes its own person again. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -116,14 +116,14 @@ def sync(
     """Undo a merge
 
      The account becomes its own person again. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -149,14 +149,14 @@ async def asyncio_detailed(
     """Undo a merge
 
      The account becomes its own person again. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -185,14 +185,14 @@ async def asyncio(
     """Undo a merge
 
      The account becomes its own person again. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

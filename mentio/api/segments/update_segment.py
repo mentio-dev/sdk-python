@@ -97,8 +97,8 @@ def sync_detailed(
     Args:
         id (str): Segment id (seg_...). Example: seg_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdateSegmentBody): Omitted fields are untouched.
 
     Raises:
@@ -137,8 +137,8 @@ def sync(
     Args:
         id (str): Segment id (seg_...). Example: seg_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdateSegmentBody): Omitted fields are untouched.
 
     Raises:
@@ -172,8 +172,8 @@ async def asyncio_detailed(
     Args:
         id (str): Segment id (seg_...). Example: seg_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdateSegmentBody): Omitted fields are untouched.
 
     Raises:
@@ -210,8 +210,8 @@ async def asyncio(
     Args:
         id (str): Segment id (seg_...). Example: seg_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdateSegmentBody): Omitted fields are untouched.
 
     Raises:

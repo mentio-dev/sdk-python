@@ -80,8 +80,8 @@ def sync_detailed(
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -117,8 +117,8 @@ def sync(
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -149,8 +149,8 @@ async def asyncio_detailed(
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -184,8 +184,8 @@ async def asyncio(
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -93,14 +93,16 @@ def sync_detailed(
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
-    yet and is a 400.
+    change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and
+    the accounts that group merged into them, from the mentions of that group's keywords only (feed,
+    alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set
+    without `groupId` hides them everywhere.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
@@ -135,14 +137,16 @@ def sync(
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
-    yet and is a 400.
+    change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and
+    the accounts that group merged into them, from the mentions of that group's keywords only (feed,
+    alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set
+    without `groupId` hides them everywhere.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
@@ -172,14 +176,16 @@ async def asyncio_detailed(
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
-    yet and is a 400.
+    change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and
+    the accounts that group merged into them, from the mentions of that group's keywords only (feed,
+    alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set
+    without `groupId` hides them everywhere.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
@@ -212,14 +218,16 @@ async def asyncio(
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
-    yet and is a 400.
+    change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and
+    the accounts that group merged into them, from the mentions of that group's keywords only (feed,
+    alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set
+    without `groupId` hides them everywhere.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:

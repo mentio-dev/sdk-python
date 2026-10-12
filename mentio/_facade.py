@@ -291,7 +291,7 @@ class _Mentions:
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
-          include_muted: true: include mentions by people you muted, hidden by default.
+          include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
@@ -305,7 +305,7 @@ class _Mentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
@@ -320,7 +320,7 @@ class _Mentions:
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
-          not_tags: Never authors your workspace tagged with any of these.
+          not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
@@ -352,7 +352,7 @@ class _Mentions:
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
-          include_muted: true: include mentions by people you muted, hidden by default.
+          include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
@@ -366,7 +366,7 @@ class _Mentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
@@ -381,7 +381,7 @@ class _Mentions:
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
-          not_tags: Never authors your workspace tagged with any of these.
+          not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
@@ -419,7 +419,7 @@ class _Mentions:
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
-          include_muted: true: include mentions by people you muted, hidden by default.
+          include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
@@ -433,7 +433,7 @@ class _Mentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
@@ -448,7 +448,7 @@ class _Mentions:
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
-          not_tags: Never authors your workspace tagged with any of these.
+          not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
@@ -492,19 +492,19 @@ class _People:
     def activities(self, id: str, **params: Any) -> _m.ListPersonActivitiesResponse200:
         """List outreach activities
 
-        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.people.list_person_activities.sync_detailed(id, client=self._client, **params))
 
     def delete_activity(self, id: str, activity_id: str, **params: Any) -> Any:
         """Delete an outreach activity
 
-        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.people.delete_person_activity.sync_detailed(id, activity_id, client=self._client, **params))
 
     def export(self, **params: Any) -> str:
@@ -513,7 +513,7 @@ class _People:
         The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -545,10 +545,10 @@ class _People:
     def get(self, id: str, **params: Any) -> _m.Person:
         """Get a person
 
-        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.people.get_person.sync_detailed(id, client=self._client, **params))
 
     def list(self, **params: Any) -> _m.ListPeopleResponse200:
@@ -557,7 +557,7 @@ class _People:
         The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword group's keywords, counted over those mentions, with that group's own annotations, merges, outreach and segments.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -591,10 +591,10 @@ class _People:
     def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
-        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           channel (required): How they were reached: email, x, linkedin, bluesky, reddit, github, call, meeting or other.
@@ -606,10 +606,10 @@ class _People:
     def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
@@ -618,24 +618,24 @@ class _People:
     def split(self, id: str, **params: Any) -> _m.Person:
         """Undo a merge
 
-        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.people.split_person.sync_detailed(id, client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there yet and is a 400.
+        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and the accounts that group merged into them, from the mentions of that group's keywords only (feed, alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set without `groupId` hides them everywhere.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
           notes:
-          muted:
+          muted: true hides their posts from the feed, the alerts and the digests; false shows them again. Without groupId, for every keyword of the workspace; with groupId, for the mentions of that group's keywords only, leaving the workspace's mute as it is.
           ownerId: The member who owns the contact (user id); null clears.
           stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
         return _result(_ops.people.update_person.sync_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
@@ -652,7 +652,7 @@ class _Segments:
         Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
@@ -666,7 +666,7 @@ class _Segments:
         Nobody in it is affected. Pass the `groupId` the segment was saved in.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.segments.delete_segment.sync_detailed(id, client=self._client, **params))
 
     def get(self, id: str, **params: Any) -> _m.Segment:
@@ -675,7 +675,7 @@ class _Segments:
         One segment of the scope the call names: the workspace, or the keyword group in `groupId`. A segment saved in another scope is a 404.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.segments.get_segment.sync_detailed(id, client=self._client, **params))
 
     def list(self, **params: Any) -> _m.ListSegmentsResponse200:
@@ -684,7 +684,7 @@ class _Segments:
         Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its own people; without it, the workspace's. A segment belongs to one scope and is not visible from another.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.segments.list_segments.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateSegmentBody | None = None, **fields: Any) -> _m.Segment:
@@ -693,7 +693,7 @@ class _Segments:
         Only the fields sent change. Pass the `groupId` the segment was saved in; a segment cannot move between scopes.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name:
@@ -1374,7 +1374,7 @@ class _AsyncMentions:
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
-          include_muted: true: include mentions by people you muted, hidden by default.
+          include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
@@ -1388,7 +1388,7 @@ class _AsyncMentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
@@ -1403,7 +1403,7 @@ class _AsyncMentions:
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
-          not_tags: Never authors your workspace tagged with any of these.
+          not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
@@ -1435,7 +1435,7 @@ class _AsyncMentions:
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
-          include_muted: true: include mentions by people you muted, hidden by default.
+          include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
@@ -1449,7 +1449,7 @@ class _AsyncMentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
@@ -1464,7 +1464,7 @@ class _AsyncMentions:
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
-          not_tags: Never authors your workspace tagged with any of these.
+          not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
@@ -1502,7 +1502,7 @@ class _AsyncMentions:
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
-          include_muted: true: include mentions by people you muted, hidden by default.
+          include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
@@ -1516,7 +1516,7 @@ class _AsyncMentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          tags: Only authors your workspace tagged with any of these (exact, case-sensitive). Repeatable, or comma-separated.
+          tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
           not_platforms: Never posts from these platforms.
@@ -1531,7 +1531,7 @@ class _AsyncMentions:
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
-          not_tags: Never authors your workspace tagged with any of these.
+          not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
@@ -1575,19 +1575,19 @@ class _AsyncPeople:
     async def activities(self, id: str, **params: Any) -> _m.ListPersonActivitiesResponse200:
         """List outreach activities
 
-        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.people.list_person_activities.asyncio_detailed(id, client=self._client, **params))
 
     async def delete_activity(self, id: str, activity_id: str, **params: Any) -> Any:
         """Delete an outreach activity
 
-        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.people.delete_person_activity.asyncio_detailed(id, activity_id, client=self._client, **params))
 
     async def export(self, **params: Any) -> str:
@@ -1596,7 +1596,7 @@ class _AsyncPeople:
         The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -1628,10 +1628,10 @@ class _AsyncPeople:
     async def get(self, id: str, **params: Any) -> _m.Person:
         """Get a person
 
-        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.people.get_person.asyncio_detailed(id, client=self._client, **params))
 
     async def list(self, **params: Any) -> _m.ListPeopleResponse200:
@@ -1640,7 +1640,7 @@ class _AsyncPeople:
         The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword group's keywords, counted over those mentions, with that group's own annotations, merges, outreach and segments.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -1674,10 +1674,10 @@ class _AsyncPeople:
     async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
-        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           channel (required): How they were reached: email, x, linkedin, bluesky, reddit, github, call, meeting or other.
@@ -1689,10 +1689,10 @@ class _AsyncPeople:
     async def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
@@ -1701,24 +1701,24 @@ class _AsyncPeople:
     async def split(self, id: str, **params: Any) -> _m.Person:
         """Undo a merge
 
-        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.people.split_person.asyncio_detailed(id, client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there yet and is a 400.
+        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and the accounts that group merged into them, from the mentions of that group's keywords only (feed, alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set without `groupId` hides them everywhere.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
           notes:
-          muted:
+          muted: true hides their posts from the feed, the alerts and the digests; false shows them again. Without groupId, for every keyword of the workspace; with groupId, for the mentions of that group's keywords only, leaving the workspace's mute as it is.
           ownerId: The member who owns the contact (user id); null clears.
           stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
         return _result(await _ops.people.update_person.asyncio_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
@@ -1735,7 +1735,7 @@ class _AsyncSegments:
         Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
@@ -1749,7 +1749,7 @@ class _AsyncSegments:
         Nobody in it is affected. Pass the `groupId` the segment was saved in.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.segments.delete_segment.asyncio_detailed(id, client=self._client, **params))
 
     async def get(self, id: str, **params: Any) -> _m.Segment:
@@ -1758,7 +1758,7 @@ class _AsyncSegments:
         One segment of the scope the call names: the workspace, or the keyword group in `groupId`. A segment saved in another scope is a 404.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.segments.get_segment.asyncio_detailed(id, client=self._client, **params))
 
     async def list(self, **params: Any) -> _m.ListSegmentsResponse200:
@@ -1767,7 +1767,7 @@ class _AsyncSegments:
         Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its own people; without it, the workspace's. A segment belongs to one scope and is not visible from another.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.segments.list_segments.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateSegmentBody | None = None, **fields: Any) -> _m.Segment:
@@ -1776,7 +1776,7 @@ class _AsyncSegments:
         Only the fields sent change. Pass the `groupId` the segment was saved in; a segment cannot move between scopes.
 
         Keyword arguments (query):
-          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name:

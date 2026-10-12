@@ -552,7 +552,7 @@ def sync_detailed(
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
-            default.
+            default: muted for the workspace, or for the mention's own keyword group.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -581,8 +581,9 @@ def sync_detailed(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-        tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
-            (exact, case-sensitive). Repeatable, or comma-separated.
+        tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
+            sensitive), in the workspace's tags or those of the mention's own keyword group.
+            Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
@@ -609,8 +610,8 @@ def sync_detailed(
             Repeatable, or comma-separated.
         not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
             from other platforms still pass.
-        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
-            these.
+        not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
+            workspace's tags or those of the mention's own keyword group.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
@@ -803,7 +804,7 @@ def sync(
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
-            default.
+            default: muted for the workspace, or for the mention's own keyword group.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -832,8 +833,9 @@ def sync(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-        tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
-            (exact, case-sensitive). Repeatable, or comma-separated.
+        tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
+            sensitive), in the workspace's tags or those of the mention's own keyword group.
+            Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
@@ -860,8 +862,8 @@ def sync(
             Repeatable, or comma-separated.
         not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
             from other platforms still pass.
-        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
-            these.
+        not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
+            workspace's tags or those of the mention's own keyword group.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
@@ -1049,7 +1051,7 @@ async def asyncio_detailed(
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
-            default.
+            default: muted for the workspace, or for the mention's own keyword group.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -1078,8 +1080,9 @@ async def asyncio_detailed(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-        tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
-            (exact, case-sensitive). Repeatable, or comma-separated.
+        tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
+            sensitive), in the workspace's tags or those of the mention's own keyword group.
+            Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
@@ -1106,8 +1109,8 @@ async def asyncio_detailed(
             Repeatable, or comma-separated.
         not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
             from other platforms still pass.
-        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
-            these.
+        not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
+            workspace's tags or those of the mention's own keyword group.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
@@ -1298,7 +1301,7 @@ async def asyncio(
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
-            default.
+            default: muted for the workspace, or for the mention's own keyword group.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -1327,8 +1330,9 @@ async def asyncio(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-        tags (list[str] | None | Unset): Only authors your workspace tagged with any of these
-            (exact, case-sensitive). Repeatable, or comma-separated.
+        tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
+            sensitive), in the workspace's tags or those of the mention's own keyword group.
+            Repeatable, or comma-separated.
         link_hosts (list[str] | None | Unset): Only posts linking to any of these hosts, the host
             itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or
             comma-separated.
@@ -1355,8 +1359,8 @@ async def asyncio(
             Repeatable, or comma-separated.
         not_subreddits (list[str] | None | Unset): Never Reddit posts from these subreddits; posts
             from other platforms still pass.
-        not_tags (list[str] | None | Unset): Never authors your workspace tagged with any of
-            these.
+        not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
+            workspace's tags or those of the mention's own keyword group.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language

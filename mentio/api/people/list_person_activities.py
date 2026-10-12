@@ -82,14 +82,14 @@ def sync_detailed(
      Every logged contact with this person across all their accounts, newest first (at most 200): who
     reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
     contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -122,14 +122,14 @@ def sync(
      Every logged contact with this person across all their accounts, newest first (at most 200): who
     reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
     contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -157,14 +157,14 @@ async def asyncio_detailed(
      Every logged contact with this person across all their accounts, newest first (at most 200): who
     reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
     contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -195,14 +195,14 @@ async def asyncio(
      Every logged contact with this person across all their accounts, newest first (at most 200): who
     reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
     contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
-    every other group's.
+    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
+    from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
-            that group's keywords, with that group's own tags, notes, merges, activities and segments.
-            Omit for the whole workspace.
+            that group's keywords, with that group's own tags, notes, mute, merges, activities and
+            segments. Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -16,7 +16,8 @@ class PersonAnnotations:
     Attributes:
         tags (list[str]):
         notes (str):
-        muted (bool): Their posts stay out of the feed and every channel; ingest and billing are untouched.
+        muted (bool): Their posts stay out of the feed and every channel; ingest and billing are untouched. Read with
+            groupId it is that group's own mute, which hides them from the mentions of that group's keywords only.
     """
 
     tags: list[str]
