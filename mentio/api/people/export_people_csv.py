@@ -25,6 +25,7 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
+    group_id: str | Unset = UNSET,
     platform: ExportPeopleCsvPlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -53,6 +54,8 @@ def _get_kwargs(
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
+
+    params["groupId"] = group_id
 
     json_platform: str | Unset = UNSET
     if not isinstance(platform, Unset):
@@ -266,6 +269,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ExportPeopleCsvPlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -296,10 +300,13 @@ def sync_detailed(
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
     columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
-    Retry-After.
+    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
+    per minute per workspace; a 429 carries Retry-After.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -355,6 +362,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
+        group_id=group_id,
         platform=platform,
         q=q,
         handle=handle,
@@ -392,6 +400,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ExportPeopleCsvPlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -422,10 +431,13 @@ def sync(
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
     columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
-    Retry-After.
+    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
+    per minute per workspace; a 429 carries Retry-After.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -482,6 +494,7 @@ def sync(
 
     return sync_detailed(
         client=client,
+        group_id=group_id,
         platform=platform,
         q=q,
         handle=handle,
@@ -513,6 +526,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ExportPeopleCsvPlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -543,10 +557,13 @@ async def asyncio_detailed(
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
     columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
-    Retry-After.
+    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
+    per minute per workspace; a 429 carries Retry-After.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -602,6 +619,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
+        group_id=group_id,
         platform=platform,
         q=q,
         handle=handle,
@@ -637,6 +655,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ExportPeopleCsvPlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -667,10 +686,13 @@ async def asyncio(
 
      The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
     columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries
-    Retry-After.
+    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
+    per minute per workspace; a 429 carries Retry-After.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ExportPeopleCsvPlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -728,6 +750,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
+            group_id=group_id,
             platform=platform,
             q=q,
             handle=handle,

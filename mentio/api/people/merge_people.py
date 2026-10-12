@@ -9,21 +9,29 @@ from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.merge_people_body import MergePeopleBody
 from ...models.person import Person
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     id: str,
     *,
     body: MergePeopleBody,
+    group_id: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
+
+    params: dict[str, Any] = {}
+
+    params["groupId"] = group_id
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "post",
         "url": "/v1/people/{id}/merge".format(
             id=quote(str(id), safe=""),
         ),
+        "params": params,
     }
 
     _kwargs["json"] = body.to_dict()
@@ -74,15 +82,21 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: MergePeopleBody,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
     mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none.
+    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
+    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
+    every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (MergePeopleBody):
 
     Raises:
@@ -96,6 +110,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         id=id,
         body=body,
+        group_id=group_id,
     )
 
     response = client.get_httpx_client().request(
@@ -110,15 +125,21 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: MergePeopleBody,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
     mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none.
+    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
+    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
+    every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (MergePeopleBody):
 
     Raises:
@@ -133,6 +154,7 @@ def sync(
         id=id,
         client=client,
         body=body,
+        group_id=group_id,
     ).parsed
 
 
@@ -141,15 +163,21 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: MergePeopleBody,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
     mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none.
+    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
+    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
+    every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (MergePeopleBody):
 
     Raises:
@@ -163,6 +191,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         id=id,
         body=body,
+        group_id=group_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -175,15 +204,21 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: MergePeopleBody,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Merge an account into a person
 
      Declare that this account and another person are the same human, for your workspace only. Their
     mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none.
+    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
+    its people, and its own tags, notes, merges and activities, apart from the workspace's and from
+    every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (MergePeopleBody):
 
     Raises:
@@ -199,5 +234,6 @@ async def asyncio(
             id=id,
             client=client,
             body=body,
+            group_id=group_id,
         )
     ).parsed

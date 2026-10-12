@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,6 +21,7 @@ class Segment:
         name (str):
         description (str):
         filter_ (SegmentFilter):
+        group_id (None | str): The group this segment belongs to, or null for a workspace segment.
         count (int): People in the segment right now; it is evaluated on every read.
         created_at (str): ISO 8601 timestamp, UTC.
         updated_at (str): ISO 8601 timestamp, UTC.
@@ -30,6 +31,7 @@ class Segment:
     name: str
     description: str
     filter_: SegmentFilter
+    group_id: None | str
     count: int
     created_at: str
     updated_at: str
@@ -43,6 +45,9 @@ class Segment:
         description = self.description
 
         filter_ = self.filter_.to_dict()
+
+        group_id: None | str
+        group_id = self.group_id
 
         count = self.count
 
@@ -58,6 +63,7 @@ class Segment:
                 "name": name,
                 "description": description,
                 "filter": filter_,
+                "groupId": group_id,
                 "count": count,
                 "createdAt": created_at,
                 "updatedAt": updated_at,
@@ -79,6 +85,13 @@ class Segment:
 
         filter_ = SegmentFilter.from_dict(d.pop("filter"))
 
+        def _parse_group_id(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        group_id = _parse_group_id(d.pop("groupId"))
+
         count = d.pop("count")
 
         created_at = d.pop("createdAt")
@@ -90,6 +103,7 @@ class Segment:
             name=name,
             description=description,
             filter_=filter_,
+            group_id=group_id,
             count=count,
             created_at=created_at,
             updated_at=updated_at,

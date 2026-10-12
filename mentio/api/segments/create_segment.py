@@ -8,18 +8,26 @@ from ...client import AuthenticatedClient, Client
 from ...models.create_segment_body import CreateSegmentBody
 from ...models.error_response import ErrorResponse
 from ...models.segment import Segment
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     body: CreateSegmentBody,
+    group_id: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
+
+    params: dict[str, Any] = {}
+
+    params["groupId"] = group_id
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "post",
         "url": "/v1/segments",
+        "params": params,
     }
 
     _kwargs["json"] = body.to_dict()
@@ -48,6 +56,11 @@ def _parse_response(
 
         return response_401
 
+    if response.status_code == 404:
+        response_404 = ErrorResponse.from_dict(response.json())
+
+        return response_404
+
     if response.status_code == 409:
         response_409 = ErrorResponse.from_dict(response.json())
 
@@ -74,10 +87,17 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: CreateSegmentBody,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Segment]:
     """Create a segment
 
+     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
+    is listed, counted and changed only there, and its name only has to be unique in the group.
+
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (CreateSegmentBody):
 
     Raises:
@@ -90,6 +110,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         body=body,
+        group_id=group_id,
     )
 
     response = client.get_httpx_client().request(
@@ -103,10 +124,17 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: CreateSegmentBody,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Segment | None:
     """Create a segment
 
+     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
+    is listed, counted and changed only there, and its name only has to be unique in the group.
+
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (CreateSegmentBody):
 
     Raises:
@@ -120,6 +148,7 @@ def sync(
     return sync_detailed(
         client=client,
         body=body,
+        group_id=group_id,
     ).parsed
 
 
@@ -127,10 +156,17 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: CreateSegmentBody,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Segment]:
     """Create a segment
 
+     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
+    is listed, counted and changed only there, and its name only has to be unique in the group.
+
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (CreateSegmentBody):
 
     Raises:
@@ -143,6 +179,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         body=body,
+        group_id=group_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -154,10 +191,17 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: CreateSegmentBody,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Segment | None:
     """Create a segment
 
+     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
+    is listed, counted and changed only there, and its name only has to be unique in the group.
+
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (CreateSegmentBody):
 
     Raises:
@@ -172,5 +216,6 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             body=body,
+            group_id=group_id,
         )
     ).parsed

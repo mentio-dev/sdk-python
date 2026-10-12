@@ -489,24 +489,31 @@ class _People:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def activities(self, id: str) -> _m.ListPersonActivitiesResponse200:
+    def activities(self, id: str, **params: Any) -> _m.ListPersonActivitiesResponse200:
         """List outreach activities
 
-        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing."""
-        return _result(_ops.people.list_person_activities.sync_detailed(id, client=self._client))
+        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
 
-    def delete_activity(self, id: str, activity_id: str) -> Any:
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(_ops.people.list_person_activities.sync_detailed(id, client=self._client, **params))
+
+    def delete_activity(self, id: str, activity_id: str, **params: Any) -> Any:
         """Delete an outreach activity
 
-        Remove a contact logged by mistake. The person's owner and stage stay as they are."""
-        return _result(_ops.people.delete_person_activity.sync_detailed(id, activity_id, client=self._client))
+        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(_ops.people.delete_person_activity.sync_detailed(id, activity_id, client=self._client, **params))
 
     def export(self, **params: Any) -> str:
         """Export people as CSV
 
-        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -535,18 +542,22 @@ class _People:
         _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(_ops.people.export_people_csv.sync_detailed(client=self._client, **params))
 
-    def get(self, id: str) -> _m.Person:
+    def get(self, id: str, **params: Any) -> _m.Person:
         """Get a person
 
-        One person as your workspace sees them. An account merged into someone resolves to that person."""
-        return _result(_ops.people.get_person.sync_detailed(id, client=self._client))
+        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(_ops.people.get_person.sync_detailed(id, client=self._client, **params))
 
     def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total.
+        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword group's keywords, counted over those mentions, with that group's own annotations, merges, outreach and segments.
 
         Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -580,7 +591,10 @@ class _People:
     def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
-        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody.
+        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           channel (required): How they were reached: email, x, linkedin, bluesky, reddit, github, call, meeting or other.
@@ -592,22 +606,31 @@ class _People:
     def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none.
+        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
         return _result(_ops.people.merge_people.sync_detailed(id, client=self._client, body=_body(_m.MergePeopleBody, body, fields)))
 
-    def split(self, id: str) -> _m.Person:
+    def split(self, id: str, **params: Any) -> _m.Person:
         """Undo a merge
 
-        The account becomes its own person again."""
-        return _result(_ops.people.split_person.sync_detailed(id, client=self._client))
+        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(_ops.people.split_person.sync_detailed(id, client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change.
+        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there yet and is a 400.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
@@ -626,30 +649,51 @@ class _Segments:
     def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Create a segment
 
+        Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
           description:
           filter:"""
         return _result(_ops.segments.create_segment.sync_detailed(client=self._client, body=_body(_m.CreateSegmentBody, body, fields)))
 
-    def delete(self, id: str) -> Any:
+    def delete(self, id: str, **params: Any) -> Any:
         """Delete a segment
 
-        Nobody in it is affected."""
-        return _result(_ops.segments.delete_segment.sync_detailed(id, client=self._client))
+        Nobody in it is affected. Pass the `groupId` the segment was saved in.
 
-    def get(self, id: str) -> _m.Segment:
-        """Get a segment"""
-        return _result(_ops.segments.get_segment.sync_detailed(id, client=self._client))
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(_ops.segments.delete_segment.sync_detailed(id, client=self._client, **params))
 
-    def list(self) -> _m.ListSegmentsResponse200:
+    def get(self, id: str, **params: Any) -> _m.Segment:
+        """Get a segment
+
+        One segment of the scope the call names: the workspace, or the keyword group in `groupId`. A segment saved in another scope is a 404.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(_ops.segments.get_segment.sync_detailed(id, client=self._client, **params))
+
+    def list(self, **params: Any) -> _m.ListSegmentsResponse200:
         """List segments
 
-        Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members."""
-        return _result(_ops.segments.list_segments.sync_detailed(client=self._client))
+        Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its own people; without it, the workspace's. A segment belongs to one scope and is not visible from another.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(_ops.segments.list_segments.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Update a segment
+
+        Only the fields sent change. Pass the `groupId` the segment was saved in; a segment cannot move between scopes.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name:
@@ -1528,24 +1572,31 @@ class _AsyncPeople:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def activities(self, id: str) -> _m.ListPersonActivitiesResponse200:
+    async def activities(self, id: str, **params: Any) -> _m.ListPersonActivitiesResponse200:
         """List outreach activities
 
-        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing."""
-        return _result(await _ops.people.list_person_activities.asyncio_detailed(id, client=self._client))
+        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
 
-    async def delete_activity(self, id: str, activity_id: str) -> Any:
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(await _ops.people.list_person_activities.asyncio_detailed(id, client=self._client, **params))
+
+    async def delete_activity(self, id: str, activity_id: str, **params: Any) -> Any:
         """Delete an outreach activity
 
-        Remove a contact logged by mistake. The person's owner and stage stay as they are."""
-        return _result(await _ops.people.delete_person_activity.asyncio_detailed(id, activity_id, client=self._client))
+        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(await _ops.people.delete_person_activity.asyncio_detailed(id, activity_id, client=self._client, **params))
 
     async def export(self, **params: Any) -> str:
         """Export people as CSV
 
-        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -1574,18 +1625,22 @@ class _AsyncPeople:
         _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(await _ops.people.export_people_csv.asyncio_detailed(client=self._client, **params))
 
-    async def get(self, id: str) -> _m.Person:
+    async def get(self, id: str, **params: Any) -> _m.Person:
         """Get a person
 
-        One person as your workspace sees them. An account merged into someone resolves to that person."""
-        return _result(await _ops.people.get_person.asyncio_detailed(id, client=self._client))
+        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(await _ops.people.get_person.asyncio_detailed(id, client=self._client, **params))
 
     async def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total.
+        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword group's keywords, counted over those mentions, with that group's own annotations, merges, outreach and segments.
 
         Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
           platform: People with an account on this platform.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
@@ -1619,7 +1674,10 @@ class _AsyncPeople:
     async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
-        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody.
+        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           channel (required): How they were reached: email, x, linkedin, bluesky, reddit, github, call, meeting or other.
@@ -1631,22 +1689,31 @@ class _AsyncPeople:
     async def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none.
+        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
         return _result(await _ops.people.merge_people.asyncio_detailed(id, client=self._client, body=_body(_m.MergePeopleBody, body, fields)))
 
-    async def split(self, id: str) -> _m.Person:
+    async def split(self, id: str, **params: Any) -> _m.Person:
         """Undo a merge
 
-        The account becomes its own person again."""
-        return _result(await _ops.people.split_person.asyncio_detailed(id, client=self._client))
+        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and activities, apart from the workspace's and from every other group's.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(await _ops.people.split_person.asyncio_detailed(id, client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change.
+        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there yet and is a 400.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
@@ -1665,30 +1732,51 @@ class _AsyncSegments:
     async def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Create a segment
 
+        Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
+
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
           description:
           filter:"""
         return _result(await _ops.segments.create_segment.asyncio_detailed(client=self._client, body=_body(_m.CreateSegmentBody, body, fields)))
 
-    async def delete(self, id: str) -> Any:
+    async def delete(self, id: str, **params: Any) -> Any:
         """Delete a segment
 
-        Nobody in it is affected."""
-        return _result(await _ops.segments.delete_segment.asyncio_detailed(id, client=self._client))
+        Nobody in it is affected. Pass the `groupId` the segment was saved in.
 
-    async def get(self, id: str) -> _m.Segment:
-        """Get a segment"""
-        return _result(await _ops.segments.get_segment.asyncio_detailed(id, client=self._client))
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(await _ops.segments.delete_segment.asyncio_detailed(id, client=self._client, **params))
 
-    async def list(self) -> _m.ListSegmentsResponse200:
+    async def get(self, id: str, **params: Any) -> _m.Segment:
+        """Get a segment
+
+        One segment of the scope the call names: the workspace, or the keyword group in `groupId`. A segment saved in another scope is a 404.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(await _ops.segments.get_segment.asyncio_detailed(id, client=self._client, **params))
+
+    async def list(self, **params: Any) -> _m.ListSegmentsResponse200:
         """List segments
 
-        Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members."""
-        return _result(await _ops.segments.list_segments.asyncio_detailed(client=self._client))
+        Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its own people; without it, the workspace's. A segment belongs to one scope and is not visible from another.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace."""
+        return _result(await _ops.segments.list_segments.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Update a segment
+
+        Only the fields sent change. Pass the `groupId` the segment was saved in; a segment cannot move between scopes.
+
+        Keyword arguments (query):
+          group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name:

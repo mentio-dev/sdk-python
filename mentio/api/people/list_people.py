@@ -22,6 +22,7 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
+    group_id: str | Unset = UNSET,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -52,6 +53,8 @@ def _get_kwargs(
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
+
+    params["groupId"] = group_id
 
     json_platform: str | Unset = UNSET
     if not isinstance(platform, Unset):
@@ -270,6 +273,7 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -304,9 +308,14 @@ def sync_detailed(
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
     stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total.
+    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
+    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
+    and segments.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -365,6 +374,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
+        group_id=group_id,
         platform=platform,
         q=q,
         handle=handle,
@@ -404,6 +414,7 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -438,9 +449,14 @@ def sync(
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
     stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total.
+    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
+    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
+    and segments.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -500,6 +516,7 @@ def sync(
 
     return sync_detailed(
         client=client,
+        group_id=group_id,
         platform=platform,
         q=q,
         handle=handle,
@@ -533,6 +550,7 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -567,9 +585,14 @@ async def asyncio_detailed(
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
     stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total.
+    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
+    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
+    and segments.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -628,6 +651,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
+        group_id=group_id,
         platform=platform,
         q=q,
         handle=handle,
@@ -665,6 +689,7 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
     platform: ListPeoplePlatform | Unset = UNSET,
     q: str | Unset = UNSET,
     handle: str | Unset = UNSET,
@@ -699,9 +724,14 @@ async def asyncio(
     per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
     follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
     stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total.
+    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
+    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
+    and segments.
 
     Args:
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         platform (ListPeoplePlatform | Unset): People with an account on this platform.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
@@ -762,6 +792,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
+            group_id=group_id,
             platform=platform,
             q=q,
             handle=handle,

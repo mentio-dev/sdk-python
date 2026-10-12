@@ -8,18 +8,27 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.person import Person
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     id: str,
+    *,
+    group_id: str | Unset = UNSET,
 ) -> dict[str, Any]:
+
+    params: dict[str, Any] = {}
+
+    params["groupId"] = group_id
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "get",
         "url": "/v1/people/{id}".format(
             id=quote(str(id), safe=""),
         ),
+        "params": params,
     }
 
     return _kwargs
@@ -64,13 +73,19 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Get a person
 
-     One person as your workspace sees them. An account merged into someone resolves to that person.
+     One person as your workspace sees them. An account merged into someone resolves to that person. With
+    `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and
+    activities, apart from the workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -82,6 +97,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         id=id,
+        group_id=group_id,
     )
 
     response = client.get_httpx_client().request(
@@ -95,13 +111,19 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Get a person
 
-     One person as your workspace sees them. An account merged into someone resolves to that person.
+     One person as your workspace sees them. An account merged into someone resolves to that person. With
+    `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and
+    activities, apart from the workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -114,6 +136,7 @@ def sync(
     return sync_detailed(
         id=id,
         client=client,
+        group_id=group_id,
     ).parsed
 
 
@@ -121,13 +144,19 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Get a person
 
-     One person as your workspace sees them. An account merged into someone resolves to that person.
+     One person as your workspace sees them. An account merged into someone resolves to that person. With
+    `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and
+    activities, apart from the workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -139,6 +168,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         id=id,
+        group_id=group_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -150,13 +180,19 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Get a person
 
-     One person as your workspace sees them. An account merged into someone resolves to that person.
+     One person as your workspace sees them. An account merged into someone resolves to that person. With
+    `groupId`, the call works inside that keyword group: its people, and its own tags, notes, merges and
+    activities, apart from the workspace's and from every other group's.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -170,5 +206,6 @@ async def asyncio(
         await asyncio_detailed(
             id=id,
             client=client,
+            group_id=group_id,
         )
     ).parsed

@@ -9,21 +9,29 @@ from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.person import Person
 from ...models.update_person_body import UpdatePersonBody
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     id: str,
     *,
     body: UpdatePersonBody,
+    group_id: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
+
+    params: dict[str, Any] = {}
+
+    params["groupId"] = group_id
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "patch",
         "url": "/v1/people/{id}".format(
             id=quote(str(id), safe=""),
         ),
+        "params": params,
     }
 
     _kwargs["json"] = body.to_dict()
@@ -79,15 +87,20 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: UpdatePersonBody,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Update your annotations on a person
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
+    yet and is a 400.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
@@ -101,6 +114,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         id=id,
         body=body,
+        group_id=group_id,
     )
 
     response = client.get_httpx_client().request(
@@ -115,15 +129,20 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: UpdatePersonBody,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Update your annotations on a person
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
+    yet and is a 400.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
@@ -138,6 +157,7 @@ def sync(
         id=id,
         client=client,
         body=body,
+        group_id=group_id,
     ).parsed
 
 
@@ -146,15 +166,20 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: UpdatePersonBody,
+    group_id: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Update your annotations on a person
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
+    yet and is a 400.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
@@ -168,6 +193,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         id=id,
         body=body,
+        group_id=group_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -180,15 +206,20 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: UpdatePersonBody,
+    group_id: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Update your annotations on a person
 
      Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your
     workspace only. Mute hides their posts from your feed and every channel; ingest and billing never
-    change.
+    change. With `groupId` the annotations are that keyword group's own; `muted` is not supported there
+    yet and is a 400.
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
+        group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
+            that group's keywords, with that group's own tags, notes, merges, activities and segments.
+            Omit for the whole workspace.
         body (UpdatePersonBody): Omitted fields are untouched.
 
     Raises:
@@ -204,5 +235,6 @@ async def asyncio(
             id=id,
             client=client,
             body=body,
+            group_id=group_id,
         )
     ).parsed
