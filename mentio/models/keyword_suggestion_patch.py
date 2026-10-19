@@ -63,6 +63,8 @@ class KeywordSuggestionPatch:
             feeds (list[KeywordSuggestionPatchFeedsItem] | Unset): Replaces the feeds this keyword reads; [] disconnects
                 them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the
                 last 30 days; one already listed keeps its place.
+            reads_workspace_feeds (bool | Unset): true: the keyword also reads the workspace's feeds (GET /v1/feeds), live
+                from now on. false: its own feeds alone.
     """
 
     term: str | Unset = UNSET
@@ -76,6 +78,7 @@ class KeywordSuggestionPatch:
     group_id: str | Unset = UNSET
     review_sources: list[KeywordSuggestionPatchReviewSourcesItem] | Unset = UNSET
     feeds: list[KeywordSuggestionPatchFeedsItem] | Unset = UNSET
+    reads_workspace_feeds: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -141,6 +144,8 @@ class KeywordSuggestionPatch:
                 feeds_item = feeds_item_data.to_dict()
                 feeds.append(feeds_item)
 
+        reads_workspace_feeds = self.reads_workspace_feeds
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -166,6 +171,8 @@ class KeywordSuggestionPatch:
             field_dict["reviewSources"] = review_sources
         if feeds is not UNSET:
             field_dict["feeds"] = feeds
+        if reads_workspace_feeds is not UNSET:
+            field_dict["readsWorkspaceFeeds"] = reads_workspace_feeds
 
         return field_dict
 
@@ -289,6 +296,8 @@ class KeywordSuggestionPatch:
 
                 feeds.append(feeds_item)
 
+        reads_workspace_feeds = d.pop("readsWorkspaceFeeds", UNSET)
+
         keyword_suggestion_patch = cls(
             term=term,
             kind=kind,
@@ -301,6 +310,7 @@ class KeywordSuggestionPatch:
             group_id=group_id,
             review_sources=review_sources,
             feeds=feeds,
+            reads_workspace_feeds=reads_workspace_feeds,
         )
 
         keyword_suggestion_patch.additional_properties = d

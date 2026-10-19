@@ -49,6 +49,8 @@ class Keyword:
         platforms (list[KeywordPlatformsType0Item] | None): Platforms the term is searched on; null means every
             platform, [] none (the keyword only collects reviews).
         feeds (list[KeywordFeed]): RSS and Atom feeds this keyword reads; empty for none.
+        reads_workspace_feeds (bool): true (the default): the keyword also reads every feed of the workspace (GET
+            /v1/feeds), on top of its own `feeds`. false: its own feeds alone.
         review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps,
             Trustpilot pages, Google Maps places); empty for none.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
@@ -73,6 +75,7 @@ class Keyword:
     group: GroupRef
     platforms: list[KeywordPlatformsType0Item] | None
     feeds: list[KeywordFeed]
+    reads_workspace_feeds: bool
     review_sources: list[ReviewSource]
     context: None | str
     matching: KeywordMatching
@@ -123,6 +126,8 @@ class Keyword:
             feeds_item = feeds_item_data.to_dict()
             feeds.append(feeds_item)
 
+        reads_workspace_feeds = self.reads_workspace_feeds
+
         review_sources = []
         for review_sources_item_data in self.review_sources:
             review_sources_item = review_sources_item_data.to_dict()
@@ -158,6 +163,7 @@ class Keyword:
                 "group": group,
                 "platforms": platforms,
                 "feeds": feeds,
+                "readsWorkspaceFeeds": reads_workspace_feeds,
                 "reviewSources": review_sources,
                 "context": context,
                 "matching": matching,
@@ -243,6 +249,8 @@ class Keyword:
 
             feeds.append(feeds_item)
 
+        reads_workspace_feeds = d.pop("readsWorkspaceFeeds")
+
         review_sources = []
         _review_sources = d.pop("reviewSources")
         for review_sources_item_data in _review_sources:
@@ -283,6 +291,7 @@ class Keyword:
             group=group,
             platforms=platforms,
             feeds=feeds,
+            reads_workspace_feeds=reads_workspace_feeds,
             review_sources=review_sources,
             context=context,
             matching=matching,

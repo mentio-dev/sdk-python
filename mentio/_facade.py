@@ -120,6 +120,12 @@ import mentio.api.billing.list_invoices  # noqa: F401
 import mentio.api.billing.list_ledger  # noqa: F401
 import mentio.api.company.get_company  # noqa: F401
 import mentio.api.company.update_company  # noqa: F401
+import mentio.api.feeds.create_feed  # noqa: F401
+import mentio.api.feeds.delete_feed  # noqa: F401
+import mentio.api.feeds.get_feed  # noqa: F401
+import mentio.api.feeds.import_feeds  # noqa: F401
+import mentio.api.feeds.list_feeds  # noqa: F401
+import mentio.api.feeds.update_feed  # noqa: F401
 import mentio.api.filters.get_filters  # noqa: F401
 import mentio.api.filters.update_filters  # noqa: F401
 import mentio.api.groups.create_group  # noqa: F401
@@ -190,7 +196,8 @@ class _Keywords:
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
           reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
-          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts."""
+          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts.
+          readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     def delete(self, id: str) -> Any:
@@ -258,7 +265,8 @@ class _Keywords:
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
           reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.
-          feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place."""
+          feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place.
+          readsWorkspaceFeeds: true: the keyword also reads the workspace's feeds (GET /v1/feeds), live from now on. false: its own feeds alone."""
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
@@ -836,7 +844,7 @@ class _Channels:
           label:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
-          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing). An empty list unsubscribes it from all of them."""
+          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing, feed.recovered). An empty list unsubscribes it from all of them."""
         return _result(_ops.alerts.update_channel.sync_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _Company:
@@ -994,6 +1002,62 @@ class _System:
         """getHealth"""
         return _result(_ops.system.get_health.sync_detailed(client=self._client))
 
+class _Feeds:
+    """feeds: create, delete, get, import, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, **fields: Any) -> _m.Feed:
+        """Connect a feed
+
+        Connect an RSS or Atom feed: a feed's address, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. A new feed brings each reading keyword the newest 10 items of the last 30 days that hold its term, never as instant alerts. A feed the workspace reads already comes back with 200 (connecting is idempotent). A members-only forum answers `feed_login_required`: send it again with `auth` (a cookie or a header), stored encrypted and read for this workspace alone.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          url (required): A feed's address (https://forum.example.com/posts.rss), or a page's (https://forum.example.com): the feed the page advertises is used.
+          auth: A sign-in for a members-only feed: a cookie, or one header. Write-only: stored encrypted, sent to the feed's own site alone, never shown again. A feed with a sign-in is read for this workspace alone."""
+        return _result(_ops.feeds.create_feed.sync_detailed(client=self._client, body=_body(_m.CreateFeedBody, body, fields)))
+
+    def delete(self, id: str) -> Any:
+        """Disconnect a feed
+
+        The workspace stops reading the feed. Its mentions stay; a keyword naming the same feed in its own `feeds` keeps reading it."""
+        return _result(_ops.feeds.delete_feed.sync_detailed(id, client=self._client))
+
+    def get(self, id: str) -> _m.Feed:
+        """Get a feed"""
+        return _result(_ops.feeds.get_feed.sync_detailed(id, client=self._client))
+
+    def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
+        """Connect many feeds
+
+        Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked on its own and reported added, already or failed, in the order sent: one that fails never stops the others. A failure carries the error code POST /v1/feeds would answer for that address (feed_login_required: send it again with auth). Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10 matching items of the last 30 days; the rest start from now.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          feeds (required): Up to 100 feeds, each { url } or { url, auth } for a members-only one. Each is checked on its own: one that fails never stops the others."""
+        return _result(_ops.feeds.import_feeds.sync_detailed(client=self._client, body=_body(_m.ImportFeedsBody, body, fields)))
+
+    def list(self, **params: Any) -> _m.ListFeedsResponse200:
+        """List feeds
+
+        The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first, each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace.
+
+        Keyword arguments (query):
+          q: Only feeds whose address or title contains this text, case-insensitive.
+          limit: Feeds per page, at most 500; default 100.
+          offset: Feeds to skip, for the next page."""
+        return _result(_ops.feeds.list_feeds.sync_detailed(client=self._client, **params))
+
+    def update(self, id: str, body: dict[str, Any] | _m.UpdateFeedBody | None = None, **fields: Any) -> _m.Feed:
+        """Update a feed
+
+        Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again; the feed is then read for this workspace alone. auth: null removes it.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          title: Your name for the feed; null clears it.
+          auth: Replaces the sign-in (checked by reading the feed with it first); null removes it and the feed is read signed out again."""
+        return _result(_ops.feeds.update_feed.sync_detailed(id, client=self._client, body=_body(_m.UpdateFeedBody, body, fields)))
+
 class _Filters:
     """filters: get, update."""
 
@@ -1081,7 +1145,7 @@ class _Attention:
 
         Keyword arguments (query):
           status: open (default), resolved, dismissed, or all.
-          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing.
+          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered never opens an item).
           limit: Items per page, newest first; 50 by default, at most 100.
           cursor: nextCursor from the previous page."""
         _coerce(params, {"status": (_enum, _m.ListAttentionStatus)})
@@ -1282,7 +1346,8 @@ class _AsyncKeywords:
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
           reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
-          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts."""
+          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts.
+          readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
@@ -1350,7 +1415,8 @@ class _AsyncKeywords:
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
           reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.
-          feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place."""
+          feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place.
+          readsWorkspaceFeeds: true: the keyword also reads the workspace's feeds (GET /v1/feeds), live from now on. false: its own feeds alone."""
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:
@@ -1928,7 +1994,7 @@ class _AsyncChannels:
           label:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
-          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing). An empty list unsubscribes it from all of them."""
+          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing, feed.recovered). An empty list unsubscribes it from all of them."""
         return _result(await _ops.alerts.update_channel.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _AsyncCompany:
@@ -2086,6 +2152,62 @@ class _AsyncSystem:
         """getHealth"""
         return _result(await _ops.system.get_health.asyncio_detailed(client=self._client))
 
+class _AsyncFeeds:
+    """feeds: create, delete, get, import, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, **fields: Any) -> _m.Feed:
+        """Connect a feed
+
+        Connect an RSS or Atom feed: a feed's address, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. A new feed brings each reading keyword the newest 10 items of the last 30 days that hold its term, never as instant alerts. A feed the workspace reads already comes back with 200 (connecting is idempotent). A members-only forum answers `feed_login_required`: send it again with `auth` (a cookie or a header), stored encrypted and read for this workspace alone.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          url (required): A feed's address (https://forum.example.com/posts.rss), or a page's (https://forum.example.com): the feed the page advertises is used.
+          auth: A sign-in for a members-only feed: a cookie, or one header. Write-only: stored encrypted, sent to the feed's own site alone, never shown again. A feed with a sign-in is read for this workspace alone."""
+        return _result(await _ops.feeds.create_feed.asyncio_detailed(client=self._client, body=_body(_m.CreateFeedBody, body, fields)))
+
+    async def delete(self, id: str) -> Any:
+        """Disconnect a feed
+
+        The workspace stops reading the feed. Its mentions stay; a keyword naming the same feed in its own `feeds` keeps reading it."""
+        return _result(await _ops.feeds.delete_feed.asyncio_detailed(id, client=self._client))
+
+    async def get(self, id: str) -> _m.Feed:
+        """Get a feed"""
+        return _result(await _ops.feeds.get_feed.asyncio_detailed(id, client=self._client))
+
+    async def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
+        """Connect many feeds
+
+        Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked on its own and reported added, already or failed, in the order sent: one that fails never stops the others. A failure carries the error code POST /v1/feeds would answer for that address (feed_login_required: send it again with auth). Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10 matching items of the last 30 days; the rest start from now.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          feeds (required): Up to 100 feeds, each { url } or { url, auth } for a members-only one. Each is checked on its own: one that fails never stops the others."""
+        return _result(await _ops.feeds.import_feeds.asyncio_detailed(client=self._client, body=_body(_m.ImportFeedsBody, body, fields)))
+
+    async def list(self, **params: Any) -> _m.ListFeedsResponse200:
+        """List feeds
+
+        The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first, each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace.
+
+        Keyword arguments (query):
+          q: Only feeds whose address or title contains this text, case-insensitive.
+          limit: Feeds per page, at most 500; default 100.
+          offset: Feeds to skip, for the next page."""
+        return _result(await _ops.feeds.list_feeds.asyncio_detailed(client=self._client, **params))
+
+    async def update(self, id: str, body: dict[str, Any] | _m.UpdateFeedBody | None = None, **fields: Any) -> _m.Feed:
+        """Update a feed
+
+        Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again; the feed is then read for this workspace alone. auth: null removes it.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          title: Your name for the feed; null clears it.
+          auth: Replaces the sign-in (checked by reading the feed with it first); null removes it and the feed is read signed out again."""
+        return _result(await _ops.feeds.update_feed.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateFeedBody, body, fields)))
+
 class _AsyncFilters:
     """filters: get, update."""
 
@@ -2173,7 +2295,7 @@ class _AsyncAttention:
 
         Keyword arguments (query):
           status: open (default), resolved, dismissed, or all.
-          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing.
+          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered never opens an item).
           limit: Items per page, newest first; 50 by default, at most 100.
           cursor: nextCursor from the previous page."""
         _coerce(params, {"status": (_enum, _m.ListAttentionStatus)})
@@ -2394,6 +2516,7 @@ class Mentio:
         self.analytics = _Analytics(self.client)
         self.api_keys = _ApiKeys(self.client)
         self.system = _System(self.client)
+        self.feeds = _Feeds(self.client)
         self.filters = _Filters(self.client)
         self.views = _Views(self.client)
         self.attention = _Attention(self.client)
@@ -2451,6 +2574,7 @@ class AsyncMentio:
         self.analytics = _AsyncAnalytics(self.client)
         self.api_keys = _AsyncApiKeys(self.client)
         self.system = _AsyncSystem(self.client)
+        self.feeds = _AsyncFeeds(self.client)
         self.filters = _AsyncFilters(self.client)
         self.views = _AsyncViews(self.client)
         self.attention = _AsyncAttention(self.client)

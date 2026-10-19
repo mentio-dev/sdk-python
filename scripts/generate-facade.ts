@@ -122,10 +122,14 @@ function bodyExpr(body: Exclude<Body, null>): string {
     .join(', ')}}`;
 }
 
+/** Words a Python method cannot be named. */
+const PY_KEYWORDS = new Set(['import', 'from', 'class', 'def', 'del', 'global', 'in', 'is', 'lambda', 'not', 'or', 'and', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield', 'async', 'await', 'assert', 'break', 'continue', 'elif', 'else', 'except', 'finally', 'for', 'if', 'nonlocal', 'as']);
+
 function methodSource(op: CliOperation, isAsync: boolean): string {
   const generated = readModule(op);
   const [, verb] = commandName(op).split(':') as [string, string];
-  const name = snake(verb);
+  // A Python keyword (feeds:import) takes a trailing underscore, PEP 8's rule.
+  const name = PY_KEYWORDS.has(snake(verb)) ? `${snake(verb)}_` : snake(verb);
   const pathParams = op.params.filter((p) => p.in === 'path').map((p) => snake(p.name));
   const body = bodyOf(op);
   const coerce = coercions(op, generated);

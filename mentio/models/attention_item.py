@@ -12,6 +12,7 @@ from ..models.attention_item_status import AttentionItemStatus
 if TYPE_CHECKING:
     from ..models.attention_item_subject import AttentionItemSubject
     from ..models.channel_failing_event_data import ChannelFailingEventData
+    from ..models.feed_failing_event_data import FeedFailingEventData
     from ..models.keyword_noisy_event_data import KeywordNoisyEventData
     from ..models.mention_spike_event_data import MentionSpikeEventData
     from ..models.negative_spike_event_data import NegativeSpikeEventData
@@ -27,7 +28,8 @@ class AttentionItem:
         id (str): Attention item id (att_...).
         kind (AttentionItemKind): mention.spike: far more mentions in the last hour than the keyword usually gets.
             sentiment.negative_spike: the negative share of the last 24 hours jumped. keyword.noisy: most scored matches are
-            noise. channel.failing: the channel's last sends all failed.
+            noise. channel.failing: the channel's last sends all failed. feed.failing: a workspace feed failed its last 3
+            hourly reads. feed.recovered: it read again after failing.
         status (AttentionItemStatus): open: the condition holds. resolved: it no longer does. dismissed: a person put it
             away; it does not come back for the same episode.
         subject (AttentionItemSubject): What the item is about.
@@ -35,8 +37,9 @@ class AttentionItem:
         opened_at (str): When the condition was first seen.
         resolved_at (None | str): When it no longer held; null while it does.
         dismissed_at (None | str): When a person dismissed it; null if nobody did.
-        data (ChannelFailingEventData | KeywordNoisyEventData | MentionSpikeEventData | NegativeSpikeEventData): The
-            facts as they stood when it opened: the same object the account event of the same name carries as `data`.
+        data (ChannelFailingEventData | FeedFailingEventData | KeywordNoisyEventData | MentionSpikeEventData |
+            NegativeSpikeEventData): The facts as they stood when it opened: the same object the account event of the same
+            name carries as `data`.
     """
 
     id: str
@@ -49,6 +52,7 @@ class AttentionItem:
     dismissed_at: None | str
     data: (
         ChannelFailingEventData
+        | FeedFailingEventData
         | KeywordNoisyEventData
         | MentionSpikeEventData
         | NegativeSpikeEventData
@@ -56,6 +60,7 @@ class AttentionItem:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.channel_failing_event_data import ChannelFailingEventData
         from ..models.keyword_noisy_event_data import KeywordNoisyEventData
         from ..models.mention_spike_event_data import MentionSpikeEventData
         from ..models.negative_spike_event_data import NegativeSpikeEventData
@@ -83,6 +88,7 @@ class AttentionItem:
             isinstance(self.data, MentionSpikeEventData)
             or isinstance(self.data, NegativeSpikeEventData)
             or isinstance(self.data, KeywordNoisyEventData)
+            or isinstance(self.data, ChannelFailingEventData)
         ):
             data = self.data.to_dict()
         else:
@@ -110,6 +116,7 @@ class AttentionItem:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.attention_item_subject import AttentionItemSubject
         from ..models.channel_failing_event_data import ChannelFailingEventData
+        from ..models.feed_failing_event_data import FeedFailingEventData
         from ..models.keyword_noisy_event_data import KeywordNoisyEventData
         from ..models.mention_spike_event_data import MentionSpikeEventData
         from ..models.negative_spike_event_data import NegativeSpikeEventData
@@ -145,6 +152,7 @@ class AttentionItem:
             data: object,
         ) -> (
             ChannelFailingEventData
+            | FeedFailingEventData
             | KeywordNoisyEventData
             | MentionSpikeEventData
             | NegativeSpikeEventData
@@ -173,11 +181,19 @@ class AttentionItem:
                 return data_type_2
             except (TypeError, ValueError, AttributeError, KeyError):
                 pass
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                data_type_3 = ChannelFailingEventData.from_dict(data)
+
+                return data_type_3
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
             if not isinstance(data, dict):
                 raise TypeError()
-            data_type_3 = ChannelFailingEventData.from_dict(data)
+            data_type_4 = FeedFailingEventData.from_dict(data)
 
-            return data_type_3
+            return data_type_4
 
         data = _parse_data(d.pop("data"))
 

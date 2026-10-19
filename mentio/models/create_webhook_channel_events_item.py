@@ -3,6 +3,8 @@ from enum import StrEnum
 
 class CreateWebhookChannelEventsItem(StrEnum):
     CHANNEL_FAILING = "channel.failing"
+    FEED_FAILING = "feed.failing"
+    FEED_RECOVERED = "feed.recovered"
     KEYWORD_CAPPED = "keyword.capped"
     KEYWORD_NOISY = "keyword.noisy"
     KEYWORD_PAUSED_FOR_BALANCE = "keyword.paused_for_balance"

@@ -54,6 +54,8 @@ class UpdateKeywordBody:
         feeds (list[UpdateKeywordBodyFeedsItem] | Unset): Replaces the feeds this keyword reads; [] disconnects them all
             (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30
             days; one already listed keeps its place.
+        reads_workspace_feeds (bool | Unset): true: the keyword also reads the workspace's feeds (GET /v1/feeds), live
+            from now on. false: its own feeds alone.
     """
 
     term: str | Unset = UNSET
@@ -67,6 +69,7 @@ class UpdateKeywordBody:
     group_id: str | Unset = UNSET
     review_sources: list[UpdateKeywordBodyReviewSourcesItem] | Unset = UNSET
     feeds: list[UpdateKeywordBodyFeedsItem] | Unset = UNSET
+    reads_workspace_feeds: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -130,6 +133,8 @@ class UpdateKeywordBody:
                 feeds_item = feeds_item_data.to_dict()
                 feeds.append(feeds_item)
 
+        reads_workspace_feeds = self.reads_workspace_feeds
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -155,6 +160,8 @@ class UpdateKeywordBody:
             field_dict["reviewSources"] = review_sources
         if feeds is not UNSET:
             field_dict["feeds"] = feeds
+        if reads_workspace_feeds is not UNSET:
+            field_dict["readsWorkspaceFeeds"] = reads_workspace_feeds
 
         return field_dict
 
@@ -268,6 +275,8 @@ class UpdateKeywordBody:
 
                 feeds.append(feeds_item)
 
+        reads_workspace_feeds = d.pop("readsWorkspaceFeeds", UNSET)
+
         update_keyword_body = cls(
             term=term,
             kind=kind,
@@ -280,6 +289,7 @@ class UpdateKeywordBody:
             group_id=group_id,
             review_sources=review_sources,
             feeds=feeds,
+            reads_workspace_feeds=reads_workspace_feeds,
         )
 
         update_keyword_body.additional_properties = d

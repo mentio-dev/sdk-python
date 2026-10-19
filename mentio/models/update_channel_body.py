@@ -26,8 +26,8 @@ class UpdateChannelBody:
         headers (UpdateChannelBodyHeaders | Unset): Webhooks only; replaces the whole set.
         events (list[UpdateChannelBodyEventsItem] | Unset): Replaces the whole set of account events the channel
             receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only
-            (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing). An empty list unsubscribes it from
-            all of them.
+            (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing, feed.recovered). An
+            empty list unsubscribes it from all of them.
     """
 
     label: str | Unset = UNSET

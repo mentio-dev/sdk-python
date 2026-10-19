@@ -100,7 +100,8 @@ def sync_detailed(
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.
             Default: ListAttentionStatus.OPEN.
         kind (str | Unset): Only these kinds, comma separated: mention.spike,
-            sentiment.negative_spike, keyword.noisy, channel.failing.
+            sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered
+            never opens an item).
         limit (int | Unset): Items per page, newest first; 50 by default, at most 100. Default:
             50.
         cursor (str | Unset): nextCursor from the previous page.
@@ -148,7 +149,8 @@ def sync(
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.
             Default: ListAttentionStatus.OPEN.
         kind (str | Unset): Only these kinds, comma separated: mention.spike,
-            sentiment.negative_spike, keyword.noisy, channel.failing.
+            sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered
+            never opens an item).
         limit (int | Unset): Items per page, newest first; 50 by default, at most 100. Default:
             50.
         cursor (str | Unset): nextCursor from the previous page.
@@ -191,7 +193,8 @@ async def asyncio_detailed(
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.
             Default: ListAttentionStatus.OPEN.
         kind (str | Unset): Only these kinds, comma separated: mention.spike,
-            sentiment.negative_spike, keyword.noisy, channel.failing.
+            sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered
+            never opens an item).
         limit (int | Unset): Items per page, newest first; 50 by default, at most 100. Default:
             50.
         cursor (str | Unset): nextCursor from the previous page.
@@ -237,7 +240,8 @@ async def asyncio(
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.
             Default: ListAttentionStatus.OPEN.
         kind (str | Unset): Only these kinds, comma separated: mention.spike,
-            sentiment.negative_spike, keyword.noisy, channel.failing.
+            sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered
+            never opens an item).
         limit (int | Unset): Items per page, newest first; 50 by default, at most 100. Default:
             50.
         cursor (str | Unset): nextCursor from the previous page.

@@ -57,6 +57,8 @@ class CreateKeywordBody:
             an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of
             keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold
             the term, billed like any mention and never sent as instant alerts.
+        reads_workspace_feeds (bool | Unset): Whether the keyword also reads the workspace's feeds (GET /v1/feeds);
+            default true. A new keyword reading them gets the look-back of the 8 most recently connected.
     """
 
     term: str
@@ -69,6 +71,7 @@ class CreateKeywordBody:
     group_id: str | Unset = UNSET
     review_sources: list[CreateKeywordBodyReviewSourcesItem] | Unset = UNSET
     feeds: list[CreateKeywordBodyFeedsItem] | Unset = UNSET
+    reads_workspace_feeds: bool | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -130,6 +133,8 @@ class CreateKeywordBody:
                 feeds_item = feeds_item_data.to_dict()
                 feeds.append(feeds_item)
 
+        reads_workspace_feeds = self.reads_workspace_feeds
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -155,6 +160,8 @@ class CreateKeywordBody:
             field_dict["reviewSources"] = review_sources
         if feeds is not UNSET:
             field_dict["feeds"] = feeds
+        if reads_workspace_feeds is not UNSET:
+            field_dict["readsWorkspaceFeeds"] = reads_workspace_feeds
 
         return field_dict
 
@@ -266,6 +273,8 @@ class CreateKeywordBody:
 
                 feeds.append(feeds_item)
 
+        reads_workspace_feeds = d.pop("readsWorkspaceFeeds", UNSET)
+
         create_keyword_body = cls(
             term=term,
             kind=kind,
@@ -277,6 +286,7 @@ class CreateKeywordBody:
             group_id=group_id,
             review_sources=review_sources,
             feeds=feeds,
+            reads_workspace_feeds=reads_workspace_feeds,
         )
 
         create_keyword_body.additional_properties = d
