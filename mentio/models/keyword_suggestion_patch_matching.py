@@ -29,9 +29,15 @@ class KeywordSuggestionPatchMatching:
 
     Attributes:
         required_terms (list[str] | Unset): The post must ALSO contain these terms, any one of them or all of them per
-            requiredMode. Empty: no requirement.
+            requiredMode. A `*` at the start or the end of an entry is a wildcard (alert* matches alerts and alerting).
+            Empty: no requirement.
         required_mode (KeywordSuggestionPatchMatchingRequiredMode | Unset): any: at least one required term must appear.
             all: every one must.
+        required_groups (list[list[str]] | Unset): Combinations of terms, at most 50 of 10 terms each: the post must
+            ALSO contain every term of at least one group (an OR of ANDs). For the keyword inreach, [["weather", "alert*"],
+            ["tsunami"], ["flash flood"]] keeps a post about inReach weather alerts, tsunamis or flash floods, one keyword
+            instead of three. Same phrase and wildcard rules as requiredTerms; when both are set a post must pass both.
+            Empty: no combinations.
         excluded_terms (list[str] | Unset): A post containing any of these is dropped. A `*` at the start or the end of
             an entry is a wildcard (beta.* matches beta.0.1; *bot matches nightlybot).
         excluded_authors (list[str] | Unset): Posts by these authors are dropped: profile or post links, @handles,
@@ -50,6 +56,7 @@ class KeywordSuggestionPatchMatching:
 
     required_terms: list[str] | Unset = UNSET
     required_mode: KeywordSuggestionPatchMatchingRequiredMode | Unset = UNSET
+    required_groups: list[list[str]] | Unset = UNSET
     excluded_terms: list[str] | Unset = UNSET
     excluded_authors: list[str] | Unset = UNSET
     case_sensitive: bool | Unset = UNSET
@@ -66,6 +73,14 @@ class KeywordSuggestionPatchMatching:
         required_mode: str | Unset = UNSET
         if not isinstance(self.required_mode, Unset):
             required_mode = self.required_mode.value
+
+        required_groups: list[list[str]] | Unset = UNSET
+        if not isinstance(self.required_groups, Unset):
+            required_groups = []
+            for required_groups_item_data in self.required_groups:
+                required_groups_item = required_groups_item_data
+
+                required_groups.append(required_groups_item)
 
         excluded_terms: list[str] | Unset = UNSET
         if not isinstance(self.excluded_terms, Unset):
@@ -94,6 +109,8 @@ class KeywordSuggestionPatchMatching:
             field_dict["requiredTerms"] = required_terms
         if required_mode is not UNSET:
             field_dict["requiredMode"] = required_mode
+        if required_groups is not UNSET:
+            field_dict["requiredGroups"] = required_groups
         if excluded_terms is not UNSET:
             field_dict["excludedTerms"] = excluded_terms
         if excluded_authors is not UNSET:
@@ -128,6 +145,15 @@ class KeywordSuggestionPatchMatching:
         else:
             required_mode = KeywordSuggestionPatchMatchingRequiredMode(_required_mode)
 
+        _required_groups = d.pop("requiredGroups", UNSET)
+        required_groups: list[list[str]] | Unset = UNSET
+        if _required_groups is not UNSET:
+            required_groups = []
+            for required_groups_item_data in _required_groups:
+                required_groups_item = cast(list[str], required_groups_item_data)
+
+                required_groups.append(required_groups_item)
+
         excluded_terms = cast(list[str], d.pop("excludedTerms", UNSET))
 
         excluded_authors = cast(list[str], d.pop("excludedAuthors", UNSET))
@@ -155,6 +181,7 @@ class KeywordSuggestionPatchMatching:
         keyword_suggestion_patch_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
+            required_groups=required_groups,
             excluded_terms=excluded_terms,
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,

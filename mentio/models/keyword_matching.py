@@ -22,8 +22,14 @@ class KeywordMatching:
 
     Attributes:
         required_terms (list[str]): The post must ALSO contain these terms, any one of them or all of them per
-            requiredMode. Empty: no requirement.
+            requiredMode. A `*` at the start or the end of an entry is a wildcard (alert* matches alerts and alerting).
+            Empty: no requirement.
         required_mode (KeywordMatchingRequiredMode): any: at least one required term must appear. all: every one must.
+        required_groups (list[list[str]]): Combinations of terms, at most 50 of 10 terms each: the post must ALSO
+            contain every term of at least one group (an OR of ANDs). For the keyword inreach, [["weather", "alert*"],
+            ["tsunami"], ["flash flood"]] keeps a post about inReach weather alerts, tsunamis or flash floods, one keyword
+            instead of three. Same phrase and wildcard rules as requiredTerms; when both are set a post must pass both.
+            Empty: no combinations.
         excluded_terms (list[str]): A post containing any of these is dropped. A `*` at the start or the end of an entry
             is a wildcard (beta.* matches beta.0.1; *bot matches nightlybot).
         excluded_authors (list[str]): Posts by these authors are dropped: profile or post links, @handles, u/names,
@@ -41,6 +47,7 @@ class KeywordMatching:
 
     required_terms: list[str]
     required_mode: KeywordMatchingRequiredMode
+    required_groups: list[list[str]]
     excluded_terms: list[str]
     excluded_authors: list[str]
     case_sensitive: bool
@@ -53,6 +60,12 @@ class KeywordMatching:
         required_terms = self.required_terms
 
         required_mode = self.required_mode.value
+
+        required_groups = []
+        for required_groups_item_data in self.required_groups:
+            required_groups_item = required_groups_item_data
+
+            required_groups.append(required_groups_item)
 
         excluded_terms = self.excluded_terms
 
@@ -72,6 +85,7 @@ class KeywordMatching:
             {
                 "requiredTerms": required_terms,
                 "requiredMode": required_mode,
+                "requiredGroups": required_groups,
                 "excludedTerms": excluded_terms,
                 "excludedAuthors": excluded_authors,
                 "caseSensitive": case_sensitive,
@@ -93,6 +107,13 @@ class KeywordMatching:
 
         required_mode = KeywordMatchingRequiredMode(d.pop("requiredMode"))
 
+        required_groups = []
+        _required_groups = d.pop("requiredGroups")
+        for required_groups_item_data in _required_groups:
+            required_groups_item = cast(list[str], required_groups_item_data)
+
+            required_groups.append(required_groups_item)
+
         excluded_terms = cast(list[str], d.pop("excludedTerms"))
 
         excluded_authors = cast(list[str], d.pop("excludedAuthors"))
@@ -108,6 +129,7 @@ class KeywordMatching:
         keyword_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
+            required_groups=required_groups,
             excluded_terms=excluded_terms,
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,
