@@ -280,7 +280,7 @@ class _Mentions:
     def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or repository), parent_url (the post a comment answers), comments (comments of it delivered to you), subreddit and flair (Reddit only). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or repository), parent_url (the post a comment answers), comments (comments of it delivered to you), subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -290,6 +290,7 @@ class _Mentions:
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
@@ -323,6 +324,8 @@ class _Mentions:
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
+          not_countries: Never posts whose author is in these countries: notCountries=in. A post whose country is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
           min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
@@ -335,7 +338,7 @@ class _Mentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_csv.sync_detailed(client=self._client, **params))
 
     def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -351,6 +354,7 @@ class _Mentions:
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
@@ -384,6 +388,8 @@ class _Mentions:
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
+          not_countries: Never posts whose author is in these countries: notCountries=in. A post whose country is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
           min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
@@ -396,7 +402,7 @@ class _Mentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_json.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Mention:
@@ -418,6 +424,7 @@ class _Mentions:
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
@@ -451,6 +458,8 @@ class _Mentions:
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
+          not_countries: Never posts whose author is in these countries: notCountries=in. A post whose country is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
           min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
@@ -466,7 +475,7 @@ class _Mentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(_ops.mentions.search_mentions.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -877,7 +886,7 @@ class _Analytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
+          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one), country (where the author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(_ops.analytics.get_analytics_breakdown.sync_detailed(client=self._client, **params))
 
@@ -1363,7 +1372,7 @@ class _AsyncMentions:
     async def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or repository), parent_url (the post a comment answers), comments (comments of it delivered to you), subreddit and flair (Reddit only). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or repository), parent_url (the post a comment answers), comments (comments of it delivered to you), subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1373,6 +1382,7 @@ class _AsyncMentions:
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
@@ -1406,6 +1416,8 @@ class _AsyncMentions:
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
+          not_countries: Never posts whose author is in these countries: notCountries=in. A post whose country is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
           min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
@@ -1418,7 +1430,7 @@ class _AsyncMentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_csv.asyncio_detailed(client=self._client, **params))
 
     async def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -1434,6 +1446,7 @@ class _AsyncMentions:
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
@@ -1467,6 +1480,8 @@ class _AsyncMentions:
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
+          not_countries: Never posts whose author is in these countries: notCountries=in. A post whose country is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
           min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
@@ -1479,7 +1494,7 @@ class _AsyncMentions:
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_json.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Mention:
@@ -1501,6 +1516,7 @@ class _AsyncMentions:
           sentiment: Only this sentiment.
           intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
+          organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
           include_muted: true: include mentions by people you muted, hidden by default: muted for the workspace, or for the mention's own keyword group.
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
@@ -1534,6 +1550,8 @@ class _AsyncMentions:
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
+          countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
+          not_countries: Never posts whose author is in these countries: notCountries=in. A post whose country is unknown still passes.
           ratings: Only app store reviews with any of these star ratings (1 to 5): ratings=1,2 is the unhappy ones. Every other post fails it.
           not_ratings: Never reviews with these star ratings (1 to 5): notRatings=5 hides the five star reviews. Posts that are not reviews still pass.
           min_likes: Only posts with at least this many likes (upvotes, reactions), as the platform reported them when the post was found. A post without that count never passes.
@@ -1549,7 +1567,7 @@ class _AsyncMentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(await _ops.mentions.search_mentions.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -1960,7 +1978,7 @@ class _AsyncAnalytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
+          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one), country (where the author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(await _ops.analytics.get_analytics_breakdown.asyncio_detailed(client=self._client, **params))
 

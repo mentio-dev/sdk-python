@@ -35,6 +35,12 @@ class MentionClassificationType0:
             billed like any other match. false while unjudged.
         language (None | str): The language the post is written in, as an ISO 639-1 code (en, es, de); null when unknown
             or classified before languages were recorded.
+        country (None | str): Where the author is, as a lowercase ISO 3166-1 alpha-2 code (us, in, de): the classifier's
+            reading of the author's profile location and the post. A best guess, not a fact the platform gave; null when
+            nothing tells, or classified before countries were recorded.
+        organization (bool): The author is a company, brand or organization account rather than a person: a LinkedIn
+            company page, a GitHub organization, an account that speaks for a business. A label only, like automated. false
+            while unjudged.
         confidence (float | None): How sure the classifier is of its relevance verdict, 0 to 1. null when the verdict
             came without one: the fallback model judged, or the row was scored before confidence was recorded.
         uncertain (bool): The verdict deserves a human look: confidence under 0.4, or the model that wrote the note
@@ -51,6 +57,8 @@ class MentionClassificationType0:
     intents: list[str]
     automated: bool
     language: None | str
+    country: None | str
+    organization: bool
     confidence: float | None
     uncertain: bool
     note: None | str
@@ -74,6 +82,11 @@ class MentionClassificationType0:
 
         language: None | str
         language = self.language
+
+        country: None | str
+        country = self.country
+
+        organization = self.organization
 
         confidence: float | None
         confidence = self.confidence
@@ -100,6 +113,8 @@ class MentionClassificationType0:
                 "intents": intents,
                 "automated": automated,
                 "language": language,
+                "country": country,
+                "organization": organization,
                 "confidence": confidence,
                 "uncertain": uncertain,
                 "note": note,
@@ -137,6 +152,15 @@ class MentionClassificationType0:
             return cast(None | str, data)
 
         language = _parse_language(d.pop("language"))
+
+        def _parse_country(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        country = _parse_country(d.pop("country"))
+
+        organization = d.pop("organization")
 
         def _parse_confidence(data: object) -> float | None:
             if data is None:
@@ -181,6 +205,8 @@ class MentionClassificationType0:
             intents=intents,
             automated=automated,
             language=language,
+            country=country,
+            organization=organization,
             confidence=confidence,
             uncertain=uncertain,
             note=note,

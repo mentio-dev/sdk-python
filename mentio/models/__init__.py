@@ -4,6 +4,8 @@ from .alert import Alert
 from .alert_channels_item import AlertChannelsItem
 from .alert_channels_item_kind import AlertChannelsItemKind
 from .alert_filter import AlertFilter
+from .alert_filter_countries_item import AlertFilterCountriesItem
+from .alert_filter_not_countries_item import AlertFilterNotCountriesItem
 from .alert_filter_platforms_item import AlertFilterPlatformsItem
 from .alert_filter_sentiments_item import AlertFilterSentimentsItem
 from .alert_mode import AlertMode
@@ -87,6 +89,10 @@ from .company import Company
 from .company_accounts import CompanyAccounts
 from .create_alert_body import CreateAlertBody
 from .create_alert_body_filter import CreateAlertBodyFilter
+from .create_alert_body_filter_countries_item import CreateAlertBodyFilterCountriesItem
+from .create_alert_body_filter_not_countries_item import (
+    CreateAlertBodyFilterNotCountriesItem,
+)
 from .create_alert_body_filter_platforms_item import CreateAlertBodyFilterPlatformsItem
 from .create_alert_body_filter_sentiments_item import (
     CreateAlertBodyFilterSentimentsItem,
@@ -149,10 +155,14 @@ from .create_top_up_body import CreateTopUpBody
 from .create_top_up_response_200 import CreateTopUpResponse200
 from .create_view_body import CreateViewBody
 from .create_view_body_filter import CreateViewBodyFilter
+from .create_view_body_filter_countries_item import CreateViewBodyFilterCountriesItem
 from .create_view_body_filter_keyword_kinds_item import (
     CreateViewBodyFilterKeywordKindsItem,
 )
 from .create_view_body_filter_kind import CreateViewBodyFilterKind
+from .create_view_body_filter_not_countries_item import (
+    CreateViewBodyFilterNotCountriesItem,
+)
 from .create_view_body_filter_not_platforms_item import (
     CreateViewBodyFilterNotPlatformsItem,
 )
@@ -178,8 +188,10 @@ from .email_channel_stats_last_7d import EmailChannelStatsLast7D
 from .error_response import ErrorResponse
 from .error_response_error import ErrorResponseError
 from .error_response_error_code import ErrorResponseErrorCode
+from .export_mentions_csv_countries_item import ExportMentionsCsvCountriesItem
 from .export_mentions_csv_keyword_kinds_item import ExportMentionsCsvKeywordKindsItem
 from .export_mentions_csv_kind import ExportMentionsCsvKind
+from .export_mentions_csv_not_countries_item import ExportMentionsCsvNotCountriesItem
 from .export_mentions_csv_not_platforms_item import ExportMentionsCsvNotPlatformsItem
 from .export_mentions_csv_not_sentiments_item import ExportMentionsCsvNotSentimentsItem
 from .export_mentions_csv_platform import ExportMentionsCsvPlatform
@@ -187,8 +199,10 @@ from .export_mentions_csv_platforms_item import ExportMentionsCsvPlatformsItem
 from .export_mentions_csv_sentiment import ExportMentionsCsvSentiment
 from .export_mentions_csv_sentiments_item import ExportMentionsCsvSentimentsItem
 from .export_mentions_csv_status import ExportMentionsCsvStatus
+from .export_mentions_json_countries_item import ExportMentionsJsonCountriesItem
 from .export_mentions_json_keyword_kinds_item import ExportMentionsJsonKeywordKindsItem
 from .export_mentions_json_kind import ExportMentionsJsonKind
+from .export_mentions_json_not_countries_item import ExportMentionsJsonNotCountriesItem
 from .export_mentions_json_not_platforms_item import ExportMentionsJsonNotPlatformsItem
 from .export_mentions_json_not_sentiments_item import (
     ExportMentionsJsonNotSentimentsItem,
@@ -209,8 +223,10 @@ from .export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from .export_people_csv_sort import ExportPeopleCsvSort
 from .export_people_csv_stages_item import ExportPeopleCsvStagesItem
 from .filter_group import FilterGroup
+from .filter_group_countries_item import FilterGroupCountriesItem
 from .filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
 from .filter_group_kind import FilterGroupKind
+from .filter_group_not_countries_item import FilterGroupNotCountriesItem
 from .filter_group_not_platforms_item import FilterGroupNotPlatformsItem
 from .filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
 from .filter_group_platforms_item import FilterGroupPlatformsItem
@@ -331,6 +347,12 @@ from .list_alerts_response_200_data_item_channels_item_kind import (
 )
 from .list_alerts_response_200_data_item_filter import (
     ListAlertsResponse200DataItemFilter,
+)
+from .list_alerts_response_200_data_item_filter_countries_item import (
+    ListAlertsResponse200DataItemFilterCountriesItem,
+)
+from .list_alerts_response_200_data_item_filter_not_countries_item import (
+    ListAlertsResponse200DataItemFilterNotCountriesItem,
 )
 from .list_alerts_response_200_data_item_filter_platforms_item import (
     ListAlertsResponse200DataItemFilterPlatformsItem,
@@ -526,11 +548,17 @@ from .list_segments_response_200_presets_item_filter_stages_item import (
 from .list_views_response_200 import ListViewsResponse200
 from .list_views_response_200_data_item import ListViewsResponse200DataItem
 from .list_views_response_200_data_item_filter import ListViewsResponse200DataItemFilter
+from .list_views_response_200_data_item_filter_countries_item import (
+    ListViewsResponse200DataItemFilterCountriesItem,
+)
 from .list_views_response_200_data_item_filter_keyword_kinds_item import (
     ListViewsResponse200DataItemFilterKeywordKindsItem,
 )
 from .list_views_response_200_data_item_filter_kind import (
     ListViewsResponse200DataItemFilterKind,
+)
+from .list_views_response_200_data_item_filter_not_countries_item import (
+    ListViewsResponse200DataItemFilterNotCountriesItem,
 )
 from .list_views_response_200_data_item_filter_not_platforms_item import (
     ListViewsResponse200DataItemFilterNotPlatformsItem,
@@ -645,8 +673,10 @@ from .run_alert_digest_response_200_outcomes_item import (
     RunAlertDigestResponse200OutcomesItem,
 )
 from .run_alert_digest_response_200_skipped import RunAlertDigestResponse200Skipped
+from .search_mentions_countries_item import SearchMentionsCountriesItem
 from .search_mentions_keyword_kinds_item import SearchMentionsKeywordKindsItem
 from .search_mentions_kind import SearchMentionsKind
+from .search_mentions_not_countries_item import SearchMentionsNotCountriesItem
 from .search_mentions_not_platforms_item import SearchMentionsNotPlatformsItem
 from .search_mentions_not_sentiments_item import SearchMentionsNotSentimentsItem
 from .search_mentions_platform import SearchMentionsPlatform
@@ -690,6 +720,10 @@ from .test_channel_response_200_outcomes_item import TestChannelResponse200Outco
 from .unmute_alert_authors_body import UnmuteAlertAuthorsBody
 from .update_alert_body import UpdateAlertBody
 from .update_alert_body_filter import UpdateAlertBodyFilter
+from .update_alert_body_filter_countries_item import UpdateAlertBodyFilterCountriesItem
+from .update_alert_body_filter_not_countries_item import (
+    UpdateAlertBodyFilterNotCountriesItem,
+)
 from .update_alert_body_filter_platforms_item import UpdateAlertBodyFilterPlatformsItem
 from .update_alert_body_filter_sentiments_item import (
     UpdateAlertBodyFilterSentimentsItem,
@@ -750,10 +784,14 @@ from .update_segment_body_filter_platforms_item import (
 from .update_segment_body_filter_stages_item import UpdateSegmentBodyFilterStagesItem
 from .update_view_body import UpdateViewBody
 from .update_view_body_filter import UpdateViewBodyFilter
+from .update_view_body_filter_countries_item import UpdateViewBodyFilterCountriesItem
 from .update_view_body_filter_keyword_kinds_item import (
     UpdateViewBodyFilterKeywordKindsItem,
 )
 from .update_view_body_filter_kind import UpdateViewBodyFilterKind
+from .update_view_body_filter_not_countries_item import (
+    UpdateViewBodyFilterNotCountriesItem,
+)
 from .update_view_body_filter_not_platforms_item import (
     UpdateViewBodyFilterNotPlatformsItem,
 )
@@ -779,8 +817,10 @@ from .usage_summary_keywords import UsageSummaryKeywords
 from .usage_summary_mentions import UsageSummaryMentions
 from .view import View
 from .view_filter import ViewFilter
+from .view_filter_countries_item import ViewFilterCountriesItem
 from .view_filter_keyword_kinds_item import ViewFilterKeywordKindsItem
 from .view_filter_kind import ViewFilterKind
+from .view_filter_not_countries_item import ViewFilterNotCountriesItem
 from .view_filter_not_platforms_item import ViewFilterNotPlatformsItem
 from .view_filter_not_sentiments_item import ViewFilterNotSentimentsItem
 from .view_filter_platforms_item import ViewFilterPlatformsItem
@@ -811,6 +851,8 @@ __all__ = (
     "AlertChannelsItem",
     "AlertChannelsItemKind",
     "AlertFilter",
+    "AlertFilterCountriesItem",
+    "AlertFilterNotCountriesItem",
     "AlertFilterPlatformsItem",
     "AlertFilterSentimentsItem",
     "AlertMode",
@@ -862,6 +904,8 @@ __all__ = (
     "CompanyAccounts",
     "CreateAlertBody",
     "CreateAlertBodyFilter",
+    "CreateAlertBodyFilterCountriesItem",
+    "CreateAlertBodyFilterNotCountriesItem",
     "CreateAlertBodyFilterPlatformsItem",
     "CreateAlertBodyFilterSentimentsItem",
     "CreateAlertBodyMode",
@@ -904,8 +948,10 @@ __all__ = (
     "CreateTopUpResponse200",
     "CreateViewBody",
     "CreateViewBodyFilter",
+    "CreateViewBodyFilterCountriesItem",
     "CreateViewBodyFilterKeywordKindsItem",
     "CreateViewBodyFilterKind",
+    "CreateViewBodyFilterNotCountriesItem",
     "CreateViewBodyFilterNotPlatformsItem",
     "CreateViewBodyFilterNotSentimentsItem",
     "CreateViewBodyFilterPlatformsItem",
@@ -927,8 +973,10 @@ __all__ = (
     "ErrorResponse",
     "ErrorResponseError",
     "ErrorResponseErrorCode",
+    "ExportMentionsCsvCountriesItem",
     "ExportMentionsCsvKeywordKindsItem",
     "ExportMentionsCsvKind",
+    "ExportMentionsCsvNotCountriesItem",
     "ExportMentionsCsvNotPlatformsItem",
     "ExportMentionsCsvNotSentimentsItem",
     "ExportMentionsCsvPlatform",
@@ -936,8 +984,10 @@ __all__ = (
     "ExportMentionsCsvSentiment",
     "ExportMentionsCsvSentimentsItem",
     "ExportMentionsCsvStatus",
+    "ExportMentionsJsonCountriesItem",
     "ExportMentionsJsonKeywordKindsItem",
     "ExportMentionsJsonKind",
+    "ExportMentionsJsonNotCountriesItem",
     "ExportMentionsJsonNotPlatformsItem",
     "ExportMentionsJsonNotSentimentsItem",
     "ExportMentionsJsonPlatform",
@@ -954,8 +1004,10 @@ __all__ = (
     "ExportPeopleCsvSort",
     "ExportPeopleCsvStagesItem",
     "FilterGroup",
+    "FilterGroupCountriesItem",
     "FilterGroupKeywordKindsItem",
     "FilterGroupKind",
+    "FilterGroupNotCountriesItem",
     "FilterGroupNotPlatformsItem",
     "FilterGroupNotSentimentsItem",
     "FilterGroupPlatformsItem",
@@ -1053,6 +1105,8 @@ __all__ = (
     "ListAlertsResponse200DataItemChannelsItem",
     "ListAlertsResponse200DataItemChannelsItemKind",
     "ListAlertsResponse200DataItemFilter",
+    "ListAlertsResponse200DataItemFilterCountriesItem",
+    "ListAlertsResponse200DataItemFilterNotCountriesItem",
     "ListAlertsResponse200DataItemFilterPlatformsItem",
     "ListAlertsResponse200DataItemFilterSentimentsItem",
     "ListAlertsResponse200DataItemMode",
@@ -1143,8 +1197,10 @@ __all__ = (
     "ListViewsResponse200",
     "ListViewsResponse200DataItem",
     "ListViewsResponse200DataItemFilter",
+    "ListViewsResponse200DataItemFilterCountriesItem",
     "ListViewsResponse200DataItemFilterKeywordKindsItem",
     "ListViewsResponse200DataItemFilterKind",
+    "ListViewsResponse200DataItemFilterNotCountriesItem",
     "ListViewsResponse200DataItemFilterNotPlatformsItem",
     "ListViewsResponse200DataItemFilterNotSentimentsItem",
     "ListViewsResponse200DataItemFilterPlatformsItem",
@@ -1232,8 +1288,10 @@ __all__ = (
     "RunAlertDigestResponse200",
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",
+    "SearchMentionsCountriesItem",
     "SearchMentionsKeywordKindsItem",
     "SearchMentionsKind",
+    "SearchMentionsNotCountriesItem",
     "SearchMentionsNotPlatformsItem",
     "SearchMentionsNotSentimentsItem",
     "SearchMentionsPlatform",
@@ -1277,6 +1335,8 @@ __all__ = (
     "UnmuteAlertAuthorsBody",
     "UpdateAlertBody",
     "UpdateAlertBodyFilter",
+    "UpdateAlertBodyFilterCountriesItem",
+    "UpdateAlertBodyFilterNotCountriesItem",
     "UpdateAlertBodyFilterPlatformsItem",
     "UpdateAlertBodyFilterSentimentsItem",
     "UpdateAlertBodyMode",
@@ -1317,8 +1377,10 @@ __all__ = (
     "UpdateSegmentBodyFilterStagesItem",
     "UpdateViewBody",
     "UpdateViewBodyFilter",
+    "UpdateViewBodyFilterCountriesItem",
     "UpdateViewBodyFilterKeywordKindsItem",
     "UpdateViewBodyFilterKind",
+    "UpdateViewBodyFilterNotCountriesItem",
     "UpdateViewBodyFilterNotPlatformsItem",
     "UpdateViewBodyFilterNotSentimentsItem",
     "UpdateViewBodyFilterPlatformsItem",
@@ -1340,8 +1402,10 @@ __all__ = (
     "UsageSummaryMentions",
     "View",
     "ViewFilter",
+    "ViewFilterCountriesItem",
     "ViewFilterKeywordKindsItem",
     "ViewFilterKind",
+    "ViewFilterNotCountriesItem",
     "ViewFilterNotPlatformsItem",
     "ViewFilterNotSentimentsItem",
     "ViewFilterPlatformsItem",

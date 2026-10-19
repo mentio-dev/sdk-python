@@ -7,10 +7,16 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
+from ...models.export_mentions_json_countries_item import (
+    ExportMentionsJsonCountriesItem,
+)
 from ...models.export_mentions_json_keyword_kinds_item import (
     ExportMentionsJsonKeywordKindsItem,
 )
 from ...models.export_mentions_json_kind import ExportMentionsJsonKind
+from ...models.export_mentions_json_not_countries_item import (
+    ExportMentionsJsonNotCountriesItem,
+)
 from ...models.export_mentions_json_not_platforms_item import (
     ExportMentionsJsonNotPlatformsItem,
 )
@@ -39,6 +45,7 @@ def _get_kwargs(
     sentiment: ExportMentionsJsonSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
     automated: bool | Unset = UNSET,
+    organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
@@ -72,6 +79,8 @@ def _get_kwargs(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    countries: list[ExportMentionsJsonCountriesItem] | Unset = UNSET,
+    not_countries: list[ExportMentionsJsonNotCountriesItem] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
     not_ratings: list[int] | Unset = UNSET,
     min_likes: int | None | Unset = UNSET,
@@ -113,6 +122,8 @@ def _get_kwargs(
     params["intent"] = intent
 
     params["automated"] = automated
+
+    params["organization"] = organization
 
     params["personId"] = person_id
 
@@ -351,6 +362,24 @@ def _get_kwargs(
 
     params["notLanguages"] = json_not_languages
 
+    json_countries: list[str] | Unset = UNSET
+    if not isinstance(countries, Unset):
+        json_countries = []
+        for countries_item_data in countries:
+            countries_item = countries_item_data.value
+            json_countries.append(countries_item)
+
+    params["countries"] = json_countries
+
+    json_not_countries: list[str] | Unset = UNSET
+    if not isinstance(not_countries, Unset):
+        json_not_countries = []
+        for not_countries_item_data in not_countries:
+            not_countries_item = not_countries_item_data.value
+            json_not_countries.append(not_countries_item)
+
+    params["notCountries"] = json_not_countries
+
     json_ratings: list[int] | Unset = UNSET
     if not isinstance(ratings, Unset):
         json_ratings = ratings
@@ -480,6 +509,7 @@ def sync_detailed(
     sentiment: ExportMentionsJsonSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
     automated: bool | Unset = UNSET,
+    organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
@@ -513,6 +543,8 @@ def sync_detailed(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    countries: list[ExportMentionsJsonCountriesItem] | Unset = UNSET,
+    not_countries: list[ExportMentionsJsonNotCountriesItem] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
     not_ratings: list[int] | Unset = UNSET,
     min_likes: int | None | Unset = UNSET,
@@ -548,6 +580,9 @@ def sync_detailed(
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
+        organization (bool | Unset): true: only posts by companies, brands and organizations (a
+            LinkedIn company page, a GitHub organization, a business account); false: only posts by
+            people, mentions judged before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -615,6 +650,11 @@ def sync_detailed(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        countries (list[ExportMentionsJsonCountriesItem] | Unset): Only posts whose author is in
+            any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the
+            author's profile and the post. A post whose country is unknown never passes.
+        not_countries (list[ExportMentionsJsonNotCountriesItem] | Unset): Never posts whose author
+            is in these countries: notCountries=in. A post whose country is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
@@ -663,6 +703,7 @@ def sync_detailed(
         sentiment=sentiment,
         intent=intent,
         automated=automated,
+        organization=organization,
         person_id=person_id,
         include_muted=include_muted,
         include_duplicates=include_duplicates,
@@ -696,6 +737,8 @@ def sync_detailed(
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
+        countries=countries,
+        not_countries=not_countries,
         ratings=ratings,
         not_ratings=not_ratings,
         min_likes=min_likes,
@@ -727,6 +770,7 @@ def sync(
     sentiment: ExportMentionsJsonSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
     automated: bool | Unset = UNSET,
+    organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
@@ -760,6 +804,8 @@ def sync(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    countries: list[ExportMentionsJsonCountriesItem] | Unset = UNSET,
+    not_countries: list[ExportMentionsJsonNotCountriesItem] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
     not_ratings: list[int] | Unset = UNSET,
     min_likes: int | None | Unset = UNSET,
@@ -795,6 +841,9 @@ def sync(
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
+        organization (bool | Unset): true: only posts by companies, brands and organizations (a
+            LinkedIn company page, a GitHub organization, a business account); false: only posts by
+            people, mentions judged before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -862,6 +911,11 @@ def sync(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        countries (list[ExportMentionsJsonCountriesItem] | Unset): Only posts whose author is in
+            any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the
+            author's profile and the post. A post whose country is unknown never passes.
+        not_countries (list[ExportMentionsJsonNotCountriesItem] | Unset): Never posts whose author
+            is in these countries: notCountries=in. A post whose country is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
@@ -911,6 +965,7 @@ def sync(
         sentiment=sentiment,
         intent=intent,
         automated=automated,
+        organization=organization,
         person_id=person_id,
         include_muted=include_muted,
         include_duplicates=include_duplicates,
@@ -944,6 +999,8 @@ def sync(
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
+        countries=countries,
+        not_countries=not_countries,
         ratings=ratings,
         not_ratings=not_ratings,
         min_likes=min_likes,
@@ -969,6 +1026,7 @@ async def asyncio_detailed(
     sentiment: ExportMentionsJsonSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
     automated: bool | Unset = UNSET,
+    organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
@@ -1002,6 +1060,8 @@ async def asyncio_detailed(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    countries: list[ExportMentionsJsonCountriesItem] | Unset = UNSET,
+    not_countries: list[ExportMentionsJsonNotCountriesItem] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
     not_ratings: list[int] | Unset = UNSET,
     min_likes: int | None | Unset = UNSET,
@@ -1037,6 +1097,9 @@ async def asyncio_detailed(
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
+        organization (bool | Unset): true: only posts by companies, brands and organizations (a
+            LinkedIn company page, a GitHub organization, a business account); false: only posts by
+            people, mentions judged before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -1104,6 +1167,11 @@ async def asyncio_detailed(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        countries (list[ExportMentionsJsonCountriesItem] | Unset): Only posts whose author is in
+            any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the
+            author's profile and the post. A post whose country is unknown never passes.
+        not_countries (list[ExportMentionsJsonNotCountriesItem] | Unset): Never posts whose author
+            is in these countries: notCountries=in. A post whose country is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
@@ -1152,6 +1220,7 @@ async def asyncio_detailed(
         sentiment=sentiment,
         intent=intent,
         automated=automated,
+        organization=organization,
         person_id=person_id,
         include_muted=include_muted,
         include_duplicates=include_duplicates,
@@ -1185,6 +1254,8 @@ async def asyncio_detailed(
         not_tags=not_tags,
         languages=languages,
         not_languages=not_languages,
+        countries=countries,
+        not_countries=not_countries,
         ratings=ratings,
         not_ratings=not_ratings,
         min_likes=min_likes,
@@ -1214,6 +1285,7 @@ async def asyncio(
     sentiment: ExportMentionsJsonSentiment | Unset = UNSET,
     intent: str | Unset = UNSET,
     automated: bool | Unset = UNSET,
+    organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
@@ -1247,6 +1319,8 @@ async def asyncio(
     not_tags: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
+    countries: list[ExportMentionsJsonCountriesItem] | Unset = UNSET,
+    not_countries: list[ExportMentionsJsonNotCountriesItem] | Unset = UNSET,
     ratings: list[int] | Unset = UNSET,
     not_ratings: list[int] | Unset = UNSET,
     min_likes: int | None | Unset = UNSET,
@@ -1282,6 +1356,9 @@ async def asyncio(
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
+        organization (bool | Unset): true: only posts by companies, brands and organizations (a
+            LinkedIn company page, a GitHub organization, a business account); false: only posts by
+            people, mentions judged before this existed included. Omitted: everything.
         person_id (str | Unset): Only this person (an id from /v1/people), merged accounts
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
@@ -1349,6 +1426,11 @@ async def asyncio(
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
             is unknown still passes.
+        countries (list[ExportMentionsJsonCountriesItem] | Unset): Only posts whose author is in
+            any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the
+            author's profile and the post. A post whose country is unknown never passes.
+        not_countries (list[ExportMentionsJsonNotCountriesItem] | Unset): Never posts whose author
+            is in these countries: notCountries=in. A post whose country is unknown still passes.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to
             5): ratings=1,2 is the unhappy ones. Every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5):
@@ -1399,6 +1481,7 @@ async def asyncio(
             sentiment=sentiment,
             intent=intent,
             automated=automated,
+            organization=organization,
             person_id=person_id,
             include_muted=include_muted,
             include_duplicates=include_duplicates,
@@ -1432,6 +1515,8 @@ async def asyncio(
             not_tags=not_tags,
             languages=languages,
             not_languages=not_languages,
+            countries=countries,
+            not_countries=not_countries,
             ratings=ratings,
             not_ratings=not_ratings,
             min_likes=min_likes,

@@ -5,8 +5,10 @@ from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 
+from ..models.filter_group_countries_item import FilterGroupCountriesItem
 from ..models.filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
 from ..models.filter_group_kind import FilterGroupKind
+from ..models.filter_group_not_countries_item import FilterGroupNotCountriesItem
 from ..models.filter_group_not_platforms_item import FilterGroupNotPlatformsItem
 from ..models.filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
 from ..models.filter_group_platforms_item import FilterGroupPlatformsItem
@@ -43,6 +45,12 @@ class FilterGroup:
         automated (bool | Unset): true: only posts that read as machine-made; false: only the rest.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1).
         not_languages (list[str] | Unset): Never posts in these languages; an unknown language still passes.
+        countries (list[FilterGroupCountriesItem] | Unset): Only posts whose author is in any of these countries (ISO
+            3166-1 alpha-2: us, in, de). An unknown country never passes.
+        not_countries (list[FilterGroupNotCountriesItem] | Unset): Never posts whose author is in these countries; an
+            unknown country still passes.
+        organization (bool | Unset): true: only posts by companies, brands and organizations; false: only posts by
+            people.
         tags (list[str] | Unset): Only authors tagged with any of these, in the workspace's tags or those of the
             mention's own keyword group.
         not_tags (list[str] | Unset): Never authors tagged with any of these, in the workspace's tags or those of the
@@ -94,6 +102,9 @@ class FilterGroup:
     automated: bool | Unset = UNSET
     languages: list[str] | Unset = UNSET
     not_languages: list[str] | Unset = UNSET
+    countries: list[FilterGroupCountriesItem] | Unset = UNSET
+    not_countries: list[FilterGroupNotCountriesItem] | Unset = UNSET
+    organization: bool | Unset = UNSET
     tags: list[str] | Unset = UNSET
     not_tags: list[str] | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
@@ -196,6 +207,22 @@ class FilterGroup:
         if not isinstance(self.not_languages, Unset):
             not_languages = self.not_languages
 
+        countries: list[str] | Unset = UNSET
+        if not isinstance(self.countries, Unset):
+            countries = []
+            for countries_item_data in self.countries:
+                countries_item = countries_item_data.value
+                countries.append(countries_item)
+
+        not_countries: list[str] | Unset = UNSET
+        if not isinstance(self.not_countries, Unset):
+            not_countries = []
+            for not_countries_item_data in self.not_countries:
+                not_countries_item = not_countries_item_data.value
+                not_countries.append(not_countries_item)
+
+        organization = self.organization
+
         tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
@@ -295,6 +322,12 @@ class FilterGroup:
             field_dict["languages"] = languages
         if not_languages is not UNSET:
             field_dict["notLanguages"] = not_languages
+        if countries is not UNSET:
+            field_dict["countries"] = countries
+        if not_countries is not UNSET:
+            field_dict["notCountries"] = not_countries
+        if organization is not UNSET:
+            field_dict["organization"] = organization
         if tags is not UNSET:
             field_dict["tags"] = tags
         if not_tags is not UNSET:
@@ -423,6 +456,28 @@ class FilterGroup:
 
         not_languages = cast(list[str], d.pop("notLanguages", UNSET))
 
+        _countries = d.pop("countries", UNSET)
+        countries: list[FilterGroupCountriesItem] | Unset = UNSET
+        if _countries is not UNSET:
+            countries = []
+            for countries_item_data in _countries:
+                countries_item = FilterGroupCountriesItem(countries_item_data)
+
+                countries.append(countries_item)
+
+        _not_countries = d.pop("notCountries", UNSET)
+        not_countries: list[FilterGroupNotCountriesItem] | Unset = UNSET
+        if _not_countries is not UNSET:
+            not_countries = []
+            for not_countries_item_data in _not_countries:
+                not_countries_item = FilterGroupNotCountriesItem(
+                    not_countries_item_data
+                )
+
+                not_countries.append(not_countries_item)
+
+        organization = d.pop("organization", UNSET)
+
         tags = cast(list[str], d.pop("tags", UNSET))
 
         not_tags = cast(list[str], d.pop("notTags", UNSET))
@@ -486,6 +541,9 @@ class FilterGroup:
             automated=automated,
             languages=languages,
             not_languages=not_languages,
+            countries=countries,
+            not_countries=not_countries,
+            organization=organization,
             tags=tags,
             not_tags=not_tags,
             link_hosts=link_hosts,

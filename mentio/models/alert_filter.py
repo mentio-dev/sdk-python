@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.alert_filter_countries_item import AlertFilterCountriesItem
+from ..models.alert_filter_not_countries_item import AlertFilterNotCountriesItem
 from ..models.alert_filter_platforms_item import AlertFilterPlatformsItem
 from ..models.alert_filter_sentiments_item import AlertFilterSentimentsItem
 from ..types import UNSET, Unset
@@ -39,8 +41,14 @@ class AlertFilter:
             (octolens.com also matches blog.octolens.com). A post with no links never passes.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es, de). A post whose
             language is unknown never passes.
+        countries (list[AlertFilterCountriesItem] | Unset): Only posts whose author is in any of these countries (ISO
+            3166-1 alpha-2: us, in, de). A post whose country is unknown never passes.
+        not_countries (list[AlertFilterNotCountriesItem] | Unset): Never posts whose author is in these countries:
+            ["in"]. A post whose country is unknown still passes.
         automated (bool | Unset): true: only posts that read as machine-made (bots, templated posts); false: only the
             rest. Omit for both.
+        organization (bool | Unset): true: only posts by companies, brands and organizations; false: only posts by
+            people. Omit for both.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings (1 to 5): [1, 2] sends the
             unhappy ones. Every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings (1 to 5): [5] keeps the five star reviews
@@ -75,7 +83,10 @@ class AlertFilter:
     tags: list[str] | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
     languages: list[str] | Unset = UNSET
+    countries: list[AlertFilterCountriesItem] | Unset = UNSET
+    not_countries: list[AlertFilterNotCountriesItem] | Unset = UNSET
     automated: bool | Unset = UNSET
+    organization: bool | Unset = UNSET
     ratings: list[int] | Unset = UNSET
     not_ratings: list[int] | Unset = UNSET
     min_likes: int | Unset = UNSET
@@ -136,7 +147,23 @@ class AlertFilter:
         if not isinstance(self.languages, Unset):
             languages = self.languages
 
+        countries: list[str] | Unset = UNSET
+        if not isinstance(self.countries, Unset):
+            countries = []
+            for countries_item_data in self.countries:
+                countries_item = countries_item_data.value
+                countries.append(countries_item)
+
+        not_countries: list[str] | Unset = UNSET
+        if not isinstance(self.not_countries, Unset):
+            not_countries = []
+            for not_countries_item_data in self.not_countries:
+                not_countries_item = not_countries_item_data.value
+                not_countries.append(not_countries_item)
+
         automated = self.automated
+
+        organization = self.organization
 
         ratings: list[int] | Unset = UNSET
         if not isinstance(self.ratings, Unset):
@@ -192,8 +219,14 @@ class AlertFilter:
             field_dict["linkHosts"] = link_hosts
         if languages is not UNSET:
             field_dict["languages"] = languages
+        if countries is not UNSET:
+            field_dict["countries"] = countries
+        if not_countries is not UNSET:
+            field_dict["notCountries"] = not_countries
         if automated is not UNSET:
             field_dict["automated"] = automated
+        if organization is not UNSET:
+            field_dict["organization"] = organization
         if ratings is not UNSET:
             field_dict["ratings"] = ratings
         if not_ratings is not UNSET:
@@ -258,7 +291,29 @@ class AlertFilter:
 
         languages = cast(list[str], d.pop("languages", UNSET))
 
+        _countries = d.pop("countries", UNSET)
+        countries: list[AlertFilterCountriesItem] | Unset = UNSET
+        if _countries is not UNSET:
+            countries = []
+            for countries_item_data in _countries:
+                countries_item = AlertFilterCountriesItem(countries_item_data)
+
+                countries.append(countries_item)
+
+        _not_countries = d.pop("notCountries", UNSET)
+        not_countries: list[AlertFilterNotCountriesItem] | Unset = UNSET
+        if _not_countries is not UNSET:
+            not_countries = []
+            for not_countries_item_data in _not_countries:
+                not_countries_item = AlertFilterNotCountriesItem(
+                    not_countries_item_data
+                )
+
+                not_countries.append(not_countries_item)
+
         automated = d.pop("automated", UNSET)
+
+        organization = d.pop("organization", UNSET)
 
         ratings = cast(list[int], d.pop("ratings", UNSET))
 
@@ -298,7 +353,10 @@ class AlertFilter:
             tags=tags,
             link_hosts=link_hosts,
             languages=languages,
+            countries=countries,
+            not_countries=not_countries,
             automated=automated,
+            organization=organization,
             ratings=ratings,
             not_ratings=not_ratings,
             min_likes=min_likes,

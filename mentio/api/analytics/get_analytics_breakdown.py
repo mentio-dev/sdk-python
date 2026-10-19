@@ -147,8 +147,9 @@ def sync_detailed(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit
-            posts only, most active first; `share` stays a percent of the whole window, every platform
+            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
+            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
+            only, most active first; `share` stays a percent of the whole window, every platform
             included).
 
     Raises:
@@ -213,8 +214,9 @@ def sync(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit
-            posts only, most active first; `share` stays a percent of the whole window, every platform
+            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
+            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
+            only, most active first; `share` stays a percent of the whole window, every platform
             included).
 
     Raises:
@@ -274,8 +276,9 @@ async def asyncio_detailed(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit
-            posts only, most active first; `share` stays a percent of the whole window, every platform
+            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
+            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
+            only, most active first; `share` stays a percent of the whole window, every platform
             included).
 
     Raises:
@@ -338,8 +341,9 @@ async def asyncio(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), subreddit (Reddit
-            posts only, most active first; `share` stays a percent of the whole window, every platform
+            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
+            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
+            only, most active first; `share` stays a percent of the whole window, every platform
             included).
 
     Raises:

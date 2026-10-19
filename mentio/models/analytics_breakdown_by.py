@@ -2,6 +2,7 @@ from enum import StrEnum
 
 
 class AnalyticsBreakdownBy(StrEnum):
+    COUNTRY = "country"
     HOUR = "hour"
     INTENT = "intent"
     KEYWORD = "keyword"
