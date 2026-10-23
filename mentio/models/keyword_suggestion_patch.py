@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from ..models.keyword_suggestion_patch_comments import (
         KeywordSuggestionPatchComments,
     )
+    from ..models.keyword_suggestion_patch_display import KeywordSuggestionPatchDisplay
     from ..models.keyword_suggestion_patch_feeds_item import (
         KeywordSuggestionPatchFeedsItem,
     )
@@ -55,6 +56,8 @@ class KeywordSuggestionPatch:
                 under it pauses it.
             comments (KeywordSuggestionPatchComments | Unset): Comments under this keyword's mentions; omitted fields are
                 untouched (on create: off, 20 per post).
+            display (KeywordSuggestionPatchDisplay | Unset): Which of this keyword's mentions you see, by language and
+                country; each list is replaced when sent, kept when omitted. Hidden mentions are still billed.
             group_id (str | Unset): Moves the keyword to this group (grp_...). A 409 when that group already tracks the
                 term.
             review_sources (list[KeywordSuggestionPatchReviewSourcesItem] | Unset): Replaces the list of apps whose reviews
@@ -75,6 +78,7 @@ class KeywordSuggestionPatch:
     matching: KeywordSuggestionPatchMatching | Unset = UNSET
     cap: KeywordSuggestionPatchCapType0 | None | Unset = UNSET
     comments: KeywordSuggestionPatchComments | Unset = UNSET
+    display: KeywordSuggestionPatchDisplay | Unset = UNSET
     group_id: str | Unset = UNSET
     review_sources: list[KeywordSuggestionPatchReviewSourcesItem] | Unset = UNSET
     feeds: list[KeywordSuggestionPatchFeedsItem] | Unset = UNSET
@@ -128,6 +132,10 @@ class KeywordSuggestionPatch:
         if not isinstance(self.comments, Unset):
             comments = self.comments.to_dict()
 
+        display: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.display, Unset):
+            display = self.display.to_dict()
+
         group_id = self.group_id
 
         review_sources: list[dict[str, Any]] | Unset = UNSET
@@ -165,6 +173,8 @@ class KeywordSuggestionPatch:
             field_dict["cap"] = cap
         if comments is not UNSET:
             field_dict["comments"] = comments
+        if display is not UNSET:
+            field_dict["display"] = display
         if group_id is not UNSET:
             field_dict["groupId"] = group_id
         if review_sources is not UNSET:
@@ -183,6 +193,9 @@ class KeywordSuggestionPatch:
         )
         from ..models.keyword_suggestion_patch_comments import (
             KeywordSuggestionPatchComments,
+        )
+        from ..models.keyword_suggestion_patch_display import (
+            KeywordSuggestionPatchDisplay,
         )
         from ..models.keyword_suggestion_patch_feeds_item import (
             KeywordSuggestionPatchFeedsItem,
@@ -274,6 +287,13 @@ class KeywordSuggestionPatch:
         else:
             comments = KeywordSuggestionPatchComments.from_dict(_comments)
 
+        _display = d.pop("display", UNSET)
+        display: KeywordSuggestionPatchDisplay | Unset
+        if isinstance(_display, Unset):
+            display = UNSET
+        else:
+            display = KeywordSuggestionPatchDisplay.from_dict(_display)
+
         group_id = d.pop("groupId", UNSET)
 
         _review_sources = d.pop("reviewSources", UNSET)
@@ -307,6 +327,7 @@ class KeywordSuggestionPatch:
             matching=matching,
             cap=cap,
             comments=comments,
+            display=display,
             group_id=group_id,
             review_sources=review_sources,
             feeds=feeds,

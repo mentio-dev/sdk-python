@@ -22,6 +22,9 @@ if TYPE_CHECKING:
     from ..models.list_keywords_response_200_data_item_comments import (
         ListKeywordsResponse200DataItemComments,
     )
+    from ..models.list_keywords_response_200_data_item_display import (
+        ListKeywordsResponse200DataItemDisplay,
+    )
     from ..models.list_keywords_response_200_data_item_matching import (
         ListKeywordsResponse200DataItemMatching,
     )
@@ -59,6 +62,10 @@ class ListKeywordsResponse200DataItem:
             (for a day on Reddit, Hacker News and Bluesky, a week on GitHub, Stack Overflow and DEV, a month on YouTube)
             (new comments only, at most maxPerPost a thread, comments of fewer than three words dropped), on Hacker News,
             Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit. List them with GET /v1/mentions/{id}/comments.
+        display (ListKeywordsResponse200DataItemDisplay): Which of this keyword's mentions you see, by language and
+            country. Both are read by the classifier, so a hidden post is still matched, classified and billed like any
+            other; it is kept out of the mentions list, the exports, MCP search, alerts and digests (includeHidden=true on
+            GET /v1/mentions shows it). Read when the mentions are read, so changing a list applies to older mentions too.
         group (GroupRef): The group the keyword belongs to.
         platforms (list[ListKeywordsResponse200DataItemPlatformsType0Item] | None): Platforms the term is searched on;
             null means every platform, [] none (the keyword only collects reviews).
@@ -87,6 +94,7 @@ class ListKeywordsResponse200DataItem:
     paused_for_cap: bool
     cap: ListKeywordsResponse200DataItemCapType0 | None
     comments: ListKeywordsResponse200DataItemComments
+    display: ListKeywordsResponse200DataItemDisplay
     group: GroupRef
     platforms: list[ListKeywordsResponse200DataItemPlatformsType0Item] | None
     feeds: list[KeywordFeed]
@@ -125,6 +133,8 @@ class ListKeywordsResponse200DataItem:
             cap = self.cap
 
         comments = self.comments.to_dict()
+
+        display = self.display.to_dict()
 
         group = self.group.to_dict()
 
@@ -177,6 +187,7 @@ class ListKeywordsResponse200DataItem:
                 "pausedForCap": paused_for_cap,
                 "cap": cap,
                 "comments": comments,
+                "display": display,
                 "group": group,
                 "platforms": platforms,
                 "feeds": feeds,
@@ -201,6 +212,9 @@ class ListKeywordsResponse200DataItem:
         )
         from ..models.list_keywords_response_200_data_item_comments import (
             ListKeywordsResponse200DataItemComments,
+        )
+        from ..models.list_keywords_response_200_data_item_display import (
+            ListKeywordsResponse200DataItemDisplay,
         )
         from ..models.list_keywords_response_200_data_item_matching import (
             ListKeywordsResponse200DataItemMatching,
@@ -244,6 +258,8 @@ class ListKeywordsResponse200DataItem:
         cap = _parse_cap(d.pop("cap"))
 
         comments = ListKeywordsResponse200DataItemComments.from_dict(d.pop("comments"))
+
+        display = ListKeywordsResponse200DataItemDisplay.from_dict(d.pop("display"))
 
         group = GroupRef.from_dict(d.pop("group"))
 
@@ -323,6 +339,7 @@ class ListKeywordsResponse200DataItem:
             paused_for_cap=paused_for_cap,
             cap=cap,
             comments=comments,
+            display=display,
             group=group,
             platforms=platforms,
             feeds=feeds,

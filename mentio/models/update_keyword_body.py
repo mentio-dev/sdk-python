@@ -15,6 +15,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
     from ..models.update_keyword_body_comments import UpdateKeywordBodyComments
+    from ..models.update_keyword_body_display import UpdateKeywordBodyDisplay
     from ..models.update_keyword_body_feeds_item import UpdateKeywordBodyFeedsItem
     from ..models.update_keyword_body_matching import UpdateKeywordBodyMatching
     from ..models.update_keyword_body_review_sources_item import (
@@ -46,6 +47,8 @@ class UpdateKeywordBody:
             pauses it.
         comments (UpdateKeywordBodyComments | Unset): Comments under this keyword's mentions; omitted fields are
             untouched (on create: off, 20 per post).
+        display (UpdateKeywordBodyDisplay | Unset): Which of this keyword's mentions you see, by language and country;
+            each list is replaced when sent, kept when omitted. Hidden mentions are still billed.
         group_id (str | Unset): Moves the keyword to this group (grp_...). A 409 when that group already tracks the
             term.
         review_sources (list[UpdateKeywordBodyReviewSourcesItem] | Unset): Replaces the list of apps whose reviews this
@@ -66,6 +69,7 @@ class UpdateKeywordBody:
     matching: UpdateKeywordBodyMatching | Unset = UNSET
     cap: None | Unset | UpdateKeywordBodyCapType0 = UNSET
     comments: UpdateKeywordBodyComments | Unset = UNSET
+    display: UpdateKeywordBodyDisplay | Unset = UNSET
     group_id: str | Unset = UNSET
     review_sources: list[UpdateKeywordBodyReviewSourcesItem] | Unset = UNSET
     feeds: list[UpdateKeywordBodyFeedsItem] | Unset = UNSET
@@ -117,6 +121,10 @@ class UpdateKeywordBody:
         if not isinstance(self.comments, Unset):
             comments = self.comments.to_dict()
 
+        display: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.display, Unset):
+            display = self.display.to_dict()
+
         group_id = self.group_id
 
         review_sources: list[dict[str, Any]] | Unset = UNSET
@@ -154,6 +162,8 @@ class UpdateKeywordBody:
             field_dict["cap"] = cap
         if comments is not UNSET:
             field_dict["comments"] = comments
+        if display is not UNSET:
+            field_dict["display"] = display
         if group_id is not UNSET:
             field_dict["groupId"] = group_id
         if review_sources is not UNSET:
@@ -169,6 +179,7 @@ class UpdateKeywordBody:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
         from ..models.update_keyword_body_comments import UpdateKeywordBodyComments
+        from ..models.update_keyword_body_display import UpdateKeywordBodyDisplay
         from ..models.update_keyword_body_feeds_item import UpdateKeywordBodyFeedsItem
         from ..models.update_keyword_body_matching import UpdateKeywordBodyMatching
         from ..models.update_keyword_body_review_sources_item import (
@@ -253,6 +264,13 @@ class UpdateKeywordBody:
         else:
             comments = UpdateKeywordBodyComments.from_dict(_comments)
 
+        _display = d.pop("display", UNSET)
+        display: UpdateKeywordBodyDisplay | Unset
+        if isinstance(_display, Unset):
+            display = UNSET
+        else:
+            display = UpdateKeywordBodyDisplay.from_dict(_display)
+
         group_id = d.pop("groupId", UNSET)
 
         _review_sources = d.pop("reviewSources", UNSET)
@@ -286,6 +304,7 @@ class UpdateKeywordBody:
             matching=matching,
             cap=cap,
             comments=comments,
+            display=display,
             group_id=group_id,
             review_sources=review_sources,
             feeds=feeds,

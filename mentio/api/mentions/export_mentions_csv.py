@@ -43,6 +43,7 @@ def _get_kwargs(
     organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_hidden: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
@@ -123,6 +124,8 @@ def _get_kwargs(
     params["personId"] = person_id
 
     params["includeMuted"] = include_muted
+
+    params["includeHidden"] = include_hidden
 
     params["includeDuplicates"] = include_duplicates
 
@@ -506,6 +509,7 @@ def sync_detailed(
     organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_hidden: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
@@ -560,12 +564,13 @@ def sync_detailed(
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
     image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
-    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
-    subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when
-    unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the
-    X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per
-    workspace; a 429 carries Retry-After.
+    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
+    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
+    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
+    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
+    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
+    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
+    carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -588,6 +593,8 @@ def sync_detailed(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default: muted for the workspace, or for the mention's own keyword group.
+        include_hidden (bool | Unset): true: include mentions their keyword's display lists hide
+            (a language or country it does not show), hidden by default.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -707,6 +714,7 @@ def sync_detailed(
         organization=organization,
         person_id=person_id,
         include_muted=include_muted,
+        include_hidden=include_hidden,
         include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
@@ -774,6 +782,7 @@ def sync(
     organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_hidden: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
@@ -828,12 +837,13 @@ def sync(
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
     image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
-    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
-    subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when
-    unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the
-    X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per
-    workspace; a 429 carries Retry-After.
+    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
+    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
+    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
+    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
+    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
+    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
+    carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -856,6 +866,8 @@ def sync(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default: muted for the workspace, or for the mention's own keyword group.
+        include_hidden (bool | Unset): true: include mentions their keyword's display lists hide
+            (a language or country it does not show), hidden by default.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -976,6 +988,7 @@ def sync(
         organization=organization,
         person_id=person_id,
         include_muted=include_muted,
+        include_hidden=include_hidden,
         include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
@@ -1037,6 +1050,7 @@ async def asyncio_detailed(
     organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_hidden: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
@@ -1091,12 +1105,13 @@ async def asyncio_detailed(
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
     image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
-    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
-    subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when
-    unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the
-    X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per
-    workspace; a 429 carries Retry-After.
+    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
+    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
+    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
+    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
+    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
+    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
+    carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1119,6 +1134,8 @@ async def asyncio_detailed(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default: muted for the workspace, or for the mention's own keyword group.
+        include_hidden (bool | Unset): true: include mentions their keyword's display lists hide
+            (a language or country it does not show), hidden by default.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -1238,6 +1255,7 @@ async def asyncio_detailed(
         organization=organization,
         person_id=person_id,
         include_muted=include_muted,
+        include_hidden=include_hidden,
         include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
@@ -1303,6 +1321,7 @@ async def asyncio(
     organization: bool | Unset = UNSET,
     person_id: str | Unset = UNSET,
     include_muted: bool | Unset = UNSET,
+    include_hidden: bool | Unset = UNSET,
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
@@ -1357,12 +1376,13 @@ async def asyncio(
     language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
     characters), group, group_external_id, rating and app_id (app store reviews only), title and
     image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included, so it adds up to the bill), kind (post, comment or
-    repository), parent_url (the post a comment answers), comments (comments of it delivered to you),
-    subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when
-    unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the
-    X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per
-    workspace; a 429 carries Retry-After.
+    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
+    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
+    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
+    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
+    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
+    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
+    carries Retry-After.
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1385,6 +1405,8 @@ async def asyncio(
             included. Implies includeMuted.
         include_muted (bool | Unset): true: include mentions by people you muted, hidden by
             default: muted for the workspace, or for the mention's own keyword group.
+        include_hidden (bool | Unset): true: include mentions their keyword's display lists hide
+            (a language or country it does not show), hidden by default.
         include_duplicates (bool | Unset): true: list cross-posts (a mention whose duplicateOf is
             set) as mentions of their own. By default each is listed only in its original's
             duplicates.
@@ -1506,6 +1528,7 @@ async def asyncio(
             organization=organization,
             person_id=person_id,
             include_muted=include_muted,
+            include_hidden=include_hidden,
             include_duplicates=include_duplicates,
             assignee_id=assignee_id,
             snoozed=snoozed,

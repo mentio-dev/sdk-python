@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from ..models.group_ref import GroupRef
     from ..models.keyword_cap_type_0 import KeywordCapType0
     from ..models.keyword_comments import KeywordComments
+    from ..models.keyword_display import KeywordDisplay
     from ..models.keyword_feed import KeywordFeed
     from ..models.keyword_matching import KeywordMatching
     from ..models.keyword_polling_item import KeywordPollingItem
@@ -45,6 +46,10 @@ class Keyword:
             News and Bluesky, a week on GitHub, Stack Overflow and DEV, a month on YouTube) (new comments only, at most
             maxPerPost a thread, comments of fewer than three words dropped), on Hacker News, Bluesky, GitHub, Stack
             Overflow, DEV, YouTube and Reddit. List them with GET /v1/mentions/{id}/comments.
+        display (KeywordDisplay): Which of this keyword's mentions you see, by language and country. Both are read by
+            the classifier, so a hidden post is still matched, classified and billed like any other; it is kept out of the
+            mentions list, the exports, MCP search, alerts and digests (includeHidden=true on GET /v1/mentions shows it).
+            Read when the mentions are read, so changing a list applies to older mentions too.
         group (GroupRef): The group the keyword belongs to.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms the term is searched on; null means every
             platform, [] none (the keyword only collects reviews).
@@ -72,6 +77,7 @@ class Keyword:
     paused_for_cap: bool
     cap: KeywordCapType0 | None
     comments: KeywordComments
+    display: KeywordDisplay
     group: GroupRef
     platforms: list[KeywordPlatformsType0Item] | None
     feeds: list[KeywordFeed]
@@ -108,6 +114,8 @@ class Keyword:
             cap = self.cap
 
         comments = self.comments.to_dict()
+
+        display = self.display.to_dict()
 
         group = self.group.to_dict()
 
@@ -160,6 +168,7 @@ class Keyword:
                 "pausedForCap": paused_for_cap,
                 "cap": cap,
                 "comments": comments,
+                "display": display,
                 "group": group,
                 "platforms": platforms,
                 "feeds": feeds,
@@ -180,6 +189,7 @@ class Keyword:
         from ..models.group_ref import GroupRef
         from ..models.keyword_cap_type_0 import KeywordCapType0
         from ..models.keyword_comments import KeywordComments
+        from ..models.keyword_display import KeywordDisplay
         from ..models.keyword_feed import KeywordFeed
         from ..models.keyword_matching import KeywordMatching
         from ..models.keyword_polling_item import KeywordPollingItem
@@ -217,6 +227,8 @@ class Keyword:
         cap = _parse_cap(d.pop("cap"))
 
         comments = KeywordComments.from_dict(d.pop("comments"))
+
+        display = KeywordDisplay.from_dict(d.pop("display"))
 
         group = GroupRef.from_dict(d.pop("group"))
 
@@ -288,6 +300,7 @@ class Keyword:
             paused_for_cap=paused_for_cap,
             cap=cap,
             comments=comments,
+            display=display,
             group=group,
             platforms=platforms,
             feeds=feeds,

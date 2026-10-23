@@ -33,11 +33,12 @@ class MentionClassificationType0:
         automated (bool): The post reads as machine-made: a bot or app account, a scheduled or templated post, an
             obvious AI-written summary. A label only: automated mentions stay in the feed, are delivered as usual and are
             billed like any other match. false while unjudged.
-        language (None | str): The language the post is written in, as an ISO 639-1 code (en, es, de); null when unknown
-            or classified before languages were recorded.
+        language (None | str): The language the post is written in, as an ISO 639-1 code (en, es, de); null when
+            unknown, not one of the 20 the classifier names, or classified before languages were recorded.
         country (None | str): Where the author is, as a lowercase ISO 3166-1 alpha-2 code (us, in, de): the classifier's
             reading of the author's profile location and the post. A best guess, not a fact the platform gave; null when
-            nothing tells, or classified before countries were recorded.
+            nothing tells, when it is not one of the 60 the classifier names, or when classified before countries were
+            recorded.
         organization (bool): The author is a company, brand or organization account rather than a person: a LinkedIn
             company page, a GitHub organization, an account that speaks for a business. A label only, like automated. false
             while unjudged.

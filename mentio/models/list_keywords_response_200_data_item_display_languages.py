@@ -1,0 +1,100 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, Self, TypeVar
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.list_keywords_response_200_data_item_display_languages_excluded_item import (
+    ListKeywordsResponse200DataItemDisplayLanguagesExcludedItem,
+)
+from ..models.list_keywords_response_200_data_item_display_languages_only_item import (
+    ListKeywordsResponse200DataItemDisplayLanguagesOnlyItem,
+)
+
+T = TypeVar("T", bound="ListKeywordsResponse200DataItemDisplayLanguages")
+
+
+@_attrs_define
+class ListKeywordsResponse200DataItemDisplayLanguages:
+    """By the language the post is written in.
+
+    Attributes:
+        only (list[ListKeywordsResponse200DataItemDisplayLanguagesOnlyItem]): When non-empty, a post whose language (ISO
+            639-1) is known and not listed is hidden, a language (ISO 639-1) the classifier recognises but does not name
+            included. A post whose language (ISO 639-1) nobody could tell is always shown.
+        excluded (list[ListKeywordsResponse200DataItemDisplayLanguagesExcludedItem]): A post whose language (ISO 639-1)
+            is listed is hidden.
+    """
+
+    only: list[ListKeywordsResponse200DataItemDisplayLanguagesOnlyItem]
+    excluded: list[ListKeywordsResponse200DataItemDisplayLanguagesExcludedItem]
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        only = []
+        for only_item_data in self.only:
+            only_item = only_item_data.value
+            only.append(only_item)
+
+        excluded = []
+        for excluded_item_data in self.excluded:
+            excluded_item = excluded_item_data.value
+            excluded.append(excluded_item)
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "only": only,
+                "excluded": excluded,
+            }
+        )
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        d = dict(src_dict)
+        only = []
+        _only = d.pop("only")
+        for only_item_data in _only:
+            only_item = ListKeywordsResponse200DataItemDisplayLanguagesOnlyItem(
+                only_item_data
+            )
+
+            only.append(only_item)
+
+        excluded = []
+        _excluded = d.pop("excluded")
+        for excluded_item_data in _excluded:
+            excluded_item = ListKeywordsResponse200DataItemDisplayLanguagesExcludedItem(
+                excluded_item_data
+            )
+
+            excluded.append(excluded_item)
+
+        list_keywords_response_200_data_item_display_languages = cls(
+            only=only,
+            excluded=excluded,
+        )
+
+        list_keywords_response_200_data_item_display_languages.additional_properties = d
+        return list_keywords_response_200_data_item_display_languages
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

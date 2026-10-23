@@ -147,10 +147,11 @@ def sync_detailed(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
-            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
-            only, most active first; `share` stays a percent of the whole window, every platform
-            included).
+            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
+            language the classifier recognised but does not name), country (where the author is, ISO
+            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
+            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
+            whole window, every platform included).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -214,10 +215,11 @@ def sync(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
-            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
-            only, most active first; `share` stays a percent of the whole window, every platform
-            included).
+            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
+            language the classifier recognised but does not name), country (where the author is, ISO
+            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
+            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
+            whole window, every platform included).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -276,10 +278,11 @@ async def asyncio_detailed(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
-            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
-            only, most active first; `share` stays a percent of the whole window, every platform
-            included).
+            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
+            language the classifier recognised but does not name), country (where the author is, ISO
+            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
+            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
+            whole window, every platform included).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -341,10 +344,11 @@ async def asyncio(
         by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
             (unclassified included), intent (a mention can carry several), status (open, ignored,
             done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one), country (where the
-            author is, ISO 3166-1 alpha-2; "unknown" for posts without one), subreddit (Reddit posts
-            only, most active first; `share` stays a percent of the whole window, every platform
-            included).
+            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
+            language the classifier recognised but does not name), country (where the author is, ISO
+            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
+            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
+            whole window, every platform included).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
