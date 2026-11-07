@@ -23,6 +23,7 @@ from ...models.export_mentions_csv_not_sentiments_item import (
 )
 from ...models.export_mentions_csv_platform import ExportMentionsCsvPlatform
 from ...models.export_mentions_csv_platforms_item import ExportMentionsCsvPlatformsItem
+from ...models.export_mentions_csv_range import ExportMentionsCsvRange
 from ...models.export_mentions_csv_sentiment import ExportMentionsCsvSentiment
 from ...models.export_mentions_csv_sentiments_item import (
     ExportMentionsCsvSentimentsItem,
@@ -47,6 +48,7 @@ def _get_kwargs(
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
+    not_authors: list[str] | None | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_confidence: float | None | Unset = UNSET,
@@ -87,6 +89,10 @@ def _get_kwargs(
     min_bookmarks: int | None | Unset = UNSET,
     any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
+    range_: ExportMentionsCsvRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -132,6 +138,16 @@ def _get_kwargs(
     params["assigneeId"] = assignee_id
 
     params["snoozed"] = snoozed
+
+    json_not_authors: list[str] | None | Unset
+    if isinstance(not_authors, Unset):
+        json_not_authors = UNSET
+    elif isinstance(not_authors, list):
+        json_not_authors = not_authors
+
+    else:
+        json_not_authors = not_authors
+    params["notAuthors"] = json_not_authors
 
     json_exclude_authors: list[str] | None | Unset
     if isinstance(exclude_authors, Unset):
@@ -436,6 +452,18 @@ def _get_kwargs(
 
     params["q"] = q
 
+    json_range_: str | Unset = UNSET
+    if not isinstance(range_, Unset):
+        json_range_ = range_.value
+
+    params["range"] = json_range_
+
+    params["from"] = from_
+
+    params["to"] = to
+
+    params["timezone"] = timezone
+
     json_since: str | Unset = UNSET
     if not isinstance(since, Unset):
         json_since = since.isoformat()
@@ -513,6 +541,7 @@ def sync_detailed(
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
+    not_authors: list[str] | None | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_confidence: float | None | Unset = UNSET,
@@ -553,6 +582,10 @@ def sync_detailed(
     min_bookmarks: int | None | Unset = UNSET,
     any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
+    range_: ExportMentionsCsvRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
 ) -> Response[ErrorResponse | str]:
@@ -566,16 +599,20 @@ def sync_detailed(
     Columns: see [Exports](/guides/exports).
 
     Args:
-        keyword_id (str | Unset): Only matches of this keyword.
-        platform (ExportMentionsCsvPlatform | Unset): Only posts from this platform.
+        keyword_id (str | Unset): Deprecated: use keywordIds. Only matches of this keyword;
+            combines with keywordIds as either.
+        platform (ExportMentionsCsvPlatform | Unset): Deprecated: use platforms. Only posts from
+            this platform; combines with platforms as either.
         status (ExportMentionsCsvStatus | Unset): Only mentions in this status. Omit for every
             status.
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
-        sentiment (ExportMentionsCsvSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
-            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional, testimonial, industry_insight, launch, feedback).
+        sentiment (ExportMentionsCsvSentiment | Unset): Deprecated: use sentiments. Only this
+            sentiment; combines with sentiments as either.
+        intent (str | Unset): Deprecated: use intents. Only mentions carrying this intent or topic
+            tag, combined with intents as either (buy_intent, question, complaint, praise, comparison,
+            churn_intent, bug_report, pricing, hiring, event, promotional, testimonial,
+            industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -594,8 +631,10 @@ def sync_detailed(
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
-        exclude_authors (list[str] | None | Unset): Hide these authors: display names, handles or
+        not_authors (list[str] | None | Unset): Hide these authors: display names, handles or
             profile URLs. Repeatable, or one comma-separated value.
+        exclude_authors (list[str] | None | Unset): Deprecated: use notAuthors, the same filter.
+            Both may be sent; every author named in either is hidden.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
         min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
@@ -680,10 +719,19 @@ def sync_detailed(
             passes when one group holds, on top of every other filter. Each group holds view-filter
             conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
-        since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
-            8601, or epoch ms).
-        until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
-            8601, or epoch ms).
+        range_ (ExportMentionsCsvRange | Unset): A preset window ending now: 7d is today and the
+            six days before, in `timezone`, as in the analytics reports. Ignored when from or to is
+            given. Omit range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only posts published at or after
+            this instant (ISO 8601, or epoch ms).
+        until (datetime.datetime | Unset): Deprecated: use to. Only posts published at or before
+            this instant (ISO 8601, or epoch ms).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -708,6 +756,7 @@ def sync_detailed(
         include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
+        not_authors=not_authors,
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
         min_confidence=min_confidence,
@@ -748,6 +797,10 @@ def sync_detailed(
         min_bookmarks=min_bookmarks,
         any_of=any_of,
         q=q,
+        range_=range_,
+        from_=from_,
+        to=to,
+        timezone=timezone,
         since=since,
         until=until,
     )
@@ -776,6 +829,7 @@ def sync(
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
+    not_authors: list[str] | None | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_confidence: float | None | Unset = UNSET,
@@ -816,6 +870,10 @@ def sync(
     min_bookmarks: int | None | Unset = UNSET,
     any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
+    range_: ExportMentionsCsvRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
 ) -> ErrorResponse | str | None:
@@ -829,16 +887,20 @@ def sync(
     Columns: see [Exports](/guides/exports).
 
     Args:
-        keyword_id (str | Unset): Only matches of this keyword.
-        platform (ExportMentionsCsvPlatform | Unset): Only posts from this platform.
+        keyword_id (str | Unset): Deprecated: use keywordIds. Only matches of this keyword;
+            combines with keywordIds as either.
+        platform (ExportMentionsCsvPlatform | Unset): Deprecated: use platforms. Only posts from
+            this platform; combines with platforms as either.
         status (ExportMentionsCsvStatus | Unset): Only mentions in this status. Omit for every
             status.
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
-        sentiment (ExportMentionsCsvSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
-            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional, testimonial, industry_insight, launch, feedback).
+        sentiment (ExportMentionsCsvSentiment | Unset): Deprecated: use sentiments. Only this
+            sentiment; combines with sentiments as either.
+        intent (str | Unset): Deprecated: use intents. Only mentions carrying this intent or topic
+            tag, combined with intents as either (buy_intent, question, complaint, praise, comparison,
+            churn_intent, bug_report, pricing, hiring, event, promotional, testimonial,
+            industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -857,8 +919,10 @@ def sync(
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
-        exclude_authors (list[str] | None | Unset): Hide these authors: display names, handles or
+        not_authors (list[str] | None | Unset): Hide these authors: display names, handles or
             profile URLs. Repeatable, or one comma-separated value.
+        exclude_authors (list[str] | None | Unset): Deprecated: use notAuthors, the same filter.
+            Both may be sent; every author named in either is hidden.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
         min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
@@ -943,10 +1007,19 @@ def sync(
             passes when one group holds, on top of every other filter. Each group holds view-filter
             conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
-        since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
-            8601, or epoch ms).
-        until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
-            8601, or epoch ms).
+        range_ (ExportMentionsCsvRange | Unset): A preset window ending now: 7d is today and the
+            six days before, in `timezone`, as in the analytics reports. Ignored when from or to is
+            given. Omit range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only posts published at or after
+            this instant (ISO 8601, or epoch ms).
+        until (datetime.datetime | Unset): Deprecated: use to. Only posts published at or before
+            this instant (ISO 8601, or epoch ms).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -972,6 +1045,7 @@ def sync(
         include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
+        not_authors=not_authors,
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
         min_confidence=min_confidence,
@@ -1012,6 +1086,10 @@ def sync(
         min_bookmarks=min_bookmarks,
         any_of=any_of,
         q=q,
+        range_=range_,
+        from_=from_,
+        to=to,
+        timezone=timezone,
         since=since,
         until=until,
     ).parsed
@@ -1034,6 +1112,7 @@ async def asyncio_detailed(
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
+    not_authors: list[str] | None | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_confidence: float | None | Unset = UNSET,
@@ -1074,6 +1153,10 @@ async def asyncio_detailed(
     min_bookmarks: int | None | Unset = UNSET,
     any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
+    range_: ExportMentionsCsvRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
 ) -> Response[ErrorResponse | str]:
@@ -1087,16 +1170,20 @@ async def asyncio_detailed(
     Columns: see [Exports](/guides/exports).
 
     Args:
-        keyword_id (str | Unset): Only matches of this keyword.
-        platform (ExportMentionsCsvPlatform | Unset): Only posts from this platform.
+        keyword_id (str | Unset): Deprecated: use keywordIds. Only matches of this keyword;
+            combines with keywordIds as either.
+        platform (ExportMentionsCsvPlatform | Unset): Deprecated: use platforms. Only posts from
+            this platform; combines with platforms as either.
         status (ExportMentionsCsvStatus | Unset): Only mentions in this status. Omit for every
             status.
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
-        sentiment (ExportMentionsCsvSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
-            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional, testimonial, industry_insight, launch, feedback).
+        sentiment (ExportMentionsCsvSentiment | Unset): Deprecated: use sentiments. Only this
+            sentiment; combines with sentiments as either.
+        intent (str | Unset): Deprecated: use intents. Only mentions carrying this intent or topic
+            tag, combined with intents as either (buy_intent, question, complaint, praise, comparison,
+            churn_intent, bug_report, pricing, hiring, event, promotional, testimonial,
+            industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -1115,8 +1202,10 @@ async def asyncio_detailed(
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
-        exclude_authors (list[str] | None | Unset): Hide these authors: display names, handles or
+        not_authors (list[str] | None | Unset): Hide these authors: display names, handles or
             profile URLs. Repeatable, or one comma-separated value.
+        exclude_authors (list[str] | None | Unset): Deprecated: use notAuthors, the same filter.
+            Both may be sent; every author named in either is hidden.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
         min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
@@ -1201,10 +1290,19 @@ async def asyncio_detailed(
             passes when one group holds, on top of every other filter. Each group holds view-filter
             conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
-        since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
-            8601, or epoch ms).
-        until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
-            8601, or epoch ms).
+        range_ (ExportMentionsCsvRange | Unset): A preset window ending now: 7d is today and the
+            six days before, in `timezone`, as in the analytics reports. Ignored when from or to is
+            given. Omit range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only posts published at or after
+            this instant (ISO 8601, or epoch ms).
+        until (datetime.datetime | Unset): Deprecated: use to. Only posts published at or before
+            this instant (ISO 8601, or epoch ms).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -1229,6 +1327,7 @@ async def asyncio_detailed(
         include_duplicates=include_duplicates,
         assignee_id=assignee_id,
         snoozed=snoozed,
+        not_authors=not_authors,
         exclude_authors=exclude_authors,
         min_relevance=min_relevance,
         min_confidence=min_confidence,
@@ -1269,6 +1368,10 @@ async def asyncio_detailed(
         min_bookmarks=min_bookmarks,
         any_of=any_of,
         q=q,
+        range_=range_,
+        from_=from_,
+        to=to,
+        timezone=timezone,
         since=since,
         until=until,
     )
@@ -1295,6 +1398,7 @@ async def asyncio(
     include_duplicates: bool | Unset = UNSET,
     assignee_id: str | Unset = UNSET,
     snoozed: bool | Unset = UNSET,
+    not_authors: list[str] | None | Unset = UNSET,
     exclude_authors: list[str] | None | Unset = UNSET,
     min_relevance: int | None | Unset = UNSET,
     min_confidence: float | None | Unset = UNSET,
@@ -1335,6 +1439,10 @@ async def asyncio(
     min_bookmarks: int | None | Unset = UNSET,
     any_of: str | Unset = UNSET,
     q: str | Unset = UNSET,
+    range_: ExportMentionsCsvRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     until: datetime.datetime | Unset = UNSET,
 ) -> ErrorResponse | str | None:
@@ -1348,16 +1456,20 @@ async def asyncio(
     Columns: see [Exports](/guides/exports).
 
     Args:
-        keyword_id (str | Unset): Only matches of this keyword.
-        platform (ExportMentionsCsvPlatform | Unset): Only posts from this platform.
+        keyword_id (str | Unset): Deprecated: use keywordIds. Only matches of this keyword;
+            combines with keywordIds as either.
+        platform (ExportMentionsCsvPlatform | Unset): Deprecated: use platforms. Only posts from
+            this platform; combines with platforms as either.
         status (ExportMentionsCsvStatus | Unset): Only mentions in this status. Omit for every
             status.
         relevant (bool | Unset): true: only mentions the classifier scored relevant; false: only
             the rest (unclassified included).
-        sentiment (ExportMentionsCsvSentiment | Unset): Only this sentiment.
-        intent (str | Unset): Only mentions carrying this intent or topic tag (buy_intent,
-            question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event,
-            promotional, testimonial, industry_insight, launch, feedback).
+        sentiment (ExportMentionsCsvSentiment | Unset): Deprecated: use sentiments. Only this
+            sentiment; combines with sentiments as either.
+        intent (str | Unset): Deprecated: use intents. Only mentions carrying this intent or topic
+            tag, combined with intents as either (buy_intent, question, complaint, praise, comparison,
+            churn_intent, bug_report, pricing, hiring, event, promotional, testimonial,
+            industry_insight, launch, feedback).
         automated (bool | Unset): true: only mentions that read as machine-made (a bot account, a
             scheduled or templated post, AI-written text); false: only the rest, mentions judged
             before this existed included. Omitted: everything.
@@ -1376,8 +1488,10 @@ async def asyncio(
         assignee_id (str | Unset): Only mentions assigned to this workspace member (user id).
         snoozed (bool | Unset): true: only mentions currently snoozed. Otherwise snoozed mentions
             stay out until they wake.
-        exclude_authors (list[str] | None | Unset): Hide these authors: display names, handles or
+        not_authors (list[str] | None | Unset): Hide these authors: display names, handles or
             profile URLs. Repeatable, or one comma-separated value.
+        exclude_authors (list[str] | None | Unset): Deprecated: use notAuthors, the same filter.
+            Both may be sent; every author named in either is hidden.
         min_relevance (int | None | Unset): Only mentions scored at least this; unclassified ones
             are excluded.
         min_confidence (float | None | Unset): Only mentions whose classifier confidence is at
@@ -1462,10 +1576,19 @@ async def asyncio(
             passes when one group holds, on top of every other filter. Each group holds view-filter
             conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
-        since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
-            8601, or epoch ms).
-        until (datetime.datetime | Unset): Only posts published at or before this instant (ISO
-            8601, or epoch ms).
+        range_ (ExportMentionsCsvRange | Unset): A preset window ending now: 7d is today and the
+            six days before, in `timezone`, as in the analytics reports. Ignored when from or to is
+            given. Omit range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only posts published at or after
+            this instant (ISO 8601, or epoch ms).
+        until (datetime.datetime | Unset): Deprecated: use to. Only posts published at or before
+            this instant (ISO 8601, or epoch ms).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -1492,6 +1615,7 @@ async def asyncio(
             include_duplicates=include_duplicates,
             assignee_id=assignee_id,
             snoozed=snoozed,
+            not_authors=not_authors,
             exclude_authors=exclude_authors,
             min_relevance=min_relevance,
             min_confidence=min_confidence,
@@ -1532,6 +1656,10 @@ async def asyncio(
             min_bookmarks=min_bookmarks,
             any_of=any_of,
             q=q,
+            range_=range_,
+            from_=from_,
+            to=to,
+            timezone=timezone,
             since=since,
             until=until,
         )

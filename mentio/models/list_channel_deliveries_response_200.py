@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,9 +20,11 @@ class ListChannelDeliveriesResponse200:
     """
     Attributes:
         data (list[ListChannelDeliveriesResponse200DataItem]):
+        next_cursor (None | str): Pass back as `cursor` for the next page; null on the last page.
     """
 
     data: list[ListChannelDeliveriesResponse200DataItem]
+    next_cursor: None | str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -31,11 +33,15 @@ class ListChannelDeliveriesResponse200:
             data_item = data_item_data.to_dict()
             data.append(data_item)
 
+        next_cursor: None | str
+        next_cursor = self.next_cursor
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "data": data,
+                "nextCursor": next_cursor,
             }
         )
 
@@ -57,8 +63,16 @@ class ListChannelDeliveriesResponse200:
 
             data.append(data_item)
 
+        def _parse_next_cursor(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        next_cursor = _parse_next_cursor(d.pop("nextCursor"))
+
         list_channel_deliveries_response_200 = cls(
             data=data,
+            next_cursor=next_cursor,
         )
 
         list_channel_deliveries_response_200.additional_properties = d

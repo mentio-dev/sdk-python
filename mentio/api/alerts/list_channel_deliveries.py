@@ -16,10 +16,13 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     id: str,
     *,
-    limit: int | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
+
+    params["cursor"] = cursor
 
     params["limit"] = limit
 
@@ -75,13 +78,16 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: int | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> Response[ErrorResponse | ListChannelDeliveriesResponse200]:
     """List deliveries to a channel
 
     Args:
         id (str): Channel id (dest_...). Example: dest_abc123.
-        limit (int | Unset):
+        cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
+        limit (int | Unset): How many deliveries, newest first, 1 to 200 (default 50). Default:
+            50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -93,6 +99,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         id=id,
+        cursor=cursor,
         limit=limit,
     )
 
@@ -107,13 +114,16 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: int | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> ErrorResponse | ListChannelDeliveriesResponse200 | None:
     """List deliveries to a channel
 
     Args:
         id (str): Channel id (dest_...). Example: dest_abc123.
-        limit (int | Unset):
+        cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
+        limit (int | Unset): How many deliveries, newest first, 1 to 200 (default 50). Default:
+            50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,6 +136,7 @@ def sync(
     return sync_detailed(
         id=id,
         client=client,
+        cursor=cursor,
         limit=limit,
     ).parsed
 
@@ -134,13 +145,16 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: int | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> Response[ErrorResponse | ListChannelDeliveriesResponse200]:
     """List deliveries to a channel
 
     Args:
         id (str): Channel id (dest_...). Example: dest_abc123.
-        limit (int | Unset):
+        cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
+        limit (int | Unset): How many deliveries, newest first, 1 to 200 (default 50). Default:
+            50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -152,6 +166,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         id=id,
+        cursor=cursor,
         limit=limit,
     )
 
@@ -164,13 +179,16 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    limit: int | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> ErrorResponse | ListChannelDeliveriesResponse200 | None:
     """List deliveries to a channel
 
     Args:
         id (str): Channel id (dest_...). Example: dest_abc123.
-        limit (int | Unset):
+        cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
+        limit (int | Unset): How many deliveries, newest first, 1 to 200 (default 50). Default:
+            50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -184,6 +202,7 @@ async def asyncio(
         await asyncio_detailed(
             id=id,
             client=client,
+            cursor=cursor,
             limit=limit,
         )
     ).parsed

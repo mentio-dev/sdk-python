@@ -14,6 +14,7 @@ from ...models.list_people_never_keyword_kinds_item import (
 from ...models.list_people_not_platforms_item import ListPeopleNotPlatformsItem
 from ...models.list_people_platform import ListPeoplePlatform
 from ...models.list_people_platforms_item import ListPeoplePlatformsItem
+from ...models.list_people_range import ListPeopleRange
 from ...models.list_people_response_200 import ListPeopleResponse200
 from ...models.list_people_sort import ListPeopleSort
 from ...models.list_people_stages_item import ListPeopleStagesItem
@@ -28,6 +29,10 @@ def _get_kwargs(
     handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
+    range_: ListPeopleRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     segment_id: str | Unset = UNSET,
     platforms: list[ListPeoplePlatformsItem] | Unset = UNSET,
@@ -69,6 +74,18 @@ def _get_kwargs(
     params["tag"] = tag
 
     params["muted"] = muted
+
+    json_range_: str | Unset = UNSET
+    if not isinstance(range_, Unset):
+        json_range_ = range_.value
+
+    params["range"] = json_range_
+
+    params["from"] = from_
+
+    params["to"] = to
+
+    params["timezone"] = timezone
 
     json_since: str | Unset = UNSET
     if not isinstance(since, Unset):
@@ -279,6 +296,10 @@ def sync_detailed(
     handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
+    range_: ListPeopleRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     segment_id: str | Unset = UNSET,
     platforms: list[ListPeoplePlatformsItem] | Unset = UNSET,
@@ -314,17 +335,28 @@ def sync_detailed(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
-        platform (ListPeoplePlatform | Unset): People with an account on this platform.
+        platform (ListPeoplePlatform | Unset): Deprecated: use platforms. People with an account
+            on this platform; combines with platforms as either.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
         handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
             jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
             accounts included; combine with platform to pick one platform. A link names its own
             platform.
-        tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
+        tag (str | Unset): Deprecated: use tags. Only people carrying this tag (exact, case-
+            sensitive); combines with tags as either.
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
-        since (datetime.datetime | Unset): Only people whose first matched mention is at or after
-            this instant (ISO 8601, or epoch ms).
+        range_ (ListPeopleRange | Unset): A preset window ending now: 7d is today and the six days
+            before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit
+            range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only people whose first matched
+            mention is at or after this instant (ISO 8601, or epoch ms).
         segment_id (str | Unset): A saved segment applied on top of every other filter here.
             Unknown id: 404.
         platforms (list[ListPeoplePlatformsItem] | Unset): People with an account on any of these
@@ -378,6 +410,10 @@ def sync_detailed(
         handle=handle,
         tag=tag,
         muted=muted,
+        range_=range_,
+        from_=from_,
+        to=to,
+        timezone=timezone,
         since=since,
         segment_id=segment_id,
         platforms=platforms,
@@ -418,6 +454,10 @@ def sync(
     handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
+    range_: ListPeopleRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     segment_id: str | Unset = UNSET,
     platforms: list[ListPeoplePlatformsItem] | Unset = UNSET,
@@ -453,17 +493,28 @@ def sync(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
-        platform (ListPeoplePlatform | Unset): People with an account on this platform.
+        platform (ListPeoplePlatform | Unset): Deprecated: use platforms. People with an account
+            on this platform; combines with platforms as either.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
         handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
             jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
             accounts included; combine with platform to pick one platform. A link names its own
             platform.
-        tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
+        tag (str | Unset): Deprecated: use tags. Only people carrying this tag (exact, case-
+            sensitive); combines with tags as either.
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
-        since (datetime.datetime | Unset): Only people whose first matched mention is at or after
-            this instant (ISO 8601, or epoch ms).
+        range_ (ListPeopleRange | Unset): A preset window ending now: 7d is today and the six days
+            before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit
+            range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only people whose first matched
+            mention is at or after this instant (ISO 8601, or epoch ms).
         segment_id (str | Unset): A saved segment applied on top of every other filter here.
             Unknown id: 404.
         platforms (list[ListPeoplePlatformsItem] | Unset): People with an account on any of these
@@ -518,6 +569,10 @@ def sync(
         handle=handle,
         tag=tag,
         muted=muted,
+        range_=range_,
+        from_=from_,
+        to=to,
+        timezone=timezone,
         since=since,
         segment_id=segment_id,
         platforms=platforms,
@@ -552,6 +607,10 @@ async def asyncio_detailed(
     handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
+    range_: ListPeopleRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     segment_id: str | Unset = UNSET,
     platforms: list[ListPeoplePlatformsItem] | Unset = UNSET,
@@ -587,17 +646,28 @@ async def asyncio_detailed(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
-        platform (ListPeoplePlatform | Unset): People with an account on this platform.
+        platform (ListPeoplePlatform | Unset): Deprecated: use platforms. People with an account
+            on this platform; combines with platforms as either.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
         handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
             jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
             accounts included; combine with platform to pick one platform. A link names its own
             platform.
-        tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
+        tag (str | Unset): Deprecated: use tags. Only people carrying this tag (exact, case-
+            sensitive); combines with tags as either.
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
-        since (datetime.datetime | Unset): Only people whose first matched mention is at or after
-            this instant (ISO 8601, or epoch ms).
+        range_ (ListPeopleRange | Unset): A preset window ending now: 7d is today and the six days
+            before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit
+            range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only people whose first matched
+            mention is at or after this instant (ISO 8601, or epoch ms).
         segment_id (str | Unset): A saved segment applied on top of every other filter here.
             Unknown id: 404.
         platforms (list[ListPeoplePlatformsItem] | Unset): People with an account on any of these
@@ -651,6 +721,10 @@ async def asyncio_detailed(
         handle=handle,
         tag=tag,
         muted=muted,
+        range_=range_,
+        from_=from_,
+        to=to,
+        timezone=timezone,
         since=since,
         segment_id=segment_id,
         platforms=platforms,
@@ -689,6 +763,10 @@ async def asyncio(
     handle: str | Unset = UNSET,
     tag: str | Unset = UNSET,
     muted: bool | Unset = UNSET,
+    range_: ListPeopleRange | Unset = UNSET,
+    from_: str | Unset = UNSET,
+    to: str | Unset = UNSET,
+    timezone: str | Unset = UNSET,
     since: datetime.datetime | Unset = UNSET,
     segment_id: str | Unset = UNSET,
     platforms: list[ListPeoplePlatformsItem] | Unset = UNSET,
@@ -724,17 +802,28 @@ async def asyncio(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
-        platform (ListPeoplePlatform | Unset): People with an account on this platform.
+        platform (ListPeoplePlatform | Unset): Deprecated: use platforms. People with an account
+            on this platform; combines with platforms as either.
         q (str | Unset): Matches the display name or the profile handle or URL, case-
             insensitively.
         handle (str | Unset): Find a person by one of their accounts: a handle (@jane, u/jane,
             jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged
             accounts included; combine with platform to pick one platform. A link names its own
             platform.
-        tag (str | Unset): Only people carrying this tag (exact, case-sensitive).
+        tag (str | Unset): Deprecated: use tags. Only people carrying this tag (exact, case-
+            sensitive); combines with tags as either.
         muted (bool | Unset): true: only muted people; false: only unmuted; omitted: everyone.
-        since (datetime.datetime | Unset): Only people whose first matched mention is at or after
-            this instant (ISO 8601, or epoch ms).
+        range_ (ListPeopleRange | Unset): A preset window ending now: 7d is today and the six days
+            before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit
+            range, from and to for no window.
+        from_ (str | Unset): Start, inclusive: a day (YYYY-MM-DD, from its first moment in
+            `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+        to (str | Unset): End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or
+            an instant (ISO 8601 with its offset, or epoch ms).
+        timezone (str | Unset): IANA zone that days in range, from and to are cut in
+            (Europe/Madrid). Default UTC.
+        since (datetime.datetime | Unset): Deprecated: use from. Only people whose first matched
+            mention is at or after this instant (ISO 8601, or epoch ms).
         segment_id (str | Unset): A saved segment applied on top of every other filter here.
             Unknown id: 404.
         platforms (list[ListPeoplePlatformsItem] | Unset): People with an account on any of these
@@ -790,6 +879,10 @@ async def asyncio(
             handle=handle,
             tag=tag,
             muted=muted,
+            range_=range_,
+            from_=from_,
+            to=to,
+            timezone=timezone,
             since=since,
             segment_id=segment_id,
             platforms=platforms,

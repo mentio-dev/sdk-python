@@ -13,7 +13,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     cursor: str | Unset = UNSET,
-    limit: int | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -72,7 +72,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     cursor: str | Unset = UNSET,
-    limit: int | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> Response[ErrorResponse | LedgerList]:
     """List ledger entries
 
@@ -83,7 +83,7 @@ def sync_detailed(
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
-        limit (int | Unset): Page size, 1 to 100 (default 25). Example: 25.
+        limit (int | Unset): Page size, 1 to 100 (default 50). Default: 50. Example: 50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -109,7 +109,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     cursor: str | Unset = UNSET,
-    limit: int | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> ErrorResponse | LedgerList | None:
     """List ledger entries
 
@@ -120,7 +120,7 @@ def sync(
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
-        limit (int | Unset): Page size, 1 to 100 (default 25). Example: 25.
+        limit (int | Unset): Page size, 1 to 100 (default 50). Default: 50. Example: 50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -141,7 +141,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     cursor: str | Unset = UNSET,
-    limit: int | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> Response[ErrorResponse | LedgerList]:
     """List ledger entries
 
@@ -152,7 +152,7 @@ async def asyncio_detailed(
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
-        limit (int | Unset): Page size, 1 to 100 (default 25). Example: 25.
+        limit (int | Unset): Page size, 1 to 100 (default 50). Default: 50. Example: 50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -176,7 +176,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     cursor: str | Unset = UNSET,
-    limit: int | Unset = UNSET,
+    limit: int | Unset = 50,
 ) -> ErrorResponse | LedgerList | None:
     """List ledger entries
 
@@ -187,7 +187,7 @@ async def asyncio(
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
-        limit (int | Unset): Page size, 1 to 100 (default 25). Example: 25.
+        limit (int | Unset): Page size, 1 to 100 (default 50). Default: 50. Example: 50.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

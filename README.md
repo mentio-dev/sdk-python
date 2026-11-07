@@ -47,12 +47,9 @@ Enum-valued arguments take plain strings (`platform="reddit"`). Instants take a 
 ### Page through every mention of the last week
 
 ```python
-from datetime import datetime, timedelta, timezone
-
-since = datetime.now(timezone.utc) - timedelta(days=7)
 cursor = None
 while True:
-    page = mentio.mentions.search(since=since, relevant=True, limit=100, cursor=cursor)
+    page = mentio.mentions.search(range="7d", relevant=True, limit=100, cursor=cursor)
     for mention in page.data:
         print(mention.post.url)
     cursor = page.next_cursor
@@ -63,7 +60,7 @@ while True:
 ### Filter by intent and sentiment
 
 ```python
-hot = mentio.mentions.search(intent="buy_intent", sentiment="negative", min_followers=1000, sort="priority")
+hot = mentio.mentions.search(intents=["buy_intent"], sentiments=["negative"], min_followers=1000, sort="priority")
 ```
 
 Intents are `buy_intent`, `question`, `complaint`, `praise` and `comparison`. `sort="priority"` puts fresh, relevant, high-reach posts first.
@@ -108,7 +105,7 @@ mentio.people.update(people.data[0].id, tags=["influencer"], muted=False)
 ### CSV export
 
 ```python
-csv_text = mentio.mentions.export(since="2026-09-01T00:00:00Z")
+csv_text = mentio.mentions.export(from_="2026-09-01")
 ```
 
 ## Async

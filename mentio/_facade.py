@@ -319,12 +319,12 @@ class _Mentions:
         Columns: see [Exports](/guides/exports).
 
         Keyword arguments (query):
-          keyword_id: Only matches of this keyword.
-          platform: Only posts from this platform.
+          keyword_id: Deprecated: use keywordIds. Only matches of this keyword; combines with keywordIds as either.
+          platform: Deprecated: use platforms. Only posts from this platform; combines with platforms as either.
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
-          sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          sentiment: Deprecated: use sentiments. Only this sentiment; combines with sentiments as either.
+          intent: Deprecated: use intents. Only mentions carrying this intent or topic tag, combined with intents as either (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
@@ -333,7 +333,8 @@ class _Mentions:
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
-          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          not_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          exclude_authors: Deprecated: use notAuthors, the same filter. Both may be sent; every author named in either is hidden.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
@@ -373,9 +374,13 @@ class _Mentions:
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
           any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
-          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
-          until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "range_": (_enum, _m.ExportMentionsCsvRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_csv.sync_detailed(client=self._client, **params))
 
     def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -389,12 +394,12 @@ class _Mentions:
         See [Exports](/guides/exports).
 
         Keyword arguments (query):
-          keyword_id: Only matches of this keyword.
-          platform: Only posts from this platform.
+          keyword_id: Deprecated: use keywordIds. Only matches of this keyword; combines with keywordIds as either.
+          platform: Deprecated: use platforms. Only posts from this platform; combines with platforms as either.
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
-          sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          sentiment: Deprecated: use sentiments. Only this sentiment; combines with sentiments as either.
+          intent: Deprecated: use intents. Only mentions carrying this intent or topic tag, combined with intents as either (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
@@ -403,7 +408,8 @@ class _Mentions:
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
-          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          not_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          exclude_authors: Deprecated: use notAuthors, the same filter. Both may be sent; every author named in either is hidden.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
@@ -443,9 +449,13 @@ class _Mentions:
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
           any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
-          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
-          until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "range_": (_enum, _m.ExportMentionsJsonRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_json.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Mention:
@@ -466,12 +476,12 @@ class _Mentions:
         - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-across-groups-anyof).
 
         Keyword arguments (query):
-          keyword_id: Only matches of this keyword.
-          platform: Only posts from this platform.
+          keyword_id: Deprecated: use keywordIds. Only matches of this keyword; combines with keywordIds as either.
+          platform: Deprecated: use platforms. Only posts from this platform; combines with platforms as either.
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
-          sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          sentiment: Deprecated: use sentiments. Only this sentiment; combines with sentiments as either.
+          intent: Deprecated: use intents. Only mentions carrying this intent or topic tag, combined with intents as either (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
@@ -480,7 +490,8 @@ class _Mentions:
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
-          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          not_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          exclude_authors: Deprecated: use notAuthors, the same filter. Both may be sent; every author named in either is hidden.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
@@ -520,12 +531,16 @@ class _Mentions:
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
           any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
-          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
-          until: Only posts published at or before this instant (ISO 8601, or epoch ms).
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms).
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
-          limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+          limit: Page size, 1 to 100 (default 50)."""
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(_ops.mentions.search_mentions.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -584,12 +599,16 @@ class _People:
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
-          platform: People with an account on this platform.
+          platform: Deprecated: use platforms. People with an account on this platform; combines with platforms as either.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
-          tag: Only people carrying this tag (exact, case-sensitive).
+          tag: Deprecated: use tags. Only people carrying this tag (exact, case-sensitive); combines with tags as either.
           muted: true: only muted people; false: only unmuted; omitted: everyone.
-          since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
           segment_id: A saved segment applied on top of every other filter here. Unknown id: 404.
           platforms: People with an account on any of these platforms. Repeatable, or comma-separated.
           tags: People carrying any of these tags. Repeatable, or comma-separated.
@@ -609,7 +628,7 @@ class _People:
           automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "range_": (_enum, _m.ExportPeopleCsvRange), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(_ops.people.export_people_csv.sync_detailed(client=self._client, **params))
 
     def get(self, id: str, **params: Any) -> _m.Person:
@@ -632,12 +651,16 @@ class _People:
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
-          platform: People with an account on this platform.
+          platform: Deprecated: use platforms. People with an account on this platform; combines with platforms as either.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
-          tag: Only people carrying this tag (exact, case-sensitive).
+          tag: Deprecated: use tags. Only people carrying this tag (exact, case-sensitive); combines with tags as either.
           muted: true: only muted people; false: only unmuted; omitted: everyone.
-          since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
           segment_id: A saved segment applied on top of every other filter here. Unknown id: 404.
           platforms: People with an account on any of these platforms. Repeatable, or comma-separated.
           tags: People carrying any of these tags. Repeatable, or comma-separated.
@@ -659,7 +682,7 @@ class _People:
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "range_": (_enum, _m.ListPeopleRange), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(_ops.people.list_people.sync_detailed(client=self._client, **params))
 
     def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
@@ -900,7 +923,8 @@ class _Channels:
         """List deliveries to a channel
 
         Keyword arguments (query):
-          limit:"""
+          cursor: Opaque cursor from a previous page (`nextCursor`).
+          limit: How many deliveries, newest first, 1 to 200 (default 50)."""
         return _result(_ops.alerts.list_channel_deliveries.sync_detailed(id, client=self._client, **params))
 
     def get(self, id: str) -> Any:
@@ -1097,7 +1121,7 @@ class _System:
         self._client = client
 
     def health(self) -> _m.GetHealthResponse200:
-        """getHealth"""
+        """Check the API is up"""
         return _result(_ops.system.get_health.sync_detailed(client=self._client))
 
 class _Feeds:
@@ -1452,7 +1476,7 @@ class _Billing:
 
         Keyword arguments (query):
           cursor: Opaque cursor from a previous page (`nextCursor`).
-          limit: Page size, 1 to 100 (default 25)."""
+          limit: Page size, 1 to 100 (default 50)."""
         return _result(_ops.billing.list_ledger.sync_detailed(client=self._client, **params))
 
     def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
@@ -1619,12 +1643,12 @@ class _AsyncMentions:
         Columns: see [Exports](/guides/exports).
 
         Keyword arguments (query):
-          keyword_id: Only matches of this keyword.
-          platform: Only posts from this platform.
+          keyword_id: Deprecated: use keywordIds. Only matches of this keyword; combines with keywordIds as either.
+          platform: Deprecated: use platforms. Only posts from this platform; combines with platforms as either.
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
-          sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          sentiment: Deprecated: use sentiments. Only this sentiment; combines with sentiments as either.
+          intent: Deprecated: use intents. Only mentions carrying this intent or topic tag, combined with intents as either (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
@@ -1633,7 +1657,8 @@ class _AsyncMentions:
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
-          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          not_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          exclude_authors: Deprecated: use notAuthors, the same filter. Both may be sent; every author named in either is hidden.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
@@ -1673,9 +1698,13 @@ class _AsyncMentions:
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
           any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
-          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
-          until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "range_": (_enum, _m.ExportMentionsCsvRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_csv.asyncio_detailed(client=self._client, **params))
 
     async def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -1689,12 +1718,12 @@ class _AsyncMentions:
         See [Exports](/guides/exports).
 
         Keyword arguments (query):
-          keyword_id: Only matches of this keyword.
-          platform: Only posts from this platform.
+          keyword_id: Deprecated: use keywordIds. Only matches of this keyword; combines with keywordIds as either.
+          platform: Deprecated: use platforms. Only posts from this platform; combines with platforms as either.
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
-          sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          sentiment: Deprecated: use sentiments. Only this sentiment; combines with sentiments as either.
+          intent: Deprecated: use intents. Only mentions carrying this intent or topic tag, combined with intents as either (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
@@ -1703,7 +1732,8 @@ class _AsyncMentions:
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
-          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          not_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          exclude_authors: Deprecated: use notAuthors, the same filter. Both may be sent; every author named in either is hidden.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
@@ -1743,9 +1773,13 @@ class _AsyncMentions:
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
           any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
-          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
-          until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "since": (_instant, None), "until": (_instant, None)})
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "range_": (_enum, _m.ExportMentionsJsonRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_json.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Mention:
@@ -1766,12 +1800,12 @@ class _AsyncMentions:
         - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-across-groups-anyof).
 
         Keyword arguments (query):
-          keyword_id: Only matches of this keyword.
-          platform: Only posts from this platform.
+          keyword_id: Deprecated: use keywordIds. Only matches of this keyword; combines with keywordIds as either.
+          platform: Deprecated: use platforms. Only posts from this platform; combines with platforms as either.
           status: Only mentions in this status. Omit for every status.
           relevant: true: only mentions the classifier scored relevant; false: only the rest (unclassified included).
-          sentiment: Only this sentiment.
-          intent: Only mentions carrying this intent or topic tag (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
+          sentiment: Deprecated: use sentiments. Only this sentiment; combines with sentiments as either.
+          intent: Deprecated: use intents. Only mentions carrying this intent or topic tag, combined with intents as either (buy_intent, question, complaint, praise, comparison, churn_intent, bug_report, pricing, hiring, event, promotional, testimonial, industry_insight, launch, feedback).
           automated: true: only mentions that read as machine-made (a bot account, a scheduled or templated post, AI-written text); false: only the rest, mentions judged before this existed included. Omitted: everything.
           organization: true: only posts by companies, brands and organizations (a LinkedIn company page, a GitHub organization, a business account); false: only posts by people, mentions judged before this existed included. Omitted: everything.
           person_id: Only this person (an id from /v1/people), merged accounts included. Implies includeMuted.
@@ -1780,7 +1814,8 @@ class _AsyncMentions:
           include_duplicates: true: list cross-posts (a mention whose duplicateOf is set) as mentions of their own. By default each is listed only in its original's duplicates.
           assignee_id: Only mentions assigned to this workspace member (user id).
           snoozed: true: only mentions currently snoozed. Otherwise snoozed mentions stay out until they wake.
-          exclude_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          not_authors: Hide these authors: display names, handles or profile URLs. Repeatable, or one comma-separated value.
+          exclude_authors: Deprecated: use notAuthors, the same filter. Both may be sent; every author named in either is hidden.
           min_relevance: Only mentions scored at least this; unclassified ones are excluded.
           min_confidence: Only mentions whose classifier confidence is at least this, 0 to 1. Mentions without a confidence are excluded.
           min_followers: Only authors with at least this many followers. Unknown reach never passes.
@@ -1820,12 +1855,16 @@ class _AsyncMentions:
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
           any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
-          since: Only posts published at or after this instant (ISO 8601, or epoch ms).
-          until: Only posts published at or before this instant (ISO 8601, or epoch ms).
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
+          until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms).
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
-          limit: Page size, 1 to 100."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+          limit: Page size, 1 to 100 (default 50)."""
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(await _ops.mentions.search_mentions.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -1884,12 +1923,16 @@ class _AsyncPeople:
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
-          platform: People with an account on this platform.
+          platform: Deprecated: use platforms. People with an account on this platform; combines with platforms as either.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
-          tag: Only people carrying this tag (exact, case-sensitive).
+          tag: Deprecated: use tags. Only people carrying this tag (exact, case-sensitive); combines with tags as either.
           muted: true: only muted people; false: only unmuted; omitted: everyone.
-          since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
           segment_id: A saved segment applied on top of every other filter here. Unknown id: 404.
           platforms: People with an account on any of these platforms. Repeatable, or comma-separated.
           tags: People carrying any of these tags. Repeatable, or comma-separated.
@@ -1909,7 +1952,7 @@ class _AsyncPeople:
           automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "range_": (_enum, _m.ExportPeopleCsvRange), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(await _ops.people.export_people_csv.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str, **params: Any) -> _m.Person:
@@ -1932,12 +1975,16 @@ class _AsyncPeople:
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
-          platform: People with an account on this platform.
+          platform: Deprecated: use platforms. People with an account on this platform; combines with platforms as either.
           q: Matches the display name or the profile handle or URL, case-insensitively.
           handle: Find a person by one of their accounts: a handle (@jane, u/jane, jane) or a profile or post link (https://x.com/jane). Exact, case-insensitive, merged accounts included; combine with platform to pick one platform. A link names its own platform.
-          tag: Only people carrying this tag (exact, case-sensitive).
+          tag: Deprecated: use tags. Only people carrying this tag (exact, case-sensitive); combines with tags as either.
           muted: true: only muted people; false: only unmuted; omitted: everyone.
-          since: Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          since: Deprecated: use from. Only people whose first matched mention is at or after this instant (ISO 8601, or epoch ms).
           segment_id: A saved segment applied on top of every other filter here. Unknown id: 404.
           platforms: People with an account on any of these platforms. Repeatable, or comma-separated.
           tags: People carrying any of these tags. Repeatable, or comma-separated.
@@ -1959,7 +2006,7 @@ class _AsyncPeople:
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "range_": (_enum, _m.ListPeopleRange), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(await _ops.people.list_people.asyncio_detailed(client=self._client, **params))
 
     async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
@@ -2200,7 +2247,8 @@ class _AsyncChannels:
         """List deliveries to a channel
 
         Keyword arguments (query):
-          limit:"""
+          cursor: Opaque cursor from a previous page (`nextCursor`).
+          limit: How many deliveries, newest first, 1 to 200 (default 50)."""
         return _result(await _ops.alerts.list_channel_deliveries.asyncio_detailed(id, client=self._client, **params))
 
     async def get(self, id: str) -> Any:
@@ -2397,7 +2445,7 @@ class _AsyncSystem:
         self._client = client
 
     async def health(self) -> _m.GetHealthResponse200:
-        """getHealth"""
+        """Check the API is up"""
         return _result(await _ops.system.get_health.asyncio_detailed(client=self._client))
 
 class _AsyncFeeds:
@@ -2752,7 +2800,7 @@ class _AsyncBilling:
 
         Keyword arguments (query):
           cursor: Opaque cursor from a previous page (`nextCursor`).
-          limit: Page size, 1 to 100 (default 25)."""
+          limit: Page size, 1 to 100 (default 50)."""
         return _result(await _ops.billing.list_ledger.asyncio_detailed(client=self._client, **params))
 
     async def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:

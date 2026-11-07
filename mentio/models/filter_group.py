@@ -66,7 +66,9 @@ class FilterGroup:
         is_reply (bool | Unset): true: only replies and comments; false: only top-level posts.
         kind (FilterGroupKind | Unset): Only posts (post), only comments (comment) or only GitHub repository events
             (repository).
-        exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
+        not_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
+        exclude_authors (list[str] | Unset): Deprecated: use notAuthors, the same filter. Both may be given; every
+            author named in either is hidden.
         ratings (list[int] | Unset): Only app store reviews with any of these star ratings; every other post fails it.
         not_ratings (list[int] | Unset): Never reviews with these star ratings; posts that are not reviews still pass.
         min_likes (int | Unset): Only posts with at least this many likes (upvotes, reactions), as the platform reported
@@ -115,6 +117,7 @@ class FilterGroup:
     max_followers: int | Unset = UNSET
     is_reply: bool | Unset = UNSET
     kind: FilterGroupKind | Unset = UNSET
+    not_authors: list[str] | Unset = UNSET
     exclude_authors: list[str] | Unset = UNSET
     ratings: list[int] | Unset = UNSET
     not_ratings: list[int] | Unset = UNSET
@@ -257,6 +260,10 @@ class FilterGroup:
         if not isinstance(self.kind, Unset):
             kind = self.kind.value
 
+        not_authors: list[str] | Unset = UNSET
+        if not isinstance(self.not_authors, Unset):
+            not_authors = self.not_authors
+
         exclude_authors: list[str] | Unset = UNSET
         if not isinstance(self.exclude_authors, Unset):
             exclude_authors = self.exclude_authors
@@ -348,6 +355,8 @@ class FilterGroup:
             field_dict["isReply"] = is_reply
         if kind is not UNSET:
             field_dict["kind"] = kind
+        if not_authors is not UNSET:
+            field_dict["notAuthors"] = not_authors
         if exclude_authors is not UNSET:
             field_dict["excludeAuthors"] = exclude_authors
         if ratings is not UNSET:
@@ -503,6 +512,8 @@ class FilterGroup:
         else:
             kind = FilterGroupKind(_kind)
 
+        not_authors = cast(list[str], d.pop("notAuthors", UNSET))
+
         exclude_authors = cast(list[str], d.pop("excludeAuthors", UNSET))
 
         ratings = cast(list[int], d.pop("ratings", UNSET))
@@ -554,6 +565,7 @@ class FilterGroup:
             max_followers=max_followers,
             is_reply=is_reply,
             kind=kind,
+            not_authors=not_authors,
             exclude_authors=exclude_authors,
             ratings=ratings,
             not_ratings=not_ratings,
