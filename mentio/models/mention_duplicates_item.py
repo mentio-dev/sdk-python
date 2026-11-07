@@ -17,9 +17,9 @@ class MentionDuplicatesItem:
     Attributes:
         id (str): The copy's mention id (mm_...).
         platform (MentionDuplicatesItemPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit,
-            x, youtube, news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews),
-            trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a keyword
-            reads).
+            x, youtube, news, linkedin, tiktok, instagram, facebook, appstore (App Store reviews), googleplay (Google Play
+            reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a
+            keyword reads).
         url (str): Link to the copy.
         published_at (str): When the copy was published.
     """

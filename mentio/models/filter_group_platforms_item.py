@@ -5,6 +5,7 @@ class FilterGroupPlatformsItem(StrEnum):
     APPSTORE = "appstore"
     BLUESKY = "bluesky"
     DEVTO = "devto"
+    FACEBOOK = "facebook"
     GITHUB = "github"
     GOOGLEMAPS = "googlemaps"
     GOOGLEPLAY = "googleplay"

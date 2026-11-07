@@ -4,6 +4,7 @@ from enum import StrEnum
 class KeywordPlatformsType0Item(StrEnum):
     BLUESKY = "bluesky"
     DEVTO = "devto"
+    FACEBOOK = "facebook"
     GITHUB = "github"
     HACKERNEWS = "hackernews"
     INSTAGRAM = "instagram"

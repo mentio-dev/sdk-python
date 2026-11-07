@@ -23,8 +23,9 @@ class MentionPost:
     """
     Attributes:
         platform (MentionPostPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x, youtube,
-            news, linkedin, tiktok, instagram, appstore (App Store reviews), googleplay (Google Play reviews), trustpilot
-            (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a keyword reads).
+            news, linkedin, tiktok, instagram, facebook, appstore (App Store reviews), googleplay (Google Play reviews),
+            trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a keyword
+            reads).
         kind (MentionPostKind): post: a top-level post. comment: an item that answers a post or another comment (a
             Reddit or Hacker News comment, an X or Bluesky reply, a Stack Overflow answer, a YouTube comment). repository:
             an event about a GitHub repository naming the keyword (see post.repository).
