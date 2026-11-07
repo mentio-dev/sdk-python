@@ -304,13 +304,11 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListPeopleResponse200]:
     """List people
 
-     The people behind your mentions: one row per person, with their accounts, reach, public profile,
-    per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
-    follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
-    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
-    and segments.
+     List the people behind your mentions, with accounts, reach, profile, stats, your annotations and
+    outreach.
+
+    Filter by platform, tag, followers, counts, intents, keyword kinds, outreach, automated or segment;
+    offset-paginated. `groupId` scopes it to one keyword group. See [People](/guides/people).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -445,13 +443,11 @@ def sync(
 ) -> ErrorResponse | ListPeopleResponse200 | None:
     """List people
 
-     The people behind your mentions: one row per person, with their accounts, reach, public profile,
-    per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
-    follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
-    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
-    and segments.
+     List the people behind your mentions, with accounts, reach, profile, stats, your annotations and
+    outreach.
+
+    Filter by platform, tag, followers, counts, intents, keyword kinds, outreach, automated or segment;
+    offset-paginated. `groupId` scopes it to one keyword group. See [People](/guides/people).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -581,13 +577,11 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListPeopleResponse200]:
     """List people
 
-     The people behind your mentions: one row per person, with their accounts, reach, public profile,
-    per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
-    follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
-    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
-    and segments.
+     List the people behind your mentions, with accounts, reach, profile, stats, your annotations and
+    outreach.
+
+    Filter by platform, tag, followers, counts, intents, keyword kinds, outreach, automated or segment;
+    offset-paginated. `groupId` scopes it to one keyword group. See [People](/guides/people).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -720,13 +714,11 @@ async def asyncio(
 ) -> ErrorResponse | ListPeopleResponse200 | None:
     """List people
 
-     The people behind your mentions: one row per person, with their accounts, reach, public profile,
-    per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag,
-    follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach
-    stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved
-    segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword
-    group's keywords, counted over those mentions, with that group's own annotations, merges, outreach
-    and segments.
+     List the people behind your mentions, with accounts, reach, profile, stats, your annotations and
+    outreach.
+
+    Filter by platform, tag, followers, counts, intents, keyword kinds, outreach, automated or segment;
+    offset-paginated. `groupId` scopes it to one keyword group. See [People](/guides/people).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned

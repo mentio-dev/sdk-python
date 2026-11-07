@@ -29,9 +29,9 @@ class MentionComment:
             account).
         parent_comment_id (None | str): The comment this one answers, when it is a reply inside the thread; null for a
             comment on the post itself.
-        engagement (MentionCommentEngagementType0 | None): Engagement counts as the platform reported them when the post
-            was ingested, usually minutes after it was written; a count the platform does not have is null. Null as a whole
-            for platforms that report none and for posts ingested before September 2026. X carries all six.
+        engagement (MentionCommentEngagementType0 | None): Counts as the platform reported them at ingest, usually
+            minutes after posting; a missing count is null. Null as a whole when a platform reports none, or before
+            September 2026. X carries all six.
         classification (MentionCommentClassificationType0 | None): A light read of the comment (sentiment and intent
             tags); null until it is scored, usually minutes after the thread arrives.
         mention_id (None | str): When this comment itself names one of your keywords, its mention (mm_...), with the

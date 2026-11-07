@@ -75,9 +75,9 @@ def sync_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Remove a member
 
-     The person loses the workspace within a minute (their dashboard session on the next request, an
-    OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in
-    owner or admin; only an owner removes another owner, and the last owner cannot be removed (409
+     Remove a member; access ends within a minute, while their mentions, notes and outreach stay.
+
+    Needs a signed-in owner or admin; only an owner removes an owner, and never the last (409
     last_owner).
 
     Args:
@@ -109,9 +109,9 @@ def sync(
 ) -> Any | ErrorResponse | None:
     """Remove a member
 
-     The person loses the workspace within a minute (their dashboard session on the next request, an
-    OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in
-    owner or admin; only an owner removes another owner, and the last owner cannot be removed (409
+     Remove a member; access ends within a minute, while their mentions, notes and outreach stay.
+
+    Needs a signed-in owner or admin; only an owner removes an owner, and never the last (409
     last_owner).
 
     Args:
@@ -138,9 +138,9 @@ async def asyncio_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Remove a member
 
-     The person loses the workspace within a minute (their dashboard session on the next request, an
-    OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in
-    owner or admin; only an owner removes another owner, and the last owner cannot be removed (409
+     Remove a member; access ends within a minute, while their mentions, notes and outreach stay.
+
+    Needs a signed-in owner or admin; only an owner removes an owner, and never the last (409
     last_owner).
 
     Args:
@@ -170,9 +170,9 @@ async def asyncio(
 ) -> Any | ErrorResponse | None:
     """Remove a member
 
-     The person loses the workspace within a minute (their dashboard session on the next request, an
-    OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in
-    owner or admin; only an owner removes another owner, and the last owner cannot be removed (409
+     Remove a member; access ends within a minute, while their mentions, notes and outreach stay.
+
+    Needs a signed-in owner or admin; only an owner removes an owner, and never the last (409
     last_owner).
 
     Args:

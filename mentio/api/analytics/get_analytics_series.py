@@ -137,11 +137,11 @@ def sync_detailed(
 ) -> Response[AnalyticsSeries | ErrorResponse]:
     """Mentions over time
 
-     Matched, relevant and sentiment counts per day or week across the window, as one total series or
-    split per platform or per keyword with `by`. The window is `range` (7d, 30d, 90d, 365d, ending
-    today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions per day or week, in total or per platform or keyword
+    (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSeriesRange | Unset): Preset window ending today. Ignored when from or
@@ -204,11 +204,11 @@ def sync(
 ) -> AnalyticsSeries | ErrorResponse | None:
     """Mentions over time
 
-     Matched, relevant and sentiment counts per day or week across the window, as one total series or
-    split per platform or per keyword with `by`. The window is `range` (7d, 30d, 90d, 365d, ending
-    today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions per day or week, in total or per platform or keyword
+    (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSeriesRange | Unset): Preset window ending today. Ignored when from or
@@ -266,11 +266,11 @@ async def asyncio_detailed(
 ) -> Response[AnalyticsSeries | ErrorResponse]:
     """Mentions over time
 
-     Matched, relevant and sentiment counts per day or week across the window, as one total series or
-    split per platform or per keyword with `by`. The window is `range` (7d, 30d, 90d, 365d, ending
-    today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions per day or week, in total or per platform or keyword
+    (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSeriesRange | Unset): Preset window ending today. Ignored when from or
@@ -331,11 +331,11 @@ async def asyncio(
 ) -> AnalyticsSeries | ErrorResponse | None:
     """Mentions over time
 
-     Matched, relevant and sentiment counts per day or week across the window, as one total series or
-    split per platform or per keyword with `by`. The window is `range` (7d, 30d, 90d, 365d, ending
-    today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions per day or week, in total or per platform or keyword
+    (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSeriesRange | Unset): Preset window ending today. Ignored when from or

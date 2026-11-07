@@ -86,13 +86,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListMentionCommentsResponse200]:
     """List the comments of a mention
 
-     The comments under a mention's post, newest first: every comment in the thread, whether or not it
-    names your keyword. Read once, about a day after the post, for mentions scored relevant whose
-    keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow,
-    DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs
-    $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your
-    keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the
-    same thread.
+     List the comments under a mention's post, newest first, whether or not they name your keyword.
+
+    Filled for relevant mentions of keywords with comments on, read several times as the thread grows;
+    each comment delivered costs $0.008. See [Comments](/guides/comments).
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -129,13 +126,10 @@ def sync(
 ) -> ErrorResponse | ListMentionCommentsResponse200 | None:
     """List the comments of a mention
 
-     The comments under a mention's post, newest first: every comment in the thread, whether or not it
-    names your keyword. Read once, about a day after the post, for mentions scored relevant whose
-    keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow,
-    DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs
-    $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your
-    keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the
-    same thread.
+     List the comments under a mention's post, newest first, whether or not they name your keyword.
+
+    Filled for relevant mentions of keywords with comments on, read several times as the thread grows;
+    each comment delivered costs $0.008. See [Comments](/guides/comments).
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -167,13 +161,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListMentionCommentsResponse200]:
     """List the comments of a mention
 
-     The comments under a mention's post, newest first: every comment in the thread, whether or not it
-    names your keyword. Read once, about a day after the post, for mentions scored relevant whose
-    keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow,
-    DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs
-    $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your
-    keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the
-    same thread.
+     List the comments under a mention's post, newest first, whether or not they name your keyword.
+
+    Filled for relevant mentions of keywords with comments on, read several times as the thread grows;
+    each comment delivered costs $0.008. See [Comments](/guides/comments).
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -208,13 +199,10 @@ async def asyncio(
 ) -> ErrorResponse | ListMentionCommentsResponse200 | None:
     """List the comments of a mention
 
-     The comments under a mention's post, newest first: every comment in the thread, whether or not it
-    names your keyword. Read once, about a day after the post, for mentions scored relevant whose
-    keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow,
-    DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs
-    $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your
-    keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the
-    same thread.
+     List the comments under a mention's post, newest first, whether or not they name your keyword.
+
+    Filled for relevant mentions of keywords with comments on, read several times as the thread grows;
+    each comment delivered costs $0.008. See [Comments](/guides/comments).
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.

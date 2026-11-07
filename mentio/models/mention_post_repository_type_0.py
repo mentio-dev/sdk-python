@@ -20,9 +20,13 @@ class MentionPostRepositoryType0:
 
         Attributes:
             name (str): The repository, owner/name.
-            event (MentionPostRepositoryType0Event): What happened. new: it was created. traction: under 30 days old, it
-                reached 10 stars. stars: it passed a star milestone. growth: it gained stars fast in a week. top: one of the
-                most starred repositories naming the keyword, brought by a new keyword's look-back.
+            event (MentionPostRepositoryType0Event): What happened:
+
+                - new: it was created.
+                - traction: under 30 days old, it reached 10 stars.
+                - stars: it passed a star milestone.
+                - growth: it gained stars fast in a week.
+                - top: among the most starred naming the keyword, from a look-back.
             stars (int): Its stars when the event was found.
             weekly_stars (int | None): Stars gained in the 7 days before the event; null when that week is not known yet.
     """

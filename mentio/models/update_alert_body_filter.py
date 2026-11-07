@@ -35,9 +35,8 @@ class UpdateAlertBodyFilter:
         keyword_ids (list[str] | Unset): Only these keywords.
         group_ids (list[str] | Unset): Only keywords in these groups (grp_...): one rule per customer, say.
         platforms (list[UpdateAlertBodyFilterPlatformsItem] | Unset): Only posts from these platforms.
-        min_relevance (int | Unset): The rule's relevance floor. Absent, it sends relevant mentions only (scored 40 and
-            up, the classifier's line); lower, down to 0, it also receives the matches the classifier scored as noise;
-            higher, it hears less. Email channels keep the 40 line whatever the rule says. Unclassified mentions never pass.
+        min_relevance (int | Unset): The rule's relevance floor. Absent: relevant mentions only (40 and up); lower, down
+            to 0, it also gets noise; higher, less. Email channels keep the 40 line. Unclassified mentions never pass.
         min_confidence (float | Unset): Only mentions whose classifier confidence is at least this, 0 to 1. A mention
             without a confidence never passes.
         sentiments (list[UpdateAlertBodyFilterSentimentsItem] | Unset): Only these sentiments.
@@ -75,9 +74,8 @@ class UpdateAlertBodyFilter:
         min_bookmarks (int | Unset): Only posts with at least this many bookmarks (saves), as the platform reported them
             when the post was found. A post without that count never passes.
         any_of (list[FilterGroup] | Unset): OR across groups: a mention passes when it meets every condition of at least
-            one group (1 to 10 groups). The other conditions still apply to every mention: the whole filter is (other
-            conditions) AND (group 1 OR group 2 ...). A group takes the conditions of a view filter (platforms, sentiments,
-            intents, keywordKinds, the not lists ...), with no anyOf of its own.
+            one group, and the other conditions too. A group takes view-filter conditions, no anyOf of its own. See
+            [anyOf](/conventions#or-across-groups-anyof).
     """
 
     keyword_ids: list[str] | Unset = UNSET

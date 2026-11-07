@@ -72,9 +72,10 @@ def sync_detailed(
 ) -> Response[CreateApiKeyResponse201 | ErrorResponse]:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
-    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
-    until revoked.
+     Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
+
+    `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it
+    stays listed until revoked.
 
     Args:
         body (CreateApiKeyBody):
@@ -105,9 +106,10 @@ def sync(
 ) -> CreateApiKeyResponse201 | ErrorResponse | None:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
-    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
-    until revoked.
+     Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
+
+    `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it
+    stays listed until revoked.
 
     Args:
         body (CreateApiKeyBody):
@@ -133,9 +135,10 @@ async def asyncio_detailed(
 ) -> Response[CreateApiKeyResponse201 | ErrorResponse]:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
-    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
-    until revoked.
+     Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
+
+    `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it
+    stays listed until revoked.
 
     Args:
         body (CreateApiKeyBody):
@@ -164,9 +167,10 @@ async def asyncio(
 ) -> CreateApiKeyResponse201 | ErrorResponse | None:
     """Create an API key
 
-     Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt`
-    makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed
-    until revoked.
+     Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
+
+    `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it
+    stays listed until revoked.
 
     Args:
         body (CreateApiKeyBody):

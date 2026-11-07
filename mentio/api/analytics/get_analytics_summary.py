@@ -119,11 +119,11 @@ def sync_detailed(
 ) -> Response[AnalyticsSummary | ErrorResponse]:
     """Headline counts for a window
 
-     Matched and relevant mentions, distinct posts and people, sentiment, buying intent and questions,
-    estimated reach, and where the matches stand in triage. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Summarize matched and relevant mentions, posts, people, sentiment, intent, reach and triage over a
+    window.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSummaryRange | Unset): Preset window ending today. Ignored when from
@@ -177,11 +177,11 @@ def sync(
 ) -> AnalyticsSummary | ErrorResponse | None:
     """Headline counts for a window
 
-     Matched and relevant mentions, distinct posts and people, sentiment, buying intent and questions,
-    estimated reach, and where the matches stand in triage. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Summarize matched and relevant mentions, posts, people, sentiment, intent, reach and triage over a
+    window.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSummaryRange | Unset): Preset window ending today. Ignored when from
@@ -230,11 +230,11 @@ async def asyncio_detailed(
 ) -> Response[AnalyticsSummary | ErrorResponse]:
     """Headline counts for a window
 
-     Matched and relevant mentions, distinct posts and people, sentiment, buying intent and questions,
-    estimated reach, and where the matches stand in triage. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Summarize matched and relevant mentions, posts, people, sentiment, intent, reach and triage over a
+    window.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSummaryRange | Unset): Preset window ending today. Ignored when from
@@ -286,11 +286,11 @@ async def asyncio(
 ) -> AnalyticsSummary | ErrorResponse | None:
     """Headline counts for a window
 
-     Matched and relevant mentions, distinct posts and people, sentiment, buying intent and questions,
-    estimated reach, and where the matches stand in triage. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Summarize matched and relevant mentions, posts, people, sentiment, intent, reach and triage over a
+    window.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsSummaryRange | Unset): Preset window ending today. Ignored when from

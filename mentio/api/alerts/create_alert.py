@@ -72,12 +72,12 @@ def sync_detailed(
 ) -> Response[Alert | ErrorResponse]:
     """Create an alert
 
-     A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it
-    happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour,
-    nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only
-    (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week
-    on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the
-    vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+     Create an alert: a rule (what to watch) sent to channels.
+
+    - `mode`: instant, or hourly, daily or weekly digests; hourly never emails.
+    - `filter.anyOf` adds OR groups of conditions.
+
+    See [Alerts](/alerts).
 
     Args:
         body (CreateAlertBody):
@@ -108,12 +108,12 @@ def sync(
 ) -> Alert | ErrorResponse | None:
     """Create an alert
 
-     A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it
-    happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour,
-    nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only
-    (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week
-    on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the
-    vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+     Create an alert: a rule (what to watch) sent to channels.
+
+    - `mode`: instant, or hourly, daily or weekly digests; hourly never emails.
+    - `filter.anyOf` adds OR groups of conditions.
+
+    See [Alerts](/alerts).
 
     Args:
         body (CreateAlertBody):
@@ -139,12 +139,12 @@ async def asyncio_detailed(
 ) -> Response[Alert | ErrorResponse]:
     """Create an alert
 
-     A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it
-    happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour,
-    nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only
-    (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week
-    on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the
-    vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+     Create an alert: a rule (what to watch) sent to channels.
+
+    - `mode`: instant, or hourly, daily or weekly digests; hourly never emails.
+    - `filter.anyOf` adds OR groups of conditions.
+
+    See [Alerts](/alerts).
 
     Args:
         body (CreateAlertBody):
@@ -173,12 +173,12 @@ async def asyncio(
 ) -> Alert | ErrorResponse | None:
     """Create an alert
 
-     A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it
-    happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour,
-    nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only
-    (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week
-    on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the
-    vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+     Create an alert: a rule (what to watch) sent to channels.
+
+    - `mode`: instant, or hourly, daily or weekly digests; hourly never emails.
+    - `filter.anyOf` adds OR groups of conditions.
+
+    See [Alerts](/alerts).
 
     Args:
         body (CreateAlertBody):

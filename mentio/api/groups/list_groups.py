@@ -67,10 +67,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListGroupsResponse200]:
     """List groups
 
-     The keyword groups of the workspace, the default group first, then oldest first. A group is how
-    keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group,
-    every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass
-    `externalId` to find the group carrying your own id.
+     List the workspace's keyword groups, default first, then oldest first.
+
+    A term may be tracked once per group. Pass `externalId` to find the group carrying your own id. See
+    [Groups](/guides/groups).
 
     Args:
         external_id (str | Unset): Only the group carrying exactly this externalId.
@@ -101,10 +101,10 @@ def sync(
 ) -> ErrorResponse | ListGroupsResponse200 | None:
     """List groups
 
-     The keyword groups of the workspace, the default group first, then oldest first. A group is how
-    keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group,
-    every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass
-    `externalId` to find the group carrying your own id.
+     List the workspace's keyword groups, default first, then oldest first.
+
+    A term may be tracked once per group. Pass `externalId` to find the group carrying your own id. See
+    [Groups](/guides/groups).
 
     Args:
         external_id (str | Unset): Only the group carrying exactly this externalId.
@@ -130,10 +130,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListGroupsResponse200]:
     """List groups
 
-     The keyword groups of the workspace, the default group first, then oldest first. A group is how
-    keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group,
-    every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass
-    `externalId` to find the group carrying your own id.
+     List the workspace's keyword groups, default first, then oldest first.
+
+    A term may be tracked once per group. Pass `externalId` to find the group carrying your own id. See
+    [Groups](/guides/groups).
 
     Args:
         external_id (str | Unset): Only the group carrying exactly this externalId.
@@ -162,10 +162,10 @@ async def asyncio(
 ) -> ErrorResponse | ListGroupsResponse200 | None:
     """List groups
 
-     The keyword groups of the workspace, the default group first, then oldest first. A group is how
-    keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group,
-    every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass
-    `externalId` to find the group carrying your own id.
+     List the workspace's keyword groups, default first, then oldest first.
+
+    A term may be tracked once per group. Pass `externalId` to find the group carrying your own id. See
+    [Groups](/guides/groups).
 
     Args:
         external_id (str | Unset): Only the group carrying exactly this externalId.

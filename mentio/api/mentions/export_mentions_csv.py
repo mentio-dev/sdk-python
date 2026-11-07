@@ -558,19 +558,12 @@ def sync_detailed(
 ) -> Response[ErrorResponse | str]:
     """Export mentions as CSV
 
-     The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the
-    order they entered your feed, which can differ from the post date): id, published_at, platform,
-    keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
-    language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
-    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
-    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
-    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
-    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+     Export the mentions GET /v1/mentions would list as CSV, newest matched first.
+
+    - Capped at 10,000 rows; X-Mentions-Truncated says when cut.
+    - 6 exports a minute per workspace.
+
+    Columns: see [Exports](/guides/exports).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -683,12 +676,9 @@ def sync_detailed(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -831,19 +821,12 @@ def sync(
 ) -> ErrorResponse | str | None:
     """Export mentions as CSV
 
-     The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the
-    order they entered your feed, which can differ from the post date): id, published_at, platform,
-    keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
-    language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
-    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
-    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
-    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
-    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+     Export the mentions GET /v1/mentions would list as CSV, newest matched first.
+
+    - Capped at 10,000 rows; X-Mentions-Truncated says when cut.
+    - 6 exports a minute per workspace.
+
+    Columns: see [Exports](/guides/exports).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -956,12 +939,9 @@ def sync(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -1099,19 +1079,12 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | str]:
     """Export mentions as CSV
 
-     The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the
-    order they entered your feed, which can differ from the post date): id, published_at, platform,
-    keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
-    language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
-    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
-    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
-    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
-    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+     Export the mentions GET /v1/mentions would list as CSV, newest matched first.
+
+    - Capped at 10,000 rows; X-Mentions-Truncated says when cut.
+    - 6 exports a minute per workspace.
+
+    Columns: see [Exports](/guides/exports).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1224,12 +1197,9 @@ async def asyncio_detailed(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -1370,19 +1340,12 @@ async def asyncio(
 ) -> ErrorResponse | str | None:
     """Export mentions as CSV
 
-     The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the
-    order they entered your feed, which can differ from the post date): id, published_at, platform,
-    keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated),
-    language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000
-    characters), group, group_external_id, rating and app_id (app store reviews only), title and
-    image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV
-    keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by
-    language or country too, it adds up to the bill), kind (post, comment or repository), parent_url
-    (the post a comment answers), comments (comments of it delivered to you), subreddit and flair
-    (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and
-    organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-
-    Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429
-    carries Retry-After.
+     Export the mentions GET /v1/mentions would list as CSV, newest matched first.
+
+    - Capped at 10,000 rows; X-Mentions-Truncated says when cut.
+    - 6 exports a minute per workspace.
+
+    Columns: see [Exports](/guides/exports).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1495,12 +1458,9 @@ async def asyncio(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).

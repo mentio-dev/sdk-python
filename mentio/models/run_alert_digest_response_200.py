@@ -23,9 +23,8 @@ T = TypeVar("T", bound="RunAlertDigestResponse200")
 class RunAlertDigestResponse200:
     """
     Attributes:
-        skipped (RunAlertDigestResponse200Skipped): Why nothing was sent, if nothing was: the period already went out,
-            the window had nothing to show, (hourly rules) the hour's retry window closed before it could send, or another
-            run of the same period is sending it right now.
+        skipped (RunAlertDigestResponse200Skipped): Why nothing was sent: the period already went out, nothing to show,
+            an hourly retry window closed, or another run is sending it now.
         matched (int):
         relevant (int):
         outcomes (list[RunAlertDigestResponse200OutcomesItem]):

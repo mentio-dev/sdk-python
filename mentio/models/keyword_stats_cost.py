@@ -11,9 +11,8 @@ T = TypeVar("T", bound="KeywordStatsCost")
 
 @_attrs_define
 class KeywordStatsCost:
-    """What this keyword has cost this calendar month (UTC) at list price: exactly its row in GET
-    /v1/usage/breakdown?month=<this month> (same tables, same rounding). The wallet's ledger, which settles once a day,
-    is what can differ from these list-price numbers, and only by cumulative rounding.
+    """What this keyword has cost this calendar month (UTC) at list price: its row in GET /v1/usage/breakdown?month=<this
+    month>. The ledger differs only by cumulative rounding.
 
         Attributes:
             keyword_days (int): Days this month the keyword was charged for: unmuted at the daily tick. A keyword created

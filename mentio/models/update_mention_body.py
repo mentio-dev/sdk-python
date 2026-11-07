@@ -24,10 +24,9 @@ class UpdateMentionBody:
         snoozed_until (datetime.datetime | Unset): ISO 8601 (or epoch ms) until which the mention leaves the feed; null
             wakes it.
         note (None | str | Unset): Internal note; null or empty clears it.
-        relevant (bool | None | Unset): Your verdict on relevance, correcting the classifier: true sets relevance to 100
-            and puts a filtered mention back in the relevant feed, false sets it to 0 and takes it out; null withdraws the
-            verdict and restores the classifier's score. Never billed or unbilled. A mention still being classified answers
-            409 classification_pending.
+        relevant (bool | None | Unset): Your verdict: true sets relevance to 100 (a filtered mention becomes relevant),
+            false to 0; null restores the classifier's score. Billing never changes. 409 classification_pending while it is
+            still being classified.
         sentiment (UpdateMentionBodySentiment | Unset): Your corrected sentiment; null withdraws the correction and
             restores the classifier's.
     """

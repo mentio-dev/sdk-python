@@ -92,10 +92,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Feed]:
     """Update a feed
 
-     Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie
-    copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by
-    reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again;
-    the feed is then read for this workspace alone. auth: null removes it.
+     Rename a feed, or set its sign-in for a members-only forum.
+
+    `auth` is a browser cookie or one header (such as Discourse's Api-Key), checked, stored encrypted
+    and never shown; the feed is then read for this workspace alone. null removes it.
 
     Args:
         id (str): Feed id (fd_...). Example: fd_abc123.
@@ -129,10 +129,10 @@ def sync(
 ) -> ErrorResponse | Feed | None:
     """Update a feed
 
-     Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie
-    copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by
-    reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again;
-    the feed is then read for this workspace alone. auth: null removes it.
+     Rename a feed, or set its sign-in for a members-only forum.
+
+    `auth` is a browser cookie or one header (such as Discourse's Api-Key), checked, stored encrypted
+    and never shown; the feed is then read for this workspace alone. null removes it.
 
     Args:
         id (str): Feed id (fd_...). Example: fd_abc123.
@@ -161,10 +161,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Feed]:
     """Update a feed
 
-     Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie
-    copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by
-    reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again;
-    the feed is then read for this workspace alone. auth: null removes it.
+     Rename a feed, or set its sign-in for a members-only forum.
+
+    `auth` is a browser cookie or one header (such as Discourse's Api-Key), checked, stored encrypted
+    and never shown; the feed is then read for this workspace alone. null removes it.
 
     Args:
         id (str): Feed id (fd_...). Example: fd_abc123.
@@ -196,10 +196,10 @@ async def asyncio(
 ) -> ErrorResponse | Feed | None:
     """Update a feed
 
-     Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie
-    copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by
-    reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again;
-    the feed is then read for this workspace alone. auth: null removes it.
+     Rename a feed, or set its sign-in for a members-only forum.
+
+    `auth` is a browser cookie or one header (such as Discourse's Api-Key), checked, stored encrypted
+    and never shown; the feed is then read for this workspace alone. null removes it.
 
     Args:
         id (str): Feed id (fd_...). Example: fd_abc123.

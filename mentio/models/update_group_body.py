@@ -18,9 +18,8 @@ class UpdateGroupBody:
     Attributes:
         name (str | Unset): The group's name: a customer, a campaign, a product. Unique per workspace.
         external_id (None | str | Unset): Replaces your id for the group; null clears it.
-        context (None | str | Unset): Replaces the group's company description; null clears it (the workspace profile
-            applies again). New mentions are judged with it at once; old ones are not rescored. Not on the default group
-            (400 default_group_context): that one is the workspace itself and reads the profile.
+        context (None | str | Unset): Replaces the group's company description; null clears it. New mentions are judged
+            with it at once, old ones are not rescored. Not on the default group (400 default_group_context).
     """
 
     name: str | Unset = UNSET

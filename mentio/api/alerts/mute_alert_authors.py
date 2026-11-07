@@ -82,10 +82,10 @@ def sync_detailed(
 ) -> Response[Alert | ErrorResponse]:
     """Mute authors on an alert
 
-     Add authors to the alert's muted list without touching the rest of its filter. Links are read the
-    way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News
-    profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no
-    person (a subreddit, a story) rejects the request with that entry named.
+     Add authors to the alert's muted list, leaving the rest of its filter.
+
+    A post link mutes its author; already muted authors are skipped, so retries are safe. An entry
+    naming no person (a subreddit) is a 400. See [Alerts](/alerts#mute-authors).
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.
@@ -119,10 +119,10 @@ def sync(
 ) -> Alert | ErrorResponse | None:
     """Mute authors on an alert
 
-     Add authors to the alert's muted list without touching the rest of its filter. Links are read the
-    way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News
-    profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no
-    person (a subreddit, a story) rejects the request with that entry named.
+     Add authors to the alert's muted list, leaving the rest of its filter.
+
+    A post link mutes its author; already muted authors are skipped, so retries are safe. An entry
+    naming no person (a subreddit) is a 400. See [Alerts](/alerts#mute-authors).
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.
@@ -151,10 +151,10 @@ async def asyncio_detailed(
 ) -> Response[Alert | ErrorResponse]:
     """Mute authors on an alert
 
-     Add authors to the alert's muted list without touching the rest of its filter. Links are read the
-    way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News
-    profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no
-    person (a subreddit, a story) rejects the request with that entry named.
+     Add authors to the alert's muted list, leaving the rest of its filter.
+
+    A post link mutes its author; already muted authors are skipped, so retries are safe. An entry
+    naming no person (a subreddit) is a 400. See [Alerts](/alerts#mute-authors).
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.
@@ -186,10 +186,10 @@ async def asyncio(
 ) -> Alert | ErrorResponse | None:
     """Mute authors on an alert
 
-     Add authors to the alert's muted list without touching the rest of its filter. Links are read the
-    way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News
-    profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no
-    person (a subreddit, a story) rejects the request with that entry named.
+     Add authors to the alert's muted list, leaving the rest of its filter.
+
+    A post link mutes its author; already muted authors are skipped, so retries are safe. An entry
+    naming no person (a subreddit) is a 400. See [Alerts](/alerts#mute-authors).
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.

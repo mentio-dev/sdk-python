@@ -16,12 +16,10 @@ class UpdateKeywordBodyComments:
     """Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
 
     Attributes:
-        enabled (bool | Unset): Read the comments under this keyword's relevant mentions, from 30 minutes after each
-            post, as long as its platform's conversations last (a day to a month). Each comment delivered costs $0.008
-            (comments of fewer than three words are dropped, never billed) (the comments line of the bill). Off by default.
-        max_per_post (int | Unset): The newest comments of one thread you receive, 20 by default, 100 at most: the
-            ceiling on what one mention's comments can cost. A comment that names the keyword is a mention too, but only
-            among these newest ones, so it is never billed past the ceiling.
+        enabled (bool | Unset): Read the comments under this keyword's relevant mentions. Each comment delivered costs
+            $0.008; comments under three words are dropped, never billed. See [Comments](/guides/comments).
+        max_per_post (int | Unset): The newest comments of one thread you receive: the ceiling on what one mention's
+            comments can cost. A comment naming the keyword is a mention only among these.
     """
 
     enabled: bool | Unset = UNSET

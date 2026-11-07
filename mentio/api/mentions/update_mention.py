@@ -87,11 +87,11 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Mention]:
     """Update a mention
 
-     The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign
-    it to a workspace member, snooze it out of the feed, leave an internal note, or correct the
-    classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list,
-    filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and
-    restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
+     Triage, assign, snooze, annotate or correct the classification of a mention.
+
+    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
+    restores the classifier's.
+    - Omitted fields stay. Delivery and billing never change.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -125,11 +125,11 @@ def sync(
 ) -> ErrorResponse | Mention | None:
     """Update a mention
 
-     The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign
-    it to a workspace member, snooze it out of the feed, leave an internal note, or correct the
-    classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list,
-    filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and
-    restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
+     Triage, assign, snooze, annotate or correct the classification of a mention.
+
+    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
+    restores the classifier's.
+    - Omitted fields stay. Delivery and billing never change.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -158,11 +158,11 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Mention]:
     """Update a mention
 
-     The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign
-    it to a workspace member, snooze it out of the feed, leave an internal note, or correct the
-    classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list,
-    filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and
-    restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
+     Triage, assign, snooze, annotate or correct the classification of a mention.
+
+    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
+    restores the classifier's.
+    - Omitted fields stay. Delivery and billing never change.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -194,11 +194,11 @@ async def asyncio(
 ) -> ErrorResponse | Mention | None:
     """Update a mention
 
-     The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign
-    it to a workspace member, snooze it out of the feed, leave an internal note, or correct the
-    classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list,
-    filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and
-    restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
+     Triage, assign, snooze, annotate or correct the classification of a mention.
+
+    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
+    restores the classifier's.
+    - Omitted fields stay. Delivery and billing never change.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.

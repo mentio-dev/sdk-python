@@ -76,9 +76,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | LedgerList]:
     """List ledger entries
 
-     Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily
-    keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the
-    cumulative units behind it. Cursor paged.
+     List every movement of the balance, newest first, cursor paged.
+
+    Rows are the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, and
+    adjustments. A debit row carries the UTC day it settled and the cumulative units behind it.
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
@@ -112,9 +113,10 @@ def sync(
 ) -> ErrorResponse | LedgerList | None:
     """List ledger entries
 
-     Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily
-    keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the
-    cumulative units behind it. Cursor paged.
+     List every movement of the balance, newest first, cursor paged.
+
+    Rows are the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, and
+    adjustments. A debit row carries the UTC day it settled and the cumulative units behind it.
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
@@ -143,9 +145,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | LedgerList]:
     """List ledger entries
 
-     Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily
-    keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the
-    cumulative units behind it. Cursor paged.
+     List every movement of the balance, newest first, cursor paged.
+
+    Rows are the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, and
+    adjustments. A debit row carries the UTC day it settled and the cumulative units behind it.
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).
@@ -177,9 +180,10 @@ async def asyncio(
 ) -> ErrorResponse | LedgerList | None:
     """List ledger entries
 
-     Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily
-    keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the
-    cumulative units behind it. Cursor paged.
+     List every movement of the balance, newest first, cursor paged.
+
+    Rows are the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, and
+    adjustments. A debit row carries the UTC day it settled and the cumulative units behind it.
 
     Args:
         cursor (str | Unset): Opaque cursor from a previous page (`nextCursor`).

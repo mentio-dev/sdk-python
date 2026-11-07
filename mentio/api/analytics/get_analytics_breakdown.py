@@ -125,11 +125,10 @@ def sync_detailed(
 ) -> Response[AnalyticsBreakdown | ErrorResponse]:
     """Mentions grouped by one dimension
 
-     One table of matched, relevant and sentiment counts grouped by `by`: platform, keyword, sentiment,
-    intent, status, hour (weekday and hour of day) or person. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions in one table, grouped by one dimension (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsBreakdownRange | Unset): Preset window ending today. Ignored when from
@@ -144,14 +143,17 @@ def sync_detailed(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
-            (unclassified included), intent (a mention can carry several), status (open, ignored,
-            done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
-            language the classifier recognised but does not name), country (where the author is, ISO
-            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
-            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
-            whole window, every platform included).
+        by (GetAnalyticsBreakdownBy): The dimension to group by:
+
+            - platform or keyword.
+            - sentiment: unclassified included.
+            - intent: a mention can carry several.
+            - status: open, ignored, done.
+            - hour: weekday and hour of day in `timezone`.
+            - person: who posted; anonymous posts are left out.
+            - language: ISO 639-1; "unknown" if none, "other" if unnamed.
+            - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
+            - subreddit: Reddit posts only; `share` stays of the whole window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -193,11 +195,10 @@ def sync(
 ) -> AnalyticsBreakdown | ErrorResponse | None:
     """Mentions grouped by one dimension
 
-     One table of matched, relevant and sentiment counts grouped by `by`: platform, keyword, sentiment,
-    intent, status, hour (weekday and hour of day) or person. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions in one table, grouped by one dimension (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsBreakdownRange | Unset): Preset window ending today. Ignored when from
@@ -212,14 +213,17 @@ def sync(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
-            (unclassified included), intent (a mention can carry several), status (open, ignored,
-            done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
-            language the classifier recognised but does not name), country (where the author is, ISO
-            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
-            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
-            whole window, every platform included).
+        by (GetAnalyticsBreakdownBy): The dimension to group by:
+
+            - platform or keyword.
+            - sentiment: unclassified included.
+            - intent: a mention can carry several.
+            - status: open, ignored, done.
+            - hour: weekday and hour of day in `timezone`.
+            - person: who posted; anonymous posts are left out.
+            - language: ISO 639-1; "unknown" if none, "other" if unnamed.
+            - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
+            - subreddit: Reddit posts only; `share` stays of the whole window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -256,11 +260,10 @@ async def asyncio_detailed(
 ) -> Response[AnalyticsBreakdown | ErrorResponse]:
     """Mentions grouped by one dimension
 
-     One table of matched, relevant and sentiment counts grouped by `by`: platform, keyword, sentiment,
-    intent, status, hour (weekday and hour of day) or person. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions in one table, grouped by one dimension (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsBreakdownRange | Unset): Preset window ending today. Ignored when from
@@ -275,14 +278,17 @@ async def asyncio_detailed(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
-            (unclassified included), intent (a mention can carry several), status (open, ignored,
-            done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
-            language the classifier recognised but does not name), country (where the author is, ISO
-            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
-            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
-            whole window, every platform included).
+        by (GetAnalyticsBreakdownBy): The dimension to group by:
+
+            - platform or keyword.
+            - sentiment: unclassified included.
+            - intent: a mention can carry several.
+            - status: open, ignored, done.
+            - hour: weekday and hour of day in `timezone`.
+            - person: who posted; anonymous posts are left out.
+            - language: ISO 639-1; "unknown" if none, "other" if unnamed.
+            - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
+            - subreddit: Reddit posts only; `share` stays of the whole window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -322,11 +328,10 @@ async def asyncio(
 ) -> AnalyticsBreakdown | ErrorResponse | None:
     """Mentions grouped by one dimension
 
-     One table of matched, relevant and sentiment counts grouped by `by`: platform, keyword, sentiment,
-    intent, status, hour (weekday and hour of day) or person. The window is `range` (7d, 30d, 90d, 365d,
-    ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and
-    `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis
-    is the publish date.
+     Count matched, relevant and sentiment mentions in one table, grouped by one dimension (`by`).
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetAnalyticsBreakdownRange | Unset): Preset window ending today. Ignored when from
@@ -341,14 +346,17 @@ async def asyncio(
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
             offset, the zone's at the end of the window, applies to the whole window.
-        by (GetAnalyticsBreakdownBy): The dimension to group by: platform, keyword, sentiment
-            (unclassified included), intent (a mention can carry several), status (open, ignored,
-            done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts
-            are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a
-            language the classifier recognised but does not name), country (where the author is, ISO
-            3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not
-            name), subreddit (Reddit posts only, most active first; `share` stays a percent of the
-            whole window, every platform included).
+        by (GetAnalyticsBreakdownBy): The dimension to group by:
+
+            - platform or keyword.
+            - sentiment: unclassified included.
+            - intent: a mention can carry several.
+            - status: open, ignored, done.
+            - hour: weekday and hour of day in `timezone`.
+            - person: who posted; anonymous posts are left out.
+            - language: ISO 639-1; "unknown" if none, "other" if unnamed.
+            - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
+            - subreddit: Reddit posts only; `share` stays of the whole window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

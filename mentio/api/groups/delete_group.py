@@ -70,10 +70,10 @@ def sync_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Delete a group and its keywords
 
-     Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions
-    go with it, alert rules that named it are adjusted; charges already made stay on the usage record).
-    Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move
-    or delete its keywords instead.
+     Delete a group and EVERY keyword in it, with their mentions.
+
+    Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
+    deleted. The group's `stats.keywords` says how many go.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.
@@ -104,10 +104,10 @@ def sync(
 ) -> Any | ErrorResponse | None:
     """Delete a group and its keywords
 
-     Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions
-    go with it, alert rules that named it are adjusted; charges already made stay on the usage record).
-    Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move
-    or delete its keywords instead.
+     Delete a group and EVERY keyword in it, with their mentions.
+
+    Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
+    deleted. The group's `stats.keywords` says how many go.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.
@@ -133,10 +133,10 @@ async def asyncio_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Delete a group and its keywords
 
-     Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions
-    go with it, alert rules that named it are adjusted; charges already made stay on the usage record).
-    Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move
-    or delete its keywords instead.
+     Delete a group and EVERY keyword in it, with their mentions.
+
+    Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
+    deleted. The group's `stats.keywords` says how many go.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.
@@ -165,10 +165,10 @@ async def asyncio(
 ) -> Any | ErrorResponse | None:
     """Delete a group and its keywords
 
-     Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions
-    go with it, alert rules that named it are adjusted; charges already made stay on the usage record).
-    Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move
-    or delete its keywords instead.
+     Delete a group and EVERY keyword in it, with their mentions.
+
+    Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
+    deleted. The group's `stats.keywords` says how many go.
 
     Args:
         id (str): Group id (grp_...). Example: grp_abc123.

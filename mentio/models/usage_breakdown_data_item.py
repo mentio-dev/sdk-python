@@ -27,17 +27,16 @@ class UsageBreakdownDataItem:
         label (str): Readable name: the keyword term or the group name, otherwise the key.
         keyword (None | UsageBreakdownDataItemKeywordType0): by=keyword only; null otherwise.
         group (None | UsageBreakdownDataItemGroupType0): by=group only; null otherwise.
-        keyword_days (int | None): Keyword-days metered in this group: the days the daily tick charged for. Null for
-            by=platform (a keyword-day belongs to no platform) and for a day before the first recorded tick (unknown, not
-            zero); a keyword row counts only the days on record, so before window.keywordDaysFrom it is a floor, not a zero.
+        keyword_days (int | None): Keyword-days the daily tick charged in this row. Null for by=platform and for days
+            before the first recorded tick (unknown, not zero); before window.keywordDaysFrom a keyword row is a floor.
         keyword_cents (int): The keyword-days at the keyword rate ($5 a month, 500/30 cents a day), rounded once on the
             total.
         matched_mentions (int): Matches recorded in the window, relevant or not.
         billable_mentions (int): Of the matches billed in the window (every scored match, relevant or not), the ones in
             this group.
-        unclassified_mentions (int): Matches recorded in the window that are never charged: no score yet (still being
-            scored, or classification failed), or a free review from the look-back of a newly connected app. Every other
-            match is charged, on the mentions line or, for a comment, on the comments line.
+        unclassified_mentions (int): Matches in the window that are never charged: not scored yet, classification
+            failed, or a free review from a new app's look-back. Every other match is charged, on the mentions or comments
+            line.
         mention_cents (int): The billed mentions at $0.008 each, rounded once on the total.
         billable_comments (int): Comments billed in the window (the comments line): comments delivered under your
             mentions and comments that matched a keyword, each once per workspace.

@@ -56,10 +56,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Whoami]:
     """Introspect the credential
 
-     The workspace this credential acts on, how the request authenticated (an API key, an OAuth access
-    token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and
-    expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is
-    the classic scripting mistake.
+     Show the workspace this credential acts on, how it authenticated, whether it may write, and a key's
+    id and expiry.
+
+    Run it first: a read key answers 403 read_only_key on every write.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -84,10 +84,10 @@ def sync(
 ) -> ErrorResponse | Whoami | None:
     """Introspect the credential
 
-     The workspace this credential acts on, how the request authenticated (an API key, an OAuth access
-    token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and
-    expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is
-    the classic scripting mistake.
+     Show the workspace this credential acts on, how it authenticated, whether it may write, and a key's
+    id and expiry.
+
+    Run it first: a read key answers 403 read_only_key on every write.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -108,10 +108,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Whoami]:
     """Introspect the credential
 
-     The workspace this credential acts on, how the request authenticated (an API key, an OAuth access
-    token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and
-    expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is
-    the classic scripting mistake.
+     Show the workspace this credential acts on, how it authenticated, whether it may write, and a key's
+    id and expiry.
+
+    Run it first: a read key answers 403 read_only_key on every write.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -134,10 +134,10 @@ async def asyncio(
 ) -> ErrorResponse | Whoami | None:
     """Introspect the credential
 
-     The workspace this credential acts on, how the request authenticated (an API key, an OAuth access
-    token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and
-    expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is
-    the classic scripting mistake.
+     Show the workspace this credential acts on, how it authenticated, whether it may write, and a key's
+    id and expiry.
+
+    Run it first: a read key answers 403 read_only_key on every write.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -77,10 +77,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | View]:
     """Save a view
 
-     Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
-    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
-    selects whatever matches when it is read.
+     Save a named filter over mentions, evaluated whenever it is read.
+
+    The filter takes GET /v1/mentions' fields plus `anyOf`; an empty filter is every mention. See
+    [Views](/guides/views).
 
     Args:
         body (CreateViewBody):
@@ -111,10 +111,10 @@ def sync(
 ) -> ErrorResponse | View | None:
     """Save a view
 
-     Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
-    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
-    selects whatever matches when it is read.
+     Save a named filter over mentions, evaluated whenever it is read.
+
+    The filter takes GET /v1/mentions' fields plus `anyOf`; an empty filter is every mention. See
+    [Views](/guides/views).
 
     Args:
         body (CreateViewBody):
@@ -140,10 +140,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | View]:
     """Save a view
 
-     Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
-    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
-    selects whatever matches when it is read.
+     Save a named filter over mentions, evaluated whenever it is read.
+
+    The filter takes GET /v1/mentions' fields plus `anyOf`; an empty filter is every mention. See
+    [Views](/guides/views).
 
     Args:
         body (CreateViewBody):
@@ -172,10 +172,10 @@ async def asyncio(
 ) -> ErrorResponse | View | None:
     """Save a view
 
-     Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are
-    any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of
-    which at least one must hold; an empty filter is every mention. Nothing is materialized: the view
-    selects whatever matches when it is read.
+     Save a named filter over mentions, evaluated whenever it is read.
+
+    The filter takes GET /v1/mentions' fields plus `anyOf`; an empty filter is every mention. See
+    [Views](/guides/views).
 
     Args:
         body (CreateViewBody):

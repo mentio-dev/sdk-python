@@ -126,12 +126,13 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ReviewsReport]:
     """Reviews: stars over a window, per review page
 
-     The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average
-    stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a
-    series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by
-    two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and
-    `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it;
-    `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+     Report on your keywords' reviews: count, average stars, distribution, replies and open 1-2 star
+    reviews.
+
+    Per page too, with unhappy reviews' tags; each review counts once.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetReviewsReportRange | Unset): Preset window ending today. Ignored when from or
@@ -189,12 +190,13 @@ def sync(
 ) -> ErrorResponse | ReviewsReport | None:
     """Reviews: stars over a window, per review page
 
-     The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average
-    stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a
-    series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by
-    two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and
-    `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it;
-    `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+     Report on your keywords' reviews: count, average stars, distribution, replies and open 1-2 star
+    reviews.
+
+    Per page too, with unhappy reviews' tags; each review counts once.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetReviewsReportRange | Unset): Preset window ending today. Ignored when from or
@@ -247,12 +249,13 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ReviewsReport]:
     """Reviews: stars over a window, per review page
 
-     The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average
-    stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a
-    series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by
-    two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and
-    `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it;
-    `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+     Report on your keywords' reviews: count, average stars, distribution, replies and open 1-2 star
+    reviews.
+
+    Per page too, with unhappy reviews' tags; each review counts once.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetReviewsReportRange | Unset): Preset window ending today. Ignored when from or
@@ -308,12 +311,13 @@ async def asyncio(
 ) -> ErrorResponse | ReviewsReport | None:
     """Reviews: stars over a window, per review page
 
-     The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average
-    stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a
-    series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by
-    two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and
-    `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it;
-    `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+     Report on your keywords' reviews: count, average stars, distribution, replies and open 1-2 star
+    reviews.
+
+    Per page too, with unhappy reviews' tags; each review counts once.
+
+    The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the
+    period before.
 
     Args:
         range_ (GetReviewsReportRange | Unset): Preset window ending today. Ignored when from or

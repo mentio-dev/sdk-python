@@ -91,8 +91,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Segment]:
     """Create a segment
 
-     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
-    is listed, counted and changed only there, and its name only has to be unique in the group.
+     Save a named filter over your people.
+
+    With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only
+    there, and its name only has to be unique in the group.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -128,8 +130,10 @@ def sync(
 ) -> ErrorResponse | Segment | None:
     """Create a segment
 
-     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
-    is listed, counted and changed only there, and its name only has to be unique in the group.
+     Save a named filter over your people.
+
+    With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only
+    there, and its name only has to be unique in the group.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -160,8 +164,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Segment]:
     """Create a segment
 
-     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
-    is listed, counted and changed only there, and its name only has to be unique in the group.
+     Save a named filter over your people.
+
+    With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only
+    there, and its name only has to be unique in the group.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -195,8 +201,10 @@ async def asyncio(
 ) -> ErrorResponse | Segment | None:
     """Create a segment
 
-     Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it
-    is listed, counted and changed only there, and its name only has to be unique in the group.
+     Save a named filter over your people.
+
+    With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only
+    there, and its name only has to be unique in the group.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned

@@ -72,10 +72,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | WorkspaceFilters]:
     """Update the workspace filters
 
-     Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are
-    stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as
-    owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions
-    are untouched.
+     Replace any of the workspace's noise-rule lists; omitted lists stay, empty ones clear.
+
+    Entries are stored canonically (lowercase terms, authors as profile links or names, owner/name
+    repositories, subreddits without r/). Applies to new mentions within a minute.
 
     Args:
         body (UpdateFiltersBody): Omitted fields are untouched; an empty list clears one.
@@ -106,10 +106,10 @@ def sync(
 ) -> ErrorResponse | WorkspaceFilters | None:
     """Update the workspace filters
 
-     Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are
-    stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as
-    owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions
-    are untouched.
+     Replace any of the workspace's noise-rule lists; omitted lists stay, empty ones clear.
+
+    Entries are stored canonically (lowercase terms, authors as profile links or names, owner/name
+    repositories, subreddits without r/). Applies to new mentions within a minute.
 
     Args:
         body (UpdateFiltersBody): Omitted fields are untouched; an empty list clears one.
@@ -135,10 +135,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | WorkspaceFilters]:
     """Update the workspace filters
 
-     Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are
-    stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as
-    owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions
-    are untouched.
+     Replace any of the workspace's noise-rule lists; omitted lists stay, empty ones clear.
+
+    Entries are stored canonically (lowercase terms, authors as profile links or names, owner/name
+    repositories, subreddits without r/). Applies to new mentions within a minute.
 
     Args:
         body (UpdateFiltersBody): Omitted fields are untouched; an empty list clears one.
@@ -167,10 +167,10 @@ async def asyncio(
 ) -> ErrorResponse | WorkspaceFilters | None:
     """Update the workspace filters
 
-     Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are
-    stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as
-    owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions
-    are untouched.
+     Replace any of the workspace's noise-rule lists; omitted lists stay, empty ones clear.
+
+    Entries are stored canonically (lowercase terms, authors as profile links or names, owner/name
+    repositories, subreddits without r/). Applies to new mentions within a minute.
 
     Args:
         body (UpdateFiltersBody): Omitted fields are untouched; an empty list clears one.

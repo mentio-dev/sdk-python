@@ -78,9 +78,10 @@ def sync_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Delete an outreach activity
 
-     Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`,
-    the call works inside that keyword group: its people, and its own tags, notes, mute, merges and
-    activities, apart from the workspace's and from every other group's.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -119,9 +120,10 @@ def sync(
 ) -> Any | ErrorResponse | None:
     """Delete an outreach activity
 
-     Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`,
-    the call works inside that keyword group: its people, and its own tags, notes, mute, merges and
-    activities, apart from the workspace's and from every other group's.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -155,9 +157,10 @@ async def asyncio_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Delete an outreach activity
 
-     Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`,
-    the call works inside that keyword group: its people, and its own tags, notes, mute, merges and
-    activities, apart from the workspace's and from every other group's.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -194,9 +197,10 @@ async def asyncio(
 ) -> Any | ErrorResponse | None:
     """Delete an outreach activity
 
-     Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`,
-    the call works inside that keyword group: its people, and its own tags, notes, mute, merges and
-    activities, apart from the workspace's and from every other group's.
+     Remove a contact logged by mistake. The person's owner and stage stay as they are.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.

@@ -91,12 +91,13 @@ def sync_detailed(
 ) -> Response[ErrorResponse | PersonActivity]:
     """Log an outreach activity
 
-     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
-    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
-    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
-    logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
-    workspace's and from every other group's.
+     Record that a teammate reached out to this person: an email, a DM, a call.
+
+    The first claims an unowned person and marks them contacted; without `memberId`, a key's activity
+    claims nobody.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -135,12 +136,13 @@ def sync(
 ) -> ErrorResponse | PersonActivity | None:
     """Log an outreach activity
 
-     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
-    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
-    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
-    logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
-    workspace's and from every other group's.
+     Record that a teammate reached out to this person: an email, a DM, a call.
+
+    The first claims an unowned person and marks them contacted; without `memberId`, a key's activity
+    claims nobody.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -174,12 +176,13 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | PersonActivity]:
     """Log an outreach activity
 
-     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
-    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
-    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
-    logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
-    workspace's and from every other group's.
+     Record that a teammate reached out to this person: an email, a DM, a call.
+
+    The first claims an unowned person and marks them contacted; without `memberId`, a key's activity
+    claims nobody.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -216,12 +219,13 @@ async def asyncio(
 ) -> ErrorResponse | PersonActivity | None:
     """Log an outreach activity
 
-     Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims
-    an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner
-    and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it
-    logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that
-    keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the
-    workspace's and from every other group's.
+     Record that a teammate reached out to this person: an email, a DM, a call.
+
+    The first claims an unowned person and marks them contacted; without `memberId`, a key's activity
+    claims nobody.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.

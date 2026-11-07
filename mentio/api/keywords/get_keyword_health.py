@@ -96,14 +96,12 @@ def sync_detailed(
 ) -> Response[ErrorResponse | KeywordHealth]:
     """Get a keyword's health
 
-     Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status
-    (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by
-    platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each
-    suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have
-    had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context
-    rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read
-    only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a
-    fresh one. At most 30 reads a minute per workspace.
+     Report whether a keyword earns what it costs, with reasons and suggested fixes.
+
+    - Each suggestion has a `patch` for PATCH /v1/keywords/{id} and its measured effect.
+    - Read only, never billed, cached 5 minutes; 30 reads a minute.
+
+    See [Keyword health](/guides/keyword-health).
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -143,14 +141,12 @@ def sync(
 ) -> ErrorResponse | KeywordHealth | None:
     """Get a keyword's health
 
-     Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status
-    (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by
-    platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each
-    suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have
-    had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context
-    rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read
-    only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a
-    fresh one. At most 30 reads a minute per workspace.
+     Report whether a keyword earns what it costs, with reasons and suggested fixes.
+
+    - Each suggestion has a `patch` for PATCH /v1/keywords/{id} and its measured effect.
+    - Read only, never billed, cached 5 minutes; 30 reads a minute.
+
+    See [Keyword health](/guides/keyword-health).
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -185,14 +181,12 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | KeywordHealth]:
     """Get a keyword's health
 
-     Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status
-    (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by
-    platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each
-    suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have
-    had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context
-    rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read
-    only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a
-    fresh one. At most 30 reads a minute per workspace.
+     Report whether a keyword earns what it costs, with reasons and suggested fixes.
+
+    - Each suggestion has a `patch` for PATCH /v1/keywords/{id} and its measured effect.
+    - Read only, never billed, cached 5 minutes; 30 reads a minute.
+
+    See [Keyword health](/guides/keyword-health).
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -230,14 +224,12 @@ async def asyncio(
 ) -> ErrorResponse | KeywordHealth | None:
     """Get a keyword's health
 
-     Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status
-    (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by
-    platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each
-    suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have
-    had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context
-    rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read
-    only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a
-    fresh one. At most 30 reads a minute per workspace.
+     Report whether a keyword earns what it costs, with reasons and suggested fixes.
+
+    - Each suggestion has a `patch` for PATCH /v1/keywords/{id} and its measured effect.
+    - Read only, never billed, cached 5 minutes; 30 reads a minute.
+
+    See [Keyword health](/guides/keyword-health).
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.

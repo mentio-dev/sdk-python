@@ -77,9 +77,10 @@ def sync_detailed(
 ) -> Response[Alert | ErrorResponse]:
     """Unmute authors on an alert
 
-     Remove authors from the alert's muted list without touching the rest of its filter. Name each one by
-    the stored entry or by any link to that profile or its posts. Authors that are not muted are
-    ignored, so a retry is safe.
+     Remove authors from the alert's muted list without touching the rest of its filter.
+
+    Name each one by the stored entry or by any link to that profile or its posts. Authors that are not
+    muted are ignored, so a retry is safe.
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.
@@ -113,9 +114,10 @@ def sync(
 ) -> Alert | ErrorResponse | None:
     """Unmute authors on an alert
 
-     Remove authors from the alert's muted list without touching the rest of its filter. Name each one by
-    the stored entry or by any link to that profile or its posts. Authors that are not muted are
-    ignored, so a retry is safe.
+     Remove authors from the alert's muted list without touching the rest of its filter.
+
+    Name each one by the stored entry or by any link to that profile or its posts. Authors that are not
+    muted are ignored, so a retry is safe.
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.
@@ -144,9 +146,10 @@ async def asyncio_detailed(
 ) -> Response[Alert | ErrorResponse]:
     """Unmute authors on an alert
 
-     Remove authors from the alert's muted list without touching the rest of its filter. Name each one by
-    the stored entry or by any link to that profile or its posts. Authors that are not muted are
-    ignored, so a retry is safe.
+     Remove authors from the alert's muted list without touching the rest of its filter.
+
+    Name each one by the stored entry or by any link to that profile or its posts. Authors that are not
+    muted are ignored, so a retry is safe.
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.
@@ -178,9 +181,10 @@ async def asyncio(
 ) -> Alert | ErrorResponse | None:
     """Unmute authors on an alert
 
-     Remove authors from the alert's muted list without touching the rest of its filter. Name each one by
-    the stored entry or by any link to that profile or its posts. Authors that are not muted are
-    ignored, so a retry is safe.
+     Remove authors from the alert's muted list without touching the rest of its filter.
+
+    Name each one by the stored entry or by any link to that profile or its posts. Authors that are not
+    muted are ignored, so a retry is safe.
 
     Args:
         id (str): Alert id (feed_...). Example: feed_abc123.

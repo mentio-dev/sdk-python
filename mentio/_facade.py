@@ -184,20 +184,26 @@ class _Keywords:
     def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
-        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case, subreddits, GitHub repository events) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly ceiling on its matched mentions: at the cap it stops matching until the first of the next month (UTC) or until the cap is raised, while its daily keyword charge continues.
+        Start tracking a word or phrase; mentions arrive from the next poll.
+
+        - $5 a month, charged daily; up to 500 per funded workspace.
+        - `matching` filters posts before they are stored, so rejected posts never bill.
+        - `cap` limits matched mentions per period.
+
+        See [Keywords](/guides/keywords).
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
-          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A mention cap per day, week or month (per, default month); omit or null for none.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           display: Which of this keyword's mentions you see, by language and country; each list is replaced when sent, kept when omitted. Hidden mentions are still billed.
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
-          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
-          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts.
+          reviewSources: Review pages this keyword collects (app store apps, Trustpilot pages, Google Maps places): every new review is a mention, whatever it says. Polled daily; a newly connected page brings 30 days back, free. See [Reviews](/platforms/reviews).
+          feeds: RSS or Atom feeds only this keyword reads: a feed's URL, or a page that advertises one (else a 400). Read hourly; an item holding the term is a mention. See [RSS](/platforms/rss#a-keywords-own-feeds).
           readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
@@ -210,7 +216,9 @@ class _Keywords:
     def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Duplicate a keyword
 
-        A new keyword with this one's settings and a new `term` (or the same term in another group): its kind, platforms, context, every matching rule, its monthly mention cap and its comments setting. Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month, and the newest posts of the last 30 days come in at once, as with any new keyword.
+        Create a keyword with this one's settings under a new term or group.
+
+        It copies kind, platforms, context, rules, cap and comments; review apps and feeds only via `include`. A new keyword: $5 a month and a 30-day look-back.
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The term of the copy. The same term as the original only in another group (groupId): a term is tracked once per group. Wrap it in double quotes for the exact phrase only.
@@ -225,7 +233,12 @@ class _Keywords:
     def health(self, id: str, **params: Any) -> _m.KeywordHealth:
         """Get a keyword's health
 
-        Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a fresh one. At most 30 reads a minute per workspace.
+        Report whether a keyword earns what it costs, with reasons and suggested fixes.
+
+        - Each suggestion has a `patch` for PATCH /v1/keywords/{id} and its measured effect.
+        - Read only, never billed, cached 5 minutes; 30 reads a minute.
+
+        See [Keyword health](/guides/keyword-health).
 
         Keyword arguments (query):
           range_: Trailing window of UTC days ending today, by match time: 7d, 30d, 90d (default 30d).
@@ -236,7 +249,9 @@ class _Keywords:
     def list(self, **params: Any) -> _m.ListKeywordsResponse200:
         """List keywords
 
-        The keywords of the workspace with their match stats and poll health. Without parameters: every keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched before paging.
+        List the workspace's keywords with their match stats and poll health, newest first.
+
+        `q` searches term and context; the other parameters filter, sort and page; `total` counts matches before paging.
 
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
@@ -253,14 +268,18 @@ class _Keywords:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+        Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+
+        - A new `term` is tracked from now on, no look-back; old mentions stay.
+        - An empty rule list clears it; `cap` null removes the cap.
+        - Changes apply to new mentions only.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term: Renames the keyword: the new term is tracked from now on, with no look-back, and the keyword keeps its id, its settings and the mentions the old term found. Wrap it in double quotes for the exact phrase only. A 409 when its group already tracks the new term.
+          term: Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id, settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it.
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
-          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the mention cap and its period (per, default month); null removes it. A cap above the current period's count resumes a capped keyword at once, one at or under it pauses it.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
@@ -280,7 +299,9 @@ class _Mentions:
     def comments(self, id: str, **params: Any) -> _m.ListMentionCommentsResponse200:
         """List the comments of a mention
 
-        The comments under a mention's post, newest first: every comment in the thread, whether or not it names your keyword. Read once, about a day after the post, for mentions scored relevant whose keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the same thread.
+        List the comments under a mention's post, newest first, whether or not they name your keyword.
+
+        Filled for relevant mentions of keywords with comments on, read several times as the thread grows; each comment delivered costs $0.008. See [Comments](/guides/comments).
 
         Keyword arguments (query):
           cursor: nextCursor from the previous page.
@@ -290,7 +311,12 @@ class _Mentions:
     def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by language or country too, it adds up to the bill), kind (post, comment or repository), parent_url (the post a comment answers), comments (comments of it delivered to you), subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        Export the mentions GET /v1/mentions would list as CSV, newest matched first.
+
+        - Capped at 10,000 rows; X-Mentions-Truncated says when cut.
+        - 6 exports a minute per workspace.
+
+        Columns: see [Exports](/guides/exports).
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -345,7 +371,7 @@ class _Mentions:
           min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
           min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
-          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -355,7 +381,12 @@ class _Mentions:
     def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
         """Export mentions as JSON
 
-        The same mentions GET /v1/mentions would list for these filters, in one response, newest matched first (the order they entered your feed): every row is the full Mention object the list returns, text included. Capped at 10,000 mentions; `truncated` (and the X-Mentions-Truncated header) says when the cap cut the list. Shares the CSV export's limit: at most 6 exports per minute per workspace, either format; a 429 carries Retry-After.
+        Export the mentions GET /v1/mentions would list as one JSON response, newest matched first.
+
+        - Full Mention objects, capped at 10,000; `truncated` says when cut.
+        - Shares the CSV export's 6 a minute.
+
+        See [Exports](/guides/exports).
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -410,7 +441,7 @@ class _Mentions:
           min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
           min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
-          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -420,13 +451,19 @@ class _Mentions:
     def get(self, id: str) -> _m.Mention:
         """Get a mention
 
-        One mention by id, as it appears in the list: the post, its author with reach and your tags, the classification, the priority score and the triage fields. Ids belong to your organization; any other id is a 404."""
+        Get one mention by id, as it appears in the list.
+
+        It carries the post, its author with reach and your tags, the classification, the priority score and the triage fields. Ids belong to your organization; any other id is a 404."""
         return _result(_ops.mentions.get_mention.sync_detailed(id, client=self._client))
 
     def search(self, **params: Any) -> _m.SearchMentionsResponse200:
         """List mentions
 
-        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
+        List the mentions matched to your keywords, newest match first, filtered and cursor-paginated.
+
+        - A mention is one post matched to one keyword.
+        - `sort=priority` ranks the last 30 days by attention score.
+        - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-across-groups-anyof).
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -481,7 +518,7 @@ class _Mentions:
           min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
           min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
-          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -494,14 +531,17 @@ class _Mentions:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
         """Update a mention
 
-        The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign it to a workspace member, snooze it out of the feed, leave an internal note, or correct the classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list, filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
+        Triage, assign, snooze, annotate or correct the classification of a mention.
+
+        - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null restores the classifier's.
+        - Omitted fields stay. Delivery and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
           status: ignored or done to handle it; open to put it back.
           assigneeId: A workspace member (user id), or null to unassign.
           snoozedUntil: ISO 8601 (or epoch ms) until which the mention leaves the feed; null wakes it.
           note: Internal note; null or empty clears it.
-          relevant: Your verdict on relevance, correcting the classifier: true sets relevance to 100 and puts a filtered mention back in the relevant feed, false sets it to 0 and takes it out; null withdraws the verdict and restores the classifier's score. Never billed or unbilled. A mention still being classified answers 409 classification_pending.
+          relevant: Your verdict: true sets relevance to 100 (a filtered mention becomes relevant), false to 0; null restores the classifier's score. Billing never changes. 409 classification_pending while it is still being classified.
           sentiment: Your corrected sentiment; null withdraws the correction and restores the classifier's."""
         return _result(_ops.mentions.update_mention.sync_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
 
@@ -514,7 +554,11 @@ class _People:
     def activities(self, id: str, **params: Any) -> _m.ListPersonActivitiesResponse200:
         """List outreach activities
 
-        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        List every logged contact with this person, newest first (at most 200): who, channel, when, note.
+
+        Read it before reaching out.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -523,7 +567,9 @@ class _People:
     def delete_activity(self, id: str, activity_id: str, **params: Any) -> Any:
         """Delete an outreach activity
 
-        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        Remove a contact logged by mistake. The person's owner and stage stay as they are.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -532,7 +578,9 @@ class _People:
     def export(self, **params: Any) -> str:
         """Export people as CSV
 
-        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        Export the GET /v1/people list as CSV, one row per person with contact and outreach columns.
+
+        Capped at 5,000 people; 6 exports a minute. See [Exports](/guides/exports#people-columns).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -567,7 +615,9 @@ class _People:
     def get(self, id: str, **params: Any) -> _m.Person:
         """Get a person
 
-        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        One person as your workspace sees them. An account merged into someone resolves to that person.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -576,7 +626,9 @@ class _People:
     def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword group's keywords, counted over those mentions, with that group's own annotations, merges, outreach and segments.
+        List the people behind your mentions, with accounts, reach, profile, stats, your annotations and outreach.
+
+        Filter by platform, tag, followers, counts, intents, keyword kinds, outreach, automated or segment; offset-paginated. `groupId` scopes it to one keyword group. See [People](/guides/people).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -613,7 +665,11 @@ class _People:
     def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
-        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        Record that a teammate reached out to this person: an email, a DM, a call.
+
+        The first claims an unowned person and marks them contacted; without `memberId`, a key's activity claims nobody.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -628,7 +684,11 @@ class _People:
     def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        Declare that this account and another person are the same human, for your workspace only.
+
+        Everything combines under `into`, which keeps its owner and stage unless it had none.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -640,7 +700,9 @@ class _People:
     def split(self, id: str, **params: Any) -> _m.Person:
         """Undo a merge
 
-        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        The account becomes its own person again.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -649,7 +711,9 @@ class _People:
     def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and the accounts that group merged into them, from the mentions of that group's keywords only (feed, alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set without `groupId` hides them everywhere.
+        Set a person's tags, notes, mute, outreach owner and stage, for your workspace only.
+
+        Mute hides their posts from the feed and every channel; billing never changes. With `groupId` the annotations are that group's own; see [People](/guides/people).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -657,7 +721,7 @@ class _People:
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
           notes:
-          muted: true hides their posts from the feed, the alerts and the digests; false shows them again. Without groupId, for every keyword of the workspace; with groupId, for the mentions of that group's keywords only, leaving the workspace's mute as it is.
+          muted: true hides their posts from the feed, alerts and digests; false shows them again. Without groupId for the whole workspace; with it, for that group's keywords only.
           ownerId: The member who owns the contact (user id); null clears.
           stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
         return _result(_ops.people.update_person.sync_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
@@ -671,7 +735,9 @@ class _Segments:
     def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Create a segment
 
-        Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
+        Save a named filter over your people.
+
+        With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -703,7 +769,9 @@ class _Segments:
     def list(self, **params: Any) -> _m.ListSegmentsResponse200:
         """List segments
 
-        Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its own people; without it, the workspace's. A segment belongs to one scope and is not visible from another.
+        List your saved segments with live member counts, plus presets to start from.
+
+        Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each belongs to one scope.
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -732,7 +800,12 @@ class _Alerts:
     def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
-        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour, nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+        Create an alert: a rule (what to watch) sent to channels.
+
+        - `mode`: instant, or hourly, daily or weekly digests; hourly never emails.
+        - `filter.anyOf` adds OR groups of conditions.
+
+        See [Alerts](/alerts).
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
@@ -759,7 +832,9 @@ class _Alerts:
     def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
         """Mute authors on an alert
 
-        Add authors to the alert's muted list without touching the rest of its filter. Links are read the way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no person (a subreddit, a story) rejects the request with that entry named.
+        Add authors to the alert's muted list, leaving the rest of its filter.
+
+        A post link mutes its author; already muted authors are skipped, so retries are safe. An entry naming no person (a subreddit) is a 400. See [Alerts](/alerts#mute-authors).
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
@@ -776,7 +851,9 @@ class _Alerts:
     def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
         """Unmute authors on an alert
 
-        Remove authors from the alert's muted list without touching the rest of its filter. Name each one by the stored entry or by any link to that profile or its posts. Authors that are not muted are ignored, so a retry is safe.
+        Remove authors from the alert's muted list without touching the rest of its filter.
+
+        Name each one by the stored entry or by any link to that profile or its posts. Authors that are not muted are ignored, so a retry is safe.
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
@@ -849,7 +926,7 @@ class _Channels:
           label:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
-          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing, feed.recovered). An empty list unsubscribes it from all of them."""
+          events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
         return _result(_ops.alerts.update_channel.sync_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _Company:
@@ -889,7 +966,9 @@ class _Analytics:
     def breakdown(self, **params: Any) -> _m.AnalyticsBreakdown:
         """Mentions grouped by one dimension
 
-        One table of matched, relevant and sentiment counts grouped by `by`: platform, keyword, sentiment, intent, status, hour (weekday and hour of day) or person. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Count matched, relevant and sentiment mentions in one table, grouped by one dimension (`by`).
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -899,14 +978,18 @@ class _Analytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a language the classifier recognised but does not name), country (where the author is, ISO 3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not name), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
+          by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(_ops.analytics.get_analytics_breakdown.sync_detailed(client=self._client, **params))
 
     def reviews(self, **params: Any) -> _m.ReviewsReport:
         """Reviews: stars over a window, per review page
 
-        The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Report on your keywords' reviews: count, average stars, distribution, replies and open 1-2 star reviews.
+
+        Per page too, with unhappy reviews' tags; each review counts once.
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -923,7 +1006,9 @@ class _Analytics:
     def series(self, **params: Any) -> _m.AnalyticsSeries:
         """Mentions over time
 
-        Matched, relevant and sentiment counts per day or week across the window, as one total series or split per platform or per keyword with `by`. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Count matched, relevant and sentiment mentions per day or week, in total or per platform or keyword (`by`).
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -941,7 +1026,11 @@ class _Analytics:
     def share_of_voice(self, **params: Any) -> _m.ShareOfVoice:
         """Brand against competitors
 
-        Every keyword matched in the window with its counts and its share of brand plus competitor matches; topic keywords are counted but stay out of the split. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        List every keyword matched in the window with its share of brand plus competitor matches.
+
+        Topic keywords are counted but stay out of the split.
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -957,7 +1046,9 @@ class _Analytics:
     def summary(self, **params: Any) -> _m.AnalyticsSummary:
         """Headline counts for a window
 
-        Matched and relevant mentions, distinct posts and people, sentiment, buying intent and questions, estimated reach, and where the matches stand in triage. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Summarize matched and relevant mentions, posts, people, sentiment, intent, reach and triage over a window.
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -979,7 +1070,9 @@ class _ApiKeys:
     def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
         """Create an API key
 
-        Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed until revoked.
+        Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
+
+        `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed until revoked.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: A label for the key; "default" when omitted.
@@ -1016,7 +1109,12 @@ class _Feeds:
     def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, **fields: Any) -> _m.Feed:
         """Connect a feed
 
-        Connect an RSS or Atom feed: a feed's address, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. A new feed brings each reading keyword the newest 10 items of the last 30 days that hold its term, never as instant alerts. A feed the workspace reads already comes back with 200 (connecting is idempotent). A members-only forum answers `feed_login_required`: send it again with `auth` (a cookie or a header), stored encrypted and read for this workspace alone.
+        Connect an RSS or Atom feed, or a page advertising one, for the workspace's keywords to read hourly.
+
+        - Idempotent: a feed already read returns 200.
+        - A members-only forum answers `feed_login_required`: resend with `auth`.
+
+        See [RSS](/platforms/rss#workspace-feeds).
 
         Body: a dict, a model, or the fields as keyword arguments:
           url (required): A feed's address (https://forum.example.com/posts.rss), or a page's (https://forum.example.com): the feed the page advertises is used.
@@ -1036,7 +1134,9 @@ class _Feeds:
     def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
         """Connect many feeds
 
-        Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked on its own and reported added, already or failed, in the order sent: one that fails never stops the others. A failure carries the error code POST /v1/feeds would answer for that address (feed_login_required: send it again with auth). Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10 matching items of the last 30 days; the rest start from now.
+        Connect up to 100 feeds in one call, each reported added, already or failed, in order.
+
+        A failure never stops the others and carries the code POST /v1/feeds would answer. Only the first 8 added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
         Body: a dict, a model, or the fields as keyword arguments:
           feeds (required): Up to 100 feeds, each { url } or { url, auth } for a members-only one. Each is checked on its own: one that fails never stops the others."""
@@ -1045,7 +1145,9 @@ class _Feeds:
     def list(self, **params: Any) -> _m.ListFeedsResponse200:
         """List feeds
 
-        The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first, each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace.
+        List the workspace's RSS and Atom feeds, newest first, each with its poll health.
+
+        Keywords with readsWorkspaceFeeds (the default) read them hourly, for free; matching items bill as mentions. See [RSS](/platforms/rss#workspace-feeds).
 
         Keyword arguments (query):
           q: Only feeds whose address or title contains this text, case-insensitive.
@@ -1056,7 +1158,9 @@ class _Feeds:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateFeedBody | None = None, **fields: Any) -> _m.Feed:
         """Update a feed
 
-        Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again; the feed is then read for this workspace alone. auth: null removes it.
+        Rename a feed, or set its sign-in for a members-only forum.
+
+        `auth` is a browser cookie or one header (such as Discourse's Api-Key), checked, stored encrypted and never shown; the feed is then read for this workspace alone. null removes it.
 
         Body: a dict, a model, or the fields as keyword arguments:
           title: Your name for the feed; null clears it.
@@ -1072,13 +1176,17 @@ class _Filters:
     def get(self) -> _m.WorkspaceFilters:
         """Get the workspace filters
 
-        The noise rules applied to every keyword before a mention is stored: excluded terms and authors, excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post they reject is never classified, delivered or billed. Keyword-level rules live on each keyword (`matching`); both apply."""
+        Read the workspace's noise rules, applied to every keyword before a mention is stored.
+
+        A rejected post is never classified, delivered or billed. Keyword rules (`matching`) apply too."""
         return _result(_ops.filters.get_filters.sync_detailed(client=self._client))
 
     def update(self, body: dict[str, Any] | _m.UpdateFiltersBody | None = None, **fields: Any) -> _m.WorkspaceFilters:
         """Update the workspace filters
 
-        Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions are untouched.
+        Replace any of the workspace's noise-rule lists; omitted lists stay, empty ones clear.
+
+        Entries are stored canonically (lowercase terms, authors as profile links or names, owner/name repositories, subreddits without r/). Applies to new mentions within a minute.
 
         Body: a dict, a model, or the fields as keyword arguments:
           excludedTerms: Replaces the list; [] clears it.
@@ -1096,7 +1204,9 @@ class _Views:
     def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
         """Save a view
 
-        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of which at least one must hold; an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
+        Save a named filter over mentions, evaluated whenever it is read.
+
+        The filter takes GET /v1/mentions' fields plus `anyOf`; an empty filter is every mention. See [Views](/guides/views).
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): Unique per workspace, case-insensitive.
@@ -1117,7 +1227,9 @@ class _Views:
     def list(self) -> _m.ListViewsResponse200:
         """List views
 
-        The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to read exactly what it selects."""
+        List the workspace's saved views, oldest first.
+
+        A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to read exactly what it selects."""
         return _result(_ops.views.list_views.sync_detailed(client=self._client))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateViewBody | None = None, **fields: Any) -> _m.View:
@@ -1140,13 +1252,17 @@ class _Attention:
     def dismiss(self, id: str) -> _m.AttentionItem:
         """Dismiss an attention item
 
-        Put an item away. It leaves the open list and does not come back while its condition lasts; once the condition clears, a new episode may open a new item. Idempotent."""
+        Put an attention item away. Idempotent.
+
+        It leaves the open list and does not come back while its condition lasts. Once the condition clears, a new episode may open a new item."""
         return _result(_ops.attention.dismiss_attention.sync_detailed(id, client=self._client))
 
     def list(self, **params: Any) -> _m.ListAttentionResponse200:
         """List attention items
 
-        What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike), whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour; an item opens when its condition starts and resolves on its own when the condition is gone. Open items by default; `status=all` reads the history. Each opening is also an account event of the same name, which webhook, Slack, email and Telegram channels can subscribe to.
+        List what needs a person, newest first: mention spikes, negative sentiment jumps, noisy keywords and failing channels.
+
+        Checked hourly; items resolve on their own. Open items by default, `status=all` for history. Each opening is also an account event. See [Attention](/guides/attention).
 
         Keyword arguments (query):
           status: open (default), resolved, dismissed, or all.
@@ -1165,18 +1281,22 @@ class _Groups:
     def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Create a group
 
-        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours; `context` (optional) is the group's own company description, which the classifier reads in place of the whole workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a keyword.
+        Create a keyword group, then pass its id as `groupId` when creating keywords.
+
+        `externalId` is your own id for it; `context` is its company description, read instead of the workspace profile. See [Groups](/guides/groups).
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
           externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=.
-          context: What the classifier reads as "the company" for this group's keywords, in place of the WHOLE workspace profile, its relevance guidelines and competitor list included (at most 4000 characters): who the business is, what it sells, for whom, what is not it, and any rule that should apply to this group ("ignore job posts"). For a group per customer, the customer's description. Null: the workspace profile, as for every keyword before groups."""
+          context: What the classifier reads as "the company" for this group's keywords, instead of the WHOLE workspace profile (guidelines and competitors included). Null: the workspace profile. See [Groups](/guides/groups#a-company-description-per-group)."""
         return _result(_ops.groups.create_group.sync_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
 
     def delete(self, id: str) -> Any:
         """Delete a group and its keywords
 
-        Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions go with it, alert rules that named it are adjusted; charges already made stay on the usage record). Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move or delete its keywords instead."""
+        Delete a group and EVERY keyword in it, with their mentions.
+
+        Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be deleted. The group's `stats.keywords` says how many go."""
         return _result(_ops.groups.delete_group.sync_detailed(id, client=self._client))
 
     def get(self, id: str) -> _m.Group:
@@ -1186,7 +1306,9 @@ class _Groups:
     def list(self, **params: Any) -> _m.ListGroupsResponse200:
         """List groups
 
-        The keyword groups of the workspace, the default group first, then oldest first. A group is how keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group, every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass `externalId` to find the group carrying your own id.
+        List the workspace's keyword groups, default first, then oldest first.
+
+        A term may be tracked once per group. Pass `externalId` to find the group carrying your own id. See [Groups](/guides/groups).
 
         Keyword arguments (query):
           external_id: Only the group carrying exactly this externalId."""
@@ -1195,12 +1317,14 @@ class _Groups:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Update a group
 
-        Rename a group, change your id for it (`externalId`, null clears) or its company description (`context`, null clears: the workspace profile applies again; new mentions are judged with it at once, old ones are not rescored). The default group can be renamed like any other but takes no description: it is the workspace itself and reads the company profile.
+        Rename a group, or change its `externalId` or company description (`context`); null clears either.
+
+        New mentions use a new description at once; old ones are not rescored. The default group takes no description.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: The group's name: a customer, a campaign, a product. Unique per workspace.
           externalId: Replaces your id for the group; null clears it.
-          context: Replaces the group's company description; null clears it (the workspace profile applies again). New mentions are judged with it at once; old ones are not rescored. Not on the default group (400 default_group_context): that one is the workspace itself and reads the profile."""
+          context: Replaces the group's company description; null clears it. New mentions are judged with it at once, old ones are not rescored. Not on the default group (400 default_group_context)."""
         return _result(_ops.groups.update_group.sync_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
 
 class _Auth:
@@ -1212,7 +1336,9 @@ class _Auth:
     def whoami(self) -> _m.Whoami:
         """Introspect the credential
 
-        The workspace this credential acts on, how the request authenticated (an API key, an OAuth access token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is the classic scripting mistake."""
+        Show the workspace this credential acts on, how it authenticated, whether it may write, and a key's id and expiry.
+
+        Run it first: a read key answers 403 read_only_key on every write."""
         return _result(_ops.auth.whoami.sync_detailed(client=self._client))
 
 class _Members:
@@ -1230,7 +1356,9 @@ class _Members:
     def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, **fields: Any) -> _m.Invitation:
         """Invite a member
 
-        Send an email invitation to join the workspace as admin or member; it expires after 48 hours. Idempotent: an address that already holds an open invitation gets it back with 200 and no second email. An address that is already a member is a 409 already_member. Team changes need a signed-in owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers 403.
+        Invite someone by email as admin or member; the invitation expires after 48 hours.
+
+        Idempotent for an open invitation (200, no second email); a member is 409 already_member. Needs a signed-in owner or admin: API keys get 403.
 
         Body: a dict, a model, or the fields as keyword arguments:
           email (required): The address to invite; it receives an email with a link to join.
@@ -1246,7 +1374,9 @@ class _Members:
     def remove(self, id: str) -> Any:
         """Remove a member
 
-        The person loses the workspace within a minute (their dashboard session on the next request, an OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in owner or admin; only an owner removes another owner, and the last owner cannot be removed (409 last_owner)."""
+        Remove a member; access ends within a minute, while their mentions, notes and outreach stay.
+
+        Needs a signed-in owner or admin; only an owner removes an owner, and never the last (409 last_owner)."""
         return _result(_ops.members.remove_member.sync_detailed(id, client=self._client))
 
     def revoke_invitation(self, id: str) -> Any:
@@ -1264,7 +1394,12 @@ class _Usage:
     def breakdown(self, **params: Any) -> _m.UsageBreakdown:
         """Get the usage breakdown
 
-        What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`: day, platform or keyword), in USD cents at list price, with the window's totals on every call. `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the wallet has debited so far for the window's days: mentions settle the morning after their day, so a window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read this at most 30 times a minute through its keys and tokens together.
+        Report what the workspace was charged over a window at list price, grouped by one dimension (`by`).
+
+        - Rows are paged; the window's totals come on every call.
+        - 30 reads a minute per workspace.
+
+        See [Cost per keyword](/billing#cost-per-keyword).
 
         Keyword arguments (query):
           by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
@@ -1283,7 +1418,9 @@ class _Usage:
     def get(self) -> _m.UsageSummary:
         """Get usage and balance
 
-        The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged daily."""
+        Read the balance, daily burn, keywords running and paused, and recent matches: the short form of GET /v1/billing/wallet.
+
+        Every matched mention bills $0.008, relevant or not; every active keyword $5 a month, charged daily. See [Billing](/billing)."""
         return _result(_ops.usage.get_usage.sync_detailed(client=self._client))
 
 class _Billing:
@@ -1301,13 +1438,17 @@ class _Billing:
     def invoices(self) -> _m.InvoiceList:
         """List receipts
 
-        The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this workspace's share of the billing customer's newest 100 orders. Empty before the first top-up."""
+        List the top-up orders, newest first, as Polar (the merchant of record) holds them.
+
+        This workspace's share of the billing customer's newest 100 orders; empty before the first top-up."""
         return _result(_ops.billing.list_invoices.sync_detailed(client=self._client))
 
     def ledger(self, **params: Any) -> _m.LedgerList:
         """List ledger entries
 
-        Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the cumulative units behind it. Cursor paged.
+        List every movement of the balance, newest first, cursor paged.
+
+        Rows are the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, and adjustments. A debit row carries the UTC day it settled and the cumulative units behind it.
 
         Keyword arguments (query):
           cursor: Opaque cursor from a previous page (`nextCursor`).
@@ -1317,7 +1458,9 @@ class _Billing:
     def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
         """Create a top-up checkout
 
-        Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The balance is credited when the payment lands, within a minute, and tracking the wallet had paused resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this deployment trusts; omit it for the dashboard's billing page.
+        Get a hosted checkout URL for a top-up; this call charges nothing.
+
+        The balance is credited within a minute of payment, and paused tracking resumes. `successUrl` must be on a trusted origin; omit it for the dashboard.
 
         Body: a dict, a model, or the fields as keyword arguments:
           amountCents (required): Amount to add, in USD cents (2000 to 500000). Prefilled at checkout, editable there.
@@ -1327,7 +1470,9 @@ class _Billing:
     def wallet(self) -> _m.Wallet:
         """Get the wallet
 
-        The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused, what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds and the auto-recharge settings. `GET /v1/usage` is the short form."""
+        Read the prepaid balance in full; GET /v1/usage is the short form.
+
+        It adds what a day costs, what a resume needs, the welcome credit, the newest top-up, top-up bounds and auto-recharge settings."""
         return _result(_ops.billing.get_wallet.sync_detailed(client=self._client))
 
 class _AsyncKeywords:
@@ -1339,20 +1484,26 @@ class _AsyncKeywords:
     async def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
-        Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the balance. `matching` narrows what the term matches (required and excluded terms, excluded authors, case, subreddits, GitHub repository events) before a mention is stored, so a rejected post is never billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly ceiling on its matched mentions: at the cap it stops matching until the first of the next month (UTC) or until the cap is raised, while its daily keyword charge continues.
+        Start tracking a word or phrase; mentions arrive from the next poll.
+
+        - $5 a month, charged daily; up to 500 per funded workspace.
+        - `matching` filters posts before they are stored, so rejected posts never bill.
+        - `cap` limits matched mentions per period.
+
+        See [Keywords](/guides/keywords).
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
-          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A mention cap per day, week or month (per, default month); omit or null for none.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
           display: Which of this keyword's mentions you see, by language and country; each list is replaced when sent, kept when omitted. Hidden mentions are still billed.
           groupId: The group to track it in (grp_...); omit for the workspace's default group. A term may be tracked once per group.
-          reviewSources: Review pages this keyword collects, at most 10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after that each review bills like any mention.
-          feeds: RSS or Atom feeds this keyword reads, at most 20, each { url }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour; an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold the term, billed like any mention and never sent as instant alerts.
+          reviewSources: Review pages this keyword collects (app store apps, Trustpilot pages, Google Maps places): every new review is a mention, whatever it says. Polled daily; a newly connected page brings 30 days back, free. See [Reviews](/platforms/reviews).
+          feeds: RSS or Atom feeds only this keyword reads: a feed's URL, or a page that advertises one (else a 400). Read hourly; an item holding the term is a mention. See [RSS](/platforms/rss#a-keywords-own-feeds).
           readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
 
@@ -1365,7 +1516,9 @@ class _AsyncKeywords:
     async def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Duplicate a keyword
 
-        A new keyword with this one's settings and a new `term` (or the same term in another group): its kind, platforms, context, every matching rule, its monthly mention cap and its comments setting. Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month, and the newest posts of the last 30 days come in at once, as with any new keyword.
+        Create a keyword with this one's settings under a new term or group.
+
+        It copies kind, platforms, context, rules, cap and comments; review apps and feeds only via `include`. A new keyword: $5 a month and a 30-day look-back.
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The term of the copy. The same term as the original only in another group (groupId): a term is tracked once per group. Wrap it in double quotes for the exact phrase only.
@@ -1380,7 +1533,12 @@ class _AsyncKeywords:
     async def health(self, id: str, **params: Any) -> _m.KeywordHealth:
         """Get a keyword's health
 
-        Whether the keyword earns what it costs over a trailing window (`range`, default 30d): a status (healthy, noisy, quiet, capped, paused, new) with the reasons in plain words, its numbers by platform and week, what it cost, the words and authors its noise is made of, and suggestions. Each suggestion carries a `patch` to send to PATCH /v1/keywords/{id} as is, and the effect it would have had, measured by running the matcher's own rules over the window's posts. `ai=true` adds a context rewritten by a language model (cached a day, at most 20 model calls an hour per workspace). Read only and never billed; the report is cached for 5 minutes, and a change to the keyword starts a fresh one. At most 30 reads a minute per workspace.
+        Report whether a keyword earns what it costs, with reasons and suggested fixes.
+
+        - Each suggestion has a `patch` for PATCH /v1/keywords/{id} and its measured effect.
+        - Read only, never billed, cached 5 minutes; 30 reads a minute.
+
+        See [Keyword health](/guides/keyword-health).
 
         Keyword arguments (query):
           range_: Trailing window of UTC days ending today, by match time: 7d, 30d, 90d (default 30d).
@@ -1391,7 +1549,9 @@ class _AsyncKeywords:
     async def list(self, **params: Any) -> _m.ListKeywordsResponse200:
         """List keywords
 
-        The keywords of the workspace with their match stats and poll health. Without parameters: every keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched before paging.
+        List the workspace's keywords with their match stats and poll health, newest first.
+
+        `q` searches term and context; the other parameters filter, sort and page; `total` counts matches before paging.
 
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
@@ -1408,14 +1568,18 @@ class _AsyncKeywords:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+        Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+
+        - A new `term` is tracked from now on, no look-back; old mentions stay.
+        - An empty rule list clears it; `cap` null removes the cap.
+        - Changes apply to new mentions only.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term: Renames the keyword: the new term is tracked from now on, with no look-back, and the keyword keeps its id, its settings and the mentions the old term found. Wrap it in double quotes for the exact phrase only. A 409 when its group already tracks the new term.
+          term: Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id, settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it.
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
-          context: A sentence the classifier reads for this keyword only, on top of the company profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
+          context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: Replaces the mention cap and its period (per, default month); null removes it. A cap above the current period's count resumes a capped keyword at once, one at or under it pauses it.
           comments: Comments under this keyword's mentions; omitted fields are untouched (on create: off, 20 per post).
@@ -1435,7 +1599,9 @@ class _AsyncMentions:
     async def comments(self, id: str, **params: Any) -> _m.ListMentionCommentsResponse200:
         """List the comments of a mention
 
-        The comments under a mention's post, newest first: every comment in the thread, whether or not it names your keyword. Read once, about a day after the post, for mentions scored relevant whose keyword has comments enabled (keywords.comments), on Hacker News, Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit; empty before that and for other keywords. Each comment delivered costs $0.008 on the comments line of the bill, once per workspace. A comment that itself names one of your keywords is also a mention: `mentionId` links it. Two mentions of one post (two keywords) list the same thread.
+        List the comments under a mention's post, newest first, whether or not they name your keyword.
+
+        Filled for relevant mentions of keywords with comments on, read several times as the thread grows; each comment delivered costs $0.008. See [Comments](/guides/comments).
 
         Keyword arguments (query):
           cursor: nextCursor from the previous page.
@@ -1445,7 +1611,12 @@ class _AsyncMentions:
     async def export(self, **params: Any) -> str:
         """Export mentions as CSV
 
-        The same mentions GET /v1/mentions would list for these filters, as CSV, newest matched first (the order they entered your feed, which can differ from the post date): id, published_at, platform, keyword, author, author_url, author_followers, relevance, sentiment, intents (pipe-separated), language, confidence, status, relevant, delivered, url, links (pipe-separated), text (first 1,000 characters), group, group_external_id, rating and app_id (app store reviews only), title and image_url (where the platform has them), duplicate_of (the mention a cross-post copies; the CSV keeps one row per mention, copies included; with includeHidden=true, the mentions a keyword hides by language or country too, it adds up to the bill), kind (post, comment or repository), parent_url (the post a comment answers), comments (comments of it delivered to you), subreddit and flair (Reddit only), country (where the author is, ISO 3166-1 alpha-2, empty when unknown) and organization (true when a company or organization posted). Capped at 10,000 rows; the X-Mentions-Truncated header says when the cap cut the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        Export the mentions GET /v1/mentions would list as CSV, newest matched first.
+
+        - Capped at 10,000 rows; X-Mentions-Truncated says when cut.
+        - 6 exports a minute per workspace.
+
+        Columns: see [Exports](/guides/exports).
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1500,7 +1671,7 @@ class _AsyncMentions:
           min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
           min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
-          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -1510,7 +1681,12 @@ class _AsyncMentions:
     async def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
         """Export mentions as JSON
 
-        The same mentions GET /v1/mentions would list for these filters, in one response, newest matched first (the order they entered your feed): every row is the full Mention object the list returns, text included. Capped at 10,000 mentions; `truncated` (and the X-Mentions-Truncated header) says when the cap cut the list. Shares the CSV export's limit: at most 6 exports per minute per workspace, either format; a 429 carries Retry-After.
+        Export the mentions GET /v1/mentions would list as one JSON response, newest matched first.
+
+        - Full Mention objects, capped at 10,000; `truncated` says when cut.
+        - Shares the CSV export's 6 a minute.
+
+        See [Exports](/guides/exports).
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1565,7 +1741,7 @@ class _AsyncMentions:
           min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
           min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
-          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms)."""
@@ -1575,13 +1751,19 @@ class _AsyncMentions:
     async def get(self, id: str) -> _m.Mention:
         """Get a mention
 
-        One mention by id, as it appears in the list: the post, its author with reach and your tags, the classification, the priority score and the triage fields. Ids belong to your organization; any other id is a 404."""
+        Get one mention by id, as it appears in the list.
+
+        It carries the post, its author with reach and your tags, the classification, the priority score and the triage fields. Ids belong to your organization; any other id is a 404."""
         return _result(await _ops.mentions.get_mention.asyncio_detailed(id, client=self._client))
 
     async def search(self, **params: Any) -> _m.SearchMentionsResponse200:
         """List mentions
 
-        Mentions matched to your keywords, filtered and paginated. Default order is newest match first; sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
+        List the mentions matched to your keywords, newest match first, filtered and cursor-paginated.
+
+        - A mention is one post matched to one keyword.
+        - `sort=priority` ranks the last 30 days by attention score.
+        - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-across-groups-anyof).
 
         Keyword arguments (query):
           keyword_id: Only matches of this keyword.
@@ -1636,7 +1818,7 @@ class _AsyncMentions:
           min_quotes: Only posts with at least this many quotes, as the platform reported them when the post was found. A post without that count never passes.
           min_views: Only posts with at least this many views (plays), as the platform reported them when the post was found. A post without that count never passes.
           min_bookmarks: Only posts with at least this many bookmarks (saves), as the platform reported them when the post was found. A post without that count never passes.
-          any_of: OR across groups of conditions, as URL-encoded JSON: [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one group holds, and every other filter here still applies. 1 to 10 groups, none empty, no nesting.
+          any_of: OR across groups of conditions, as URL-encoded JSON: a mention passes when one group holds, on top of every other filter. Each group holds view-filter conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
           q: Substring search in the post text or the author's name.
           since: Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Only posts published at or before this instant (ISO 8601, or epoch ms).
@@ -1649,14 +1831,17 @@ class _AsyncMentions:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
         """Update a mention
 
-        The one write on a mention. Set status to ignored or done to handle it (open puts it back), assign it to a workspace member, snooze it out of the feed, leave an internal note, or correct the classifier: `relevant` true or false is your verdict (relevance becomes 100 or 0, and every list, filter, digest and report follows it), `sentiment` replaces the label; null withdraws a verdict and restores the classifier's value. Omitted fields are untouched. Delivery and billing never change.
+        Triage, assign, snooze, annotate or correct the classification of a mention.
+
+        - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null restores the classifier's.
+        - Omitted fields stay. Delivery and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
           status: ignored or done to handle it; open to put it back.
           assigneeId: A workspace member (user id), or null to unassign.
           snoozedUntil: ISO 8601 (or epoch ms) until which the mention leaves the feed; null wakes it.
           note: Internal note; null or empty clears it.
-          relevant: Your verdict on relevance, correcting the classifier: true sets relevance to 100 and puts a filtered mention back in the relevant feed, false sets it to 0 and takes it out; null withdraws the verdict and restores the classifier's score. Never billed or unbilled. A mention still being classified answers 409 classification_pending.
+          relevant: Your verdict: true sets relevance to 100 (a filtered mention becomes relevant), false to 0; null restores the classifier's score. Billing never changes. 409 classification_pending while it is still being classified.
           sentiment: Your corrected sentiment; null withdraws the correction and restores the classifier's."""
         return _result(await _ops.mentions.update_mention.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
 
@@ -1669,7 +1854,11 @@ class _AsyncPeople:
     async def activities(self, id: str, **params: Any) -> _m.ListPersonActivitiesResponse200:
         """List outreach activities
 
-        Every logged contact with this person across all their accounts, newest first (at most 200): who reached out, the channel, when, and a short note. Read it before reaching out so two teammates never contact the same person without knowing. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        List every logged contact with this person, newest first (at most 200): who, channel, when, note.
+
+        Read it before reaching out.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -1678,7 +1867,9 @@ class _AsyncPeople:
     async def delete_activity(self, id: str, activity_id: str, **params: Any) -> Any:
         """Delete an outreach activity
 
-        Remove a contact logged by mistake. The person's owner and stage stay as they are. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        Remove a contact logged by mistake. The person's owner and stage stay as they are.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -1687,7 +1878,9 @@ class _AsyncPeople:
     async def export(self, **params: Any) -> str:
         """Export people as CSV
 
-        The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports per minute per workspace; a 429 carries Retry-After.
+        Export the GET /v1/people list as CSV, one row per person with contact and outreach columns.
+
+        Capped at 5,000 people; 6 exports a minute. See [Exports](/guides/exports#people-columns).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -1722,7 +1915,9 @@ class _AsyncPeople:
     async def get(self, id: str, **params: Any) -> _m.Person:
         """Get a person
 
-        One person as your workspace sees them. An account merged into someone resolves to that person. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        One person as your workspace sees them. An account merged into someone resolves to that person.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -1731,7 +1926,9 @@ class _AsyncPeople:
     async def list(self, **params: Any) -> _m.ListPeopleResponse200:
         """List people
 
-        The people behind your mentions: one row per person, with their accounts, reach, public profile, per-workspace stats, your annotations and where your outreach stands. Filter by platform, tag, follower range, mention counts, intents seen, keyword kinds mentioned or never mentioned, outreach stage, owner, automated (bot accounts, whose matched posts are mostly machine-made), or a saved segment. Offset-paginated with a total. With `groupId`, only the people who mentioned that keyword group's keywords, counted over those mentions, with that group's own annotations, merges, outreach and segments.
+        List the people behind your mentions, with accounts, reach, profile, stats, your annotations and outreach.
+
+        Filter by platform, tag, followers, counts, intents, keyword kinds, outreach, automated or segment; offset-paginated. `groupId` scopes it to one keyword group. See [People](/guides/people).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -1768,7 +1965,11 @@ class _AsyncPeople:
     async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
-        Record that a teammate reached out to this person: an email, a DM, a call. The first activity claims an unowned person for whoever reached out and moves not_contacted to contacted; an existing owner and a later stage are kept. `memberId` defaults to the signed-in member; an API key that omits it logs an unattributed activity, which claims nobody. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        Record that a teammate reached out to this person: an email, a DM, a call.
+
+        The first claims an unowned person and marks them contacted; without `memberId`, a key's activity claims nobody.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -1783,7 +1984,11 @@ class _AsyncPeople:
     async def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
-        Declare that this account and another person are the same human, for your workspace only. Their mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps its owner and stage unless it had none. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        Declare that this account and another person are the same human, for your workspace only.
+
+        Everything combines under `into`, which keeps its owner and stage unless it had none.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -1795,7 +2000,9 @@ class _AsyncPeople:
     async def split(self, id: str, **params: Any) -> _m.Person:
         """Undo a merge
 
-        The account becomes its own person again. With `groupId`, the call works inside that keyword group: its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and from every other group's.
+        The account becomes its own person again.
+
+        With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-by-group).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -1804,7 +2011,9 @@ class _AsyncPeople:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
 
-        Tags, notes, mute, and the outreach owner (a workspace member; null clears) and stage, for your workspace only. Mute hides their posts from your feed and every channel; ingest and billing never change. With `groupId` the annotations are that keyword group's own: `muted` hides the person, and the accounts that group merged into them, from the mentions of that group's keywords only (feed, alerts and digests), and the group's tags show on those mentions next to the workspace's. A mute set without `groupId` hides them everywhere.
+        Set a person's tags, notes, mute, outreach owner and stage, for your workspace only.
+
+        Mute hides their posts from the feed and every channel; billing never changes. With `groupId` the annotations are that group's own; see [People](/guides/people).
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -1812,7 +2021,7 @@ class _AsyncPeople:
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
           notes:
-          muted: true hides their posts from the feed, the alerts and the digests; false shows them again. Without groupId, for every keyword of the workspace; with groupId, for the mentions of that group's keywords only, leaving the workspace's mute as it is.
+          muted: true hides their posts from the feed, alerts and digests; false shows them again. Without groupId for the whole workspace; with it, for that group's keywords only.
           ownerId: The member who owns the contact (user id); null clears.
           stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
         return _result(await _ops.people.update_person.asyncio_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
@@ -1826,7 +2035,9 @@ class _AsyncSegments:
     async def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Create a segment
 
-        Save a named filter over your people. With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
+        Save a named filter over your people.
+
+        With `groupId` the segment belongs to that keyword group: it is listed, counted and changed only there, and its name only has to be unique in the group.
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
@@ -1858,7 +2069,9 @@ class _AsyncSegments:
     async def list(self, **params: Any) -> _m.ListSegmentsResponse200:
         """List segments
 
-        Your saved segments, each with the number of people in it right now (segments are evaluated on every read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its own people; without it, the workspace's. A segment belongs to one scope and is not visible from another.
+        List your saved segments with live member counts, plus presets to start from.
+
+        Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each belongs to one scope.
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
@@ -1887,7 +2100,12 @@ class _AsyncAlerts:
     async def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
-        A rule (what to watch, the filter) times channels. mode instant sends each matching mention as it happens; hourly sends one digest every UTC hour (five minutes past) for the previous full hour, nothing when it had no mention over the rule's floor, to Slack, Telegram and webhook channels only (no schedule); daily sends one digest at schedule.hour in schedule.timezone; weekly sends one a week on schedule.weekday (0 Sunday to 6 Saturday). filter.anyOf adds OR: groups of conditions in the vocabulary of the mentions list, at least one of which must hold on top of the rest of the filter.
+        Create an alert: a rule (what to watch) sent to channels.
+
+        - `mode`: instant, or hourly, daily or weekly digests; hourly never emails.
+        - `filter.anyOf` adds OR groups of conditions.
+
+        See [Alerts](/alerts).
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required):
@@ -1914,7 +2132,9 @@ class _AsyncAlerts:
     async def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
         """Mute authors on an alert
 
-        Add authors to the alert's muted list without touching the rest of its filter. Links are read the way the dashboard reads them: a post link mutes its author, twitter.com becomes x.com, a Hacker News profile keeps its id. Authors already muted are skipped, so a retry is safe. An entry that names no person (a subreddit, a story) rejects the request with that entry named.
+        Add authors to the alert's muted list, leaving the rest of its filter.
+
+        A post link mutes its author; already muted authors are skipped, so retries are safe. An entry naming no person (a subreddit) is a 400. See [Alerts](/alerts#mute-authors).
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
@@ -1931,7 +2151,9 @@ class _AsyncAlerts:
     async def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
         """Unmute authors on an alert
 
-        Remove authors from the alert's muted list without touching the rest of its filter. Name each one by the stored entry or by any link to that profile or its posts. Authors that are not muted are ignored, so a retry is safe.
+        Remove authors from the alert's muted list without touching the rest of its filter.
+
+        Name each one by the stored entry or by any link to that profile or its posts. Authors that are not muted are ignored, so a retry is safe.
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
@@ -2004,7 +2226,7 @@ class _AsyncChannels:
           label:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
-          events: Replaces the whole set of account events the channel receives. A webhook takes any of them; a Slack, email or Telegram channel the attention events only (mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing, feed.recovered). An empty list unsubscribes it from all of them."""
+          events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
         return _result(await _ops.alerts.update_channel.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _AsyncCompany:
@@ -2044,7 +2266,9 @@ class _AsyncAnalytics:
     async def breakdown(self, **params: Any) -> _m.AnalyticsBreakdown:
         """Mentions grouped by one dimension
 
-        One table of matched, relevant and sentiment counts grouped by `by`: platform, keyword, sentiment, intent, status, hour (weekday and hour of day) or person. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Count matched, relevant and sentiment mentions in one table, grouped by one dimension (`by`).
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -2054,14 +2278,18 @@ class _AsyncAnalytics:
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: platform, keyword, sentiment (unclassified included), intent (a mention can carry several), status (open, ignored, done), hour (weekday and hour of day in `timezone`), person (who posted; anonymous posts are left out), language (ISO 639-1; "unknown" for posts without one, "other" for a language the classifier recognised but does not name), country (where the author is, ISO 3166-1 alpha-2; "unknown" for posts nobody could place, "other" for a place it does not name), subreddit (Reddit posts only, most active first; `share` stays a percent of the whole window, every platform included)."""
+          by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(await _ops.analytics.get_analytics_breakdown.asyncio_detailed(client=self._client, **params))
 
     async def reviews(self, **params: Any) -> _m.ReviewsReport:
         """Reviews: stars over a window, per review page
 
-        The reviews a keyword collects (App Store, Google Play, Trustpilot, Google Maps): count, average stars, distribution, replies and open 1-2 star reviews, for the workspace and per review page with a series of average stars per `bucket`, plus the tags the unhappy reviews carry. A review matched by two keywords counts once. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Report on your keywords' reviews: count, average stars, distribution, replies and open 1-2 star reviews.
+
+        Per page too, with unhappy reviews' tags; each review counts once.
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -2078,7 +2306,9 @@ class _AsyncAnalytics:
     async def series(self, **params: Any) -> _m.AnalyticsSeries:
         """Mentions over time
 
-        Matched, relevant and sentiment counts per day or week across the window, as one total series or split per platform or per keyword with `by`. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Count matched, relevant and sentiment mentions per day or week, in total or per platform or keyword (`by`).
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -2096,7 +2326,11 @@ class _AsyncAnalytics:
     async def share_of_voice(self, **params: Any) -> _m.ShareOfVoice:
         """Brand against competitors
 
-        Every keyword matched in the window with its counts and its share of brand plus competitor matches; topic keywords are counted but stay out of the split. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        List every keyword matched in the window with its share of brand plus competitor matches.
+
+        Topic keywords are counted but stay out of the split.
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -2112,7 +2346,9 @@ class _AsyncAnalytics:
     async def summary(self, **params: Any) -> _m.AnalyticsSummary:
         """Headline counts for a window
 
-        Matched and relevant mentions, distinct posts and people, sentiment, buying intent and questions, estimated reach, and where the matches stand in triage. The window is `range` (7d, 30d, 90d, 365d, ending today) or `from` and `to`, cut into days in `timezone` (UTC by default); `keywordIds` and `platforms` narrow it; `compare=true` adds the period of the same length right before it. Time axis is the publish date.
+        Summarize matched and relevant mentions, posts, people, sentiment, intent, reach and triage over a window.
+
+        The window is `range` or `from` and `to`, in `timezone`, by publish date; `compare=true` adds the period before.
 
         Keyword arguments (query):
           range_: Preset window ending today. Ignored when from or to is given. Default 30d.
@@ -2134,7 +2370,9 @@ class _AsyncApiKeys:
     async def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
         """Create an API key
 
-        Mint a key for this workspace. The key itself is returned once; only its hash is stored. `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed until revoked.
+        Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
+
+        `expiresAt` makes it stop working at an instant (a key for a contractor or a one-off script); it stays listed until revoked.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: A label for the key; "default" when omitted.
@@ -2171,7 +2409,12 @@ class _AsyncFeeds:
     async def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, **fields: Any) -> _m.Feed:
         """Connect a feed
 
-        Connect an RSS or Atom feed: a feed's address, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used, else a usual address such as /feed or /rss. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. A new feed brings each reading keyword the newest 10 items of the last 30 days that hold its term, never as instant alerts. A feed the workspace reads already comes back with 200 (connecting is idempotent). A members-only forum answers `feed_login_required`: send it again with `auth` (a cookie or a header), stored encrypted and read for this workspace alone.
+        Connect an RSS or Atom feed, or a page advertising one, for the workspace's keywords to read hourly.
+
+        - Idempotent: a feed already read returns 200.
+        - A members-only forum answers `feed_login_required`: resend with `auth`.
+
+        See [RSS](/platforms/rss#workspace-feeds).
 
         Body: a dict, a model, or the fields as keyword arguments:
           url (required): A feed's address (https://forum.example.com/posts.rss), or a page's (https://forum.example.com): the feed the page advertises is used.
@@ -2191,7 +2434,9 @@ class _AsyncFeeds:
     async def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
         """Connect many feeds
 
-        Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked on its own and reported added, already or failed, in the order sent: one that fails never stops the others. A failure carries the error code POST /v1/feeds would answer for that address (feed_login_required: send it again with auth). Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10 matching items of the last 30 days; the rest start from now.
+        Connect up to 100 feeds in one call, each reported added, already or failed, in order.
+
+        A failure never stops the others and carries the code POST /v1/feeds would answer. Only the first 8 added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
         Body: a dict, a model, or the fields as keyword arguments:
           feeds (required): Up to 100 feeds, each { url } or { url, auth } for a members-only one. Each is checked on its own: one that fails never stops the others."""
@@ -2200,7 +2445,9 @@ class _AsyncFeeds:
     async def list(self, **params: Any) -> _m.ListFeedsResponse200:
         """List feeds
 
-        The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first, each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a workspace.
+        List the workspace's RSS and Atom feeds, newest first, each with its poll health.
+
+        Keywords with readsWorkspaceFeeds (the default) read them hourly, for free; matching items bill as mentions. See [RSS](/platforms/rss#workspace-feeds).
 
         Keyword arguments (query):
           q: Only feeds whose address or title contains this text, case-insensitive.
@@ -2211,7 +2458,9 @@ class _AsyncFeeds:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateFeedBody | None = None, **fields: Any) -> _m.Feed:
         """Update a feed
 
-        Rename a feed (title, null clears it), or set its sign-in for a members-only forum (auth: a cookie copied from your browser, or one header such as Discourse's Api-Key). A sign-in is checked by reading the feed with it, stored encrypted, sent to the feed's own site alone and never shown again; the feed is then read for this workspace alone. auth: null removes it.
+        Rename a feed, or set its sign-in for a members-only forum.
+
+        `auth` is a browser cookie or one header (such as Discourse's Api-Key), checked, stored encrypted and never shown; the feed is then read for this workspace alone. null removes it.
 
         Body: a dict, a model, or the fields as keyword arguments:
           title: Your name for the feed; null clears it.
@@ -2227,13 +2476,17 @@ class _AsyncFilters:
     async def get(self) -> _m.WorkspaceFilters:
         """Get the workspace filters
 
-        The noise rules applied to every keyword before a mention is stored: excluded terms and authors, excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post they reject is never classified, delivered or billed. Keyword-level rules live on each keyword (`matching`); both apply."""
+        Read the workspace's noise rules, applied to every keyword before a mention is stored.
+
+        A rejected post is never classified, delivered or billed. Keyword rules (`matching`) apply too."""
         return _result(await _ops.filters.get_filters.asyncio_detailed(client=self._client))
 
     async def update(self, body: dict[str, Any] | _m.UpdateFiltersBody | None = None, **fields: Any) -> _m.WorkspaceFilters:
         """Update the workspace filters
 
-        Replace any of the lists; an omitted list is untouched and an empty one clears it. Entries are stored in canonical form (terms lowercased, authors as profile links or bare names, repositories as owner/name, subreddits without r/). Takes effect on new mentions within a minute; stored mentions are untouched.
+        Replace any of the workspace's noise-rule lists; omitted lists stay, empty ones clear.
+
+        Entries are stored canonically (lowercase terms, authors as profile links or names, owner/name repositories, subreddits without r/). Applies to new mentions within a minute.
 
         Body: a dict, a model, or the fields as keyword arguments:
           excludedTerms: Replaces the list; [] clears it.
@@ -2251,7 +2504,9 @@ class _AsyncViews:
     async def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
         """Save a view
 
-        Save a named filter over mentions. The filter takes the same fields as GET /v1/mentions (lists are any-of, `not` lists none-of, every condition ANDed), plus `anyOf`, groups of those conditions of which at least one must hold; an empty filter is every mention. Nothing is materialized: the view selects whatever matches when it is read.
+        Save a named filter over mentions, evaluated whenever it is read.
+
+        The filter takes GET /v1/mentions' fields plus `anyOf`; an empty filter is every mention. See [Views](/guides/views).
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): Unique per workspace, case-insensitive.
@@ -2272,7 +2527,9 @@ class _AsyncViews:
     async def list(self) -> _m.ListViewsResponse200:
         """List views
 
-        The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to read exactly what it selects."""
+        List the workspace's saved views, oldest first.
+
+        A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to read exactly what it selects."""
         return _result(await _ops.views.list_views.asyncio_detailed(client=self._client))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateViewBody | None = None, **fields: Any) -> _m.View:
@@ -2295,13 +2552,17 @@ class _AsyncAttention:
     async def dismiss(self, id: str) -> _m.AttentionItem:
         """Dismiss an attention item
 
-        Put an item away. It leaves the open list and does not come back while its condition lasts; once the condition clears, a new episode may open a new item. Idempotent."""
+        Put an attention item away. Idempotent.
+
+        It leaves the open list and does not come back while its condition lasts. Once the condition clears, a new episode may open a new item."""
         return _result(await _ops.attention.dismiss_attention.asyncio_detailed(id, client=self._client))
 
     async def list(self, **params: Any) -> _m.ListAttentionResponse200:
         """List attention items
 
-        What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike), whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour; an item opens when its condition starts and resolves on its own when the condition is gone. Open items by default; `status=all` reads the history. Each opening is also an account event of the same name, which webhook, Slack, email and Telegram channels can subscribe to.
+        List what needs a person, newest first: mention spikes, negative sentiment jumps, noisy keywords and failing channels.
+
+        Checked hourly; items resolve on their own. Open items by default, `status=all` for history. Each opening is also an account event. See [Attention](/guides/attention).
 
         Keyword arguments (query):
           status: open (default), resolved, dismissed, or all.
@@ -2320,18 +2581,22 @@ class _AsyncGroups:
     async def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Create a group
 
-        Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your own id for it, a customer id say, so you can find it again without storing ours; `context` (optional) is the group's own company description, which the classifier reads in place of the whole workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a keyword.
+        Create a keyword group, then pass its id as `groupId` when creating keywords.
+
+        `externalId` is your own id for it; `context` is its company description, read instead of the workspace profile. See [Groups](/guides/groups).
 
         Body: a dict, a model, or the fields as keyword arguments:
           name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
           externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=.
-          context: What the classifier reads as "the company" for this group's keywords, in place of the WHOLE workspace profile, its relevance guidelines and competitor list included (at most 4000 characters): who the business is, what it sells, for whom, what is not it, and any rule that should apply to this group ("ignore job posts"). For a group per customer, the customer's description. Null: the workspace profile, as for every keyword before groups."""
+          context: What the classifier reads as "the company" for this group's keywords, instead of the WHOLE workspace profile (guidelines and competitors included). Null: the workspace profile. See [Groups](/guides/groups#a-company-description-per-group)."""
         return _result(await _ops.groups.create_group.asyncio_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
 
     async def delete(self, id: str) -> Any:
         """Delete a group and its keywords
 
-        Deletes the group and EVERY keyword in it, each the way DELETE /v1/keywords/{id} does (its mentions go with it, alert rules that named it are adjusted; charges already made stay on the usage record). Read the group first: `stats.keywords` says how many go. The default group cannot be deleted: move or delete its keywords instead."""
+        Delete a group and EVERY keyword in it, with their mentions.
+
+        Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be deleted. The group's `stats.keywords` says how many go."""
         return _result(await _ops.groups.delete_group.asyncio_detailed(id, client=self._client))
 
     async def get(self, id: str) -> _m.Group:
@@ -2341,7 +2606,9 @@ class _AsyncGroups:
     async def list(self, **params: Any) -> _m.ListGroupsResponse200:
         """List groups
 
-        The keyword groups of the workspace, the default group first, then oldest first. A group is how keywords are grouped (a customer, a campaign, a product): a term may be tracked once per group, every keyword belongs to one, and GET /v1/usage/breakdown?by=group says what each group cost. Pass `externalId` to find the group carrying your own id.
+        List the workspace's keyword groups, default first, then oldest first.
+
+        A term may be tracked once per group. Pass `externalId` to find the group carrying your own id. See [Groups](/guides/groups).
 
         Keyword arguments (query):
           external_id: Only the group carrying exactly this externalId."""
@@ -2350,12 +2617,14 @@ class _AsyncGroups:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateGroupBody | None = None, **fields: Any) -> _m.Group:
         """Update a group
 
-        Rename a group, change your id for it (`externalId`, null clears) or its company description (`context`, null clears: the workspace profile applies again; new mentions are judged with it at once, old ones are not rescored). The default group can be renamed like any other but takes no description: it is the workspace itself and reads the company profile.
+        Rename a group, or change its `externalId` or company description (`context`); null clears either.
+
+        New mentions use a new description at once; old ones are not rescored. The default group takes no description.
 
         Body: a dict, a model, or the fields as keyword arguments:
           name: The group's name: a customer, a campaign, a product. Unique per workspace.
           externalId: Replaces your id for the group; null clears it.
-          context: Replaces the group's company description; null clears it (the workspace profile applies again). New mentions are judged with it at once; old ones are not rescored. Not on the default group (400 default_group_context): that one is the workspace itself and reads the profile."""
+          context: Replaces the group's company description; null clears it. New mentions are judged with it at once, old ones are not rescored. Not on the default group (400 default_group_context)."""
         return _result(await _ops.groups.update_group.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
 
 class _AsyncAuth:
@@ -2367,7 +2636,9 @@ class _AsyncAuth:
     async def whoami(self) -> _m.Whoami:
         """Introspect the credential
 
-        The workspace this credential acts on, how the request authenticated (an API key, an OAuth access token from an MCP sign-in, or the dashboard session), whether it may write, and for a key its id and expiry. Run it first: a read key answers 403 read_only_key on every write, and a wrong workspace is the classic scripting mistake."""
+        Show the workspace this credential acts on, how it authenticated, whether it may write, and a key's id and expiry.
+
+        Run it first: a read key answers 403 read_only_key on every write."""
         return _result(await _ops.auth.whoami.asyncio_detailed(client=self._client))
 
 class _AsyncMembers:
@@ -2385,7 +2656,9 @@ class _AsyncMembers:
     async def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, **fields: Any) -> _m.Invitation:
         """Invite a member
 
-        Send an email invitation to join the workspace as admin or member; it expires after 48 hours. Idempotent: an address that already holds an open invitation gets it back with 200 and no second email. An address that is already a member is a 409 already_member. Team changes need a signed-in owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers 403.
+        Invite someone by email as admin or member; the invitation expires after 48 hours.
+
+        Idempotent for an open invitation (200, no second email); a member is 409 already_member. Needs a signed-in owner or admin: API keys get 403.
 
         Body: a dict, a model, or the fields as keyword arguments:
           email (required): The address to invite; it receives an email with a link to join.
@@ -2401,7 +2674,9 @@ class _AsyncMembers:
     async def remove(self, id: str) -> Any:
         """Remove a member
 
-        The person loses the workspace within a minute (their dashboard session on the next request, an OAuth token when its short cache lapses). Their mentions, notes and outreach stay. Needs a signed-in owner or admin; only an owner removes another owner, and the last owner cannot be removed (409 last_owner)."""
+        Remove a member; access ends within a minute, while their mentions, notes and outreach stay.
+
+        Needs a signed-in owner or admin; only an owner removes an owner, and never the last (409 last_owner)."""
         return _result(await _ops.members.remove_member.asyncio_detailed(id, client=self._client))
 
     async def revoke_invitation(self, id: str) -> Any:
@@ -2419,7 +2694,12 @@ class _AsyncUsage:
     async def breakdown(self, **params: Any) -> _m.UsageBreakdown:
         """Get the usage breakdown
 
-        What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`: day, platform or keyword), in USD cents at list price, with the window's totals on every call. `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the wallet has debited so far for the window's days: mentions settle the morning after their day, so a window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read this at most 30 times a minute through its keys and tokens together.
+        Report what the workspace was charged over a window at list price, grouped by one dimension (`by`).
+
+        - Rows are paged; the window's totals come on every call.
+        - 30 reads a minute per workspace.
+
+        See [Cost per keyword](/billing#cost-per-keyword).
 
         Keyword arguments (query):
           by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
@@ -2438,7 +2718,9 @@ class _AsyncUsage:
     async def get(self) -> _m.UsageSummary:
         """Get usage and balance
 
-        The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged daily."""
+        Read the balance, daily burn, keywords running and paused, and recent matches: the short form of GET /v1/billing/wallet.
+
+        Every matched mention bills $0.008, relevant or not; every active keyword $5 a month, charged daily. See [Billing](/billing)."""
         return _result(await _ops.usage.get_usage.asyncio_detailed(client=self._client))
 
 class _AsyncBilling:
@@ -2456,13 +2738,17 @@ class _AsyncBilling:
     async def invoices(self) -> _m.InvoiceList:
         """List receipts
 
-        The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this workspace's share of the billing customer's newest 100 orders. Empty before the first top-up."""
+        List the top-up orders, newest first, as Polar (the merchant of record) holds them.
+
+        This workspace's share of the billing customer's newest 100 orders; empty before the first top-up."""
         return _result(await _ops.billing.list_invoices.asyncio_detailed(client=self._client))
 
     async def ledger(self, **params: Any) -> _m.LedgerList:
         """List ledger entries
 
-        Every movement of the balance, newest first: the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, adjustments. A debit row carries the UTC day it settled and the cumulative units behind it. Cursor paged.
+        List every movement of the balance, newest first, cursor paged.
+
+        Rows are the welcome credit, top-ups, refunds, the daily keyword-day and mention debits, and adjustments. A debit row carries the UTC day it settled and the cumulative units behind it.
 
         Keyword arguments (query):
           cursor: Opaque cursor from a previous page (`nextCursor`).
@@ -2472,7 +2758,9 @@ class _AsyncBilling:
     async def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
         """Create a top-up checkout
 
-        Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The balance is credited when the payment lands, within a minute, and tracking the wallet had paused resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this deployment trusts; omit it for the dashboard's billing page.
+        Get a hosted checkout URL for a top-up; this call charges nothing.
+
+        The balance is credited within a minute of payment, and paused tracking resumes. `successUrl` must be on a trusted origin; omit it for the dashboard.
 
         Body: a dict, a model, or the fields as keyword arguments:
           amountCents (required): Amount to add, in USD cents (2000 to 500000). Prefilled at checkout, editable there.
@@ -2482,7 +2770,9 @@ class _AsyncBilling:
     async def wallet(self) -> _m.Wallet:
         """Get the wallet
 
-        The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused, what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds and the auto-recharge settings. `GET /v1/usage` is the short form."""
+        Read the prepaid balance in full; GET /v1/usage is the short form.
+
+        It adds what a day costs, what a resume needs, the welcome credit, the newest top-up, top-up bounds and auto-recharge settings."""
         return _result(await _ops.billing.get_wallet.asyncio_detailed(client=self._client))
 
 class Mentio:

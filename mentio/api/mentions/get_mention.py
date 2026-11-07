@@ -67,9 +67,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Mention]:
     """Get a mention
 
-     One mention by id, as it appears in the list: the post, its author with reach and your tags, the
-    classification, the priority score and the triage fields. Ids belong to your organization; any other
-    id is a 404.
+     Get one mention by id, as it appears in the list.
+
+    It carries the post, its author with reach and your tags, the classification, the priority score and
+    the triage fields. Ids belong to your organization; any other id is a 404.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -100,9 +101,10 @@ def sync(
 ) -> ErrorResponse | Mention | None:
     """Get a mention
 
-     One mention by id, as it appears in the list: the post, its author with reach and your tags, the
-    classification, the priority score and the triage fields. Ids belong to your organization; any other
-    id is a 404.
+     Get one mention by id, as it appears in the list.
+
+    It carries the post, its author with reach and your tags, the classification, the priority score and
+    the triage fields. Ids belong to your organization; any other id is a 404.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -128,9 +130,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Mention]:
     """Get a mention
 
-     One mention by id, as it appears in the list: the post, its author with reach and your tags, the
-    classification, the priority score and the triage fields. Ids belong to your organization; any other
-    id is a 404.
+     Get one mention by id, as it appears in the list.
+
+    It carries the post, its author with reach and your tags, the classification, the priority score and
+    the triage fields. Ids belong to your organization; any other id is a 404.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.
@@ -159,9 +162,10 @@ async def asyncio(
 ) -> ErrorResponse | Mention | None:
     """Get a mention
 
-     One mention by id, as it appears in the list: the post, its author with reach and your tags, the
-    classification, the priority score and the triage fields. Ids belong to your organization; any other
-    id is a 404.
+     Get one mention by id, as it appears in the list.
+
+    It carries the post, its author with reach and your tags, the classification, the priority score and
+    the triage fields. Ids belong to your organization; any other id is a 404.
 
     Args:
         id (str): Mention id (mm_...). Example: mm_abc123.

@@ -86,11 +86,12 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Person]:
     """Merge an account into a person
 
-     Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     Declare that this account and another person are the same human, for your workspace only.
+
+    Everything combines under `into`, which keeps its owner and stage unless it had none.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -129,11 +130,12 @@ def sync(
 ) -> ErrorResponse | Person | None:
     """Merge an account into a person
 
-     Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     Declare that this account and another person are the same human, for your workspace only.
+
+    Everything combines under `into`, which keeps its owner and stage unless it had none.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -167,11 +169,12 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Person]:
     """Merge an account into a person
 
-     Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     Declare that this account and another person are the same human, for your workspace only.
+
+    Everything combines under `into`, which keeps its owner and stage unless it had none.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -208,11 +211,12 @@ async def asyncio(
 ) -> ErrorResponse | Person | None:
     """Merge an account into a person
 
-     Declare that this account and another person are the same human, for your workspace only. Their
-    mentions, tags, notes and outreach activities combine under the person named by `into`, which keeps
-    its owner and stage unless it had none. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     Declare that this account and another person are the same human, for your workspace only.
+
+    Everything combines under `into`, which keeps its owner and stage unless it had none.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.

@@ -142,9 +142,9 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListKeywordsResponse200]:
     """List keywords
 
-     The keywords of the workspace with their match stats and poll health. Without parameters: every
-    keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow
-    the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched
+     List the workspace's keywords with their match stats and poll health, newest first.
+
+    `q` searches term and context; the other parameters filter, sort and page; `total` counts matches
     before paging.
 
     Args:
@@ -206,9 +206,9 @@ def sync(
 ) -> ErrorResponse | ListKeywordsResponse200 | None:
     """List keywords
 
-     The keywords of the workspace with their match stats and poll health. Without parameters: every
-    keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow
-    the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched
+     List the workspace's keywords with their match stats and poll health, newest first.
+
+    `q` searches term and context; the other parameters filter, sort and page; `total` counts matches
     before paging.
 
     Args:
@@ -265,9 +265,9 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListKeywordsResponse200]:
     """List keywords
 
-     The keywords of the workspace with their match stats and poll health. Without parameters: every
-    keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow
-    the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched
+     List the workspace's keywords with their match stats and poll health, newest first.
+
+    `q` searches term and context; the other parameters filter, sort and page; `total` counts matches
     before paging.
 
     Args:
@@ -327,9 +327,9 @@ async def asyncio(
 ) -> ErrorResponse | ListKeywordsResponse200 | None:
     """List keywords
 
-     The keywords of the workspace with their match stats and poll health. Without parameters: every
-    keyword, newest first. `q` searches the term and the context; `kind`, `status` and `platform` narrow
-    the list; `sort` orders it; `limit` and `offset` page it. `total` counts the keywords that matched
+     List the workspace's keywords with their match stats and poll health, newest first.
+
+    `q` searches term and context; the other parameters filter, sort and page; `total` counts matches
     before paging.
 
     Args:

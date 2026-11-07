@@ -56,10 +56,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Wallet]:
     """Get the wallet
 
-     The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule
-    reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused,
-    what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds
-    and the auto-recharge settings. `GET /v1/usage` is the short form.
+     Read the prepaid balance in full; GET /v1/usage is the short form.
+
+    It adds what a day costs, what a resume needs, the welcome credit, the newest top-up, top-up bounds
+    and auto-recharge settings.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -84,10 +84,10 @@ def sync(
 ) -> ErrorResponse | Wallet | None:
     """Get the wallet
 
-     The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule
-    reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused,
-    what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds
-    and the auto-recharge settings. `GET /v1/usage` is the short form.
+     Read the prepaid balance in full; GET /v1/usage is the short form.
+
+    It adds what a day costs, what a resume needs, the welcome credit, the newest top-up, top-up bounds
+    and auto-recharge settings.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -108,10 +108,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Wallet]:
     """Get the wallet
 
-     The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule
-    reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused,
-    what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds
-    and the auto-recharge settings. `GET /v1/usage` is the short form.
+     Read the prepaid balance in full; GET /v1/usage is the short form.
+
+    It adds what a day costs, what a resume needs, the welcome credit, the newest top-up, top-up bounds
+    and auto-recharge settings.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -134,10 +134,10 @@ async def asyncio(
 ) -> ErrorResponse | Wallet | None:
     """Get the wallet
 
-     The prepaid balance in full: ledger, pending mention charges and the effective balance the stop rule
-    reads, the daily burn and the days it buys, how many keywords run and how many the wallet paused,
-    what a day costs and what a resume needs, the welcome credit, the newest top-up, the top-up bounds
-    and the auto-recharge settings. `GET /v1/usage` is the short form.
+     Read the prepaid balance in full; GET /v1/usage is the short form.
+
+    It adds what a day costs, what a resume needs, the welcome credit, the newest top-up, top-up bounds
+    and auto-recharge settings.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -26,19 +26,20 @@ class MentionClassificationType0:
     Attributes:
         relevance (int | None): 0 to 100; null only when classification failed.
         sentiment (MentionClassificationType0Sentiment): Classifier sentiment.
-        intents (list[str]): Intent and topic tags: buy_intent, question, complaint, praise, comparison, churn_intent
-            (leaving or replacing the keyword), bug_report, pricing, hiring, event, promotional, testimonial (a customer
-            vouching for it from their own use), industry_insight (analysis or data about the field), launch (a product or
-            feature launch announcement), feedback (a suggestion or request about it).
-        automated (bool): The post reads as machine-made: a bot or app account, a scheduled or templated post, an
-            obvious AI-written summary. A label only: automated mentions stay in the feed, are delivered as usual and are
-            billed like any other match. false while unjudged.
+        intents (list[str]): Intent and topic tags:
+
+            - buy_intent, question, complaint, praise, comparison, bug_report, pricing, hiring, event, promotional.
+            - churn_intent: leaving or replacing the keyword.
+            - testimonial: a customer vouching for it from their own use.
+            - industry_insight: analysis or data about the field.
+            - launch: a product or feature launch announcement.
+            - feedback: a suggestion or request about it.
+        automated (bool): The post reads as machine-made (a bot or app account, a scheduled or templated post, an AI-
+            written summary). A label only: it stays in the feed, delivered and billed as usual. false while unjudged.
         language (None | str): The language the post is written in, as an ISO 639-1 code (en, es, de); null when
             unknown, not one of the 20 the classifier names, or classified before languages were recorded.
-        country (None | str): Where the author is, as a lowercase ISO 3166-1 alpha-2 code (us, in, de): the classifier's
-            reading of the author's profile location and the post. A best guess, not a fact the platform gave; null when
-            nothing tells, when it is not one of the 60 the classifier names, or when classified before countries were
-            recorded.
+        country (None | str): Where the author is (lowercase ISO 3166-1 alpha-2): the classifier's best guess from
+            profile and post. Null when unknown, outside the 60 it names, or classified before countries were recorded.
         organization (bool): The author is a company, brand or organization account rather than a person: a LinkedIn
             company page, a GitHub organization, an account that speaks for a business. A label only, like automated. false
             while unjudged.

@@ -56,11 +56,11 @@ def sync_detailed(
 ) -> Response[ErrorResponse | UsageSummary]:
     """Get usage and balance
 
-     The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule
-    reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches
-    recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every
-    matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged
-    daily.
+     Read the balance, daily burn, keywords running and paused, and recent matches: the short form of GET
+    /v1/billing/wallet.
+
+    Every matched mention bills $0.008, relevant or not; every active keyword $5 a month, charged daily.
+    See [Billing](/billing).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -85,11 +85,11 @@ def sync(
 ) -> ErrorResponse | UsageSummary | None:
     """Get usage and balance
 
-     The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule
-    reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches
-    recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every
-    matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged
-    daily.
+     Read the balance, daily burn, keywords running and paused, and recent matches: the short form of GET
+    /v1/billing/wallet.
+
+    Every matched mention bills $0.008, relevant or not; every active keyword $5 a month, charged daily.
+    See [Billing](/billing).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -110,11 +110,11 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | UsageSummary]:
     """Get usage and balance
 
-     The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule
-    reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches
-    recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every
-    matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged
-    daily.
+     Read the balance, daily burn, keywords running and paused, and recent matches: the short form of GET
+    /v1/billing/wallet.
+
+    Every matched mention bills $0.008, relevant or not; every active keyword $5 a month, charged daily.
+    See [Billing](/billing).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -137,11 +137,11 @@ async def asyncio(
 ) -> ErrorResponse | UsageSummary | None:
     """Get usage and balance
 
-     The prepaid balance (ledger, pending mention charges, and the effective balance the stop rule
-    reads), the daily burn and the days it buys, the keywords the wallet runs and pauses, the matches
-    recorded today and over 30 days, and whether tracking is stopped or the balance is low. Every
-    matched mention bills ($0.008), relevant or not; every active keyword bills $5 a month, charged
-    daily.
+     Read the balance, daily burn, keywords running and paused, and recent matches: the short form of GET
+    /v1/billing/wallet.
+
+    Every matched mention bills $0.008, relevant or not; every active keyword $5 a month, charged daily.
+    See [Billing](/billing).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

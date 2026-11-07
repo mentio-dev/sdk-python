@@ -11,19 +11,15 @@ T = TypeVar("T", bound="KeywordComments")
 
 @_attrs_define
 class KeywordComments:
-    """Comments under this keyword's mentions: when enabled, the comments of every mention scored relevant are read from 30
-    minutes after the post, on a schedule per platform (for a day on Reddit, Hacker News and Bluesky, a week on GitHub,
-    Stack Overflow and DEV, a month on YouTube) (new comments only, at most maxPerPost a thread, comments of fewer than
-    three words dropped), on Hacker News, Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit. List them with GET
-    /v1/mentions/{id}/comments.
+    """Comments under this keyword's relevant mentions, read several times per thread on Hacker News, Bluesky, GitHub,
+    Stack Overflow, DEV, YouTube and Reddit. List them with GET /v1/mentions/{id}/comments; see
+    [Comments](/guides/comments).
 
         Attributes:
-            enabled (bool): Read the comments under this keyword's relevant mentions, from 30 minutes after each post, as
-                long as its platform's conversations last (a day to a month). Each comment delivered costs $0.008 (comments of
-                fewer than three words are dropped, never billed) (the comments line of the bill). Off by default.
-            max_per_post (int): The newest comments of one thread you receive, 20 by default, 100 at most: the ceiling on
-                what one mention's comments can cost. A comment that names the keyword is a mention too, but only among these
-                newest ones, so it is never billed past the ceiling.
+            enabled (bool): Read the comments under this keyword's relevant mentions. Each comment delivered costs $0.008;
+                comments under three words are dropped, never billed. See [Comments](/guides/comments).
+            max_per_post (int): The newest comments of one thread you receive: the ceiling on what one mention's comments
+                can cost. A comment naming the keyword is a mention only among these.
     """
 
     enabled: bool

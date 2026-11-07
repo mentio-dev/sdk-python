@@ -298,10 +298,9 @@ def sync_detailed(
 ) -> Response[ErrorResponse | str]:
     """Export people as CSV
 
-     The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
-    per minute per workspace; a 429 carries Retry-After.
+     Export the GET /v1/people list as CSV, one row per person with contact and outreach columns.
+
+    Capped at 5,000 people; 6 exports a minute. See [Exports](/guides/exports#people-columns).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -429,10 +428,9 @@ def sync(
 ) -> ErrorResponse | str | None:
     """Export people as CSV
 
-     The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
-    per minute per workspace; a 429 carries Retry-After.
+     Export the GET /v1/people list as CSV, one row per person with contact and outreach columns.
+
+    Capped at 5,000 people; 6 exports a minute. See [Exports](/guides/exports#people-columns).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -555,10 +553,9 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | str]:
     """Export people as CSV
 
-     The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
-    per minute per workspace; a 429 carries Retry-After.
+     Export the GET /v1/people list as CSV, one row per person with contact and outreach columns.
+
+    Capped at 5,000 people; 6 exports a minute. See [Exports](/guides/exports#people-columns).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -684,10 +681,9 @@ async def asyncio(
 ) -> ErrorResponse | str | None:
     """Export people as CSV
 
-     The same list as GET /v1/people (segmentId included) as CSV, one row per person with their contact
-    columns: handle, followers, email, website, company, location, tags, then outreach stage, owner and
-    last contacted. Capped at 5,000 people. `groupId` scopes the export like the list. At most 6 exports
-    per minute per workspace; a 429 carries Retry-After.
+     Export the GET /v1/people list as CSV, one row per person with contact and outreach columns.
+
+    Capped at 5,000 people; 6 exports a minute. See [Exports](/guides/exports#people-columns).
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned

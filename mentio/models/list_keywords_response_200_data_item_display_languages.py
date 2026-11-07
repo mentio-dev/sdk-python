@@ -18,14 +18,14 @@ T = TypeVar("T", bound="ListKeywordsResponse200DataItemDisplayLanguages")
 
 @_attrs_define
 class ListKeywordsResponse200DataItemDisplayLanguages:
-    """By the language the post is written in.
+    """By the language the post is written in (ISO 639-1).
 
     Attributes:
-        only (list[ListKeywordsResponse200DataItemDisplayLanguagesOnlyItem]): When non-empty, a post whose language (ISO
-            639-1) is known and not listed is hidden, a language (ISO 639-1) the classifier recognises but does not name
-            included. A post whose language (ISO 639-1) nobody could tell is always shown.
-        excluded (list[ListKeywordsResponse200DataItemDisplayLanguagesExcludedItem]): A post whose language (ISO 639-1)
-            is listed is hidden.
+        only (list[ListKeywordsResponse200DataItemDisplayLanguagesOnlyItem]): When non-empty, a post whose language is
+            known and not listed is hidden, one the classifier cannot name included. A post whose language nobody could tell
+            is always shown.
+        excluded (list[ListKeywordsResponse200DataItemDisplayLanguagesExcludedItem]): A post whose language is listed is
+            hidden.
     """
 
     only: list[ListKeywordsResponse200DataItemDisplayLanguagesOnlyItem]

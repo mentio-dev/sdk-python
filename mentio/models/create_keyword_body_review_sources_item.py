@@ -27,9 +27,9 @@ class CreateKeywordBodyReviewSourcesItem:
             Play), trustpilot (a company's Trustpilot page) or googlemaps (a place's Google reviews).
         id (str | Unset): The id on the platform: the digits after "id" on the App Store, the package name on Google
             Play, the company's domain on Trustpilot (notion.so), a Place ID (ChIJ...) on Google Maps.
-        countries (list[str] | Unset): App Store and Google Play only: storefronts to read, two-letter codes, at most
-            20. Default: the one in the link, else us. Each is one more poll a day; the same review seen in two storefronts
-            is one mention. Trustpilot and Google Maps have one page for everyone and take none.
+        countries (list[str] | Unset): App Store and Google Play storefronts to read, as two-letter codes; default the
+            link's, else us. Each adds a daily poll; a review seen in two is one mention. Trustpilot and Google Maps take
+            none.
         language (str | Unset): Google Play only: the language of the reviews to read (en, es, de, pt-BR); Google Play
             answers one language at a time. Default: the link's hl, else en.
     """

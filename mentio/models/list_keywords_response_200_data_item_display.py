@@ -20,15 +20,14 @@ T = TypeVar("T", bound="ListKeywordsResponse200DataItemDisplay")
 
 @_attrs_define
 class ListKeywordsResponse200DataItemDisplay:
-    """Which of this keyword's mentions you see, by language and country. Both are read by the classifier, so a hidden post
-    is still matched, classified and billed like any other; it is kept out of the mentions list, the exports, MCP
-    search, alerts and digests (includeHidden=true on GET /v1/mentions shows it). Read when the mentions are read, so
-    changing a list applies to older mentions too.
+    """Which of this keyword's mentions you see, by language and country. A hidden post is still matched, classified and
+    billed, but kept out of lists, exports, search, alerts and digests (includeHidden=true shows it). See
+    [Keywords](/guides/keywords#show-only-some-languages-or-countries).
 
         Attributes:
-            languages (ListKeywordsResponse200DataItemDisplayLanguages): By the language the post is written in.
-            countries (ListKeywordsResponse200DataItemDisplayCountries): By where the author is, as the classifier read
-                their profile and the post.
+            languages (ListKeywordsResponse200DataItemDisplayLanguages): By the language the post is written in (ISO 639-1).
+            countries (ListKeywordsResponse200DataItemDisplayCountries): By where the author is (ISO 3166-1 alpha-2), as the
+                classifier read their profile and the post.
     """
 
     languages: ListKeywordsResponse200DataItemDisplayLanguages

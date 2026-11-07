@@ -20,21 +20,20 @@ class UsageBreakdownTotals:
         matched_mentions (int): Matches recorded in the window, relevant or not.
         billable_mentions (int): Of the matches billed in the window (every scored match, relevant or not), the ones in
             this group.
-        unclassified_mentions (int): Matches recorded in the window that are never charged: no score yet (still being
-            scored, or classification failed), or a free review from the look-back of a newly connected app. Every other
-            match is charged, on the mentions line or, for a comment, on the comments line.
+        unclassified_mentions (int): Matches in the window that are never charged: not scored yet, classification
+            failed, or a free review from a new app's look-back. Every other match is charged, on the mentions or comments
+            line.
         mention_cents (int): The billed mentions at $0.008 each, rounded once on the total.
         billable_comments (int): Comments billed in the window (the comments line): comments delivered under your
             mentions and comments that matched a keyword, each once per workspace.
         comment_cents (int): The billed comments at $0.008 each, rounded once on the total.
         total_cents (int): keywordCents plus mentionCents plus commentCents.
-        ledger_debit_cents (int): What the ledger has debited so far for the days of the window, each debit by the day
-            it settled, for the whole workspace whatever the filters. Mentions settle the morning after their day, so a
-            window ending today lags totalCents by today's mentions (and yesterday's before the tick at 00:05 UTC); a closed
-            month differs from totalCents only by cumulative rounding.
+        ledger_debit_cents (int): What the ledger has debited for the window's days, by the day each debit settled, for
+            the whole workspace whatever the filters. Lags totalCents by unsettled mentions; see [The ledger](/billing#the-
+            ledger).
         unattributed_billable (int): Billed mentions whose match row is gone (deleted keyword), so no platform or
-            keyword row can claim them. Charged all the same. Comments carry their keyword and platform on the billed row,
-            so they are never unattributed (by=group puts a deleted keyword's comments on the no-group row).
+            keyword row claims them; charged all the same. Comments never are (by=group puts a deleted keyword's comments on
+            the no-group row).
     """
 
     keyword_days: int

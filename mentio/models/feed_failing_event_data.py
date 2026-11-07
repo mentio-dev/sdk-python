@@ -23,10 +23,12 @@ class FeedFailingEventData:
             puts it away.
         url (str): Where to look in the dashboard.
         feed (FeedFailingEventDataFeed): The workspace feed (GET /v1/feeds/{id}).
-        reason (FeedFailingEventDataReason): login_required: the feed answers a sign-in or access-denied page (connect
-            it with the forum's sign-in, auth). login_expired: the same on a feed that has a sign-in: copy a fresh cookie.
-            blocked: a 403, a 429 or a bot check. not_found: the feed is gone. not_a_feed: the address answers a page, not
-            RSS or Atom. unreachable: no answer or a server error.
+        reason (FeedFailingEventDataReason): - login_required: a sign-in or access-denied page; add the forum's sign-in.
+            - login_expired: the same with a sign-in; copy a fresh cookie.
+            - blocked: a 403, a 429 or a bot check.
+            - not_found: the feed is gone.
+            - not_a_feed: the address answers a page, not RSS or Atom.
+            - unreachable: no answer or a server error.
         detail (None | str): What the last failed read saw, in a few words.
         failing_since (str): When it started failing: the third failed read in a row.
         keywords_affected (int): Live keywords of the workspace that read workspace feeds: what misses its posts while

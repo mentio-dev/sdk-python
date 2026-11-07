@@ -35,21 +35,18 @@ class Keyword:
             (see pausedForNoise). A keyword at its mention cap is not muted (see pausedForCap).
         paused_for_balance (bool): Muted by the wallet for lack of balance; a top-up resumes it, unmuting by hand needs
             balance too.
-        paused_for_noise (bool): Muted by the noise brake: on a workspace running on its welcome credit, at least 20 of
-            its matches were scored and under 30% were relevant. A change of its required or excluded terms, platforms or
-            context resumes it (when the balance covers another day), and so does unmuting; a top-up does not.
+        paused_for_noise (bool): Muted by the noise brake: under 30% of 20 or more scored matches were relevant, on
+            welcome credit. Changing its rules, platforms or context, or unmuting, resumes it (balance permitting); a top-up
+            does not. See [Billing](/billing).
         paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
             cap is raised. Not muted: it keeps its place and its daily keyword charge.
         cap (KeywordCapType0 | None): The mention cap and its period, or null for none.
-        comments (KeywordComments): Comments under this keyword's mentions: when enabled, the comments of every mention
-            scored relevant are read from 30 minutes after the post, on a schedule per platform (for a day on Reddit, Hacker
-            News and Bluesky, a week on GitHub, Stack Overflow and DEV, a month on YouTube) (new comments only, at most
-            maxPerPost a thread, comments of fewer than three words dropped), on Hacker News, Bluesky, GitHub, Stack
-            Overflow, DEV, YouTube and Reddit. List them with GET /v1/mentions/{id}/comments.
-        display (KeywordDisplay): Which of this keyword's mentions you see, by language and country. Both are read by
-            the classifier, so a hidden post is still matched, classified and billed like any other; it is kept out of the
-            mentions list, the exports, MCP search, alerts and digests (includeHidden=true on GET /v1/mentions shows it).
-            Read when the mentions are read, so changing a list applies to older mentions too.
+        comments (KeywordComments): Comments under this keyword's relevant mentions, read several times per thread on
+            Hacker News, Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit. List them with GET
+            /v1/mentions/{id}/comments; see [Comments](/guides/comments).
+        display (KeywordDisplay): Which of this keyword's mentions you see, by language and country. A hidden post is
+            still matched, classified and billed, but kept out of lists, exports, search, alerts and digests
+            (includeHidden=true shows it). See [Keywords](/guides/keywords#show-only-some-languages-or-countries).
         group (GroupRef): The group the keyword belongs to.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms the term is searched on; null means every
             platform, [] none (the keyword only collects reviews).
@@ -59,8 +56,8 @@ class Keyword:
         review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps,
             Trustpilot pages, Google Maps places); empty for none.
         context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
-            the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc is our
-            browser; ignore the geometry word." Null clears it.
+            group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word."
+            Null clears it.
         matching (KeywordMatching): Matching rules applied before a mention is stored; a rejected post is never billed.
         stats (KeywordStats): Computed over this workspace's matches.
         polling (list[KeywordPollingItem]): Poll health per platform polled on a schedule. Live feeds (Bluesky) have no

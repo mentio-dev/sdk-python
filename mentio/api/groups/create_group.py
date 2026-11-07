@@ -72,11 +72,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Group]:
     """Create a group
 
-     Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your
-    own id for it, a customer id say, so you can find it again without storing ours; `context`
-    (optional) is the group's own company description, which the classifier reads in place of the whole
-    workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a
-    keyword.
+     Create a keyword group, then pass its id as `groupId` when creating keywords.
+
+    `externalId` is your own id for it; `context` is its company description, read instead of the
+    workspace profile. See [Groups](/guides/groups).
 
     Args:
         body (CreateGroupBody):
@@ -107,11 +106,10 @@ def sync(
 ) -> ErrorResponse | Group | None:
     """Create a group
 
-     Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your
-    own id for it, a customer id say, so you can find it again without storing ours; `context`
-    (optional) is the group's own company description, which the classifier reads in place of the whole
-    workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a
-    keyword.
+     Create a keyword group, then pass its id as `groupId` when creating keywords.
+
+    `externalId` is your own id for it; `context` is its company description, read instead of the
+    workspace profile. See [Groups](/guides/groups).
 
     Args:
         body (CreateGroupBody):
@@ -137,11 +135,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Group]:
     """Create a group
 
-     Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your
-    own id for it, a customer id say, so you can find it again without storing ours; `context`
-    (optional) is the group's own company description, which the classifier reads in place of the whole
-    workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a
-    keyword.
+     Create a keyword group, then pass its id as `groupId` when creating keywords.
+
+    `externalId` is your own id for it; `context` is its company description, read instead of the
+    workspace profile. See [Groups](/guides/groups).
 
     Args:
         body (CreateGroupBody):
@@ -170,11 +167,10 @@ async def asyncio(
 ) -> ErrorResponse | Group | None:
     """Create a group
 
-     Create a keyword group. `name` is unique per workspace; `externalId` (optional, unique too) is your
-    own id for it, a customer id say, so you can find it again without storing ours; `context`
-    (optional) is the group's own company description, which the classifier reads in place of the whole
-    workspace profile for the group's keywords. Then pass the group id as `groupId` when creating a
-    keyword.
+     Create a keyword group, then pass its id as `groupId` when creating keywords.
+
+    `externalId` is your own id for it; `context` is its company description, read instead of the
+    workspace profile. See [Groups](/guides/groups).
 
     Args:
         body (CreateGroupBody):

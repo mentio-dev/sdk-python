@@ -38,8 +38,8 @@ class CreateKeywordBody:
             null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then
             needs reviewSources or feeds.
         context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
-            profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
-            is our browser; ignore the geometry word." Null clears it.
+            profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry
+            word." Null clears it.
         matching (CreateKeywordBodyMatching | Unset): Omitted fields are untouched; an empty list clears one.
         cap (CreateKeywordBodyCapType0 | None | Unset): A mention cap per day, week or month (per, default month); omit
             or null for none.
@@ -49,17 +49,12 @@ class CreateKeywordBody:
             each list is replaced when sent, kept when omitted. Hidden mentions are still billed.
         group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may
             be tracked once per group.
-        review_sources (list[CreateKeywordBodyReviewSourcesItem] | Unset): Review pages this keyword collects, at most
-            10: App Store and Google Play apps, Trustpilot pages, Google Maps places. Every new review of one is a mention
-            of the keyword, whatever its text says. Polled once a day (per country on the app stores). A newly connected
-            page brings its last 30 days, the newest 100 reviews (per country), free and never sent as instant alerts; after
-            that each review bills like any mention.
-        feeds (list[CreateKeywordBodyFeedsItem] | Unset): RSS or Atom feeds this keyword reads, at most 20, each { url
-            }: a feed's URL, or a page's (a forum, a community, a blog), in which case the feed the page advertises is used,
-            else a usual address such as /feed or /rss. A URL with no feed behind it is a 400. Each feed is read every hour;
-            an item is a mention of this keyword when it holds the term (with the keyword's matching rules), and only of
-            keywords that named the feed. A newly connected feed brings its newest 10 items of the last 30 days that hold
-            the term, billed like any mention and never sent as instant alerts.
+        review_sources (list[CreateKeywordBodyReviewSourcesItem] | Unset): Review pages this keyword collects (app store
+            apps, Trustpilot pages, Google Maps places): every new review is a mention, whatever it says. Polled daily; a
+            newly connected page brings 30 days back, free. See [Reviews](/platforms/reviews).
+        feeds (list[CreateKeywordBodyFeedsItem] | Unset): RSS or Atom feeds only this keyword reads: a feed's URL, or a
+            page that advertises one (else a 400). Read hourly; an item holding the term is a mention. See
+            [RSS](/platforms/rss#a-keywords-own-feeds).
         reads_workspace_feeds (bool | Unset): Whether the keyword also reads the workspace's feeds (GET /v1/feeds);
             default true. A new keyword reading them gets the look-back of the 8 most recently connected.
     """

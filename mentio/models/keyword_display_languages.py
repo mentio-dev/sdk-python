@@ -16,13 +16,12 @@ T = TypeVar("T", bound="KeywordDisplayLanguages")
 
 @_attrs_define
 class KeywordDisplayLanguages:
-    """By the language the post is written in.
+    """By the language the post is written in (ISO 639-1).
 
     Attributes:
-        only (list[KeywordDisplayLanguagesOnlyItem]): When non-empty, a post whose language (ISO 639-1) is known and not
-            listed is hidden, a language (ISO 639-1) the classifier recognises but does not name included. A post whose
-            language (ISO 639-1) nobody could tell is always shown.
-        excluded (list[KeywordDisplayLanguagesExcludedItem]): A post whose language (ISO 639-1) is listed is hidden.
+        only (list[KeywordDisplayLanguagesOnlyItem]): When non-empty, a post whose language is known and not listed is
+            hidden, one the classifier cannot name included. A post whose language nobody could tell is always shown.
+        excluded (list[KeywordDisplayLanguagesExcludedItem]): A post whose language is listed is hidden.
     """
 
     only: list[KeywordDisplayLanguagesOnlyItem]

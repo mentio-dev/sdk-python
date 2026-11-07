@@ -31,9 +31,9 @@ class KeywordCapType0:
             same as per.
         resumes_at (None | str): While paused for its cap (pausedForCap): when its next period starts and it matches
             again. Null otherwise.
-        per (KeywordCapType0Per | Unset): The period the cap counts in, in UTC: day (from 00:00), week (from Monday
-            00:00) or month (the calendar month, the default). At the cap the keyword stops until the next period starts, so
-            a daily cap keeps mentions coming every day with a fixed ceiling on spend. Default: KeywordCapType0Per.MONTH.
+        per (KeywordCapType0Per | Unset): The period the cap counts in, in UTC: day, week (from Monday) or calendar
+            month (the default). At the cap the keyword stops until the next period starts. Default:
+            KeywordCapType0Per.MONTH.
     """
 
     mentions: int

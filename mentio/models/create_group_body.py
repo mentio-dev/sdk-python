@@ -18,11 +18,9 @@ class CreateGroupBody:
         name (str): The group's name: a customer, a campaign, a product. Unique per workspace.
         external_id (None | str | Unset): Your own id for the group (a customer id, say). Unique per workspace; find the
             group by it with GET /v1/groups?externalId=.
-        context (None | str | Unset): What the classifier reads as "the company" for this group's keywords, in place of
-            the WHOLE workspace profile, its relevance guidelines and competitor list included (at most 4000 characters):
-            who the business is, what it sells, for whom, what is not it, and any rule that should apply to this group
-            ("ignore job posts"). For a group per customer, the customer's description. Null: the workspace profile, as for
-            every keyword before groups.
+        context (None | str | Unset): What the classifier reads as "the company" for this group's keywords, instead of
+            the WHOLE workspace profile (guidelines and competitors included). Null: the workspace profile. See
+            [Groups](/guides/groups#a-company-description-per-group).
     """
 
     name: str

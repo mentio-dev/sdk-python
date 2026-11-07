@@ -20,9 +20,8 @@ class CreateKeywordBodyCapType0:
         mentions (int): Charged items allowed per period (see per): matched mentions plus the thread comments delivered
             under them. Every match counts, relevant or not, the look-back a new keyword gets included, because every match
             bills.
-        per (CreateKeywordBodyCapType0Per | Unset): The period the cap counts in, in UTC: day (from 00:00), week (from
-            Monday 00:00) or month (the calendar month, the default). At the cap the keyword stops until the next period
-            starts, so a daily cap keeps mentions coming every day with a fixed ceiling on spend. Default:
+        per (CreateKeywordBodyCapType0Per | Unset): The period the cap counts in, in UTC: day, week (from Monday) or
+            calendar month (the default). At the cap the keyword stops until the next period starts. Default:
             CreateKeywordBodyCapType0Per.MONTH.
     """
 

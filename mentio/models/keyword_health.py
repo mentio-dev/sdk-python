@@ -28,12 +28,14 @@ class KeywordHealth:
     Attributes:
         keyword (KeywordHealthKeyword): The keyword the report is about.
         window (KeywordHealthWindow): The window the report reads, by match time, in UTC days.
-        status (KeywordHealthStatus): healthy: nothing to fix. noisy: 20 or more scored matches in the window and under
-            30% of them relevant. quiet: 7 days or older with no relevant match in the window. capped: at its monthly
-            mention cap. paused: muted (by you, the wallet or the noise brake). new: under 7 days old and not noisy yet, or
-            changed in the last 7 days with under 20 scored matches since the change. When the keyword's matching rules,
-            platforms or context changed (or it was unmuted) inside the window, the status reads only the matches since then
-            (stats.judgedSince).
+        status (KeywordHealthStatus): The status over the window; see [Keyword health](/guides/keyword-health#status).
+
+            - healthy: nothing to fix.
+            - noisy: 20 or more scored matches, under 30% relevant.
+            - quiet: 7 days or older, nothing relevant.
+            - capped: at its mention cap.
+            - paused: muted by you, the wallet or the noise brake.
+            - new: under 7 days old, or changed lately with few scored matches.
         reasons (list[str]): Why, in plain words; the first line explains the status.
         stats (KeywordHealthStats): Computed over the keyword's matches in the window.
         sample (KeywordHealthSample): The posts behind noiseTerms, noiseAuthors and the effects, after the keyword's

@@ -152,17 +152,12 @@ def sync_detailed(
 ) -> Response[ErrorResponse | UsageBreakdown]:
     """Get the usage breakdown
 
-     What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`:
-    day, platform or keyword), in USD cents at list price, with the window's totals on every call.
-    `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar
-    month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come
-    from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its
-    charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers
-    ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the
-    wallet has debited so far for the window's days: mentions settle the morning after their day, so a
-    window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from
-    it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read
-    this at most 30 times a minute through its keys and tokens together.
+     Report what the workspace was charged over a window at list price, grouped by one dimension (`by`).
+
+    - Rows are paged; the window's totals come on every call.
+    - 30 reads a minute per workspace.
+
+    See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
@@ -232,17 +227,12 @@ def sync(
 ) -> ErrorResponse | UsageBreakdown | None:
     """Get the usage breakdown
 
-     What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`:
-    day, platform or keyword), in USD cents at list price, with the window's totals on every call.
-    `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar
-    month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come
-    from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its
-    charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers
-    ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the
-    wallet has debited so far for the window's days: mentions settle the morning after their day, so a
-    window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from
-    it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read
-    this at most 30 times a minute through its keys and tokens together.
+     Report what the workspace was charged over a window at list price, grouped by one dimension (`by`).
+
+    - Rows are paged; the window's totals come on every call.
+    - 30 reads a minute per workspace.
+
+    See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
@@ -307,17 +297,12 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | UsageBreakdown]:
     """Get the usage breakdown
 
-     What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`:
-    day, platform or keyword), in USD cents at list price, with the window's totals on every call.
-    `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar
-    month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come
-    from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its
-    charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers
-    ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the
-    wallet has debited so far for the window's days: mentions settle the morning after their day, so a
-    window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from
-    it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read
-    this at most 30 times a minute through its keys and tokens together.
+     Report what the workspace was charged over a window at list price, grouped by one dimension (`by`).
+
+    - Rows are paged; the window's totals come on every call.
+    - 30 reads a minute per workspace.
+
+    See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
@@ -385,17 +370,12 @@ async def asyncio(
 ) -> ErrorResponse | UsageBreakdown | None:
     """Get the usage breakdown
 
-     What the workspace consumed and was charged over a window, grouped by one dimension per call (`by`:
-    day, platform or keyword), in USD cents at list price, with the window's totals on every call.
-    `range` reads a trailing window of UTC days ending today (default 30d); `month` reads one calendar
-    month (YYYY-MM), the shape a bill or a per-customer margin is reconciled against. Keyword-days come
-    from the daily tick and mention charges from the matches that billed, so a deleted keyword keeps its
-    charges in the keyword rows (`keyword.removed`) while its mention counts read 0; the same numbers
-    ride on each keyword as `stats.cost` for the running month. `totals.ledgerDebitCents` is what the
-    wallet has debited so far for the window's days: mentions settle the morning after their day, so a
-    window ending today lags `totals.totalCents` by the unsettled ones, and a closed month differs from
-    it only by cumulative rounding. Rows are paged (`limit`, `offset`, `total`); a workspace may read
-    this at most 30 times a minute through its keys and tokens together.
+     Report what the workspace was charged over a window at list price, grouped by one dimension (`by`).
+
+    - Rows are paged; the window's totals come on every call.
+    - 30 reads a minute per workspace.
+
+    See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
         by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of

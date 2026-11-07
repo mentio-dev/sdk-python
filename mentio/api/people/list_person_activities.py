@@ -79,11 +79,12 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListPersonActivitiesResponse200]:
     """List outreach activities
 
-     Every logged contact with this person across all their accounts, newest first (at most 200): who
-    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
-    contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     List every logged contact with this person, newest first (at most 200): who, channel, when, note.
+
+    Read it before reaching out.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -119,11 +120,12 @@ def sync(
 ) -> ErrorResponse | ListPersonActivitiesResponse200 | None:
     """List outreach activities
 
-     Every logged contact with this person across all their accounts, newest first (at most 200): who
-    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
-    contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     List every logged contact with this person, newest first (at most 200): who, channel, when, note.
+
+    Read it before reaching out.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -154,11 +156,12 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListPersonActivitiesResponse200]:
     """List outreach activities
 
-     Every logged contact with this person across all their accounts, newest first (at most 200): who
-    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
-    contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     List every logged contact with this person, newest first (at most 200): who, channel, when, note.
+
+    Read it before reaching out.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.
@@ -192,11 +195,12 @@ async def asyncio(
 ) -> ErrorResponse | ListPersonActivitiesResponse200 | None:
     """List outreach activities
 
-     Every logged contact with this person across all their accounts, newest first (at most 200): who
-    reached out, the channel, when, and a short note. Read it before reaching out so two teammates never
-    contact the same person without knowing. With `groupId`, the call works inside that keyword group:
-    its people, and its own tags, notes, mute, merges and activities, apart from the workspace's and
-    from every other group's.
+     List every logged contact with this person, newest first (at most 200): who, channel, when, note.
+
+    Read it before reaching out.
+
+    With `groupId`, it acts inside that keyword group; see [Groups](/guides/groups#people-and-segments-
+    by-group).
 
     Args:
         id (str): Person id (aut_...). Example: aut_abc123.

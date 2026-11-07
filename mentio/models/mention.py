@@ -46,10 +46,9 @@ class Mention:
         classification (MentionClassificationType0 | None): The classifier verdict, as corrected by your feedback; null
             while the post is still queued for classification.
         triage (MentionTriage):
-        duplicate_of (None | str): Set on a cross-post: the id of the mention this one copies (the same author posting
-            the same text again for the same keyword within three days, like one announcement pasted into five subreddits).
-            A copy is billed like any mention but is listed only under its original and never alerted on its own. null for
-            an original.
+        duplicate_of (None | str): On a cross-post (same author, text and keyword within three days), the original's id.
+            Billed like any mention, listed only under its original, never alerted alone. null for an original. See [Cross-
+            posts](/how-it-works#cross-posts).
         duplicates (list[MentionDuplicatesItem]): The cross-posts filed under this mention, oldest first: where else its
             author posted it. Empty when there are none, and on a copy.
         stats (MentionStats): Computed counts.

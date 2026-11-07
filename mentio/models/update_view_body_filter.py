@@ -101,9 +101,8 @@ class UpdateViewBodyFilter:
         min_bookmarks (int | Unset): Only posts with at least this many bookmarks (saves), as the platform reported them
             when the post was found. A post without that count never passes.
         any_of (list[FilterGroup] | Unset): OR across groups: a mention passes when it meets every condition of at least
-            one group (1 to 10 groups). The other conditions still apply to every mention: the whole filter is (other
-            conditions) AND (group 1 OR group 2 ...). A group takes the conditions of a view filter (platforms, sentiments,
-            intents, keywordKinds, the not lists ...), with no anyOf of its own.
+            one group, and the other conditions too. A group takes view-filter conditions, no anyOf of its own. See
+            [anyOf](/conventions#or-across-groups-anyof).
     """
 
     q: str | Unset = UNSET

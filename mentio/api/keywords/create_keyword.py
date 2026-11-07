@@ -77,13 +77,13 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Track a keyword
 
-     Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
-    funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
-    case, subreddits, GitHub repository events) before a mention is stored, so a rejected post is never
-    billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly
-    ceiling on its matched mentions: at the cap it stops matching until the first of the next month
-    (UTC) or until the cap is raised, while its daily keyword charge continues.
+     Start tracking a word or phrase; mentions arrive from the next poll.
+
+    - $5 a month, charged daily; up to 500 per funded workspace.
+    - `matching` filters posts before they are stored, so rejected posts never bill.
+    - `cap` limits matched mentions per period.
+
+    See [Keywords](/guides/keywords).
 
     Args:
         body (CreateKeywordBody):
@@ -114,13 +114,13 @@ def sync(
 ) -> ErrorResponse | Keyword | None:
     """Track a keyword
 
-     Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
-    funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
-    case, subreddits, GitHub repository events) before a mention is stored, so a rejected post is never
-    billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly
-    ceiling on its matched mentions: at the cap it stops matching until the first of the next month
-    (UTC) or until the cap is raised, while its daily keyword charge continues.
+     Start tracking a word or phrase; mentions arrive from the next poll.
+
+    - $5 a month, charged daily; up to 500 per funded workspace.
+    - `matching` filters posts before they are stored, so rejected posts never bill.
+    - `cap` limits matched mentions per period.
+
+    See [Keywords](/guides/keywords).
 
     Args:
         body (CreateKeywordBody):
@@ -146,13 +146,13 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Track a keyword
 
-     Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
-    funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
-    case, subreddits, GitHub repository events) before a mention is stored, so a rejected post is never
-    billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly
-    ceiling on its matched mentions: at the cap it stops matching until the first of the next month
-    (UTC) or until the cap is raised, while its daily keyword charge continues.
+     Start tracking a word or phrase; mentions arrive from the next poll.
+
+    - $5 a month, charged daily; up to 500 per funded workspace.
+    - `matching` filters posts before they are stored, so rejected posts never bill.
+    - `cap` limits matched mentions per period.
+
+    See [Keywords](/guides/keywords).
 
     Args:
         body (CreateKeywordBody):
@@ -181,13 +181,13 @@ async def asyncio(
 ) -> ErrorResponse | Keyword | None:
     """Track a keyword
 
-     Start tracking a word or phrase. Matching, classification and delivery begin on the next poll. A
-    funded workspace tracks up to 500 keywords; each costs $5 per month, deducted daily from the
-    balance. `matching` narrows what the term matches (required and excluded terms, excluded authors,
-    case, subreddits, GitHub repository events) before a mention is stored, so a rejected post is never
-    billed; `context` is a sentence the classifier reads for this keyword only. `cap` puts a monthly
-    ceiling on its matched mentions: at the cap it stops matching until the first of the next month
-    (UTC) or until the cap is raised, while its daily keyword charge continues.
+     Start tracking a word or phrase; mentions arrive from the next poll.
+
+    - $5 a month, charged daily; up to 500 per funded workspace.
+    - `matching` filters posts before they are stored, so rejected posts never bill.
+    - `cap` limits matched mentions per period.
+
+    See [Keywords](/guides/keywords).
 
     Args:
         body (CreateKeywordBody):

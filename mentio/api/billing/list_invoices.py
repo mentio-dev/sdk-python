@@ -56,8 +56,9 @@ def sync_detailed(
 ) -> Response[ErrorResponse | InvoiceList]:
     """List receipts
 
-     The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this
-    workspace's share of the billing customer's newest 100 orders. Empty before the first top-up.
+     List the top-up orders, newest first, as Polar (the merchant of record) holds them.
+
+    This workspace's share of the billing customer's newest 100 orders; empty before the first top-up.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -82,8 +83,9 @@ def sync(
 ) -> ErrorResponse | InvoiceList | None:
     """List receipts
 
-     The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this
-    workspace's share of the billing customer's newest 100 orders. Empty before the first top-up.
+     List the top-up orders, newest first, as Polar (the merchant of record) holds them.
+
+    This workspace's share of the billing customer's newest 100 orders; empty before the first top-up.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -104,8 +106,9 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | InvoiceList]:
     """List receipts
 
-     The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this
-    workspace's share of the billing customer's newest 100 orders. Empty before the first top-up.
+     List the top-up orders, newest first, as Polar (the merchant of record) holds them.
+
+    This workspace's share of the billing customer's newest 100 orders; empty before the first top-up.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,8 +131,9 @@ async def asyncio(
 ) -> ErrorResponse | InvoiceList | None:
     """List receipts
 
-     The orders behind the top-ups, newest first, as the merchant of record (Polar) holds them: this
-    workspace's share of the billing customer's newest 100 orders. Empty before the first top-up.
+     List the top-up orders, newest first, as Polar (the merchant of record) holds them.
+
+    This workspace's share of the billing customer's newest 100 orders; empty before the first top-up.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

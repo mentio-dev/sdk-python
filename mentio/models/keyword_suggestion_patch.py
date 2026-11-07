@@ -40,16 +40,15 @@ class KeywordSuggestionPatch:
     kept.
 
         Attributes:
-            term (str | Unset): Renames the keyword: the new term is tracked from now on, with no look-back, and the keyword
-                keeps its id, its settings and the mentions the old term found. Wrap it in double quotes for the exact phrase
-                only. A 409 when its group already tracks the new term.
+            term (str | Unset): Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id,
+                settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it.
             kind (KeywordSuggestionPatchKind | Unset): Reclassify it as brand, competitor or topic.
             muted (bool | Unset): A muted keyword stops polling and matching; its mentions stay.
             platforms (list[KeywordSuggestionPatchPlatformsType0Item] | None | Unset): Replaces the platform list; null
                 means every platform, [] none (reviews only, when the keyword has reviewSources).
             context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
-                profile or the group's own description (at most 300 characters): what the term means here, what to ignore. "Arc
-                is our browser; ignore the geometry word." Null clears it.
+                profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry
+                word." Null clears it.
             matching (KeywordSuggestionPatchMatching | Unset): Omitted fields are untouched; an empty list clears one.
             cap (KeywordSuggestionPatchCapType0 | None | Unset): Replaces the mention cap and its period (per, default
                 month); null removes it. A cap above the current period's count resumes a capped keyword at once, one at or

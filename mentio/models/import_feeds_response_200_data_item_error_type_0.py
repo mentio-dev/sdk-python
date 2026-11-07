@@ -18,10 +18,9 @@ class ImportFeedsResponse200DataItemErrorType0:
     """Why it was not connected; null unless failed.
 
     Attributes:
-        code (ImportFeedsResponse200DataItemErrorType0Code): The same code POST /v1/feeds answers for this address:
-            feed_login_required (send it again with auth), feed_login_expired (a fresh cookie), feed_unreadable (no feed, or
-            the site blocks readers), feed_limit_reached, feed_auth_not_configured, validation_error (an address that is not
-            one), internal_error (ours: send it again).
+        code (ImportFeedsResponse200DataItemErrorType0Code): The code POST /v1/feeds answers for this address:
+            feed_login_required (resend with auth), feed_login_expired (fresh cookie), feed_unreadable (no feed, or
+            blocked), feed_limit_reached, feed_auth_not_configured, validation_error, internal_error (retry).
         message (str): What was seen, for a person.
     """
 

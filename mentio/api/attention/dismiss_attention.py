@@ -67,8 +67,10 @@ def sync_detailed(
 ) -> Response[AttentionItem | ErrorResponse]:
     """Dismiss an attention item
 
-     Put an item away. It leaves the open list and does not come back while its condition lasts; once the
-    condition clears, a new episode may open a new item. Idempotent.
+     Put an attention item away. Idempotent.
+
+    It leaves the open list and does not come back while its condition lasts. Once the condition clears,
+    a new episode may open a new item.
 
     Args:
         id (str): Attention item id (att_...). Example: att_abc123.
@@ -99,8 +101,10 @@ def sync(
 ) -> AttentionItem | ErrorResponse | None:
     """Dismiss an attention item
 
-     Put an item away. It leaves the open list and does not come back while its condition lasts; once the
-    condition clears, a new episode may open a new item. Idempotent.
+     Put an attention item away. Idempotent.
+
+    It leaves the open list and does not come back while its condition lasts. Once the condition clears,
+    a new episode may open a new item.
 
     Args:
         id (str): Attention item id (att_...). Example: att_abc123.
@@ -126,8 +130,10 @@ async def asyncio_detailed(
 ) -> Response[AttentionItem | ErrorResponse]:
     """Dismiss an attention item
 
-     Put an item away. It leaves the open list and does not come back while its condition lasts; once the
-    condition clears, a new episode may open a new item. Idempotent.
+     Put an attention item away. Idempotent.
+
+    It leaves the open list and does not come back while its condition lasts. Once the condition clears,
+    a new episode may open a new item.
 
     Args:
         id (str): Attention item id (att_...). Example: att_abc123.
@@ -156,8 +162,10 @@ async def asyncio(
 ) -> AttentionItem | ErrorResponse | None:
     """Dismiss an attention item
 
-     Put an item away. It leaves the open list and does not come back while its condition lasts; once the
-    condition clears, a new episode may open a new item. Idempotent.
+     Put an attention item away. Idempotent.
+
+    It leaves the open list and does not come back while its condition lasts. Once the condition clears,
+    a new episode may open a new item.
 
     Args:
         id (str): Attention item id (att_...). Example: att_abc123.

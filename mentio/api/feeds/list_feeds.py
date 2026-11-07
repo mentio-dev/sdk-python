@@ -80,11 +80,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListFeedsResponse200]:
     """List feeds
 
-     The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first,
-    each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the
-    default) reads these feeds: an item holding its term is one of its mentions, with its matching
-    rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a
-    workspace.
+     List the workspace's RSS and Atom feeds, newest first, each with its poll health.
+
+    Keywords with readsWorkspaceFeeds (the default) read them hourly, for free; matching items bill as
+    mentions. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         q (str | Unset): Only feeds whose address or title contains this text, case-insensitive.
@@ -121,11 +120,10 @@ def sync(
 ) -> ErrorResponse | ListFeedsResponse200 | None:
     """List feeds
 
-     The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first,
-    each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the
-    default) reads these feeds: an item holding its term is one of its mentions, with its matching
-    rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a
-    workspace.
+     List the workspace's RSS and Atom feeds, newest first, each with its poll health.
+
+    Keywords with readsWorkspaceFeeds (the default) read them hourly, for free; matching items bill as
+    mentions. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         q (str | Unset): Only feeds whose address or title contains this text, case-insensitive.
@@ -157,11 +155,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListFeedsResponse200]:
     """List feeds
 
-     The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first,
-    each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the
-    default) reads these feeds: an item holding its term is one of its mentions, with its matching
-    rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a
-    workspace.
+     List the workspace's RSS and Atom feeds, newest first, each with its poll health.
+
+    Keywords with readsWorkspaceFeeds (the default) read them hourly, for free; matching items bill as
+    mentions. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         q (str | Unset): Only feeds whose address or title contains this text, case-insensitive.
@@ -196,11 +193,10 @@ async def asyncio(
 ) -> ErrorResponse | ListFeedsResponse200 | None:
     """List feeds
 
-     The RSS and Atom feeds the workspace reads (forums, communities, blogs), newest connection first,
-    each with how its hourly poll goes. Every keyword of the workspace with readsWorkspaceFeeds (the
-    default) reads these feeds: an item holding its term is one of its mentions, with its matching
-    rules, billed like any mention. Each feed is read every hour; reading it is free. At most 500 a
-    workspace.
+     List the workspace's RSS and Atom feeds, newest first, each with its poll health.
+
+    Keywords with readsWorkspaceFeeds (the default) read them hourly, for free; matching items bill as
+    mentions. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         q (str | Unset): Only feeds whose address or title contains this text, case-insensitive.

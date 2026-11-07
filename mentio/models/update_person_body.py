@@ -19,9 +19,8 @@ class UpdatePersonBody:
     Attributes:
         tags (list[str] | Unset): Replaces the whole list.
         notes (str | Unset):
-        muted (bool | Unset): true hides their posts from the feed, the alerts and the digests; false shows them again.
-            Without groupId, for every keyword of the workspace; with groupId, for the mentions of that group's keywords
-            only, leaving the workspace's mute as it is.
+        muted (bool | Unset): true hides their posts from the feed, alerts and digests; false shows them again. Without
+            groupId for the whole workspace; with it, for that group's keywords only.
         owner_id (None | str | Unset): The member who owns the contact (user id); null clears.
         stage (UpdatePersonBodyStage | Unset): Where your workspace stands with the person: not_contacted, contacted,
             replied, in_talks, customer or not_a_fit.

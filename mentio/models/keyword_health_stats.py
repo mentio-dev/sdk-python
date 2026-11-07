@@ -29,9 +29,9 @@ class KeywordHealthStats:
         noise_share (float | None): filtered / (relevant + filtered); null with nothing scored.
         workspace_share (float | None): This keyword's share of the workspace's matches in the window; null when the
             workspace matched nothing.
-        judged_since (None | str): When the keyword last changed its matching rules, platforms or context (or was
-            unmuted), when that is inside the window: the status, the reasons, noiseTerms, noiseAuthors and suggestions read
-            only the matches since then, while these numbers keep the whole window. Null: everything reads the whole window.
+        judged_since (None | str): When the keyword last changed its rules, platforms or context (or was unmuted),
+            inside the window: status, reasons, noise and suggestions read only matches since, the numbers the whole window.
+            Null: no change inside it.
         by_platform (list[KeywordHealthStatsByPlatformItem]): One row per platform it matched on, most matches first.
         weekly (list[KeywordHealthStatsWeeklyItem]): The trend, one row per 7 days of the window, oldest first; the last
             row may be shorter.

@@ -56,8 +56,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListViewsResponse200]:
     """List views
 
-     The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id
-    as `viewId` to GET /v1/mentions or the export to read exactly what it selects.
+     List the workspace's saved views, oldest first.
+
+    A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to
+    read exactly what it selects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -82,8 +84,10 @@ def sync(
 ) -> ErrorResponse | ListViewsResponse200 | None:
     """List views
 
-     The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id
-    as `viewId` to GET /v1/mentions or the export to read exactly what it selects.
+     List the workspace's saved views, oldest first.
+
+    A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to
+    read exactly what it selects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -104,8 +108,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListViewsResponse200]:
     """List views
 
-     The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id
-    as `viewId` to GET /v1/mentions or the export to read exactly what it selects.
+     List the workspace's saved views, oldest first.
+
+    A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to
+    read exactly what it selects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,8 +134,10 @@ async def asyncio(
 ) -> ErrorResponse | ListViewsResponse200 | None:
     """List views
 
-     The saved views of the workspace, oldest first. A view is a named filter over mentions: pass its id
-    as `viewId` to GET /v1/mentions or the export to read exactly what it selects.
+     List the workspace's saved views, oldest first.
+
+    A view is a named filter over mentions: pass its id as `viewId` to GET /v1/mentions or the export to
+    read exactly what it selects.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

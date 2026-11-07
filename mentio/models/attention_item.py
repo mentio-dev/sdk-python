@@ -26,10 +26,12 @@ class AttentionItem:
     """
     Attributes:
         id (str): Attention item id (att_...).
-        kind (AttentionItemKind): mention.spike: far more mentions in the last hour than the keyword usually gets.
-            sentiment.negative_spike: the negative share of the last 24 hours jumped. keyword.noisy: most scored matches are
-            noise. channel.failing: the channel's last sends all failed. feed.failing: a workspace feed failed its last 3
-            hourly reads. feed.recovered: it read again after failing.
+        kind (AttentionItemKind): - mention.spike: far more mentions in the last hour than usual.
+            - sentiment.negative_spike: the negative share of the last 24 hours jumped.
+            - keyword.noisy: most scored matches are noise.
+            - channel.failing: the channel's last sends all failed.
+            - feed.failing: a workspace feed failed its last 3 hourly reads.
+            - feed.recovered: it read again after failing.
         status (AttentionItemStatus): open: the condition holds. resolved: it no longer does. dismissed: a person put it
             away; it does not come back for the same episode.
         subject (AttentionItemSubject): What the item is about.

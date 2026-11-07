@@ -72,14 +72,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ImportFeedsResponse200]:
     """Connect many feeds
 
-     Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked
-    on its own and reported added, already or failed, in the order sent: one that fails never stops the
-    others. A failure carries the error code POST /v1/feeds would answer for that address
-    (feed_login_required: send it again with auth). Every keyword of the workspace with
-    readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its
-    mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it
-    is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10
-    matching items of the last 30 days; the rest start from now.
+     Connect up to 100 feeds in one call, each reported added, already or failed, in order.
+
+    A failure never stops the others and carries the code POST /v1/feeds would answer. Only the first 8
+    added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         body (ImportFeedsBody):
@@ -110,14 +106,10 @@ def sync(
 ) -> ErrorResponse | ImportFeedsResponse200 | None:
     """Connect many feeds
 
-     Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked
-    on its own and reported added, already or failed, in the order sent: one that fails never stops the
-    others. A failure carries the error code POST /v1/feeds would answer for that address
-    (feed_login_required: send it again with auth). Every keyword of the workspace with
-    readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its
-    mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it
-    is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10
-    matching items of the last 30 days; the rest start from now.
+     Connect up to 100 feeds in one call, each reported added, already or failed, in order.
+
+    A failure never stops the others and carries the code POST /v1/feeds would answer. Only the first 8
+    added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         body (ImportFeedsBody):
@@ -143,14 +135,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ImportFeedsResponse200]:
     """Connect many feeds
 
-     Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked
-    on its own and reported added, already or failed, in the order sent: one that fails never stops the
-    others. A failure carries the error code POST /v1/feeds would answer for that address
-    (feed_login_required: send it again with auth). Every keyword of the workspace with
-    readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its
-    mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it
-    is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10
-    matching items of the last 30 days; the rest start from now.
+     Connect up to 100 feeds in one call, each reported added, already or failed, in order.
+
+    A failure never stops the others and carries the code POST /v1/feeds would answer. Only the first 8
+    added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         body (ImportFeedsBody):
@@ -179,14 +167,10 @@ async def asyncio(
 ) -> ErrorResponse | ImportFeedsResponse200 | None:
     """Connect many feeds
 
-     Connect up to 100 feeds in one call, each { url } or { url, auth } for a members-only one, checked
-    on its own and reported added, already or failed, in the order sent: one that fails never stops the
-    others. A failure carries the error code POST /v1/feeds would answer for that address
-    (feed_login_required: send it again with auth). Every keyword of the workspace with
-    readsWorkspaceFeeds (the default) reads these feeds: an item holding its term is one of its
-    mentions, with its matching rules, billed like any mention. Each feed is read every hour; reading it
-    is free. At most 500 a workspace. The first 8 added bring each reading keyword the newest 10
-    matching items of the last 30 days; the rest start from now.
+     Connect up to 100 feeds in one call, each reported added, already or failed, in order.
+
+    A failure never stops the others and carries the code POST /v1/feeds would answer. Only the first 8
+    added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
         body (ImportFeedsBody):

@@ -26,15 +26,13 @@ class MentionPost:
             news, linkedin, tiktok, instagram, facebook, appstore (App Store reviews), googleplay (Google Play reviews),
             trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a keyword
             reads).
-        kind (MentionPostKind): post: a top-level post. comment: an item that answers a post or another comment (a
-            Reddit or Hacker News comment, an X or Bluesky reply, a Stack Overflow answer, a YouTube comment). repository:
-            an event about a GitHub repository naming the keyword (see post.repository).
+        kind (MentionPostKind): post: a top-level post. comment: answers a post or comment (Reddit, Hacker News or
+            YouTube comments, X or Bluesky replies, Stack Overflow answers). repository: a GitHub repository event (see
+            post.repository).
         url (str): Permalink of the post.
         text (str): Title and body, truncated to 8 KB at ingest.
-        title (None | str): The post's own title where the platform has one: a Hacker News story, a Reddit thread, a
-            GitHub issue or pull request, a Stack Overflow question, a DEV article, a YouTube video, a news article, a
-            titled review. Null for platforms without titles (X, Bluesky, LinkedIn) and for posts ingested before October
-            2026.
+        title (None | str): The post's own title where the platform has one (a story, thread, issue, question, article,
+            video or titled review). Null on X, Bluesky and LinkedIn, and for posts ingested before October 2026.
         image_url (None | str): A preview image of the post, when the platform sent one with it: a YouTube thumbnail, a
             DEV cover, a news article's sharing image, a Bluesky link card or image. Null otherwise.
         subreddit (None | str): The subreddit a Reddit post was written in, without the r/ (SaaS). Null on every other
@@ -46,9 +44,9 @@ class MentionPost:
         links (list[str]): Links the post carries, in the order written, at most 20. Empty for a post with none, and for
             posts ingested before September 2026.
         published_at (str): When the post was published.
-        engagement (MentionPostEngagementType0 | None): Engagement counts as the platform reported them when the post
-            was ingested, usually minutes after it was written; a count the platform does not have is null. Null as a whole
-            for platforms that report none and for posts ingested before September 2026. X carries all six.
+        engagement (MentionPostEngagementType0 | None): Counts as the platform reported them at ingest, usually minutes
+            after posting; a missing count is null. Null as a whole when a platform reports none, or before September 2026.
+            X carries all six.
         reply_to (MentionPostReplyToType0 | None): The post or comment this one answers; null for top-level posts.
     """
 

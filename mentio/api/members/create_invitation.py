@@ -82,11 +82,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Invitation]:
     """Invite a member
 
-     Send an email invitation to join the workspace as admin or member; it expires after 48 hours.
-    Idempotent: an address that already holds an open invitation gets it back with 200 and no second
-    email. An address that is already a member is a 409 already_member. Team changes need a signed-in
-    owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers
-    403.
+     Invite someone by email as admin or member; the invitation expires after 48 hours.
+
+    Idempotent for an open invitation (200, no second email); a member is 409 already_member. Needs a
+    signed-in owner or admin: API keys get 403.
 
     Args:
         body (CreateInvitationBody):
@@ -117,11 +116,10 @@ def sync(
 ) -> ErrorResponse | Invitation | None:
     """Invite a member
 
-     Send an email invitation to join the workspace as admin or member; it expires after 48 hours.
-    Idempotent: an address that already holds an open invitation gets it back with 200 and no second
-    email. An address that is already a member is a 409 already_member. Team changes need a signed-in
-    owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers
-    403.
+     Invite someone by email as admin or member; the invitation expires after 48 hours.
+
+    Idempotent for an open invitation (200, no second email); a member is 409 already_member. Needs a
+    signed-in owner or admin: API keys get 403.
 
     Args:
         body (CreateInvitationBody):
@@ -147,11 +145,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Invitation]:
     """Invite a member
 
-     Send an email invitation to join the workspace as admin or member; it expires after 48 hours.
-    Idempotent: an address that already holds an open invitation gets it back with 200 and no second
-    email. An address that is already a member is a 409 already_member. Team changes need a signed-in
-    owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers
-    403.
+     Invite someone by email as admin or member; the invitation expires after 48 hours.
+
+    Idempotent for an open invitation (200, no second email); a member is 409 already_member. Needs a
+    signed-in owner or admin: API keys get 403.
 
     Args:
         body (CreateInvitationBody):
@@ -180,11 +177,10 @@ async def asyncio(
 ) -> ErrorResponse | Invitation | None:
     """Invite a member
 
-     Send an email invitation to join the workspace as admin or member; it expires after 48 hours.
-    Idempotent: an address that already holds an open invitation gets it back with 200 and no second
-    email. An address that is already a member is a 409 already_member. Team changes need a signed-in
-    owner or admin (an OAuth token from an MCP sign-in, or the dashboard session): an API key answers
-    403.
+     Invite someone by email as admin or member; the invitation expires after 48 hours.
+
+    Idempotent for an open invitation (200, no second email); a member is 409 already_member. Needs a
+    signed-in owner or admin: API keys get 403.
 
     Args:
         body (CreateInvitationBody):

@@ -87,10 +87,10 @@ def sync_detailed(
 ) -> Response[CreateTopUpResponse200 | ErrorResponse]:
     """Create a top-up checkout
 
-     Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The
-    balance is credited when the payment lands, within a minute, and tracking the wallet had paused
-    resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this
-    deployment trusts; omit it for the dashboard's billing page.
+     Get a hosted checkout URL for a top-up; this call charges nothing.
+
+    The balance is credited within a minute of payment, and paused tracking resumes. `successUrl` must
+    be on a trusted origin; omit it for the dashboard.
 
     Args:
         body (CreateTopUpBody):
@@ -121,10 +121,10 @@ def sync(
 ) -> CreateTopUpResponse200 | ErrorResponse | None:
     """Create a top-up checkout
 
-     Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The
-    balance is credited when the payment lands, within a minute, and tracking the wallet had paused
-    resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this
-    deployment trusts; omit it for the dashboard's billing page.
+     Get a hosted checkout URL for a top-up; this call charges nothing.
+
+    The balance is credited within a minute of payment, and paused tracking resumes. `successUrl` must
+    be on a trusted origin; omit it for the dashboard.
 
     Args:
         body (CreateTopUpBody):
@@ -150,10 +150,10 @@ async def asyncio_detailed(
 ) -> Response[CreateTopUpResponse200 | ErrorResponse]:
     """Create a top-up checkout
 
-     Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The
-    balance is credited when the payment lands, within a minute, and tracking the wallet had paused
-    resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this
-    deployment trusts; omit it for the dashboard's billing page.
+     Get a hosted checkout URL for a top-up; this call charges nothing.
+
+    The balance is credited within a minute of payment, and paused tracking resumes. `successUrl` must
+    be on a trusted origin; omit it for the dashboard.
 
     Args:
         body (CreateTopUpBody):
@@ -182,10 +182,10 @@ async def asyncio(
 ) -> CreateTopUpResponse200 | ErrorResponse | None:
     """Create a top-up checkout
 
-     Returns a hosted checkout URL with `amountCents` prefilled (editable there, $20 to $5,000). The
-    balance is credited when the payment lands, within a minute, and tracking the wallet had paused
-    resumes at once. Nothing is charged by this call itself. `successUrl` must be on an origin this
-    deployment trusts; omit it for the dashboard's billing page.
+     Get a hosted checkout URL for a top-up; this call charges nothing.
+
+    The balance is credited within a minute of payment, and paused tracking resumes. `successUrl` must
+    be on a trusted origin; omit it for the dashboard.
 
     Args:
         body (CreateTopUpBody):

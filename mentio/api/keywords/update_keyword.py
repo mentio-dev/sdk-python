@@ -87,11 +87,11 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Update a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+
+    - A new `term` is tracked from now on, no look-back; old mentions stay.
+    - An empty rule list clears it; `cap` null removes the cap.
+    - Changes apply to new mentions only.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -125,11 +125,11 @@ def sync(
 ) -> ErrorResponse | Keyword | None:
     """Update a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+
+    - A new `term` is tracked from now on, no look-back; old mentions stay.
+    - An empty rule list clears it; `cap` null removes the cap.
+    - Changes apply to new mentions only.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -158,11 +158,11 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Update a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+
+    - A new `term` is tracked from now on, no look-back; old mentions stay.
+    - An empty rule list clears it; `cap` null removes the cap.
+    - Changes apply to new mentions only.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -194,11 +194,11 @@ async def asyncio(
 ) -> ErrorResponse | Keyword | None:
     """Update a keyword
 
-     Rename it (`term`: the new term is tracked from now on, with no look-back; the mentions the old term
-    found stay), mute or unmute it, reclassify it (`kind`), change the platforms it is tracked on, its
-    classifier `context`, its `matching` rules (each rule field optional; an empty list clears one), or
-    its monthly mention `cap` (null removes it; a cap above this month's count resumes a capped keyword
-    at once). Rules apply to new mentions from the next poll; stored mentions are untouched.
+     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+
+    - A new `term` is tracked from now on, no look-back; old mentions stay.
+    - An empty rule list clears it; `cap` null removes the cap.
+    - Changes apply to new mentions only.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.

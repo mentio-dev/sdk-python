@@ -56,10 +56,9 @@ def sync_detailed(
 ) -> Response[ErrorResponse | WorkspaceFilters]:
     """Get the workspace filters
 
-     The noise rules applied to every keyword before a mention is stored: excluded terms and authors,
-    excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post
-    they reject is never classified, delivered or billed. Keyword-level rules live on each keyword
-    (`matching`); both apply.
+     Read the workspace's noise rules, applied to every keyword before a mention is stored.
+
+    A rejected post is never classified, delivered or billed. Keyword rules (`matching`) apply too.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -84,10 +83,9 @@ def sync(
 ) -> ErrorResponse | WorkspaceFilters | None:
     """Get the workspace filters
 
-     The noise rules applied to every keyword before a mention is stored: excluded terms and authors,
-    excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post
-    they reject is never classified, delivered or billed. Keyword-level rules live on each keyword
-    (`matching`); both apply.
+     Read the workspace's noise rules, applied to every keyword before a mention is stored.
+
+    A rejected post is never classified, delivered or billed. Keyword rules (`matching`) apply too.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -108,10 +106,9 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | WorkspaceFilters]:
     """Get the workspace filters
 
-     The noise rules applied to every keyword before a mention is stored: excluded terms and authors,
-    excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post
-    they reject is never classified, delivered or billed. Keyword-level rules live on each keyword
-    (`matching`); both apply.
+     Read the workspace's noise rules, applied to every keyword before a mention is stored.
+
+    A rejected post is never classified, delivered or billed. Keyword rules (`matching`) apply too.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -134,10 +131,9 @@ async def asyncio(
 ) -> ErrorResponse | WorkspaceFilters | None:
     """Get the workspace filters
 
-     The noise rules applied to every keyword before a mention is stored: excluded terms and authors,
-    excluded GitHub repositories, and the subreddits Reddit posts may (or may not) come from. A post
-    they reject is never classified, delivered or billed. Keyword-level rules live on each keyword
-    (`matching`); both apply.
+     Read the workspace's noise rules, applied to every keyword before a mention is stored.
+
+    A rejected post is never classified, delivered or billed. Keyword rules (`matching`) apply too.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

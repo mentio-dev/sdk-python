@@ -72,11 +72,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListSegmentsResponse200]:
     """List segments
 
-     Your saved segments, each with the number of people in it right now (segments are evaluated on every
-    read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET
-    /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its
-    own people; without it, the workspace's. A segment belongs to one scope and is not visible from
-    another.
+     List your saved segments with live member counts, plus presets to start from.
+
+    Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
+    belongs to one scope.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -109,11 +108,10 @@ def sync(
 ) -> ErrorResponse | ListSegmentsResponse200 | None:
     """List segments
 
-     Your saved segments, each with the number of people in it right now (segments are evaluated on every
-    read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET
-    /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its
-    own people; without it, the workspace's. A segment belongs to one scope and is not visible from
-    another.
+     List your saved segments with live member counts, plus presets to start from.
+
+    Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
+    belongs to one scope.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -141,11 +139,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListSegmentsResponse200]:
     """List segments
 
-     Your saved segments, each with the number of people in it right now (segments are evaluated on every
-    read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET
-    /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its
-    own people; without it, the workspace's. A segment belongs to one scope and is not visible from
-    another.
+     List your saved segments with live member counts, plus presets to start from.
+
+    Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
+    belongs to one scope.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
@@ -176,11 +173,10 @@ async def asyncio(
 ) -> ErrorResponse | ListSegmentsResponse200 | None:
     """List segments
 
-     Your saved segments, each with the number of people in it right now (segments are evaluated on every
-    read, never materialized), plus presets you can save as a starting point. Pass a segment id to GET
-    /v1/people to list its members. With `groupId`, that keyword group's own segments, counted over its
-    own people; without it, the workspace's. A segment belongs to one scope and is not visible from
-    another.
+     List your saved segments with live member counts, plus presets to start from.
+
+    Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
+    belongs to one scope.
 
     Args:
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned

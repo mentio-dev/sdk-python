@@ -89,12 +89,11 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListAttentionResponse200]:
     """List attention items
 
-     What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike),
-    whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy
-    (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour;
-    an item opens when its condition starts and resolves on its own when the condition is gone. Open
-    items by default; `status=all` reads the history. Each opening is also an account event of the same
-    name, which webhook, Slack, email and Telegram channels can subscribe to.
+     List what needs a person, newest first: mention spikes, negative sentiment jumps, noisy keywords and
+    failing channels.
+
+    Checked hourly; items resolve on their own. Open items by default, `status=all` for history. Each
+    opening is also an account event. See [Attention](/guides/attention).
 
     Args:
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.
@@ -138,12 +137,11 @@ def sync(
 ) -> ErrorResponse | ListAttentionResponse200 | None:
     """List attention items
 
-     What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike),
-    whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy
-    (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour;
-    an item opens when its condition starts and resolves on its own when the condition is gone. Open
-    items by default; `status=all` reads the history. Each opening is also an account event of the same
-    name, which webhook, Slack, email and Telegram channels can subscribe to.
+     List what needs a person, newest first: mention spikes, negative sentiment jumps, noisy keywords and
+    failing channels.
+
+    Checked hourly; items resolve on their own. Open items by default, `status=all` for history. Each
+    opening is also an account event. See [Attention](/guides/attention).
 
     Args:
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.
@@ -182,12 +180,11 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListAttentionResponse200]:
     """List attention items
 
-     What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike),
-    whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy
-    (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour;
-    an item opens when its condition starts and resolves on its own when the condition is gone. Open
-    items by default; `status=all` reads the history. Each opening is also an account event of the same
-    name, which webhook, Slack, email and Telegram channels can subscribe to.
+     List what needs a person, newest first: mention spikes, negative sentiment jumps, noisy keywords and
+    failing channels.
+
+    Checked hourly; items resolve on their own. Open items by default, `status=all` for history. Each
+    opening is also an account event. See [Attention](/guides/attention).
 
     Args:
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.
@@ -229,12 +226,11 @@ async def asyncio(
 ) -> ErrorResponse | ListAttentionResponse200 | None:
     """List attention items
 
-     What needs a person, newest first: a keyword whose mentions spiked in the last hour (mention.spike),
-    whose negative share of the last 24 hours jumped (sentiment.negative_spike), that turned noisy
-    (keyword.noisy), or a channel whose last sends all failed (channel.failing). Detected once an hour;
-    an item opens when its condition starts and resolves on its own when the condition is gone. Open
-    items by default; `status=all` reads the history. Each opening is also an account event of the same
-    name, which webhook, Slack, email and Telegram channels can subscribe to.
+     List what needs a person, newest first: mention spikes, negative sentiment jumps, noisy keywords and
+    failing channels.
+
+    Checked hourly; items resolve on their own. Open items by default, `status=all` for history. Each
+    opening is also an account event. See [Attention](/guides/attention).
 
     Args:
         status (ListAttentionStatus | Unset): open (default), resolved, dismissed, or all.

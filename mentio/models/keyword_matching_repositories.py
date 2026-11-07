@@ -19,15 +19,16 @@ class KeywordMatchingRepositories:
     before it is stored, so it is never billed.
 
         Attributes:
-            events (list[KeywordMatchingRepositoriesEventsItem]): The repository events this keyword takes. traction: a
-                repository created in the last 30 days reached 10 stars. stars: one with 100 stars or more passed a milestone
-                (100, 250, 500, 1,000, 2,000, 5,000 ...). growth: it gained stars fast in a week. new: every repository created,
-                even with no stars (off by default: nearly all of them are noise for a broad keyword). Default: traction, stars,
-                growth. Empty: no repository events.
+            events (list[KeywordMatchingRepositoriesEventsItem]): The repository events this keyword takes (default
+                traction, stars, growth; empty: none). See [GitHub](/platforms/github#repositories).
+
+                - traction: under 30 days old, it reached 10 stars.
+                - stars: it passed a milestone (100, 250, 500, 1,000 ...).
+                - growth: it gained stars fast in a week.
+                - new: every repository created; opt in, mostly noise.
             min_stars (int | None): Only repositories with at least this many stars; null for no minimum.
-            min_weekly_stars (int | None): Only repositories that gained at least this many stars in the last 7 days (25 or
-                more). It applies to every event, and one whose last week is not known yet does not pass. null: a growth event
-                needs 100 stars and 20% of the repository's stars in a week, the other events need no growth.
+            min_weekly_stars (int | None): Only repositories that gained at least this many stars in the last 7 days, for
+                every event; an unknown week fails. null: growth needs 100 stars and 20% a week, other events nothing.
     """
 
     events: list[KeywordMatchingRepositoriesEventsItem]

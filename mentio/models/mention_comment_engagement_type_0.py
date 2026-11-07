@@ -11,9 +11,8 @@ T = TypeVar("T", bound="MentionCommentEngagementType0")
 
 @_attrs_define
 class MentionCommentEngagementType0:
-    """Engagement counts as the platform reported them when the post was ingested, usually minutes after it was written; a
-    count the platform does not have is null. Null as a whole for platforms that report none and for posts ingested
-    before September 2026. X carries all six.
+    """Counts as the platform reported them at ingest, usually minutes after posting; a missing count is null. Null as a
+    whole when a platform reports none, or before September 2026. X carries all six.
 
         Attributes:
             likes (int | None):

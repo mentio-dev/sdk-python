@@ -564,11 +564,12 @@ def sync_detailed(
 ) -> Response[ErrorResponse | SearchMentionsResponse200]:
     """List mentions
 
-     Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
-    sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
-    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
+     List the mentions matched to your keywords, newest match first, filtered and cursor-paginated.
+
+    - A mention is one post matched to one keyword.
+    - `sort=priority` ranks the last 30 days by attention score.
+    - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-
+    across-groups-anyof).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -681,12 +682,9 @@ def sync_detailed(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -841,11 +839,12 @@ def sync(
 ) -> ErrorResponse | SearchMentionsResponse200 | None:
     """List mentions
 
-     Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
-    sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
-    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
+     List the mentions matched to your keywords, newest match first, filtered and cursor-paginated.
+
+    - A mention is one post matched to one keyword.
+    - `sort=priority` ranks the last 30 days by attention score.
+    - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-
+    across-groups-anyof).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -958,12 +957,9 @@ def sync(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -1113,11 +1109,12 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | SearchMentionsResponse200]:
     """List mentions
 
-     Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
-    sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
-    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
+     List the mentions matched to your keywords, newest match first, filtered and cursor-paginated.
+
+    - A mention is one post matched to one keyword.
+    - `sort=priority` ranks the last 30 days by attention score.
+    - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-
+    across-groups-anyof).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1230,12 +1227,9 @@ async def asyncio_detailed(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).
@@ -1388,11 +1382,12 @@ async def asyncio(
 ) -> ErrorResponse | SearchMentionsResponse200 | None:
     """List mentions
 
-     Mentions matched to your keywords, filtered and paginated. Default order is newest match first;
-    sort=priority ranks the last 30 days of matches by attention score. Page with nextCursor, passing
-    the same filters and sort. A mention is one post matched to one keyword. alertId applies an alert
-    rule's filter on top of the others: the same mentions that rule would send. anyOf adds OR: URL-
-    encoded JSON groups of conditions, at least one of which must hold on top of every other filter.
+     List the mentions matched to your keywords, newest match first, filtered and cursor-paginated.
+
+    - A mention is one post matched to one keyword.
+    - `sort=priority` ranks the last 30 days by attention score.
+    - `alertId` applies that alert rule's filter; `anyOf` adds OR. See [Conventions](/conventions#or-
+    across-groups-anyof).
 
     Args:
         keyword_id (str | Unset): Only matches of this keyword.
@@ -1505,12 +1500,9 @@ async def asyncio(
         min_bookmarks (int | None | Unset): Only posts with at least this many bookmarks (saves),
             as the platform reported them when the post was found. A post without that count never
             passes.
-        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON:
-            [{"platforms":["reddit"],"sentiments":["negative"]},{"intents":["buy_intent"]}] is
-            "negative on Reddit, or buying intent anywhere". Each group holds the conditions of a view
-            filter (lists any-of, not lists none-of, all ANDed); a mention passes when at least one
-            group holds, and every other filter here still applies. 1 to 10 groups, none empty, no
-            nesting.
+        any_of (str | Unset): OR across groups of conditions, as URL-encoded JSON: a mention
+            passes when one group holds, on top of every other filter. Each group holds view-filter
+            conditions, no nesting. See [anyOf](/conventions#or-across-groups-anyof).
         q (str | Unset): Substring search in the post text or the author's name.
         since (datetime.datetime | Unset): Only posts published at or after this instant (ISO
             8601, or epoch ms).

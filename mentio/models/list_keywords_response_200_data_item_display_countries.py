@@ -18,15 +18,14 @@ T = TypeVar("T", bound="ListKeywordsResponse200DataItemDisplayCountries")
 
 @_attrs_define
 class ListKeywordsResponse200DataItemDisplayCountries:
-    """By where the author is, as the classifier read their profile and the post.
+    """By where the author is (ISO 3166-1 alpha-2), as the classifier read their profile and the post.
 
     Attributes:
         only (list[ListKeywordsResponse200DataItemDisplayCountriesOnlyItem]): When non-empty, a post whose author's
-            country (ISO 3166-1 alpha-2) is known and not listed is hidden, a author's country (ISO 3166-1 alpha-2) the
-            classifier recognises but does not name included. A post whose author's country (ISO 3166-1 alpha-2) nobody
-            could tell is always shown.
-        excluded (list[ListKeywordsResponse200DataItemDisplayCountriesExcludedItem]): A post whose author's country (ISO
-            3166-1 alpha-2) is listed is hidden.
+            country is known and not listed is hidden, one the classifier cannot name included. A post whose author's
+            country nobody could tell is always shown.
+        excluded (list[ListKeywordsResponse200DataItemDisplayCountriesExcludedItem]): A post whose author's country is
+            listed is hidden.
     """
 
     only: list[ListKeywordsResponse200DataItemDisplayCountriesOnlyItem]

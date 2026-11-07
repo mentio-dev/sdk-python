@@ -87,10 +87,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Duplicate a keyword
 
-     A new keyword with this one's settings and a new `term` (or the same term in another group): its
-    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
-    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
-    and the newest posts of the last 30 days come in at once, as with any new keyword.
+     Create a keyword with this one's settings under a new term or group.
+
+    It copies kind, platforms, context, rules, cap and comments; review apps and feeds only via
+    `include`. A new keyword: $5 a month and a 30-day look-back.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -124,10 +124,10 @@ def sync(
 ) -> ErrorResponse | Keyword | None:
     """Duplicate a keyword
 
-     A new keyword with this one's settings and a new `term` (or the same term in another group): its
-    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
-    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
-    and the newest posts of the last 30 days come in at once, as with any new keyword.
+     Create a keyword with this one's settings under a new term or group.
+
+    It copies kind, platforms, context, rules, cap and comments; review apps and feeds only via
+    `include`. A new keyword: $5 a month and a 30-day look-back.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -156,10 +156,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Duplicate a keyword
 
-     A new keyword with this one's settings and a new `term` (or the same term in another group): its
-    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
-    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
-    and the newest posts of the last 30 days come in at once, as with any new keyword.
+     Create a keyword with this one's settings under a new term or group.
+
+    It copies kind, platforms, context, rules, cap and comments; review apps and feeds only via
+    `include`. A new keyword: $5 a month and a 30-day look-back.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
@@ -191,10 +191,10 @@ async def asyncio(
 ) -> ErrorResponse | Keyword | None:
     """Duplicate a keyword
 
-     A new keyword with this one's settings and a new `term` (or the same term in another group): its
-    kind, platforms, context, every matching rule, its monthly mention cap and its comments setting.
-    Review apps and feeds are copied only when listed in `include`. It is a new keyword: $5 per month,
-    and the newest posts of the last 30 days come in at once, as with any new keyword.
+     Create a keyword with this one's settings under a new term or group.
+
+    It copies kind, platforms, context, rules, cap and comments; review apps and feeds only via
+    `include`. A new keyword: $5 a month and a 30-day look-back.
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.

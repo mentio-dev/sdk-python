@@ -25,20 +25,17 @@ class KeywordMatching:
             requiredMode. A `*` at the start or the end of an entry is a wildcard (alert* matches alerts and alerting).
             Empty: no requirement.
         required_mode (KeywordMatchingRequiredMode): any: at least one required term must appear. all: every one must.
-        required_groups (list[list[str]]): Combinations of terms, at most 50 of 10 terms each: the post must ALSO
-            contain every term of at least one group (an OR of ANDs). For the keyword inreach, [["weather", "alert*"],
-            ["tsunami"], ["flash flood"]] keeps a post about inReach weather alerts, tsunamis or flash floods, one keyword
-            instead of three. Same phrase and wildcard rules as requiredTerms; when both are set a post must pass both.
-            Empty: no combinations.
+        required_groups (list[list[str]]): Combinations: the post must ALSO contain every term of at least one group (an
+            OR of ANDs), on top of requiredTerms, with the same phrase and wildcard rules. See
+            [Keywords](/guides/keywords#several-searches-in-one-keyword).
         excluded_terms (list[str]): A post containing any of these is dropped. A `*` at the start or the end of an entry
             is a wildcard (beta.* matches beta.0.1; *bot matches nightlybot).
         excluded_authors (list[str]): Posts by these authors are dropped: profile or post links, @handles, u/names,
             Bluesky DIDs or display names, stored in canonical form like an alert's muted list.
         case_sensitive (bool): true: the term must appear in the case it was typed (RAG, never rag). Default false.
-        exact_phrase (bool): true: only the exact phrase matches. false (default): a multi-word keyword also matches a
-            post holding its words close together, in any order, plurals and spellings (non-profit, nonprofit) included;
-            such a match is kept and billed only when the classifier scores it relevant. A term sent in double quotes sets
-            this to true.
+        exact_phrase (bool): true: only the exact phrase matches (a term sent in double quotes sets it). false: a multi-
+            word keyword also matches its words close together, kept and billed only when scored relevant. See
+            [Keywords](/guides/keywords#the-exact-phrase-only).
         subreddits (KeywordMatchingSubreddits): Reddit only, for this keyword alone; the workspace filters' own
             subreddit lists (GET /v1/filters) still apply to every keyword, and a post must pass both.
         repositories (KeywordMatchingRepositories): GitHub only: which repository events naming this keyword become

@@ -30,9 +30,8 @@ class ListFeedsResponse200DataItem:
         url (str): The feed itself (after redirects, or the one the page advertised): what is polled.
         title (None | str): The feed's own title, when it has one.
         connected_at (str): When the workspace connected it.
-        reading_since (str): Nothing published before this is a live mention: the connection, or the last time its sign-
-            in was added or removed (signed in and signed out, a post is read as two different posts, so the switch starts
-            over rather than bill one twice).
+        reading_since (str): Nothing published before this is a live mention: the connection, or the last sign-in change
+            (signed in or out, a post reads as a new one, so it starts over rather than bill twice).
         auth (ListFeedsResponse200DataItemAuthType0 | None): The sign-in the feed is read with, or null for a public
             feed. PATCH { auth } replaces it, { auth: null } removes it.
         health (ListFeedsResponse200DataItemHealth): Whether the hourly read works.
