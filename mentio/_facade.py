@@ -86,22 +86,14 @@ def _body(target: Any, body: Any, fields: dict[str, Any]) -> Any:
 
 
 import mentio.api.alerts.create_alert  # noqa: F401
-import mentio.api.alerts.create_channel  # noqa: F401
 import mentio.api.alerts.delete_alert  # noqa: F401
-import mentio.api.alerts.delete_channel  # noqa: F401
 import mentio.api.alerts.get_alert  # noqa: F401
-import mentio.api.alerts.get_channel  # noqa: F401
 import mentio.api.alerts.list_alerts  # noqa: F401
-import mentio.api.alerts.list_channel_deliveries  # noqa: F401
-import mentio.api.alerts.list_channels  # noqa: F401
 import mentio.api.alerts.mute_alert_authors  # noqa: F401
-import mentio.api.alerts.rotate_webhook_secret  # noqa: F401
 import mentio.api.alerts.run_alert_digest  # noqa: F401
 import mentio.api.alerts.test_alert  # noqa: F401
-import mentio.api.alerts.test_channel  # noqa: F401
 import mentio.api.alerts.unmute_alert_authors  # noqa: F401
 import mentio.api.alerts.update_alert  # noqa: F401
-import mentio.api.alerts.update_channel  # noqa: F401
 import mentio.api.analytics.get_analytics_breakdown  # noqa: F401
 import mentio.api.analytics.get_analytics_series  # noqa: F401
 import mentio.api.analytics.get_analytics_summary  # noqa: F401
@@ -118,6 +110,14 @@ import mentio.api.billing.get_invoice_url  # noqa: F401
 import mentio.api.billing.get_wallet  # noqa: F401
 import mentio.api.billing.list_invoices  # noqa: F401
 import mentio.api.billing.list_ledger  # noqa: F401
+import mentio.api.channels.create_channel  # noqa: F401
+import mentio.api.channels.delete_channel  # noqa: F401
+import mentio.api.channels.get_channel  # noqa: F401
+import mentio.api.channels.list_channel_deliveries  # noqa: F401
+import mentio.api.channels.list_channels  # noqa: F401
+import mentio.api.channels.rotate_webhook_secret  # noqa: F401
+import mentio.api.channels.test_channel  # noqa: F401
+import mentio.api.channels.update_channel  # noqa: F401
 import mentio.api.company.get_company  # noqa: F401
 import mentio.api.company.update_company  # noqa: F401
 import mentio.api.feeds.create_feed  # noqa: F401
@@ -163,6 +163,7 @@ import mentio.api.people.update_person  # noqa: F401
 import mentio.api.segments.create_segment  # noqa: F401
 import mentio.api.segments.delete_segment  # noqa: F401
 import mentio.api.segments.get_segment  # noqa: F401
+import mentio.api.segments.list_segment_presets  # noqa: F401
 import mentio.api.segments.list_segments  # noqa: F401
 import mentio.api.segments.update_segment  # noqa: F401
 import mentio.api.system.get_health  # noqa: F401
@@ -255,14 +256,22 @@ class _Keywords:
 
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
-          group_id: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
-          kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
-          platform: Only keywords tracked on any of these platforms: its term searched there (every platform when its platforms are null), or for appstore and googleplay, an app of that store among its reviewSources. Repeatable, or comma-separated.
+          group_ids: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never keywords in these groups (grp_...). Repeatable, or comma-separated.
+          kinds: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_kinds: Never these kinds. Repeatable, or comma-separated.
+          not_statuses: Never keywords in these states. Repeatable, or comma-separated.
+          not_platforms: Never keywords tracked on any of these platforms (by the same reading as platforms). Repeatable, or comma-separated.
+          statuses: Only keywords in these states: active, muted, paused, noisy, capped. Repeatable, or comma-separated.
+          platforms: Only keywords tracked on any of these platforms: its term searched there (every platform when its platforms are null), or for appstore and googleplay, an app of that store among its reviewSources. Repeatable, or comma-separated.
+          group_id: Deprecated: use groupIds, the same filter; both are read as one list.
+          kind: Deprecated: use kinds, the same filter; both are read as one list.
+          status: Deprecated: use statuses, the same filter; both are read as one list.
+          platform: Deprecated: use platforms, the same filter; both are read as one list.
           sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
           limit: Page size, 1 to 500. Omit for every keyword after `offset`.
           offset: Skip this many keywords."""
-        _coerce(params, {"kind": (_enum_list, _m.ListKeywordsKindItem), "status": (_enum_list, _m.ListKeywordsStatusItem), "platform": (_enum_list, _m.ListKeywordsPlatformItem), "sort": (_enum, _m.ListKeywordsSort)})
+        _coerce(params, {"kinds": (_enum_list, _m.ListKeywordsKindsItem), "not_kinds": (_enum_list, _m.ListKeywordsNotKindsItem), "not_statuses": (_enum_list, _m.ListKeywordsNotStatusesItem), "not_platforms": (_enum_list, _m.ListKeywordsNotPlatformsItem), "statuses": (_enum_list, _m.ListKeywordsStatusesItem), "platforms": (_enum_list, _m.ListKeywordsPlatformsItem), "kind": (_enum_list, _m.ListKeywordsKindItem), "status": (_enum_list, _m.ListKeywordsStatusItem), "platform": (_enum_list, _m.ListKeywordsPlatformItem), "sort": (_enum, _m.ListKeywordsSort)})
         return _result(_ops.keywords.list_keywords.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
@@ -750,7 +759,7 @@ class _People:
         return _result(_ops.people.update_person.sync_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
 
 class _Segments:
-    """segments: create, delete, get, list, update."""
+    """segments: create, delete, get, list, presets, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -792,13 +801,19 @@ class _Segments:
     def list(self, **params: Any) -> _m.ListSegmentsResponse200:
         """List segments
 
-        List your saved segments with live member counts, plus presets to start from.
+        List your saved segments with live member counts.
 
         Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each belongs to one scope.
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(_ops.segments.list_segments.sync_detailed(client=self._client, **params))
+
+    def presets(self) -> _m.ListSegmentPresetsResponse200:
+        """List segment presets
+
+        Suggested segments to start from, the same for every workspace. Save one with POST /v1/segments and its `filter`."""
+        return _result(_ops.segments.list_segment_presets.sync_detailed(client=self._client))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Update a segment
@@ -913,11 +928,11 @@ class _Channels:
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
           headers: Extra request headers to send, for your own auth."""
-        return _result(_ops.alerts.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
+        return _result(_ops.channels.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
 
     def delete(self, id: str) -> Any:
         """Delete a channel"""
-        return _result(_ops.alerts.delete_channel.sync_detailed(id, client=self._client))
+        return _result(_ops.channels.delete_channel.sync_detailed(id, client=self._client))
 
     def deliveries(self, id: str, **params: Any) -> _m.ListChannelDeliveriesResponse200:
         """List deliveries to a channel
@@ -925,23 +940,23 @@ class _Channels:
         Keyword arguments (query):
           cursor: Opaque cursor from a previous page (`nextCursor`).
           limit: How many deliveries, newest first, 1 to 200 (default 50)."""
-        return _result(_ops.alerts.list_channel_deliveries.sync_detailed(id, client=self._client, **params))
+        return _result(_ops.channels.list_channel_deliveries.sync_detailed(id, client=self._client, **params))
 
     def get(self, id: str) -> Any:
         """Get a channel"""
-        return _result(_ops.alerts.get_channel.sync_detailed(id, client=self._client))
+        return _result(_ops.channels.get_channel.sync_detailed(id, client=self._client))
 
     def list(self) -> _m.ListChannelsResponse200:
         """List channels"""
-        return _result(_ops.alerts.list_channels.sync_detailed(client=self._client))
+        return _result(_ops.channels.list_channels.sync_detailed(client=self._client))
 
     def rotate_secret(self, id: str) -> Any:
         """Rotate a webhook secret"""
-        return _result(_ops.alerts.rotate_webhook_secret.sync_detailed(id, client=self._client))
+        return _result(_ops.channels.rotate_webhook_secret.sync_detailed(id, client=self._client))
 
     def test(self, id: str) -> _m.TestChannelResponse200:
         """Send a test to a channel"""
-        return _result(_ops.alerts.test_channel.sync_detailed(id, client=self._client))
+        return _result(_ops.channels.test_channel.sync_detailed(id, client=self._client))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateChannelBody | None = None, **fields: Any) -> Any:
         """Update a channel
@@ -951,7 +966,7 @@ class _Channels:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
           events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
-        return _result(_ops.alerts.update_channel.sync_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
+        return _result(_ops.channels.update_channel.sync_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _Company:
     """company: get, update."""
@@ -1579,14 +1594,22 @@ class _AsyncKeywords:
 
         Keyword arguments (query):
           q: Text to find in the term or in the keyword's context, case-insensitive.
-          group_id: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
-          kind: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
-          status: Only keywords in these states: active, muted, paused, capped. Repeatable, or comma-separated.
-          platform: Only keywords tracked on any of these platforms: its term searched there (every platform when its platforms are null), or for appstore and googleplay, an app of that store among its reviewSources. Repeatable, or comma-separated.
+          group_ids: Only keywords in any of these groups (grp_...). Repeatable, or comma-separated.
+          not_group_ids: Never keywords in these groups (grp_...). Repeatable, or comma-separated.
+          kinds: Only these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_kinds: Never these kinds. Repeatable, or comma-separated.
+          not_statuses: Never keywords in these states. Repeatable, or comma-separated.
+          not_platforms: Never keywords tracked on any of these platforms (by the same reading as platforms). Repeatable, or comma-separated.
+          statuses: Only keywords in these states: active, muted, paused, noisy, capped. Repeatable, or comma-separated.
+          platforms: Only keywords tracked on any of these platforms: its term searched there (every platform when its platforms are null), or for appstore and googleplay, an app of that store among its reviewSources. Repeatable, or comma-separated.
+          group_id: Deprecated: use groupIds, the same filter; both are read as one list.
+          kind: Deprecated: use kinds, the same filter; both are read as one list.
+          status: Deprecated: use statuses, the same filter; both are read as one list.
+          platform: Deprecated: use platforms, the same filter; both are read as one list.
           sort: newest: created most recently first. oldest: the reverse. term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent: most matches in the last 7 days first. lastMention: newest matched post first, keywords with none last.
           limit: Page size, 1 to 500. Omit for every keyword after `offset`.
           offset: Skip this many keywords."""
-        _coerce(params, {"kind": (_enum_list, _m.ListKeywordsKindItem), "status": (_enum_list, _m.ListKeywordsStatusItem), "platform": (_enum_list, _m.ListKeywordsPlatformItem), "sort": (_enum, _m.ListKeywordsSort)})
+        _coerce(params, {"kinds": (_enum_list, _m.ListKeywordsKindsItem), "not_kinds": (_enum_list, _m.ListKeywordsNotKindsItem), "not_statuses": (_enum_list, _m.ListKeywordsNotStatusesItem), "not_platforms": (_enum_list, _m.ListKeywordsNotPlatformsItem), "statuses": (_enum_list, _m.ListKeywordsStatusesItem), "platforms": (_enum_list, _m.ListKeywordsPlatformsItem), "kind": (_enum_list, _m.ListKeywordsKindItem), "status": (_enum_list, _m.ListKeywordsStatusItem), "platform": (_enum_list, _m.ListKeywordsPlatformItem), "sort": (_enum, _m.ListKeywordsSort)})
         return _result(await _ops.keywords.list_keywords.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
@@ -2074,7 +2097,7 @@ class _AsyncPeople:
         return _result(await _ops.people.update_person.asyncio_detailed(id, client=self._client, body=_body(_m.UpdatePersonBody, body, fields)))
 
 class _AsyncSegments:
-    """segments: create, delete, get, list, update."""
+    """segments: create, delete, get, list, presets, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -2116,13 +2139,19 @@ class _AsyncSegments:
     async def list(self, **params: Any) -> _m.ListSegmentsResponse200:
         """List segments
 
-        List your saved segments with live member counts, plus presets to start from.
+        List your saved segments with live member counts.
 
         Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each belongs to one scope.
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
         return _result(await _ops.segments.list_segments.asyncio_detailed(client=self._client, **params))
+
+    async def presets(self) -> _m.ListSegmentPresetsResponse200:
+        """List segment presets
+
+        Suggested segments to start from, the same for every workspace. Save one with POST /v1/segments and its `filter`."""
+        return _result(await _ops.segments.list_segment_presets.asyncio_detailed(client=self._client))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateSegmentBody | None = None, **fields: Any) -> _m.Segment:
         """Update a segment
@@ -2237,11 +2266,11 @@ class _AsyncChannels:
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
           headers: Extra request headers to send, for your own auth."""
-        return _result(await _ops.alerts.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
+        return _result(await _ops.channels.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
 
     async def delete(self, id: str) -> Any:
         """Delete a channel"""
-        return _result(await _ops.alerts.delete_channel.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.channels.delete_channel.asyncio_detailed(id, client=self._client))
 
     async def deliveries(self, id: str, **params: Any) -> _m.ListChannelDeliveriesResponse200:
         """List deliveries to a channel
@@ -2249,23 +2278,23 @@ class _AsyncChannels:
         Keyword arguments (query):
           cursor: Opaque cursor from a previous page (`nextCursor`).
           limit: How many deliveries, newest first, 1 to 200 (default 50)."""
-        return _result(await _ops.alerts.list_channel_deliveries.asyncio_detailed(id, client=self._client, **params))
+        return _result(await _ops.channels.list_channel_deliveries.asyncio_detailed(id, client=self._client, **params))
 
     async def get(self, id: str) -> Any:
         """Get a channel"""
-        return _result(await _ops.alerts.get_channel.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.channels.get_channel.asyncio_detailed(id, client=self._client))
 
     async def list(self) -> _m.ListChannelsResponse200:
         """List channels"""
-        return _result(await _ops.alerts.list_channels.asyncio_detailed(client=self._client))
+        return _result(await _ops.channels.list_channels.asyncio_detailed(client=self._client))
 
     async def rotate_secret(self, id: str) -> Any:
         """Rotate a webhook secret"""
-        return _result(await _ops.alerts.rotate_webhook_secret.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.channels.rotate_webhook_secret.asyncio_detailed(id, client=self._client))
 
     async def test(self, id: str) -> _m.TestChannelResponse200:
         """Send a test to a channel"""
-        return _result(await _ops.alerts.test_channel.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.channels.test_channel.asyncio_detailed(id, client=self._client))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateChannelBody | None = None, **fields: Any) -> Any:
         """Update a channel
@@ -2275,7 +2304,7 @@ class _AsyncChannels:
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
           events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
-        return _result(await _ops.alerts.update_channel.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
+        return _result(await _ops.channels.update_channel.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _AsyncCompany:
     """company: get, update."""

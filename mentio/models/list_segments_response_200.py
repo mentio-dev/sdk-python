@@ -10,9 +10,7 @@ if TYPE_CHECKING:
     from ..models.list_segments_response_200_data_item import (
         ListSegmentsResponse200DataItem,
     )
-    from ..models.list_segments_response_200_presets_item import (
-        ListSegmentsResponse200PresetsItem,
-    )
+    from ..models.segment_preset import SegmentPreset
 
 
 T = TypeVar("T", bound="ListSegmentsResponse200")
@@ -23,11 +21,12 @@ class ListSegmentsResponse200:
     """
     Attributes:
         data (list[ListSegmentsResponse200DataItem]):
-        presets (list[ListSegmentsResponse200PresetsItem]): Starting points you can save with POST /v1/segments.
+        presets (list[SegmentPreset]): Deprecated: use GET /v1/segments/presets. Starting points you can save with POST
+            /v1/segments.
     """
 
     data: list[ListSegmentsResponse200DataItem]
-    presets: list[ListSegmentsResponse200PresetsItem]
+    presets: list[SegmentPreset]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,9 +56,7 @@ class ListSegmentsResponse200:
         from ..models.list_segments_response_200_data_item import (
             ListSegmentsResponse200DataItem,
         )
-        from ..models.list_segments_response_200_presets_item import (
-            ListSegmentsResponse200PresetsItem,
-        )
+        from ..models.segment_preset import SegmentPreset
 
         d = dict(src_dict)
         data = []
@@ -72,9 +69,7 @@ class ListSegmentsResponse200:
         presets = []
         _presets = d.pop("presets")
         for presets_item_data in _presets:
-            presets_item = ListSegmentsResponse200PresetsItem.from_dict(
-                presets_item_data
-            )
+            presets_item = SegmentPreset.from_dict(presets_item_data)
 
             presets.append(presets_item)
 

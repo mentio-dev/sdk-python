@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class ListSegmentsResponse200PresetsItemFilterKeywordKindsItem(StrEnum):
+class SegmentPresetFilterKeywordKindsItem(StrEnum):
     BRAND = "brand"
     COMPETITOR = "competitor"
     TOPIC = "topic"

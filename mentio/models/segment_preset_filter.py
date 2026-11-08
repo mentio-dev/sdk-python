@@ -6,82 +6,69 @@ from typing import Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.list_segments_response_200_presets_item_filter_keyword_kinds_item import (
-    ListSegmentsResponse200PresetsItemFilterKeywordKindsItem,
+from ..models.segment_preset_filter_keyword_kinds_item import (
+    SegmentPresetFilterKeywordKindsItem,
 )
-from ..models.list_segments_response_200_presets_item_filter_never_keyword_kinds_item import (
-    ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem,
+from ..models.segment_preset_filter_never_keyword_kinds_item import (
+    SegmentPresetFilterNeverKeywordKindsItem,
 )
-from ..models.list_segments_response_200_presets_item_filter_not_platforms_item import (
-    ListSegmentsResponse200PresetsItemFilterNotPlatformsItem,
+from ..models.segment_preset_filter_not_platforms_item import (
+    SegmentPresetFilterNotPlatformsItem,
 )
-from ..models.list_segments_response_200_presets_item_filter_platforms_item import (
-    ListSegmentsResponse200PresetsItemFilterPlatformsItem,
+from ..models.segment_preset_filter_platforms_item import (
+    SegmentPresetFilterPlatformsItem,
 )
-from ..models.list_segments_response_200_presets_item_filter_stages_item import (
-    ListSegmentsResponse200PresetsItemFilterStagesItem,
-)
+from ..models.segment_preset_filter_stages_item import SegmentPresetFilterStagesItem
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ListSegmentsResponse200PresetsItemFilter")
+T = TypeVar("T", bound="SegmentPresetFilter")
 
 
 @_attrs_define
-class ListSegmentsResponse200PresetsItemFilter:
-    """
+class SegmentPresetFilter:
+    """The filter to save with POST /v1/segments.
+
     Attributes:
-        platforms (list[ListSegmentsResponse200PresetsItemFilterPlatformsItem] | Unset): People with an account on any
-            of these platforms.
+        platforms (list[SegmentPresetFilterPlatformsItem] | Unset): People with an account on any of these platforms.
         tags (list[str] | Unset): People carrying any of these tags.
         min_followers (int | Unset): At least this many followers. Unknown reach never matches.
         max_followers (int | Unset): At most this many followers. Unknown reach never matches.
         min_mentions (int | Unset): At least this many matched mentions.
         min_negative (int | Unset): At least this many negative mentions.
         intents (list[str] | Unset): At least one mention carrying any of these intents.
-        keyword_kinds (list[ListSegmentsResponse200PresetsItemFilterKeywordKindsItem] | Unset): Mentioned a keyword of
-            any of these kinds.
-        never_keyword_kinds (list[ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem] | Unset): Never
-            mentioned a keyword of these kinds.
-        not_platforms (list[ListSegmentsResponse200PresetsItemFilterNotPlatformsItem] | Unset): Nobody with an account
-            on these platforms.
+        keyword_kinds (list[SegmentPresetFilterKeywordKindsItem] | Unset): Mentioned a keyword of any of these kinds.
+        never_keyword_kinds (list[SegmentPresetFilterNeverKeywordKindsItem] | Unset): Never mentioned a keyword of these
+            kinds.
+        not_platforms (list[SegmentPresetFilterNotPlatformsItem] | Unset): Nobody with an account on these platforms.
         not_tags (list[str] | Unset): Nobody carrying any of these tags.
         not_intents (list[str] | Unset): Nobody whose mentions carry any of these intents.
         new_since_days (int | Unset): First seen within this many days.
         link_hosts (list[str] | Unset): At least one mention linking to any of these hosts, the host itself or a
             subdomain of it.
         muted (bool | Unset): true: only muted people; false: only unmuted.
-        stages (list[ListSegmentsResponse200PresetsItemFilterStagesItem] | Unset): People at any of these outreach
-            stages.
+        stages (list[SegmentPresetFilterStagesItem] | Unset): People at any of these outreach stages.
         automated (bool | Unset): true: only people whose matched posts are mostly machine-made (bot accounts); false:
             only the rest.
         owner_ids (list[str] | Unset): People owned by any of these members (user ids); "none" matches people nobody
             owns.
     """
 
-    platforms: list[ListSegmentsResponse200PresetsItemFilterPlatformsItem] | Unset = (
-        UNSET
-    )
+    platforms: list[SegmentPresetFilterPlatformsItem] | Unset = UNSET
     tags: list[str] | Unset = UNSET
     min_followers: int | Unset = UNSET
     max_followers: int | Unset = UNSET
     min_mentions: int | Unset = UNSET
     min_negative: int | Unset = UNSET
     intents: list[str] | Unset = UNSET
-    keyword_kinds: (
-        list[ListSegmentsResponse200PresetsItemFilterKeywordKindsItem] | Unset
-    ) = UNSET
-    never_keyword_kinds: (
-        list[ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem] | Unset
-    ) = UNSET
-    not_platforms: (
-        list[ListSegmentsResponse200PresetsItemFilterNotPlatformsItem] | Unset
-    ) = UNSET
+    keyword_kinds: list[SegmentPresetFilterKeywordKindsItem] | Unset = UNSET
+    never_keyword_kinds: list[SegmentPresetFilterNeverKeywordKindsItem] | Unset = UNSET
+    not_platforms: list[SegmentPresetFilterNotPlatformsItem] | Unset = UNSET
     not_tags: list[str] | Unset = UNSET
     not_intents: list[str] | Unset = UNSET
     new_since_days: int | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
     muted: bool | Unset = UNSET
-    stages: list[ListSegmentsResponse200PresetsItemFilterStagesItem] | Unset = UNSET
+    stages: list[SegmentPresetFilterStagesItem] | Unset = UNSET
     automated: bool | Unset = UNSET
     owner_ids: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -206,15 +193,11 @@ class ListSegmentsResponse200PresetsItemFilter:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
         _platforms = d.pop("platforms", UNSET)
-        platforms: (
-            list[ListSegmentsResponse200PresetsItemFilterPlatformsItem] | Unset
-        ) = UNSET
+        platforms: list[SegmentPresetFilterPlatformsItem] | Unset = UNSET
         if _platforms is not UNSET:
             platforms = []
             for platforms_item_data in _platforms:
-                platforms_item = ListSegmentsResponse200PresetsItemFilterPlatformsItem(
-                    platforms_item_data
-                )
+                platforms_item = SegmentPresetFilterPlatformsItem(platforms_item_data)
 
                 platforms.append(platforms_item)
 
@@ -231,46 +214,36 @@ class ListSegmentsResponse200PresetsItemFilter:
         intents = cast(list[str], d.pop("intents", UNSET))
 
         _keyword_kinds = d.pop("keywordKinds", UNSET)
-        keyword_kinds: (
-            list[ListSegmentsResponse200PresetsItemFilterKeywordKindsItem] | Unset
-        ) = UNSET
+        keyword_kinds: list[SegmentPresetFilterKeywordKindsItem] | Unset = UNSET
         if _keyword_kinds is not UNSET:
             keyword_kinds = []
             for keyword_kinds_item_data in _keyword_kinds:
-                keyword_kinds_item = (
-                    ListSegmentsResponse200PresetsItemFilterKeywordKindsItem(
-                        keyword_kinds_item_data
-                    )
+                keyword_kinds_item = SegmentPresetFilterKeywordKindsItem(
+                    keyword_kinds_item_data
                 )
 
                 keyword_kinds.append(keyword_kinds_item)
 
         _never_keyword_kinds = d.pop("neverKeywordKinds", UNSET)
-        never_keyword_kinds: (
-            list[ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem] | Unset
-        ) = UNSET
+        never_keyword_kinds: list[SegmentPresetFilterNeverKeywordKindsItem] | Unset = (
+            UNSET
+        )
         if _never_keyword_kinds is not UNSET:
             never_keyword_kinds = []
             for never_keyword_kinds_item_data in _never_keyword_kinds:
-                never_keyword_kinds_item = (
-                    ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem(
-                        never_keyword_kinds_item_data
-                    )
+                never_keyword_kinds_item = SegmentPresetFilterNeverKeywordKindsItem(
+                    never_keyword_kinds_item_data
                 )
 
                 never_keyword_kinds.append(never_keyword_kinds_item)
 
         _not_platforms = d.pop("notPlatforms", UNSET)
-        not_platforms: (
-            list[ListSegmentsResponse200PresetsItemFilterNotPlatformsItem] | Unset
-        ) = UNSET
+        not_platforms: list[SegmentPresetFilterNotPlatformsItem] | Unset = UNSET
         if _not_platforms is not UNSET:
             not_platforms = []
             for not_platforms_item_data in _not_platforms:
-                not_platforms_item = (
-                    ListSegmentsResponse200PresetsItemFilterNotPlatformsItem(
-                        not_platforms_item_data
-                    )
+                not_platforms_item = SegmentPresetFilterNotPlatformsItem(
+                    not_platforms_item_data
                 )
 
                 not_platforms.append(not_platforms_item)
@@ -286,13 +259,11 @@ class ListSegmentsResponse200PresetsItemFilter:
         muted = d.pop("muted", UNSET)
 
         _stages = d.pop("stages", UNSET)
-        stages: list[ListSegmentsResponse200PresetsItemFilterStagesItem] | Unset = UNSET
+        stages: list[SegmentPresetFilterStagesItem] | Unset = UNSET
         if _stages is not UNSET:
             stages = []
             for stages_item_data in _stages:
-                stages_item = ListSegmentsResponse200PresetsItemFilterStagesItem(
-                    stages_item_data
-                )
+                stages_item = SegmentPresetFilterStagesItem(stages_item_data)
 
                 stages.append(stages_item)
 
@@ -300,7 +271,7 @@ class ListSegmentsResponse200PresetsItemFilter:
 
         owner_ids = cast(list[str], d.pop("ownerIds", UNSET))
 
-        list_segments_response_200_presets_item_filter = cls(
+        segment_preset_filter = cls(
             platforms=platforms,
             tags=tags,
             min_followers=min_followers,
@@ -321,8 +292,8 @@ class ListSegmentsResponse200PresetsItemFilter:
             owner_ids=owner_ids,
         )
 
-        list_segments_response_200_presets_item_filter.additional_properties = d
-        return list_segments_response_200_presets_item_filter
+        segment_preset_filter.additional_properties = d
+        return segment_preset_filter
 
     @property
     def additional_keys(self) -> list[str]:

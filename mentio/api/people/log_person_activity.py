@@ -17,8 +17,11 @@ def _get_kwargs(
     *,
     body: LogPersonActivityBody,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
+    if not isinstance(idempotency_key, Unset):
+        headers["idempotency-key"] = idempotency_key
 
     params: dict[str, Any] = {}
 
@@ -88,6 +91,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: LogPersonActivityBody,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | PersonActivity]:
     """Log an outreach activity
 
@@ -104,6 +108,9 @@ def sync_detailed(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (LogPersonActivityBody):
 
     Raises:
@@ -118,6 +125,7 @@ def sync_detailed(
         id=id,
         body=body,
         group_id=group_id,
+        idempotency_key=idempotency_key,
     )
 
     response = client.get_httpx_client().request(
@@ -133,6 +141,7 @@ def sync(
     client: AuthenticatedClient,
     body: LogPersonActivityBody,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | PersonActivity | None:
     """Log an outreach activity
 
@@ -149,6 +158,9 @@ def sync(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (LogPersonActivityBody):
 
     Raises:
@@ -164,6 +176,7 @@ def sync(
         client=client,
         body=body,
         group_id=group_id,
+        idempotency_key=idempotency_key,
     ).parsed
 
 
@@ -173,6 +186,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: LogPersonActivityBody,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | PersonActivity]:
     """Log an outreach activity
 
@@ -189,6 +203,9 @@ async def asyncio_detailed(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (LogPersonActivityBody):
 
     Raises:
@@ -203,6 +220,7 @@ async def asyncio_detailed(
         id=id,
         body=body,
         group_id=group_id,
+        idempotency_key=idempotency_key,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -216,6 +234,7 @@ async def asyncio(
     client: AuthenticatedClient,
     body: LogPersonActivityBody,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | PersonActivity | None:
     """Log an outreach activity
 
@@ -232,6 +251,9 @@ async def asyncio(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (LogPersonActivityBody):
 
     Raises:
@@ -248,5 +270,6 @@ async def asyncio(
             client=client,
             body=body,
             group_id=group_id,
+            idempotency_key=idempotency_key,
         )
     ).parsed

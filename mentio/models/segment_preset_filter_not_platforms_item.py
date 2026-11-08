@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class ListSegmentsResponse200PresetsItemFilterPlatformsItem(StrEnum):
+class SegmentPresetFilterNotPlatformsItem(StrEnum):
     APPSTORE = "appstore"
     BLUESKY = "bluesky"
     DEVTO = "devto"

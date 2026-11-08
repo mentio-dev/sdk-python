@@ -7,16 +7,30 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.list_keywords_kind_item import ListKeywordsKindItem
+from ...models.list_keywords_kinds_item import ListKeywordsKindsItem
+from ...models.list_keywords_not_kinds_item import ListKeywordsNotKindsItem
+from ...models.list_keywords_not_platforms_item import ListKeywordsNotPlatformsItem
+from ...models.list_keywords_not_statuses_item import ListKeywordsNotStatusesItem
 from ...models.list_keywords_platform_item import ListKeywordsPlatformItem
+from ...models.list_keywords_platforms_item import ListKeywordsPlatformsItem
 from ...models.list_keywords_response_200 import ListKeywordsResponse200
 from ...models.list_keywords_sort import ListKeywordsSort
 from ...models.list_keywords_status_item import ListKeywordsStatusItem
+from ...models.list_keywords_statuses_item import ListKeywordsStatusesItem
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     q: str | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    kinds: list[ListKeywordsKindsItem] | Unset = UNSET,
+    not_kinds: list[ListKeywordsNotKindsItem] | Unset = UNSET,
+    not_statuses: list[ListKeywordsNotStatusesItem] | Unset = UNSET,
+    not_platforms: list[ListKeywordsNotPlatformsItem] | Unset = UNSET,
+    statuses: list[ListKeywordsStatusesItem] | Unset = UNSET,
+    platforms: list[ListKeywordsPlatformsItem] | Unset = UNSET,
     group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
@@ -29,6 +43,80 @@ def _get_kwargs(
     params: dict[str, Any] = {}
 
     params["q"] = q
+
+    json_group_ids: list[str] | None | Unset
+    if isinstance(group_ids, Unset):
+        json_group_ids = UNSET
+    elif isinstance(group_ids, list):
+        json_group_ids = group_ids
+
+    else:
+        json_group_ids = group_ids
+    params["groupIds"] = json_group_ids
+
+    json_not_group_ids: list[str] | None | Unset
+    if isinstance(not_group_ids, Unset):
+        json_not_group_ids = UNSET
+    elif isinstance(not_group_ids, list):
+        json_not_group_ids = not_group_ids
+
+    else:
+        json_not_group_ids = not_group_ids
+    params["notGroupIds"] = json_not_group_ids
+
+    json_kinds: list[str] | Unset = UNSET
+    if not isinstance(kinds, Unset):
+        json_kinds = []
+        for kinds_item_data in kinds:
+            kinds_item = kinds_item_data.value
+            json_kinds.append(kinds_item)
+
+    params["kinds"] = json_kinds
+
+    json_not_kinds: list[str] | Unset = UNSET
+    if not isinstance(not_kinds, Unset):
+        json_not_kinds = []
+        for not_kinds_item_data in not_kinds:
+            not_kinds_item = not_kinds_item_data.value
+            json_not_kinds.append(not_kinds_item)
+
+    params["notKinds"] = json_not_kinds
+
+    json_not_statuses: list[str] | Unset = UNSET
+    if not isinstance(not_statuses, Unset):
+        json_not_statuses = []
+        for not_statuses_item_data in not_statuses:
+            not_statuses_item = not_statuses_item_data.value
+            json_not_statuses.append(not_statuses_item)
+
+    params["notStatuses"] = json_not_statuses
+
+    json_not_platforms: list[str] | Unset = UNSET
+    if not isinstance(not_platforms, Unset):
+        json_not_platforms = []
+        for not_platforms_item_data in not_platforms:
+            not_platforms_item = not_platforms_item_data.value
+            json_not_platforms.append(not_platforms_item)
+
+    params["notPlatforms"] = json_not_platforms
+
+    json_statuses: list[str] | Unset = UNSET
+    if not isinstance(statuses, Unset):
+        json_statuses = []
+        for statuses_item_data in statuses:
+            statuses_item = statuses_item_data.value
+            json_statuses.append(statuses_item)
+
+    params["statuses"] = json_statuses
+
+    json_platforms: list[str] | Unset = UNSET
+    if not isinstance(platforms, Unset):
+        json_platforms = []
+        for platforms_item_data in platforms:
+            platforms_item = platforms_item_data.value
+            json_platforms.append(platforms_item)
+
+    params["platforms"] = json_platforms
 
     json_group_id: list[str] | None | Unset
     if isinstance(group_id, Unset):
@@ -132,6 +220,14 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    kinds: list[ListKeywordsKindsItem] | Unset = UNSET,
+    not_kinds: list[ListKeywordsNotKindsItem] | Unset = UNSET,
+    not_statuses: list[ListKeywordsNotStatusesItem] | Unset = UNSET,
+    not_platforms: list[ListKeywordsNotPlatformsItem] | Unset = UNSET,
+    statuses: list[ListKeywordsStatusesItem] | Unset = UNSET,
+    platforms: list[ListKeywordsPlatformsItem] | Unset = UNSET,
     group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
@@ -149,16 +245,32 @@ def sync_detailed(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
-        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+        group_ids (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
             Repeatable, or comma-separated.
-        kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
+        not_group_ids (list[str] | None | Unset): Never keywords in these groups (grp_...).
             Repeatable, or comma-separated.
-        status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused, capped. Repeatable, or comma-separated.
-        platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
+        kinds (list[ListKeywordsKindsItem] | Unset): Only these kinds: brand, competitor, topic.
+            Repeatable, or comma-separated.
+        not_kinds (list[ListKeywordsNotKindsItem] | Unset): Never these kinds. Repeatable, or
+            comma-separated.
+        not_statuses (list[ListKeywordsNotStatusesItem] | Unset): Never keywords in these states.
+            Repeatable, or comma-separated.
+        not_platforms (list[ListKeywordsNotPlatformsItem] | Unset): Never keywords tracked on any
+            of these platforms (by the same reading as platforms). Repeatable, or comma-separated.
+        statuses (list[ListKeywordsStatusesItem] | Unset): Only keywords in these states: active,
+            muted, paused, noisy, capped. Repeatable, or comma-separated.
+        platforms (list[ListKeywordsPlatformsItem] | Unset): Only keywords tracked on any of these
             platforms: its term searched there (every platform when its platforms are null), or for
             appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
             comma-separated.
+        group_id (list[str] | None | Unset): Deprecated: use groupIds, the same filter; both are
+            read as one list.
+        kind (list[ListKeywordsKindItem] | Unset): Deprecated: use kinds, the same filter; both
+            are read as one list.
+        status (list[ListKeywordsStatusItem] | Unset): Deprecated: use statuses, the same filter;
+            both are read as one list.
+        platform (list[ListKeywordsPlatformItem] | Unset): Deprecated: use platforms, the same
+            filter; both are read as one list.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords
@@ -176,6 +288,14 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         q=q,
+        group_ids=group_ids,
+        not_group_ids=not_group_ids,
+        kinds=kinds,
+        not_kinds=not_kinds,
+        not_statuses=not_statuses,
+        not_platforms=not_platforms,
+        statuses=statuses,
+        platforms=platforms,
         group_id=group_id,
         kind=kind,
         status=status,
@@ -196,6 +316,14 @@ def sync(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    kinds: list[ListKeywordsKindsItem] | Unset = UNSET,
+    not_kinds: list[ListKeywordsNotKindsItem] | Unset = UNSET,
+    not_statuses: list[ListKeywordsNotStatusesItem] | Unset = UNSET,
+    not_platforms: list[ListKeywordsNotPlatformsItem] | Unset = UNSET,
+    statuses: list[ListKeywordsStatusesItem] | Unset = UNSET,
+    platforms: list[ListKeywordsPlatformsItem] | Unset = UNSET,
     group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
@@ -213,16 +341,32 @@ def sync(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
-        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+        group_ids (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
             Repeatable, or comma-separated.
-        kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
+        not_group_ids (list[str] | None | Unset): Never keywords in these groups (grp_...).
             Repeatable, or comma-separated.
-        status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused, capped. Repeatable, or comma-separated.
-        platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
+        kinds (list[ListKeywordsKindsItem] | Unset): Only these kinds: brand, competitor, topic.
+            Repeatable, or comma-separated.
+        not_kinds (list[ListKeywordsNotKindsItem] | Unset): Never these kinds. Repeatable, or
+            comma-separated.
+        not_statuses (list[ListKeywordsNotStatusesItem] | Unset): Never keywords in these states.
+            Repeatable, or comma-separated.
+        not_platforms (list[ListKeywordsNotPlatformsItem] | Unset): Never keywords tracked on any
+            of these platforms (by the same reading as platforms). Repeatable, or comma-separated.
+        statuses (list[ListKeywordsStatusesItem] | Unset): Only keywords in these states: active,
+            muted, paused, noisy, capped. Repeatable, or comma-separated.
+        platforms (list[ListKeywordsPlatformsItem] | Unset): Only keywords tracked on any of these
             platforms: its term searched there (every platform when its platforms are null), or for
             appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
             comma-separated.
+        group_id (list[str] | None | Unset): Deprecated: use groupIds, the same filter; both are
+            read as one list.
+        kind (list[ListKeywordsKindItem] | Unset): Deprecated: use kinds, the same filter; both
+            are read as one list.
+        status (list[ListKeywordsStatusItem] | Unset): Deprecated: use statuses, the same filter;
+            both are read as one list.
+        platform (list[ListKeywordsPlatformItem] | Unset): Deprecated: use platforms, the same
+            filter; both are read as one list.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords
@@ -241,6 +385,14 @@ def sync(
     return sync_detailed(
         client=client,
         q=q,
+        group_ids=group_ids,
+        not_group_ids=not_group_ids,
+        kinds=kinds,
+        not_kinds=not_kinds,
+        not_statuses=not_statuses,
+        not_platforms=not_platforms,
+        statuses=statuses,
+        platforms=platforms,
         group_id=group_id,
         kind=kind,
         status=status,
@@ -255,6 +407,14 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    kinds: list[ListKeywordsKindsItem] | Unset = UNSET,
+    not_kinds: list[ListKeywordsNotKindsItem] | Unset = UNSET,
+    not_statuses: list[ListKeywordsNotStatusesItem] | Unset = UNSET,
+    not_platforms: list[ListKeywordsNotPlatformsItem] | Unset = UNSET,
+    statuses: list[ListKeywordsStatusesItem] | Unset = UNSET,
+    platforms: list[ListKeywordsPlatformsItem] | Unset = UNSET,
     group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
@@ -272,16 +432,32 @@ async def asyncio_detailed(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
-        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+        group_ids (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
             Repeatable, or comma-separated.
-        kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
+        not_group_ids (list[str] | None | Unset): Never keywords in these groups (grp_...).
             Repeatable, or comma-separated.
-        status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused, capped. Repeatable, or comma-separated.
-        platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
+        kinds (list[ListKeywordsKindsItem] | Unset): Only these kinds: brand, competitor, topic.
+            Repeatable, or comma-separated.
+        not_kinds (list[ListKeywordsNotKindsItem] | Unset): Never these kinds. Repeatable, or
+            comma-separated.
+        not_statuses (list[ListKeywordsNotStatusesItem] | Unset): Never keywords in these states.
+            Repeatable, or comma-separated.
+        not_platforms (list[ListKeywordsNotPlatformsItem] | Unset): Never keywords tracked on any
+            of these platforms (by the same reading as platforms). Repeatable, or comma-separated.
+        statuses (list[ListKeywordsStatusesItem] | Unset): Only keywords in these states: active,
+            muted, paused, noisy, capped. Repeatable, or comma-separated.
+        platforms (list[ListKeywordsPlatformsItem] | Unset): Only keywords tracked on any of these
             platforms: its term searched there (every platform when its platforms are null), or for
             appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
             comma-separated.
+        group_id (list[str] | None | Unset): Deprecated: use groupIds, the same filter; both are
+            read as one list.
+        kind (list[ListKeywordsKindItem] | Unset): Deprecated: use kinds, the same filter; both
+            are read as one list.
+        status (list[ListKeywordsStatusItem] | Unset): Deprecated: use statuses, the same filter;
+            both are read as one list.
+        platform (list[ListKeywordsPlatformItem] | Unset): Deprecated: use platforms, the same
+            filter; both are read as one list.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords
@@ -299,6 +475,14 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         q=q,
+        group_ids=group_ids,
+        not_group_ids=not_group_ids,
+        kinds=kinds,
+        not_kinds=not_kinds,
+        not_statuses=not_statuses,
+        not_platforms=not_platforms,
+        statuses=statuses,
+        platforms=platforms,
         group_id=group_id,
         kind=kind,
         status=status,
@@ -317,6 +501,14 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     q: str | Unset = UNSET,
+    group_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    kinds: list[ListKeywordsKindsItem] | Unset = UNSET,
+    not_kinds: list[ListKeywordsNotKindsItem] | Unset = UNSET,
+    not_statuses: list[ListKeywordsNotStatusesItem] | Unset = UNSET,
+    not_platforms: list[ListKeywordsNotPlatformsItem] | Unset = UNSET,
+    statuses: list[ListKeywordsStatusesItem] | Unset = UNSET,
+    platforms: list[ListKeywordsPlatformsItem] | Unset = UNSET,
     group_id: list[str] | None | Unset = UNSET,
     kind: list[ListKeywordsKindItem] | Unset = UNSET,
     status: list[ListKeywordsStatusItem] | Unset = UNSET,
@@ -334,16 +526,32 @@ async def asyncio(
 
     Args:
         q (str | Unset): Text to find in the term or in the keyword's context, case-insensitive.
-        group_id (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
+        group_ids (list[str] | None | Unset): Only keywords in any of these groups (grp_...).
             Repeatable, or comma-separated.
-        kind (list[ListKeywordsKindItem] | Unset): Only these kinds: brand, competitor, topic.
+        not_group_ids (list[str] | None | Unset): Never keywords in these groups (grp_...).
             Repeatable, or comma-separated.
-        status (list[ListKeywordsStatusItem] | Unset): Only keywords in these states: active,
-            muted, paused, capped. Repeatable, or comma-separated.
-        platform (list[ListKeywordsPlatformItem] | Unset): Only keywords tracked on any of these
+        kinds (list[ListKeywordsKindsItem] | Unset): Only these kinds: brand, competitor, topic.
+            Repeatable, or comma-separated.
+        not_kinds (list[ListKeywordsNotKindsItem] | Unset): Never these kinds. Repeatable, or
+            comma-separated.
+        not_statuses (list[ListKeywordsNotStatusesItem] | Unset): Never keywords in these states.
+            Repeatable, or comma-separated.
+        not_platforms (list[ListKeywordsNotPlatformsItem] | Unset): Never keywords tracked on any
+            of these platforms (by the same reading as platforms). Repeatable, or comma-separated.
+        statuses (list[ListKeywordsStatusesItem] | Unset): Only keywords in these states: active,
+            muted, paused, noisy, capped. Repeatable, or comma-separated.
+        platforms (list[ListKeywordsPlatformsItem] | Unset): Only keywords tracked on any of these
             platforms: its term searched there (every platform when its platforms are null), or for
             appstore and googleplay, an app of that store among its reviewSources. Repeatable, or
             comma-separated.
+        group_id (list[str] | None | Unset): Deprecated: use groupIds, the same filter; both are
+            read as one list.
+        kind (list[ListKeywordsKindItem] | Unset): Deprecated: use kinds, the same filter; both
+            are read as one list.
+        status (list[ListKeywordsStatusItem] | Unset): Deprecated: use statuses, the same filter;
+            both are read as one list.
+        platform (list[ListKeywordsPlatformItem] | Unset): Deprecated: use platforms, the same
+            filter; both are read as one list.
         sort (ListKeywordsSort | Unset): newest: created most recently first. oldest: the reverse.
             term: A to Z. mentions: most matches first. relevant: most relevant matches first. recent:
             most matches in the last 7 days first. lastMention: newest matched post first, keywords
@@ -363,6 +571,14 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             q=q,
+            group_ids=group_ids,
+            not_group_ids=not_group_ids,
+            kinds=kinds,
+            not_kinds=not_kinds,
+            not_statuses=not_statuses,
+            not_platforms=not_platforms,
+            statuses=statuses,
+            platforms=platforms,
             group_id=group_id,
             kind=kind,
             status=status,

@@ -7,7 +7,7 @@
  * generated code (python parameter names, enum class names, response types)
  * is read back from the generated files, so it cannot drift from them.
  */
-import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { commandName } from '../../cli/src/naming';
 import { operationsFromDocument, type OpenApiDocument, type OpenApiSchema } from '../../cli/src/operations-from-spec';
@@ -323,3 +323,27 @@ const body = [
 
 writeFileSync(`${root}/mentio/_facade.py`, body);
 console.log(`Wrote mentio/_facade.py (${operations.length} operations in ${groupOrder.length} groups, sync and async)`);
+
+// Operations that moved to another tag keep their old low-level module path
+// importable: `mentio.api.alerts.list_channels` re-exports
+// `mentio.api.channels.list_channels` (channels were tagged Alerts until
+// 2026-11-07). The generator overwrites mentio/, so the aliases are written
+// here on every run.
+const MOVED_TAGS: Record<string, string> = { Channels: 'alerts' };
+let aliases = 0;
+for (const op of operations) {
+  const oldDir = MOVED_TAGS[op.tag];
+  if (!oldDir) continue;
+  const dir = `${root}/mentio/api/${oldDir}`;
+  // The old tag may have no operation left: the generator then writes no
+  // package there, and the aliases need one of their own.
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  if (!existsSync(`${dir}/__init__.py`)) writeFileSync(`${dir}/__init__.py`, '');
+  const mod = snake(op.operationId);
+  writeFileSync(
+    `${dir}/${mod}.py`,
+    `"""Moved to mentio.api.${snake(op.tag)}.${mod}; this path stays importable."""\n\nfrom ..${snake(op.tag)}.${mod} import *  # noqa: F401,F403\nfrom ..${snake(op.tag)}.${mod} import _get_kwargs, _parse_response, _build_response  # noqa: F401\n`,
+  );
+  aliases++;
+}
+if (aliases > 0) console.log(`Wrote ${aliases} moved-module aliases`);

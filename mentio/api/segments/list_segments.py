@@ -72,7 +72,7 @@ def sync_detailed(
 ) -> Response[ErrorResponse | ListSegmentsResponse200]:
     """List segments
 
-     List your saved segments with live member counts, plus presets to start from.
+     List your saved segments with live member counts.
 
     Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
     belongs to one scope.
@@ -108,7 +108,7 @@ def sync(
 ) -> ErrorResponse | ListSegmentsResponse200 | None:
     """List segments
 
-     List your saved segments with live member counts, plus presets to start from.
+     List your saved segments with live member counts.
 
     Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
     belongs to one scope.
@@ -139,7 +139,7 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | ListSegmentsResponse200]:
     """List segments
 
-     List your saved segments with live member counts, plus presets to start from.
+     List your saved segments with live member counts.
 
     Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
     belongs to one scope.
@@ -173,7 +173,7 @@ async def asyncio(
 ) -> ErrorResponse | ListSegmentsResponse200 | None:
     """List segments
 
-     List your saved segments with live member counts, plus presets to start from.
+     List your saved segments with live member counts.
 
     Pass a segment id to GET /v1/people for its members. `groupId` reads that group's own segments; each
     belongs to one scope.

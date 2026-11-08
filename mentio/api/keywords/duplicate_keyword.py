@@ -9,15 +9,18 @@ from ...client import AuthenticatedClient, Client
 from ...models.duplicate_keyword_body import DuplicateKeywordBody
 from ...models.error_response import ErrorResponse
 from ...models.keyword import Keyword
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     id: str,
     *,
     body: DuplicateKeywordBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
+    if not isinstance(idempotency_key, Unset):
+        headers["idempotency-key"] = idempotency_key
 
     _kwargs: dict[str, Any] = {
         "method": "post",
@@ -84,6 +87,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: DuplicateKeywordBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Keyword]:
     """Duplicate a keyword
 
@@ -94,6 +98,9 @@ def sync_detailed(
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (DuplicateKeywordBody):
 
     Raises:
@@ -107,6 +114,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         id=id,
         body=body,
+        idempotency_key=idempotency_key,
     )
 
     response = client.get_httpx_client().request(
@@ -121,6 +129,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: DuplicateKeywordBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | Keyword | None:
     """Duplicate a keyword
 
@@ -131,6 +140,9 @@ def sync(
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (DuplicateKeywordBody):
 
     Raises:
@@ -145,6 +157,7 @@ def sync(
         id=id,
         client=client,
         body=body,
+        idempotency_key=idempotency_key,
     ).parsed
 
 
@@ -153,6 +166,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: DuplicateKeywordBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Keyword]:
     """Duplicate a keyword
 
@@ -163,6 +177,9 @@ async def asyncio_detailed(
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (DuplicateKeywordBody):
 
     Raises:
@@ -176,6 +193,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         id=id,
         body=body,
+        idempotency_key=idempotency_key,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -188,6 +206,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: DuplicateKeywordBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | Keyword | None:
     """Duplicate a keyword
 
@@ -198,6 +217,9 @@ async def asyncio(
 
     Args:
         id (str): Keyword id (kw_...). Example: kw_abc123.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (DuplicateKeywordBody):
 
     Raises:
@@ -213,5 +235,6 @@ async def asyncio(
             id=id,
             client=client,
             body=body,
+            idempotency_key=idempotency_key,
         )
     ).parsed

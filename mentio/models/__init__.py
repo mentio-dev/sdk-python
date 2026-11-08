@@ -511,7 +511,12 @@ from .list_groups_response_200_data_item import ListGroupsResponse200DataItem
 from .list_groups_response_200_data_item_stats import ListGroupsResponse200DataItemStats
 from .list_invitations_response_200 import ListInvitationsResponse200
 from .list_keywords_kind_item import ListKeywordsKindItem
+from .list_keywords_kinds_item import ListKeywordsKindsItem
+from .list_keywords_not_kinds_item import ListKeywordsNotKindsItem
+from .list_keywords_not_platforms_item import ListKeywordsNotPlatformsItem
+from .list_keywords_not_statuses_item import ListKeywordsNotStatusesItem
 from .list_keywords_platform_item import ListKeywordsPlatformItem
+from .list_keywords_platforms_item import ListKeywordsPlatformsItem
 from .list_keywords_response_200 import ListKeywordsResponse200
 from .list_keywords_response_200_data_item import ListKeywordsResponse200DataItem
 from .list_keywords_response_200_data_item_cap_type_0 import (
@@ -591,6 +596,7 @@ from .list_keywords_response_200_data_item_stats_noise import (
 )
 from .list_keywords_sort import ListKeywordsSort
 from .list_keywords_status_item import ListKeywordsStatusItem
+from .list_keywords_statuses_item import ListKeywordsStatusesItem
 from .list_members_response_200 import ListMembersResponse200
 from .list_mention_comments_response_200 import ListMentionCommentsResponse200
 from .list_people_keyword_kinds_item import ListPeopleKeywordKindsItem
@@ -645,6 +651,7 @@ from .list_person_activities_response_200_data_item_channel import (
 from .list_person_activities_response_200_data_item_member_type_0 import (
     ListPersonActivitiesResponse200DataItemMemberType0,
 )
+from .list_segment_presets_response_200 import ListSegmentPresetsResponse200
 from .list_segments_response_200 import ListSegmentsResponse200
 from .list_segments_response_200_data_item import ListSegmentsResponse200DataItem
 from .list_segments_response_200_data_item_filter import (
@@ -664,25 +671,6 @@ from .list_segments_response_200_data_item_filter_platforms_item import (
 )
 from .list_segments_response_200_data_item_filter_stages_item import (
     ListSegmentsResponse200DataItemFilterStagesItem,
-)
-from .list_segments_response_200_presets_item import ListSegmentsResponse200PresetsItem
-from .list_segments_response_200_presets_item_filter import (
-    ListSegmentsResponse200PresetsItemFilter,
-)
-from .list_segments_response_200_presets_item_filter_keyword_kinds_item import (
-    ListSegmentsResponse200PresetsItemFilterKeywordKindsItem,
-)
-from .list_segments_response_200_presets_item_filter_never_keyword_kinds_item import (
-    ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem,
-)
-from .list_segments_response_200_presets_item_filter_not_platforms_item import (
-    ListSegmentsResponse200PresetsItemFilterNotPlatformsItem,
-)
-from .list_segments_response_200_presets_item_filter_platforms_item import (
-    ListSegmentsResponse200PresetsItemFilterPlatformsItem,
-)
-from .list_segments_response_200_presets_item_filter_stages_item import (
-    ListSegmentsResponse200PresetsItemFilterStagesItem,
 )
 from .list_views_response_200 import ListViewsResponse200
 from .list_views_response_200_data_item import ListViewsResponse200DataItem
@@ -833,6 +821,19 @@ from .segment_filter_never_keyword_kinds_item import SegmentFilterNeverKeywordKi
 from .segment_filter_not_platforms_item import SegmentFilterNotPlatformsItem
 from .segment_filter_platforms_item import SegmentFilterPlatformsItem
 from .segment_filter_stages_item import SegmentFilterStagesItem
+from .segment_preset import SegmentPreset
+from .segment_preset_filter import SegmentPresetFilter
+from .segment_preset_filter_keyword_kinds_item import (
+    SegmentPresetFilterKeywordKindsItem,
+)
+from .segment_preset_filter_never_keyword_kinds_item import (
+    SegmentPresetFilterNeverKeywordKindsItem,
+)
+from .segment_preset_filter_not_platforms_item import (
+    SegmentPresetFilterNotPlatformsItem,
+)
+from .segment_preset_filter_platforms_item import SegmentPresetFilterPlatformsItem
+from .segment_preset_filter_stages_item import SegmentPresetFilterStagesItem
 from .share_of_voice import ShareOfVoice
 from .share_of_voice_data_item import ShareOfVoiceDataItem
 from .share_of_voice_data_item_keyword import ShareOfVoiceDataItemKeyword
@@ -1354,7 +1355,12 @@ __all__ = (
     "ListGroupsResponse200DataItemStats",
     "ListInvitationsResponse200",
     "ListKeywordsKindItem",
+    "ListKeywordsKindsItem",
+    "ListKeywordsNotKindsItem",
+    "ListKeywordsNotPlatformsItem",
+    "ListKeywordsNotStatusesItem",
     "ListKeywordsPlatformItem",
+    "ListKeywordsPlatformsItem",
     "ListKeywordsResponse200",
     "ListKeywordsResponse200DataItem",
     "ListKeywordsResponse200DataItemCapType0",
@@ -1384,6 +1390,7 @@ __all__ = (
     "ListKeywordsResponse200DataItemStatsNoise",
     "ListKeywordsSort",
     "ListKeywordsStatusItem",
+    "ListKeywordsStatusesItem",
     "ListMembersResponse200",
     "ListMentionCommentsResponse200",
     "ListPeopleKeywordKindsItem",
@@ -1412,6 +1419,7 @@ __all__ = (
     "ListPersonActivitiesResponse200DataItem",
     "ListPersonActivitiesResponse200DataItemChannel",
     "ListPersonActivitiesResponse200DataItemMemberType0",
+    "ListSegmentPresetsResponse200",
     "ListSegmentsResponse200",
     "ListSegmentsResponse200DataItem",
     "ListSegmentsResponse200DataItemFilter",
@@ -1420,13 +1428,6 @@ __all__ = (
     "ListSegmentsResponse200DataItemFilterNotPlatformsItem",
     "ListSegmentsResponse200DataItemFilterPlatformsItem",
     "ListSegmentsResponse200DataItemFilterStagesItem",
-    "ListSegmentsResponse200PresetsItem",
-    "ListSegmentsResponse200PresetsItemFilter",
-    "ListSegmentsResponse200PresetsItemFilterKeywordKindsItem",
-    "ListSegmentsResponse200PresetsItemFilterNeverKeywordKindsItem",
-    "ListSegmentsResponse200PresetsItemFilterNotPlatformsItem",
-    "ListSegmentsResponse200PresetsItemFilterPlatformsItem",
-    "ListSegmentsResponse200PresetsItemFilterStagesItem",
     "ListViewsResponse200",
     "ListViewsResponse200DataItem",
     "ListViewsResponse200DataItemFilter",
@@ -1542,6 +1543,13 @@ __all__ = (
     "SegmentFilterNotPlatformsItem",
     "SegmentFilterPlatformsItem",
     "SegmentFilterStagesItem",
+    "SegmentPreset",
+    "SegmentPresetFilter",
+    "SegmentPresetFilterKeywordKindsItem",
+    "SegmentPresetFilterNeverKeywordKindsItem",
+    "SegmentPresetFilterNotPlatformsItem",
+    "SegmentPresetFilterPlatformsItem",
+    "SegmentPresetFilterStagesItem",
     "ShareOfVoice",
     "ShareOfVoiceDataItem",
     "ShareOfVoiceDataItemKeyword",

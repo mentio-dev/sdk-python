@@ -8,14 +8,17 @@ from ...client import AuthenticatedClient, Client
 from ...models.create_api_key_body import CreateApiKeyBody
 from ...models.create_api_key_response_201 import CreateApiKeyResponse201
 from ...models.error_response import ErrorResponse
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     body: CreateApiKeyBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
+    if not isinstance(idempotency_key, Unset):
+        headers["idempotency-key"] = idempotency_key
 
     _kwargs: dict[str, Any] = {
         "method": "post",
@@ -69,6 +72,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: CreateApiKeyBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[CreateApiKeyResponse201 | ErrorResponse]:
     """Create an API key
 
@@ -78,6 +82,9 @@ def sync_detailed(
     stays listed until revoked.
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (CreateApiKeyBody):
 
     Raises:
@@ -90,6 +97,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         body=body,
+        idempotency_key=idempotency_key,
     )
 
     response = client.get_httpx_client().request(
@@ -103,6 +111,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: CreateApiKeyBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> CreateApiKeyResponse201 | ErrorResponse | None:
     """Create an API key
 
@@ -112,6 +121,9 @@ def sync(
     stays listed until revoked.
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (CreateApiKeyBody):
 
     Raises:
@@ -125,6 +137,7 @@ def sync(
     return sync_detailed(
         client=client,
         body=body,
+        idempotency_key=idempotency_key,
     ).parsed
 
 
@@ -132,6 +145,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: CreateApiKeyBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[CreateApiKeyResponse201 | ErrorResponse]:
     """Create an API key
 
@@ -141,6 +155,9 @@ async def asyncio_detailed(
     stays listed until revoked.
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (CreateApiKeyBody):
 
     Raises:
@@ -153,6 +170,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         body=body,
+        idempotency_key=idempotency_key,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -164,6 +182,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: CreateApiKeyBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> CreateApiKeyResponse201 | ErrorResponse | None:
     """Create an API key
 
@@ -173,6 +192,9 @@ async def asyncio(
     stays listed until revoked.
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (CreateApiKeyBody):
 
     Raises:
@@ -187,5 +209,6 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             body=body,
+            idempotency_key=idempotency_key,
         )
     ).parsed

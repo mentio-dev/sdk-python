@@ -21,6 +21,8 @@ class ErrorResponseErrorCode(StrEnum):
     FORBIDDEN = "forbidden"
     GROUP_CHANGED = "group_changed"
     HOURLY_EMAIL_UNSUPPORTED = "hourly_email_unsupported"
+    IDEMPOTENCY_KEY_IN_USE = "idempotency_key_in_use"
+    IDEMPOTENCY_KEY_REUSED = "idempotency_key_reused"
     INSUFFICIENT_BALANCE = "insufficient_balance"
     INTERNAL_ERROR = "internal_error"
     INVALID_ASSIGNEE = "invalid_assignee"

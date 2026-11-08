@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class ListSegmentsResponse200PresetsItemFilterStagesItem(StrEnum):
+class SegmentPresetFilterStagesItem(StrEnum):
     CONTACTED = "contacted"
     CUSTOMER = "customer"
     IN_TALKS = "in_talks"
