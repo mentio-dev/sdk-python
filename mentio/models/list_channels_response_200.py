@@ -20,7 +20,7 @@ T = TypeVar("T", bound="ListChannelsResponse200")
 class ListChannelsResponse200:
     """
     Attributes:
-        data (list[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel]):
+        data (list[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel]): Every channel of the workspace.
     """
 
     data: list[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel]

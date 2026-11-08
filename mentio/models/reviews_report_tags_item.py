@@ -13,8 +13,8 @@ T = TypeVar("T", bound="ReviewsReportTagsItem")
 class ReviewsReportTagsItem:
     """
     Attributes:
-        tag (str):
-        count (int):
+        tag (str): The intent or topic tag.
+        count (int): Reviews carrying it.
     """
 
     tag: str

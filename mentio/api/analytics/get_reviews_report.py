@@ -7,6 +7,9 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.get_reviews_report_bucket import GetReviewsReportBucket
+from ...models.get_reviews_report_not_platforms_item import (
+    GetReviewsReportNotPlatformsItem,
+)
 from ...models.get_reviews_report_platforms_item import GetReviewsReportPlatformsItem
 from ...models.get_reviews_report_range import GetReviewsReportRange
 from ...models.reviews_report import ReviewsReport
@@ -20,6 +23,8 @@ def _get_kwargs(
     to: str | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetReviewsReportPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetReviewsReportNotPlatformsItem] | Unset = UNSET,
     compare: bool | Unset = UNSET,
     timezone: str | Unset = UNSET,
     bucket: GetReviewsReportBucket | Unset = UNSET,
@@ -55,6 +60,25 @@ def _get_kwargs(
             json_platforms.append(platforms_item)
 
     params["platforms"] = json_platforms
+
+    json_not_keyword_ids: list[str] | None | Unset
+    if isinstance(not_keyword_ids, Unset):
+        json_not_keyword_ids = UNSET
+    elif isinstance(not_keyword_ids, list):
+        json_not_keyword_ids = not_keyword_ids
+
+    else:
+        json_not_keyword_ids = not_keyword_ids
+    params["notKeywordIds"] = json_not_keyword_ids
+
+    json_not_platforms: list[str] | Unset = UNSET
+    if not isinstance(not_platforms, Unset):
+        json_not_platforms = []
+        for not_platforms_item_data in not_platforms:
+            not_platforms_item = not_platforms_item_data.value
+            json_not_platforms.append(not_platforms_item)
+
+    params["notPlatforms"] = json_not_platforms
 
     params["compare"] = compare
 
@@ -120,6 +144,8 @@ def sync_detailed(
     to: str | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetReviewsReportPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetReviewsReportNotPlatformsItem] | Unset = UNSET,
     compare: bool | Unset = UNSET,
     timezone: str | Unset = UNSET,
     bucket: GetReviewsReportBucket | Unset = UNSET,
@@ -143,6 +169,10 @@ def sync_detailed(
             separated; omit for every keyword.
         platforms (list[GetReviewsReportPlatformsItem] | Unset): Only these platforms. Repeatable,
             or comma-separated; omit for every platform.
+        not_keyword_ids (list[str] | None | Unset): Never these keyword ids. Repeatable, or comma-
+            separated.
+        not_platforms (list[GetReviewsReportNotPlatformsItem] | Unset): Never these platforms.
+            Repeatable, or comma-separated.
         compare (bool | Unset): true adds the period of the same length right before the window as
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
@@ -164,6 +194,8 @@ def sync_detailed(
         to=to,
         keyword_ids=keyword_ids,
         platforms=platforms,
+        not_keyword_ids=not_keyword_ids,
+        not_platforms=not_platforms,
         compare=compare,
         timezone=timezone,
         bucket=bucket,
@@ -184,6 +216,8 @@ def sync(
     to: str | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetReviewsReportPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetReviewsReportNotPlatformsItem] | Unset = UNSET,
     compare: bool | Unset = UNSET,
     timezone: str | Unset = UNSET,
     bucket: GetReviewsReportBucket | Unset = UNSET,
@@ -207,6 +241,10 @@ def sync(
             separated; omit for every keyword.
         platforms (list[GetReviewsReportPlatformsItem] | Unset): Only these platforms. Repeatable,
             or comma-separated; omit for every platform.
+        not_keyword_ids (list[str] | None | Unset): Never these keyword ids. Repeatable, or comma-
+            separated.
+        not_platforms (list[GetReviewsReportNotPlatformsItem] | Unset): Never these platforms.
+            Repeatable, or comma-separated.
         compare (bool | Unset): true adds the period of the same length right before the window as
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
@@ -229,6 +267,8 @@ def sync(
         to=to,
         keyword_ids=keyword_ids,
         platforms=platforms,
+        not_keyword_ids=not_keyword_ids,
+        not_platforms=not_platforms,
         compare=compare,
         timezone=timezone,
         bucket=bucket,
@@ -243,6 +283,8 @@ async def asyncio_detailed(
     to: str | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetReviewsReportPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetReviewsReportNotPlatformsItem] | Unset = UNSET,
     compare: bool | Unset = UNSET,
     timezone: str | Unset = UNSET,
     bucket: GetReviewsReportBucket | Unset = UNSET,
@@ -266,6 +308,10 @@ async def asyncio_detailed(
             separated; omit for every keyword.
         platforms (list[GetReviewsReportPlatformsItem] | Unset): Only these platforms. Repeatable,
             or comma-separated; omit for every platform.
+        not_keyword_ids (list[str] | None | Unset): Never these keyword ids. Repeatable, or comma-
+            separated.
+        not_platforms (list[GetReviewsReportNotPlatformsItem] | Unset): Never these platforms.
+            Repeatable, or comma-separated.
         compare (bool | Unset): true adds the period of the same length right before the window as
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
@@ -287,6 +333,8 @@ async def asyncio_detailed(
         to=to,
         keyword_ids=keyword_ids,
         platforms=platforms,
+        not_keyword_ids=not_keyword_ids,
+        not_platforms=not_platforms,
         compare=compare,
         timezone=timezone,
         bucket=bucket,
@@ -305,6 +353,8 @@ async def asyncio(
     to: str | Unset = UNSET,
     keyword_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetReviewsReportPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetReviewsReportNotPlatformsItem] | Unset = UNSET,
     compare: bool | Unset = UNSET,
     timezone: str | Unset = UNSET,
     bucket: GetReviewsReportBucket | Unset = UNSET,
@@ -328,6 +378,10 @@ async def asyncio(
             separated; omit for every keyword.
         platforms (list[GetReviewsReportPlatformsItem] | Unset): Only these platforms. Repeatable,
             or comma-separated; omit for every platform.
+        not_keyword_ids (list[str] | None | Unset): Never these keyword ids. Repeatable, or comma-
+            separated.
+        not_platforms (list[GetReviewsReportNotPlatformsItem] | Unset): Never these platforms.
+            Repeatable, or comma-separated.
         compare (bool | Unset): true adds the period of the same length right before the window as
             `previous`.
         timezone (str | Unset): IANA zone the days are cut in (Europe/Madrid). Default UTC. One
@@ -351,6 +405,8 @@ async def asyncio(
             to=to,
             keyword_ids=keyword_ids,
             platforms=platforms,
+            not_keyword_ids=not_keyword_ids,
+            not_platforms=not_platforms,
             compare=compare,
             timezone=timezone,
             bucket=bucket,

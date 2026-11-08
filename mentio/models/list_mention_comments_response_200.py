@@ -17,7 +17,7 @@ T = TypeVar("T", bound="ListMentionCommentsResponse200")
 class ListMentionCommentsResponse200:
     """
     Attributes:
-        data (list[MentionComment]):
+        data (list[MentionComment]): The page of comments, newest first.
         next_cursor (None | str): Pass as cursor for the next page; null on the last page.
     """
 

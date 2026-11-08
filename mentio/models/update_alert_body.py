@@ -22,8 +22,8 @@ class UpdateAlertBody:
     """Omitted fields are untouched.
 
     Attributes:
-        name (str | Unset):
-        enabled (bool | Unset):
+        name (str | Unset): Rule name.
+        enabled (bool | Unset): false: the rule sends nothing.
         mode (UpdateAlertBodyMode | Unset):
         filter_ (UpdateAlertBodyFilter | Unset): Replaces the whole filter.
         schedule (None | Unset | UpdateAlertBodyScheduleType0): Daily and weekly alerts. Ignored on an hourly one,

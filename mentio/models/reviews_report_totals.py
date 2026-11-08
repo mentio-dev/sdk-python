@@ -17,7 +17,8 @@ T = TypeVar("T", bound="ReviewsReportTotals")
 
 @_attrs_define
 class ReviewsReportTotals:
-    """
+    """The window's review count and average rating.
+
     Attributes:
         reviews (int): Reviews published in the window; a review matched by two keywords counts once.
         average_rating (float | None): Average stars, one decimal; null with no reviews.

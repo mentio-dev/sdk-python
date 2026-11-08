@@ -18,9 +18,9 @@ class View:
     """
     Attributes:
         id (str): View id (vw_...).
-        name (str):
-        description (str):
-        filter_ (ViewFilter):
+        name (str): View name.
+        description (str): What the view is for.
+        filter_ (ViewFilter): The mentions filter it saves (the fields of GET /v1/mentions).
         created_at (str): ISO 8601 timestamp, UTC.
         updated_at (str): ISO 8601 timestamp, UTC.
     """

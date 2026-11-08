@@ -19,7 +19,7 @@ T = TypeVar("T", bound="ListKeywordsResponse200")
 class ListKeywordsResponse200:
     """
     Attributes:
-        data (list[ListKeywordsResponse200DataItem]):
+        data (list[ListKeywordsResponse200DataItem]): The keywords.
         total (int): Keywords matching the filters, before `limit` and `offset`.
     """
 

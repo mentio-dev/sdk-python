@@ -21,7 +21,7 @@ class UpdateChannelBody:
     """Omitted fields are untouched.
 
     Attributes:
-        label (str | Unset):
+        label (str | Unset): Your name for the channel.
         url (str | Unset): Webhooks only.
         headers (UpdateChannelBodyHeaders | Unset): Webhooks only; replaces the whole set.
         events (list[UpdateChannelBodyEventsItem] | Unset): Replaces the account events the channel receives; empty

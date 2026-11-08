@@ -18,10 +18,10 @@ class PersonProfileType0:
     """Public profile facts; null until looked up.
 
     Attributes:
-        bio (None | str):
-        company (None | str):
-        location (None | str):
-        website (None | str):
+        bio (None | str): The profile's bio, as the platform shows it.
+        company (None | str): Company named on the profile.
+        location (None | str): Location named on the profile.
+        website (None | str): Website linked from the profile.
         email (None | str): Only when the person made it public on the platform.
         links (list[PersonProfileType0LinksItem]): Other accounts the person lists on their profile.
         fetched_at (str): When the profile was read.

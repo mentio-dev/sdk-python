@@ -20,7 +20,7 @@ class PersonStats:
     Attributes:
         mentions (int): Every match of theirs for this workspace, relevant or not.
         relevant (int): Of those, scored relevant.
-        sentiment (PersonStatsSentiment):
+        sentiment (PersonStatsSentiment): Their matched mentions by sentiment.
         first_seen_at (str): Their oldest matched post.
         last_seen_at (str): Their newest matched post.
     """

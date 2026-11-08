@@ -11,7 +11,8 @@ T = TypeVar("T", bound="WalletAutoRecharge")
 
 @_attrs_define
 class WalletAutoRecharge:
-    """
+    """Automatic top-up: off unless set in the dashboard.
+
     Attributes:
         available (bool): This deployment can charge saved cards; false hides the setting.
         enabled (bool): Charge the saved card automatically when the balance runs low.

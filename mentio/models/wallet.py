@@ -43,7 +43,7 @@ class Wallet:
         max_top_up_cents (int): Largest single top-up.
         default_top_up_cents (int): Amount prefilled in the checkout.
         currency (WalletCurrency): Every amount on this page is in USD cents.
-        auto_recharge (WalletAutoRecharge):
+        auto_recharge (WalletAutoRecharge): Automatic top-up: off unless set in the dashboard.
     """
 
     balance_cents: int

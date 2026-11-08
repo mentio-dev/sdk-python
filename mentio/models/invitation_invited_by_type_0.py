@@ -14,9 +14,9 @@ class InvitationInvitedByType0:
     """Who sent it; an API key invites on behalf of the oldest owner.
 
     Attributes:
-        id (str):
-        email (str):
-        name (None | str):
+        id (str): User id.
+        email (str): Their email.
+        name (None | str): Their name.
     """
 
     id: str

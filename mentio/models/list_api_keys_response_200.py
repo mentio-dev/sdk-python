@@ -19,7 +19,7 @@ T = TypeVar("T", bound="ListApiKeysResponse200")
 class ListApiKeysResponse200:
     """
     Attributes:
-        data (list[ListApiKeysResponse200DataItem]):
+        data (list[ListApiKeysResponse200DataItem]): Every API key of the workspace; the secret is never shown again.
     """
 
     data: list[ListApiKeysResponse200DataItem]

@@ -15,7 +15,7 @@ class ListChannelDeliveriesResponse200DataItemAlert:
     produces.
 
         Attributes:
-            name (None | str):
+            name (None | str): Alert name.
     """
 
     name: None | str

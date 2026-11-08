@@ -13,8 +13,8 @@ T = TypeVar("T", bound="PersonProfileType0LinksItem")
 class PersonProfileType0LinksItem:
     """
     Attributes:
-        provider (str):
-        url (str):
+        provider (str): The platform or kind of the linked account (github, x, website, ...).
+        url (str): Link to the account.
     """
 
     provider: str

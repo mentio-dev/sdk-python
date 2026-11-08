@@ -14,7 +14,7 @@ class ReviewsReportPagesItemSeriesItem:
     """
     Attributes:
         date (str): Bucket start, YYYY-MM-DD.
-        reviews (int):
+        reviews (int): Reviews in the bucket.
         average_rating (float | None): Average stars, one decimal; null with no reviews.
     """
 

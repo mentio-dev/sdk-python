@@ -164,6 +164,9 @@ from .create_segment_body_filter_never_keyword_kinds_item import (
 from .create_segment_body_filter_not_platforms_item import (
     CreateSegmentBodyFilterNotPlatformsItem,
 )
+from .create_segment_body_filter_not_stages_item import (
+    CreateSegmentBodyFilterNotStagesItem,
+)
 from .create_segment_body_filter_platforms_item import (
     CreateSegmentBodyFilterPlatformsItem,
 )
@@ -182,6 +185,9 @@ from .create_view_body_filter_keyword_kinds_item import (
 from .create_view_body_filter_kind import CreateViewBodyFilterKind
 from .create_view_body_filter_not_countries_item import (
     CreateViewBodyFilterNotCountriesItem,
+)
+from .create_view_body_filter_not_keyword_kinds_item import (
+    CreateViewBodyFilterNotKeywordKindsItem,
 )
 from .create_view_body_filter_not_platforms_item import (
     CreateViewBodyFilterNotPlatformsItem,
@@ -212,6 +218,9 @@ from .export_mentions_csv_countries_item import ExportMentionsCsvCountriesItem
 from .export_mentions_csv_keyword_kinds_item import ExportMentionsCsvKeywordKindsItem
 from .export_mentions_csv_kind import ExportMentionsCsvKind
 from .export_mentions_csv_not_countries_item import ExportMentionsCsvNotCountriesItem
+from .export_mentions_csv_not_keyword_kinds_item import (
+    ExportMentionsCsvNotKeywordKindsItem,
+)
 from .export_mentions_csv_not_platforms_item import ExportMentionsCsvNotPlatformsItem
 from .export_mentions_csv_not_sentiments_item import ExportMentionsCsvNotSentimentsItem
 from .export_mentions_csv_platform import ExportMentionsCsvPlatform
@@ -224,6 +233,9 @@ from .export_mentions_json_countries_item import ExportMentionsJsonCountriesItem
 from .export_mentions_json_keyword_kinds_item import ExportMentionsJsonKeywordKindsItem
 from .export_mentions_json_kind import ExportMentionsJsonKind
 from .export_mentions_json_not_countries_item import ExportMentionsJsonNotCountriesItem
+from .export_mentions_json_not_keyword_kinds_item import (
+    ExportMentionsJsonNotKeywordKindsItem,
+)
 from .export_mentions_json_not_platforms_item import ExportMentionsJsonNotPlatformsItem
 from .export_mentions_json_not_sentiments_item import (
     ExportMentionsJsonNotSentimentsItem,
@@ -240,6 +252,7 @@ from .export_people_csv_never_keyword_kinds_item import (
     ExportPeopleCsvNeverKeywordKindsItem,
 )
 from .export_people_csv_not_platforms_item import ExportPeopleCsvNotPlatformsItem
+from .export_people_csv_not_stages_item import ExportPeopleCsvNotStagesItem
 from .export_people_csv_platform import ExportPeopleCsvPlatform
 from .export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from .export_people_csv_range import ExportPeopleCsvRange
@@ -260,29 +273,40 @@ from .filter_group_countries_item import FilterGroupCountriesItem
 from .filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
 from .filter_group_kind import FilterGroupKind
 from .filter_group_not_countries_item import FilterGroupNotCountriesItem
+from .filter_group_not_keyword_kinds_item import FilterGroupNotKeywordKindsItem
 from .filter_group_not_platforms_item import FilterGroupNotPlatformsItem
 from .filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
 from .filter_group_platforms_item import FilterGroupPlatformsItem
 from .filter_group_sentiments_item import FilterGroupSentimentsItem
 from .filter_group_status import FilterGroupStatus
 from .get_analytics_breakdown_by import GetAnalyticsBreakdownBy
+from .get_analytics_breakdown_not_platforms_item import (
+    GetAnalyticsBreakdownNotPlatformsItem,
+)
 from .get_analytics_breakdown_platforms_item import GetAnalyticsBreakdownPlatformsItem
 from .get_analytics_breakdown_range import GetAnalyticsBreakdownRange
 from .get_analytics_series_bucket import GetAnalyticsSeriesBucket
 from .get_analytics_series_by import GetAnalyticsSeriesBy
+from .get_analytics_series_not_platforms_item import GetAnalyticsSeriesNotPlatformsItem
 from .get_analytics_series_platforms_item import GetAnalyticsSeriesPlatformsItem
 from .get_analytics_series_range import GetAnalyticsSeriesRange
+from .get_analytics_summary_not_platforms_item import (
+    GetAnalyticsSummaryNotPlatformsItem,
+)
 from .get_analytics_summary_platforms_item import GetAnalyticsSummaryPlatformsItem
 from .get_analytics_summary_range import GetAnalyticsSummaryRange
 from .get_health_response_200 import GetHealthResponse200
 from .get_invoice_url_response_200 import GetInvoiceUrlResponse200
 from .get_keyword_health_range import GetKeywordHealthRange
 from .get_reviews_report_bucket import GetReviewsReportBucket
+from .get_reviews_report_not_platforms_item import GetReviewsReportNotPlatformsItem
 from .get_reviews_report_platforms_item import GetReviewsReportPlatformsItem
 from .get_reviews_report_range import GetReviewsReportRange
+from .get_share_of_voice_not_platforms_item import GetShareOfVoiceNotPlatformsItem
 from .get_share_of_voice_platforms_item import GetShareOfVoicePlatformsItem
 from .get_share_of_voice_range import GetShareOfVoiceRange
 from .get_usage_breakdown_by import GetUsageBreakdownBy
+from .get_usage_breakdown_not_platforms_item import GetUsageBreakdownNotPlatformsItem
 from .get_usage_breakdown_platforms_item import GetUsageBreakdownPlatformsItem
 from .get_usage_breakdown_range import GetUsageBreakdownRange
 from .group import Group
@@ -602,6 +626,7 @@ from .list_mention_comments_response_200 import ListMentionCommentsResponse200
 from .list_people_keyword_kinds_item import ListPeopleKeywordKindsItem
 from .list_people_never_keyword_kinds_item import ListPeopleNeverKeywordKindsItem
 from .list_people_not_platforms_item import ListPeopleNotPlatformsItem
+from .list_people_not_stages_item import ListPeopleNotStagesItem
 from .list_people_platform import ListPeoplePlatform
 from .list_people_platforms_item import ListPeoplePlatformsItem
 from .list_people_range import ListPeopleRange
@@ -666,6 +691,9 @@ from .list_segments_response_200_data_item_filter_never_keyword_kinds_item impor
 from .list_segments_response_200_data_item_filter_not_platforms_item import (
     ListSegmentsResponse200DataItemFilterNotPlatformsItem,
 )
+from .list_segments_response_200_data_item_filter_not_stages_item import (
+    ListSegmentsResponse200DataItemFilterNotStagesItem,
+)
 from .list_segments_response_200_data_item_filter_platforms_item import (
     ListSegmentsResponse200DataItemFilterPlatformsItem,
 )
@@ -686,6 +714,9 @@ from .list_views_response_200_data_item_filter_kind import (
 )
 from .list_views_response_200_data_item_filter_not_countries_item import (
     ListViewsResponse200DataItemFilterNotCountriesItem,
+)
+from .list_views_response_200_data_item_filter_not_keyword_kinds_item import (
+    ListViewsResponse200DataItemFilterNotKeywordKindsItem,
 )
 from .list_views_response_200_data_item_filter_not_platforms_item import (
     ListViewsResponse200DataItemFilterNotPlatformsItem,
@@ -804,6 +835,7 @@ from .search_mentions_countries_item import SearchMentionsCountriesItem
 from .search_mentions_keyword_kinds_item import SearchMentionsKeywordKindsItem
 from .search_mentions_kind import SearchMentionsKind
 from .search_mentions_not_countries_item import SearchMentionsNotCountriesItem
+from .search_mentions_not_keyword_kinds_item import SearchMentionsNotKeywordKindsItem
 from .search_mentions_not_platforms_item import SearchMentionsNotPlatformsItem
 from .search_mentions_not_sentiments_item import SearchMentionsNotSentimentsItem
 from .search_mentions_platform import SearchMentionsPlatform
@@ -819,6 +851,7 @@ from .segment_filter import SegmentFilter
 from .segment_filter_keyword_kinds_item import SegmentFilterKeywordKindsItem
 from .segment_filter_never_keyword_kinds_item import SegmentFilterNeverKeywordKindsItem
 from .segment_filter_not_platforms_item import SegmentFilterNotPlatformsItem
+from .segment_filter_not_stages_item import SegmentFilterNotStagesItem
 from .segment_filter_platforms_item import SegmentFilterPlatformsItem
 from .segment_filter_stages_item import SegmentFilterStagesItem
 from .segment_preset import SegmentPreset
@@ -832,6 +865,7 @@ from .segment_preset_filter_never_keyword_kinds_item import (
 from .segment_preset_filter_not_platforms_item import (
     SegmentPresetFilterNotPlatformsItem,
 )
+from .segment_preset_filter_not_stages_item import SegmentPresetFilterNotStagesItem
 from .segment_preset_filter_platforms_item import SegmentPresetFilterPlatformsItem
 from .segment_preset_filter_stages_item import SegmentPresetFilterStagesItem
 from .share_of_voice import ShareOfVoice
@@ -939,6 +973,9 @@ from .update_segment_body_filter_never_keyword_kinds_item import (
 from .update_segment_body_filter_not_platforms_item import (
     UpdateSegmentBodyFilterNotPlatformsItem,
 )
+from .update_segment_body_filter_not_stages_item import (
+    UpdateSegmentBodyFilterNotStagesItem,
+)
 from .update_segment_body_filter_platforms_item import (
     UpdateSegmentBodyFilterPlatformsItem,
 )
@@ -952,6 +989,9 @@ from .update_view_body_filter_keyword_kinds_item import (
 from .update_view_body_filter_kind import UpdateViewBodyFilterKind
 from .update_view_body_filter_not_countries_item import (
     UpdateViewBodyFilterNotCountriesItem,
+)
+from .update_view_body_filter_not_keyword_kinds_item import (
+    UpdateViewBodyFilterNotKeywordKindsItem,
 )
 from .update_view_body_filter_not_platforms_item import (
     UpdateViewBodyFilterNotPlatformsItem,
@@ -982,6 +1022,7 @@ from .view_filter_countries_item import ViewFilterCountriesItem
 from .view_filter_keyword_kinds_item import ViewFilterKeywordKindsItem
 from .view_filter_kind import ViewFilterKind
 from .view_filter_not_countries_item import ViewFilterNotCountriesItem
+from .view_filter_not_keyword_kinds_item import ViewFilterNotKeywordKindsItem
 from .view_filter_not_platforms_item import ViewFilterNotPlatformsItem
 from .view_filter_not_sentiments_item import ViewFilterNotSentimentsItem
 from .view_filter_platforms_item import ViewFilterPlatformsItem
@@ -1112,6 +1153,7 @@ __all__ = (
     "CreateSegmentBodyFilterKeywordKindsItem",
     "CreateSegmentBodyFilterNeverKeywordKindsItem",
     "CreateSegmentBodyFilterNotPlatformsItem",
+    "CreateSegmentBodyFilterNotStagesItem",
     "CreateSegmentBodyFilterPlatformsItem",
     "CreateSegmentBodyFilterStagesItem",
     "CreateSlackChannel",
@@ -1125,6 +1167,7 @@ __all__ = (
     "CreateViewBodyFilterKeywordKindsItem",
     "CreateViewBodyFilterKind",
     "CreateViewBodyFilterNotCountriesItem",
+    "CreateViewBodyFilterNotKeywordKindsItem",
     "CreateViewBodyFilterNotPlatformsItem",
     "CreateViewBodyFilterNotSentimentsItem",
     "CreateViewBodyFilterPlatformsItem",
@@ -1150,6 +1193,7 @@ __all__ = (
     "ExportMentionsCsvKeywordKindsItem",
     "ExportMentionsCsvKind",
     "ExportMentionsCsvNotCountriesItem",
+    "ExportMentionsCsvNotKeywordKindsItem",
     "ExportMentionsCsvNotPlatformsItem",
     "ExportMentionsCsvNotSentimentsItem",
     "ExportMentionsCsvPlatform",
@@ -1162,6 +1206,7 @@ __all__ = (
     "ExportMentionsJsonKeywordKindsItem",
     "ExportMentionsJsonKind",
     "ExportMentionsJsonNotCountriesItem",
+    "ExportMentionsJsonNotKeywordKindsItem",
     "ExportMentionsJsonNotPlatformsItem",
     "ExportMentionsJsonNotSentimentsItem",
     "ExportMentionsJsonPlatform",
@@ -1174,6 +1219,7 @@ __all__ = (
     "ExportPeopleCsvKeywordKindsItem",
     "ExportPeopleCsvNeverKeywordKindsItem",
     "ExportPeopleCsvNotPlatformsItem",
+    "ExportPeopleCsvNotStagesItem",
     "ExportPeopleCsvPlatform",
     "ExportPeopleCsvPlatformsItem",
     "ExportPeopleCsvRange",
@@ -1194,29 +1240,36 @@ __all__ = (
     "FilterGroupKeywordKindsItem",
     "FilterGroupKind",
     "FilterGroupNotCountriesItem",
+    "FilterGroupNotKeywordKindsItem",
     "FilterGroupNotPlatformsItem",
     "FilterGroupNotSentimentsItem",
     "FilterGroupPlatformsItem",
     "FilterGroupSentimentsItem",
     "FilterGroupStatus",
     "GetAnalyticsBreakdownBy",
+    "GetAnalyticsBreakdownNotPlatformsItem",
     "GetAnalyticsBreakdownPlatformsItem",
     "GetAnalyticsBreakdownRange",
     "GetAnalyticsSeriesBucket",
     "GetAnalyticsSeriesBy",
+    "GetAnalyticsSeriesNotPlatformsItem",
     "GetAnalyticsSeriesPlatformsItem",
     "GetAnalyticsSeriesRange",
+    "GetAnalyticsSummaryNotPlatformsItem",
     "GetAnalyticsSummaryPlatformsItem",
     "GetAnalyticsSummaryRange",
     "GetHealthResponse200",
     "GetInvoiceUrlResponse200",
     "GetKeywordHealthRange",
     "GetReviewsReportBucket",
+    "GetReviewsReportNotPlatformsItem",
     "GetReviewsReportPlatformsItem",
     "GetReviewsReportRange",
+    "GetShareOfVoiceNotPlatformsItem",
     "GetShareOfVoicePlatformsItem",
     "GetShareOfVoiceRange",
     "GetUsageBreakdownBy",
+    "GetUsageBreakdownNotPlatformsItem",
     "GetUsageBreakdownPlatformsItem",
     "GetUsageBreakdownRange",
     "Group",
@@ -1396,6 +1449,7 @@ __all__ = (
     "ListPeopleKeywordKindsItem",
     "ListPeopleNeverKeywordKindsItem",
     "ListPeopleNotPlatformsItem",
+    "ListPeopleNotStagesItem",
     "ListPeoplePlatform",
     "ListPeoplePlatformsItem",
     "ListPeopleRange",
@@ -1426,6 +1480,7 @@ __all__ = (
     "ListSegmentsResponse200DataItemFilterKeywordKindsItem",
     "ListSegmentsResponse200DataItemFilterNeverKeywordKindsItem",
     "ListSegmentsResponse200DataItemFilterNotPlatformsItem",
+    "ListSegmentsResponse200DataItemFilterNotStagesItem",
     "ListSegmentsResponse200DataItemFilterPlatformsItem",
     "ListSegmentsResponse200DataItemFilterStagesItem",
     "ListViewsResponse200",
@@ -1435,6 +1490,7 @@ __all__ = (
     "ListViewsResponse200DataItemFilterKeywordKindsItem",
     "ListViewsResponse200DataItemFilterKind",
     "ListViewsResponse200DataItemFilterNotCountriesItem",
+    "ListViewsResponse200DataItemFilterNotKeywordKindsItem",
     "ListViewsResponse200DataItemFilterNotPlatformsItem",
     "ListViewsResponse200DataItemFilterNotSentimentsItem",
     "ListViewsResponse200DataItemFilterPlatformsItem",
@@ -1526,6 +1582,7 @@ __all__ = (
     "SearchMentionsKeywordKindsItem",
     "SearchMentionsKind",
     "SearchMentionsNotCountriesItem",
+    "SearchMentionsNotKeywordKindsItem",
     "SearchMentionsNotPlatformsItem",
     "SearchMentionsNotSentimentsItem",
     "SearchMentionsPlatform",
@@ -1541,6 +1598,7 @@ __all__ = (
     "SegmentFilterKeywordKindsItem",
     "SegmentFilterNeverKeywordKindsItem",
     "SegmentFilterNotPlatformsItem",
+    "SegmentFilterNotStagesItem",
     "SegmentFilterPlatformsItem",
     "SegmentFilterStagesItem",
     "SegmentPreset",
@@ -1548,6 +1606,7 @@ __all__ = (
     "SegmentPresetFilterKeywordKindsItem",
     "SegmentPresetFilterNeverKeywordKindsItem",
     "SegmentPresetFilterNotPlatformsItem",
+    "SegmentPresetFilterNotStagesItem",
     "SegmentPresetFilterPlatformsItem",
     "SegmentPresetFilterStagesItem",
     "ShareOfVoice",
@@ -1627,6 +1686,7 @@ __all__ = (
     "UpdateSegmentBodyFilterKeywordKindsItem",
     "UpdateSegmentBodyFilterNeverKeywordKindsItem",
     "UpdateSegmentBodyFilterNotPlatformsItem",
+    "UpdateSegmentBodyFilterNotStagesItem",
     "UpdateSegmentBodyFilterPlatformsItem",
     "UpdateSegmentBodyFilterStagesItem",
     "UpdateViewBody",
@@ -1635,6 +1695,7 @@ __all__ = (
     "UpdateViewBodyFilterKeywordKindsItem",
     "UpdateViewBodyFilterKind",
     "UpdateViewBodyFilterNotCountriesItem",
+    "UpdateViewBodyFilterNotKeywordKindsItem",
     "UpdateViewBodyFilterNotPlatformsItem",
     "UpdateViewBodyFilterNotSentimentsItem",
     "UpdateViewBodyFilterPlatformsItem",
@@ -1660,6 +1721,7 @@ __all__ = (
     "ViewFilterKeywordKindsItem",
     "ViewFilterKind",
     "ViewFilterNotCountriesItem",
+    "ViewFilterNotKeywordKindsItem",
     "ViewFilterNotPlatformsItem",
     "ViewFilterNotSentimentsItem",
     "ViewFilterPlatformsItem",

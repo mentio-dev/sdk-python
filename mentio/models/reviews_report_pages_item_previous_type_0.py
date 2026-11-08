@@ -14,7 +14,7 @@ class ReviewsReportPagesItemPreviousType0:
     """The period of the same length right before the window, with compare=true; else null.
 
     Attributes:
-        reviews (int):
+        reviews (int): Reviews in the window.
         average_rating (float | None): Average stars, one decimal; null with no reviews.
     """
 

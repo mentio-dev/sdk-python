@@ -13,9 +13,9 @@ T = TypeVar("T", bound="TestChannelResponse200OutcomesItem")
 class TestChannelResponse200OutcomesItem:
     """
     Attributes:
-        channel_id (str):
-        ok (bool):
-        error (None | str):
+        channel_id (str): The channel (dest_...).
+        ok (bool): Whether the channel accepted it.
+        error (None | str): Why it failed; null when it did not.
     """
 
     channel_id: str

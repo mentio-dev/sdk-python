@@ -19,9 +19,9 @@ T = TypeVar("T", bound="CreateSegmentBody")
 class CreateSegmentBody:
     """
     Attributes:
-        name (str):
-        description (str | Unset):  Default: ''.
-        filter_ (CreateSegmentBodyFilter | Unset):
+        name (str): Segment name, unique in its scope.
+        description (str | Unset): What the segment is for. Default: ''.
+        filter_ (CreateSegmentBodyFilter | Unset): The people filter (the fields of GET /v1/people).
     """
 
     name: str

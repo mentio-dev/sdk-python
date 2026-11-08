@@ -25,7 +25,7 @@ class MentionClassificationType0:
 
     Attributes:
         relevance (int | None): 0 to 100; null only when classification failed.
-        sentiment (MentionClassificationType0Sentiment): Classifier sentiment.
+        sentiment (MentionClassificationType0Sentiment): positive, neutral or negative; null until classified.
         intents (list[str]): Intent and topic tags:
 
             - buy_intent, question, complaint, praise, comparison, bug_report, pricing, hiring, event, promotional.

@@ -21,7 +21,8 @@ T = TypeVar("T", bound="AlertFilter")
 
 @_attrs_define
 class AlertFilter:
-    """
+    """Which mentions the rule sends.
+
     Attributes:
         keyword_ids (list[str] | Unset): Only these keywords.
         group_ids (list[str] | Unset): Only keywords in these groups (grp_...): one rule per customer, say.

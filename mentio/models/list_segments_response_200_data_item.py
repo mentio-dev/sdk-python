@@ -20,9 +20,9 @@ class ListSegmentsResponse200DataItem:
     """
     Attributes:
         id (str): Segment id (seg_...).
-        name (str):
-        description (str):
-        filter_ (ListSegmentsResponse200DataItemFilter):
+        name (str): Segment name.
+        description (str): What the segment is for.
+        filter_ (ListSegmentsResponse200DataItemFilter): The people filter it saves (the fields of GET /v1/people).
         group_id (None | str): The group this segment belongs to, or null for a workspace segment.
         count (int): People in the segment right now; it is evaluated on every read.
         created_at (str): ISO 8601 timestamp, UTC.

@@ -14,9 +14,9 @@ class MentionTriageAssigneeType0:
     """Workspace member this mention is assigned to; null when unassigned.
 
     Attributes:
-        id (str):
-        name (None | str):
-        email (None | str):
+        id (str): User id.
+        name (None | str): Member name.
+        email (None | str): Member email.
     """
 
     id: str

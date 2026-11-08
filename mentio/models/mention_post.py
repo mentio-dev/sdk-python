@@ -20,7 +20,8 @@ T = TypeVar("T", bound="MentionPost")
 
 @_attrs_define
 class MentionPost:
-    """
+    """The post: platform, text, link, publish time and engagement.
+
     Attributes:
         platform (MentionPostPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x, youtube,
             news, linkedin, tiktok, instagram, facebook, appstore (App Store reviews), googleplay (Google Play reviews),

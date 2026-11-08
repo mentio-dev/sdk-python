@@ -14,8 +14,8 @@ class PersonAnnotations:
     """What this workspace wrote about the person.
 
     Attributes:
-        tags (list[str]):
-        notes (str):
+        tags (list[str]): Tags your team gave them.
+        notes (str): Your team's notes.
         muted (bool): Their posts stay out of the feed and every channel; ingest and billing are untouched. Read with
             groupId it is that group's own mute, which hides them from the mentions of that group's keywords only.
     """

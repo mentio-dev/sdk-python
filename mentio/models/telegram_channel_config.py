@@ -14,10 +14,11 @@ T = TypeVar("T", bound="TelegramChannelConfig")
 
 @_attrs_define
 class TelegramChannelConfig:
-    """
+    """The channel's settings for its kind; secrets are never returned.
+
     Attributes:
         chat_id (str): Telegram chat id.
-        chat_type (TelegramChannelConfigChatType):
+        chat_type (TelegramChannelConfigChatType): private, group, supergroup or channel.
         events (list[TelegramChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
             involved: one short message when an item opens (GET /v1/attention). Empty when it receives none.
     """

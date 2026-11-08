@@ -9,6 +9,7 @@ from ..models.filter_group_countries_item import FilterGroupCountriesItem
 from ..models.filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
 from ..models.filter_group_kind import FilterGroupKind
 from ..models.filter_group_not_countries_item import FilterGroupNotCountriesItem
+from ..models.filter_group_not_keyword_kinds_item import FilterGroupNotKeywordKindsItem
 from ..models.filter_group_not_platforms_item import FilterGroupNotPlatformsItem
 from ..models.filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
 from ..models.filter_group_platforms_item import FilterGroupPlatformsItem
@@ -29,6 +30,7 @@ class FilterGroup:
         not_keyword_ids (list[str] | Unset): Never matches of these keywords.
         keyword_kinds (list[FilterGroupKeywordKindsItem] | Unset): Only matches of keywords of any of these kinds:
             brand, competitor, topic.
+        not_keyword_kinds (list[FilterGroupNotKeywordKindsItem] | Unset): Never matches of keywords of these kinds.
         group_ids (list[str] | Unset): Only matches of keywords in any of these groups (grp_...).
         not_group_ids (list[str] | Unset): Never matches of keywords in these groups.
         platforms (list[FilterGroupPlatformsItem] | Unset): Only posts from any of these platforms.
@@ -89,6 +91,7 @@ class FilterGroup:
     keyword_ids: list[str] | Unset = UNSET
     not_keyword_ids: list[str] | Unset = UNSET
     keyword_kinds: list[FilterGroupKeywordKindsItem] | Unset = UNSET
+    not_keyword_kinds: list[FilterGroupNotKeywordKindsItem] | Unset = UNSET
     group_ids: list[str] | Unset = UNSET
     not_group_ids: list[str] | Unset = UNSET
     platforms: list[FilterGroupPlatformsItem] | Unset = UNSET
@@ -145,6 +148,13 @@ class FilterGroup:
             for keyword_kinds_item_data in self.keyword_kinds:
                 keyword_kinds_item = keyword_kinds_item_data.value
                 keyword_kinds.append(keyword_kinds_item)
+
+        not_keyword_kinds: list[str] | Unset = UNSET
+        if not isinstance(self.not_keyword_kinds, Unset):
+            not_keyword_kinds = []
+            for not_keyword_kinds_item_data in self.not_keyword_kinds:
+                not_keyword_kinds_item = not_keyword_kinds_item_data.value
+                not_keyword_kinds.append(not_keyword_kinds_item)
 
         group_ids: list[str] | Unset = UNSET
         if not isinstance(self.group_ids, Unset):
@@ -299,6 +309,8 @@ class FilterGroup:
             field_dict["notKeywordIds"] = not_keyword_ids
         if keyword_kinds is not UNSET:
             field_dict["keywordKinds"] = keyword_kinds
+        if not_keyword_kinds is not UNSET:
+            field_dict["notKeywordKinds"] = not_keyword_kinds
         if group_ids is not UNSET:
             field_dict["groupIds"] = group_ids
         if not_group_ids is not UNSET:
@@ -397,6 +409,17 @@ class FilterGroup:
                 )
 
                 keyword_kinds.append(keyword_kinds_item)
+
+        _not_keyword_kinds = d.pop("notKeywordKinds", UNSET)
+        not_keyword_kinds: list[FilterGroupNotKeywordKindsItem] | Unset = UNSET
+        if _not_keyword_kinds is not UNSET:
+            not_keyword_kinds = []
+            for not_keyword_kinds_item_data in _not_keyword_kinds:
+                not_keyword_kinds_item = FilterGroupNotKeywordKindsItem(
+                    not_keyword_kinds_item_data
+                )
+
+                not_keyword_kinds.append(not_keyword_kinds_item)
 
         group_ids = cast(list[str], d.pop("groupIds", UNSET))
 
@@ -537,6 +560,7 @@ class FilterGroup:
             keyword_ids=keyword_ids,
             not_keyword_ids=not_keyword_ids,
             keyword_kinds=keyword_kinds,
+            not_keyword_kinds=not_keyword_kinds,
             group_ids=group_ids,
             not_group_ids=not_group_ids,
             platforms=platforms,

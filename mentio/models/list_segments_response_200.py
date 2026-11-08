@@ -20,7 +20,7 @@ T = TypeVar("T", bound="ListSegmentsResponse200")
 class ListSegmentsResponse200:
     """
     Attributes:
-        data (list[ListSegmentsResponse200DataItem]):
+        data (list[ListSegmentsResponse200DataItem]): The segments.
         presets (list[SegmentPreset]): Deprecated: use GET /v1/segments/presets. Starting points you can save with POST
             /v1/segments.
     """

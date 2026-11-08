@@ -19,7 +19,7 @@ T = TypeVar("T", bound="TestChannelResponse200")
 class TestChannelResponse200:
     """
     Attributes:
-        outcomes (list[TestChannelResponse200OutcomesItem]):
+        outcomes (list[TestChannelResponse200OutcomesItem]): The test send's result.
     """
 
     outcomes: list[TestChannelResponse200OutcomesItem]

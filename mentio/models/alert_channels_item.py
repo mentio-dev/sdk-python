@@ -15,9 +15,9 @@ T = TypeVar("T", bound="AlertChannelsItem")
 class AlertChannelsItem:
     """
     Attributes:
-        id (str):
-        kind (AlertChannelsItemKind):
-        label (str):
+        id (str): Channel id (dest_...).
+        kind (AlertChannelsItemKind): Channel kind.
+        label (str): Channel name.
     """
 
     id: str

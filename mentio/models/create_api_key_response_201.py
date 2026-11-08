@@ -16,7 +16,7 @@ class CreateApiKeyResponse201:
     """
     Attributes:
         id (str): Key id (key_...).
-        name (str):
+        name (str): Your name for the key.
         prefix (str): The first characters of the key, to tell keys apart.
         scope (CreateApiKeyResponse201Scope): read: GET only. write: everything.
         created_at (str): ISO 8601 timestamp, UTC.

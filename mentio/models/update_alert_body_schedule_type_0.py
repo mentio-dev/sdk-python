@@ -16,10 +16,10 @@ class UpdateAlertBodyScheduleType0:
     """Daily and weekly alerts. Ignored on an hourly one, except a weekday, which is refused.
 
     Attributes:
-        hour (int):
-        timezone (str):
-        minute (int | Unset):  Default: 0.
-        skip_empty (bool | Unset):  Default: True.
+        hour (int): Hour of the day to send, 0 to 23, in timezone.
+        timezone (str): IANA zone the schedule runs in (Europe/Madrid).
+        minute (int | Unset): Minute past the hour, 0 to 59. Default: 0.
+        skip_empty (bool | Unset): true: send nothing when the window had no mention. Default: True.
         weekday (int | Unset): Weekly rules: the day it sends, 0 Sunday to 6 Saturday. Required for mode weekly; ignored
             on daily rules.
     """

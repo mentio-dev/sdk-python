@@ -20,9 +20,9 @@ class ListViewsResponse200DataItem:
     """
     Attributes:
         id (str): View id (vw_...).
-        name (str):
-        description (str):
-        filter_ (ListViewsResponse200DataItemFilter):
+        name (str): View name.
+        description (str): What the view is for.
+        filter_ (ListViewsResponse200DataItemFilter): The mentions filter it saves (the fields of GET /v1/mentions).
         created_at (str): ISO 8601 timestamp, UTC.
         updated_at (str): ISO 8601 timestamp, UTC.
     """

@@ -13,7 +13,7 @@ T = TypeVar("T", bound="GetHealthResponse200")
 class GetHealthResponse200:
     """
     Attributes:
-        ok (bool):
+        ok (bool): Always true when the API answers.
     """
 
     ok: bool

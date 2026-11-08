@@ -36,7 +36,7 @@ class Mention:
             follower ladder (unknown reach counts 8), the strongest intent (buy intent 20 down to praise 5), minus 2 per day
             of age floored at 20.
         keyword (MentionKeyword): The keyword this post matched, the group it is in, and how it matched.
-        post (MentionPost):
+        post (MentionPost): The post: platform, text, link, publish time and engagement.
         parent_mention_id (None | str): For a comment whose parent post or comment is itself one of your mentions: that
             mention's id (mm_...). Null otherwise.
         author (MentionAuthorType0 | None): Who posted it; null when the platform gave no author at all.
@@ -45,7 +45,7 @@ class Mention:
             the app.
         classification (MentionClassificationType0 | None): The classifier verdict, as corrected by your feedback; null
             while the post is still queued for classification.
-        triage (MentionTriage):
+        triage (MentionTriage): What your team did with it: status, assignee, snooze and notes.
         duplicate_of (None | str): On a cross-post (same author, text and keyword within three days), the original's id.
             Billed like any mention, listed only under its original, never alerted alone. null for an original. See [Cross-
             posts](/how-it-works#cross-posts).

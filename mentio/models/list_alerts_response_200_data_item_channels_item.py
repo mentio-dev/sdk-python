@@ -17,9 +17,9 @@ T = TypeVar("T", bound="ListAlertsResponse200DataItemChannelsItem")
 class ListAlertsResponse200DataItemChannelsItem:
     """
     Attributes:
-        id (str):
-        kind (ListAlertsResponse200DataItemChannelsItemKind):
-        label (str):
+        id (str): Channel id (dest_...).
+        kind (ListAlertsResponse200DataItemChannelsItemKind): Channel kind.
+        label (str): Channel name.
     """
 
     id: str

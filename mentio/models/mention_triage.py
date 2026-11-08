@@ -15,7 +15,8 @@ T = TypeVar("T", bound="MentionTriage")
 
 @_attrs_define
 class MentionTriage:
-    """
+    """What your team did with it: status, assignee, snooze and notes.
+
     Attributes:
         assignee (MentionTriageAssigneeType0 | None): Workspace member this mention is assigned to; null when
             unassigned.

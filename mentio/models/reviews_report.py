@@ -22,7 +22,7 @@ class ReviewsReport:
     """
     Attributes:
         window (ReviewsReportWindow): The window the report covers.
-        totals (ReviewsReportTotals):
+        totals (ReviewsReportTotals): The window's review count and average rating.
         tags (list[ReviewsReportTagsItem]): Intent and topic tags on the 1 and 2 star reviews, most frequent first: what
             the unhappy ones are about.
         pages (list[ReviewsReportPagesItem]): One row per review page with reviews in the window, most reviewed first.

@@ -29,7 +29,7 @@ class Person:
         name (None | str): Display name as of their newest post; null when the platform has none.
         handle (None | str): Platform handle of the canonical account, formatted as the platform shows it.
         url (None | str): Profile URL of the canonical account.
-        avatar_url (None | str):
+        avatar_url (None | str): Profile picture URL.
         accounts (list[PersonAccountsItem]): Every account this workspace treats as this person, the canonical one
             first.
         reach (PersonReach): Platform counts as of their newest post; null where the platform has no such number.

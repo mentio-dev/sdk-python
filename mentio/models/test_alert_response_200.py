@@ -19,7 +19,7 @@ T = TypeVar("T", bound="TestAlertResponse200")
 class TestAlertResponse200:
     """
     Attributes:
-        outcomes (list[TestAlertResponse200OutcomesItem]):
+        outcomes (list[TestAlertResponse200OutcomesItem]): One result per channel of the rule.
     """
 
     outcomes: list[TestAlertResponse200OutcomesItem]

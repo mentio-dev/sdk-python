@@ -17,7 +17,7 @@ T = TypeVar("T", bound="ListAttentionResponse200")
 class ListAttentionResponse200:
     """
     Attributes:
-        data (list[AttentionItem]):
+        data (list[AttentionItem]): The attention items.
         next_cursor (None | str): Pass as cursor for the next page; null on the last one.
     """
 

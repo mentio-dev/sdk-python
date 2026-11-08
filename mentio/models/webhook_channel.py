@@ -21,11 +21,11 @@ class WebhookChannel:
     """
     Attributes:
         id (str): Channel id (dest_...).
-        label (str):
+        label (str): Your name for the channel.
         stats (WebhookChannelStats): Computed over this workspace's deliveries.
         created_at (str): ISO 8601 timestamp, UTC.
-        kind (WebhookChannelKind):
-        config (WebhookChannelConfig):
+        kind (WebhookChannelKind): Channel kind.
+        config (WebhookChannelConfig): The channel's settings for its kind; secrets are never returned.
     """
 
     id: str

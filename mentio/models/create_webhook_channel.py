@@ -21,7 +21,7 @@ T = TypeVar("T", bound="CreateWebhookChannel")
 class CreateWebhookChannel:
     """
     Attributes:
-        kind (CreateWebhookChannelKind):
+        kind (CreateWebhookChannelKind): Channel kind.
         url (str): Where the signed POSTs go. https in production.
         label (str | Unset): A name for the channel; the host of the URL when omitted.
         headers (CreateWebhookChannelHeaders | Unset): Extra request headers to send, for your own auth.

@@ -14,9 +14,9 @@ class ListChannelDeliveriesResponse200DataItemMentionType0:
     """For mention deliveries: the post, text cut to 160 characters.
 
     Attributes:
-        id (str):
-        url (str):
-        text (str):
+        id (str): Mention id.
+        url (str): Link to the post.
+        text (str): The post text, cut to 160 characters.
     """
 
     id: str

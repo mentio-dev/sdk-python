@@ -21,11 +21,11 @@ class SlackChannel:
     """
     Attributes:
         id (str): Channel id (dest_...).
-        label (str):
+        label (str): Your name for the channel.
         stats (SlackChannelStats): Computed over this workspace's deliveries.
         created_at (str): ISO 8601 timestamp, UTC.
-        kind (SlackChannelKind):
-        config (SlackChannelConfig):
+        kind (SlackChannelKind): Channel kind.
+        config (SlackChannelConfig): The channel's settings for its kind; secrets are never returned.
     """
 
     id: str

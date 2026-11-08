@@ -18,7 +18,7 @@ class UpdatePersonBody:
 
     Attributes:
         tags (list[str] | Unset): Replaces the whole list.
-        notes (str | Unset):
+        notes (str | Unset): Notes, up to 2,000 characters; replaces the current notes.
         muted (bool | Unset): true hides their posts from the feed, alerts and digests; false shows them again. Without
             groupId for the whole workspace; with it, for that group's keywords only.
         owner_id (None | str | Unset): The member who owns the contact (user id); null clears.

@@ -18,7 +18,7 @@ class ListApiKeysResponse200DataItem:
     """
     Attributes:
         id (str): Key id (key_...).
-        name (str):
+        name (str): Your name for the key.
         prefix (str): The first characters of the key, to tell keys apart.
         scope (ListApiKeysResponse200DataItemScope): read: GET only. write: everything.
         created_at (str): ISO 8601 timestamp, UTC.

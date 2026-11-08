@@ -29,8 +29,8 @@ class Keyword:
     """
     Attributes:
         id (str): Keyword id (kw_...).
-        term (str):
-        kind (KeywordKind):
+        term (str): The tracked text, as typed.
+        kind (KeywordKind): brand (your own name), competitor, or topic.
         muted (bool): Not polled or matched. Paused by you, by the wallet (see pausedForBalance) or by the noise brake
             (see pausedForNoise). A keyword at its mention cap is not muted (see pausedForCap).
         paused_for_balance (bool): Muted by the wallet for lack of balance; a top-up resumes it, unmuting by hand needs

@@ -13,7 +13,7 @@ T = TypeVar("T", bound="EmailChannelConfigRecipientsItem")
 class EmailChannelConfigRecipientsItem:
     """
     Attributes:
-        email (str):
+        email (str): Recipient address.
         confirmed_at (None | str): Null until the address confirmed through its link; unconfirmed addresses receive
             nothing.
     """

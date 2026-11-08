@@ -17,7 +17,7 @@ T = TypeVar("T", bound="ListMembersResponse200")
 class ListMembersResponse200:
     """
     Attributes:
-        data (list[Member]):
+        data (list[Member]): The members.
     """
 
     data: list[Member]

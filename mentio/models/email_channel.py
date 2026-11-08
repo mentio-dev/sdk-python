@@ -21,11 +21,11 @@ class EmailChannel:
     """
     Attributes:
         id (str): Channel id (dest_...).
-        label (str):
+        label (str): Your name for the channel.
         stats (EmailChannelStats): Computed over this workspace's deliveries.
         created_at (str): ISO 8601 timestamp, UTC.
-        kind (EmailChannelKind):
-        config (EmailChannelConfig):
+        kind (EmailChannelKind): Channel kind.
+        config (EmailChannelConfig): The channel's settings for its kind; secrets are never returned.
     """
 
     id: str

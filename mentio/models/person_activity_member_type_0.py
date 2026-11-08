@@ -15,8 +15,8 @@ class PersonActivityMemberType0:
 
     Attributes:
         id (str): User id of the workspace member.
-        name (None | str):
-        email (None | str):
+        name (None | str): The member's name.
+        email (None | str): The member's email.
     """
 
     id: str

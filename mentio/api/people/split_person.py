@@ -15,7 +15,11 @@ def _get_kwargs(
     id: str,
     *,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
+    if not isinstance(idempotency_key, Unset):
+        headers["idempotency-key"] = idempotency_key
 
     params: dict[str, Any] = {}
 
@@ -31,6 +35,7 @@ def _get_kwargs(
         "params": params,
     }
 
+    _kwargs["headers"] = headers
     return _kwargs
 
 
@@ -41,6 +46,11 @@ def _parse_response(
         response_200 = Person.from_dict(response.json())
 
         return response_200
+
+    if response.status_code == 400:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
 
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
@@ -74,6 +84,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Undo a merge
 
@@ -87,6 +98,9 @@ def sync_detailed(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -99,6 +113,7 @@ def sync_detailed(
     kwargs = _get_kwargs(
         id=id,
         group_id=group_id,
+        idempotency_key=idempotency_key,
     )
 
     response = client.get_httpx_client().request(
@@ -113,6 +128,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Undo a merge
 
@@ -126,6 +142,9 @@ def sync(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -139,6 +158,7 @@ def sync(
         id=id,
         client=client,
         group_id=group_id,
+        idempotency_key=idempotency_key,
     ).parsed
 
 
@@ -147,6 +167,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | Person]:
     """Undo a merge
 
@@ -160,6 +181,9 @@ async def asyncio_detailed(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -172,6 +196,7 @@ async def asyncio_detailed(
     kwargs = _get_kwargs(
         id=id,
         group_id=group_id,
+        idempotency_key=idempotency_key,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -184,6 +209,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     group_id: str | Unset = UNSET,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | Person | None:
     """Undo a merge
 
@@ -197,6 +223,9 @@ async def asyncio(
         group_id (str | Unset): Scope to one keyword group (grp_...): only people who mentioned
             that group's keywords, with that group's own tags, notes, mute, merges, activities and
             segments. Omit for the whole workspace.
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -211,5 +240,6 @@ async def asyncio(
             id=id,
             client=client,
             group_id=group_id,
+            idempotency_key=idempotency_key,
         )
     ).parsed

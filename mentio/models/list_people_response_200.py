@@ -19,7 +19,7 @@ T = TypeVar("T", bound="ListPeopleResponse200")
 class ListPeopleResponse200:
     """
     Attributes:
-        data (list[ListPeopleResponse200DataItem]):
+        data (list[ListPeopleResponse200DataItem]): The page of people.
         total (int): People matching the filters, across all pages.
     """
 

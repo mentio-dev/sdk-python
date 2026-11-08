@@ -14,11 +14,11 @@ class ReviewsReportPreviousType0Distribution:
     """Reviews per star rating.
 
     Attributes:
-        field_1 (int):
-        field_2 (int):
-        field_3 (int):
-        field_4 (int):
-        field_5 (int):
+        field_1 (int): One star.
+        field_2 (int): Two stars.
+        field_3 (int): Three stars.
+        field_4 (int): Four stars.
+        field_5 (int): Five stars.
     """
 
     field_1: int

@@ -19,8 +19,8 @@ T = TypeVar("T", bound="UpdateViewBody")
 class UpdateViewBody:
     """
     Attributes:
-        name (str | Unset):
-        description (str | Unset):
+        name (str | Unset): View name, unique in the workspace.
+        description (str | Unset): What the view is for.
         filter_ (UpdateViewBodyFilter | Unset): Replaces the whole filter.
     """
 

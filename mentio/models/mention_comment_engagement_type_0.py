@@ -15,12 +15,12 @@ class MentionCommentEngagementType0:
     whole when a platform reports none, or before September 2026. X carries all six.
 
         Attributes:
-            likes (int | None):
-            reposts (int | None):
-            replies (int | None):
-            quotes (int | None):
-            views (int | None):
-            bookmarks (int | None):
+            likes (int | None): Likes or upvotes when the post was ingested; null when the platform does not report them.
+            reposts (int | None): Reposts or shares when ingested; null when not reported.
+            replies (int | None): Replies or comments when ingested; null when not reported.
+            quotes (int | None): Quotes when ingested; null when not reported.
+            views (int | None): Views when ingested; null when not reported.
+            bookmarks (int | None): Bookmarks or saves when ingested; null when not reported.
     """
 
     likes: int | None

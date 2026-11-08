@@ -19,7 +19,7 @@ class MentionCommentClassificationType0:
     arrives.
 
         Attributes:
-            sentiment (MentionCommentClassificationType0Sentiment): Classifier sentiment.
+            sentiment (MentionCommentClassificationType0Sentiment): positive, neutral or negative; null until classified.
             intents (list[str]): Intent and topic tags, the same vocabulary as a mention's.
     """
 

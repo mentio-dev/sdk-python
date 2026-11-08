@@ -19,7 +19,7 @@ T = TypeVar("T", bound="ListAlertsResponse200")
 class ListAlertsResponse200:
     """
     Attributes:
-        data (list[ListAlertsResponse200DataItem]):
+        data (list[ListAlertsResponse200DataItem]): Every alert rule of the workspace.
     """
 
     data: list[ListAlertsResponse200DataItem]

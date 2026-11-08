@@ -16,6 +16,9 @@ from ..models.update_view_body_filter_kind import UpdateViewBodyFilterKind
 from ..models.update_view_body_filter_not_countries_item import (
     UpdateViewBodyFilterNotCountriesItem,
 )
+from ..models.update_view_body_filter_not_keyword_kinds_item import (
+    UpdateViewBodyFilterNotKeywordKindsItem,
+)
 from ..models.update_view_body_filter_not_platforms_item import (
     UpdateViewBodyFilterNotPlatformsItem,
 )
@@ -48,6 +51,8 @@ class UpdateViewBodyFilter:
         not_keyword_ids (list[str] | Unset): Never matches of these keywords.
         keyword_kinds (list[UpdateViewBodyFilterKeywordKindsItem] | Unset): Only matches of keywords of any of these
             kinds: brand, competitor, topic.
+        not_keyword_kinds (list[UpdateViewBodyFilterNotKeywordKindsItem] | Unset): Never matches of keywords of these
+            kinds.
         group_ids (list[str] | Unset): Only matches of keywords in any of these groups (grp_...).
         not_group_ids (list[str] | Unset): Never matches of keywords in these groups.
         platforms (list[UpdateViewBodyFilterPlatformsItem] | Unset): Only posts from any of these platforms.
@@ -111,6 +116,7 @@ class UpdateViewBodyFilter:
     keyword_ids: list[str] | Unset = UNSET
     not_keyword_ids: list[str] | Unset = UNSET
     keyword_kinds: list[UpdateViewBodyFilterKeywordKindsItem] | Unset = UNSET
+    not_keyword_kinds: list[UpdateViewBodyFilterNotKeywordKindsItem] | Unset = UNSET
     group_ids: list[str] | Unset = UNSET
     not_group_ids: list[str] | Unset = UNSET
     platforms: list[UpdateViewBodyFilterPlatformsItem] | Unset = UNSET
@@ -169,6 +175,13 @@ class UpdateViewBodyFilter:
             for keyword_kinds_item_data in self.keyword_kinds:
                 keyword_kinds_item = keyword_kinds_item_data.value
                 keyword_kinds.append(keyword_kinds_item)
+
+        not_keyword_kinds: list[str] | Unset = UNSET
+        if not isinstance(self.not_keyword_kinds, Unset):
+            not_keyword_kinds = []
+            for not_keyword_kinds_item_data in self.not_keyword_kinds:
+                not_keyword_kinds_item = not_keyword_kinds_item_data.value
+                not_keyword_kinds.append(not_keyword_kinds_item)
 
         group_ids: list[str] | Unset = UNSET
         if not isinstance(self.group_ids, Unset):
@@ -330,6 +343,8 @@ class UpdateViewBodyFilter:
             field_dict["notKeywordIds"] = not_keyword_ids
         if keyword_kinds is not UNSET:
             field_dict["keywordKinds"] = keyword_kinds
+        if not_keyword_kinds is not UNSET:
+            field_dict["notKeywordKinds"] = not_keyword_kinds
         if group_ids is not UNSET:
             field_dict["groupIds"] = group_ids
         if not_group_ids is not UNSET:
@@ -432,6 +447,17 @@ class UpdateViewBodyFilter:
                 )
 
                 keyword_kinds.append(keyword_kinds_item)
+
+        _not_keyword_kinds = d.pop("notKeywordKinds", UNSET)
+        not_keyword_kinds: list[UpdateViewBodyFilterNotKeywordKindsItem] | Unset = UNSET
+        if _not_keyword_kinds is not UNSET:
+            not_keyword_kinds = []
+            for not_keyword_kinds_item_data in _not_keyword_kinds:
+                not_keyword_kinds_item = UpdateViewBodyFilterNotKeywordKindsItem(
+                    not_keyword_kinds_item_data
+                )
+
+                not_keyword_kinds.append(not_keyword_kinds_item)
 
         group_ids = cast(list[str], d.pop("groupIds", UNSET))
 
@@ -583,6 +609,7 @@ class UpdateViewBodyFilter:
             keyword_ids=keyword_ids,
             not_keyword_ids=not_keyword_ids,
             keyword_kinds=keyword_kinds,
+            not_keyword_kinds=not_keyword_kinds,
             group_ids=group_ids,
             not_group_ids=not_group_ids,
             platforms=platforms,

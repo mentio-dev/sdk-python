@@ -16,6 +16,7 @@ from ...models.export_people_csv_never_keyword_kinds_item import (
 from ...models.export_people_csv_not_platforms_item import (
     ExportPeopleCsvNotPlatformsItem,
 )
+from ...models.export_people_csv_not_stages_item import ExportPeopleCsvNotStagesItem
 from ...models.export_people_csv_platform import ExportPeopleCsvPlatform
 from ...models.export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from ...models.export_people_csv_range import ExportPeopleCsvRange
@@ -53,6 +54,9 @@ def _get_kwargs(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    not_stages: list[ExportPeopleCsvNotStagesItem] | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_owner_ids: list[str] | None | Unset = UNSET,
     automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
@@ -210,6 +214,35 @@ def _get_kwargs(
 
     params["stages"] = json_stages
 
+    json_not_stages: list[str] | Unset = UNSET
+    if not isinstance(not_stages, Unset):
+        json_not_stages = []
+        for not_stages_item_data in not_stages:
+            not_stages_item = not_stages_item_data.value
+            json_not_stages.append(not_stages_item)
+
+    params["notStages"] = json_not_stages
+
+    json_not_link_hosts: list[str] | None | Unset
+    if isinstance(not_link_hosts, Unset):
+        json_not_link_hosts = UNSET
+    elif isinstance(not_link_hosts, list):
+        json_not_link_hosts = not_link_hosts
+
+    else:
+        json_not_link_hosts = not_link_hosts
+    params["notLinkHosts"] = json_not_link_hosts
+
+    json_not_owner_ids: list[str] | None | Unset
+    if isinstance(not_owner_ids, Unset):
+        json_not_owner_ids = UNSET
+    elif isinstance(not_owner_ids, list):
+        json_not_owner_ids = not_owner_ids
+
+    else:
+        json_not_owner_ids = not_owner_ids
+    params["notOwnerIds"] = json_not_owner_ids
+
     params["automated"] = automated
 
     json_owner_ids: list[str] | None | Unset
@@ -313,6 +346,9 @@ def sync_detailed(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    not_stages: list[ExportPeopleCsvNotStagesItem] | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_owner_ids: list[str] | None | Unset = UNSET,
     automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
@@ -376,6 +412,12 @@ def sync_detailed(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        not_stages (list[ExportPeopleCsvNotStagesItem] | Unset): Nobody at these outreach stages.
+            Repeatable, or comma-separated.
+        not_link_hosts (list[str] | None | Unset): Nobody with a mention linking to any of these
+            hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        not_owner_ids (list[str] | None | Unset): Nobody owned by these members (user ids); `none`
+            drops the people nobody owns. Repeatable, or comma-separated.
         automated (bool | Unset): true: only people whose matched posts are mostly machine-made
             (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
@@ -420,6 +462,9 @@ def sync_detailed(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        not_stages=not_stages,
+        not_link_hosts=not_link_hosts,
+        not_owner_ids=not_owner_ids,
         automated=automated,
         owner_ids=owner_ids,
         sort=sort,
@@ -462,6 +507,9 @@ def sync(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    not_stages: list[ExportPeopleCsvNotStagesItem] | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_owner_ids: list[str] | None | Unset = UNSET,
     automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
@@ -525,6 +573,12 @@ def sync(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        not_stages (list[ExportPeopleCsvNotStagesItem] | Unset): Nobody at these outreach stages.
+            Repeatable, or comma-separated.
+        not_link_hosts (list[str] | None | Unset): Nobody with a mention linking to any of these
+            hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        not_owner_ids (list[str] | None | Unset): Nobody owned by these members (user ids); `none`
+            drops the people nobody owns. Repeatable, or comma-separated.
         automated (bool | Unset): true: only people whose matched posts are mostly machine-made
             (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
@@ -570,6 +624,9 @@ def sync(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        not_stages=not_stages,
+        not_link_hosts=not_link_hosts,
+        not_owner_ids=not_owner_ids,
         automated=automated,
         owner_ids=owner_ids,
         sort=sort,
@@ -606,6 +663,9 @@ async def asyncio_detailed(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    not_stages: list[ExportPeopleCsvNotStagesItem] | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_owner_ids: list[str] | None | Unset = UNSET,
     automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
@@ -669,6 +729,12 @@ async def asyncio_detailed(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        not_stages (list[ExportPeopleCsvNotStagesItem] | Unset): Nobody at these outreach stages.
+            Repeatable, or comma-separated.
+        not_link_hosts (list[str] | None | Unset): Nobody with a mention linking to any of these
+            hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        not_owner_ids (list[str] | None | Unset): Nobody owned by these members (user ids); `none`
+            drops the people nobody owns. Repeatable, or comma-separated.
         automated (bool | Unset): true: only people whose matched posts are mostly machine-made
             (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
@@ -713,6 +779,9 @@ async def asyncio_detailed(
         new_since_days=new_since_days,
         link_hosts=link_hosts,
         stages=stages,
+        not_stages=not_stages,
+        not_link_hosts=not_link_hosts,
+        not_owner_ids=not_owner_ids,
         automated=automated,
         owner_ids=owner_ids,
         sort=sort,
@@ -753,6 +822,9 @@ async def asyncio(
     new_since_days: int | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     stages: list[ExportPeopleCsvStagesItem] | Unset = UNSET,
+    not_stages: list[ExportPeopleCsvNotStagesItem] | Unset = UNSET,
+    not_link_hosts: list[str] | None | Unset = UNSET,
+    not_owner_ids: list[str] | None | Unset = UNSET,
     automated: bool | Unset = UNSET,
     owner_ids: list[str] | None | Unset = UNSET,
     sort: ExportPeopleCsvSort | Unset = ExportPeopleCsvSort.MENTIONS,
@@ -816,6 +888,12 @@ async def asyncio(
             these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
         stages (list[ExportPeopleCsvStagesItem] | Unset): People at any of these outreach stages.
             Repeatable, or comma-separated.
+        not_stages (list[ExportPeopleCsvNotStagesItem] | Unset): Nobody at these outreach stages.
+            Repeatable, or comma-separated.
+        not_link_hosts (list[str] | None | Unset): Nobody with a mention linking to any of these
+            hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+        not_owner_ids (list[str] | None | Unset): Nobody owned by these members (user ids); `none`
+            drops the people nobody owns. Repeatable, or comma-separated.
         automated (bool | Unset): true: only people whose matched posts are mostly machine-made
             (bot accounts); false: only the rest; omitted: everyone.
         owner_ids (list[str] | None | Unset): People owned by any of these members (user ids);
@@ -862,6 +940,9 @@ async def asyncio(
             new_since_days=new_since_days,
             link_hosts=link_hosts,
             stages=stages,
+            not_stages=not_stages,
+            not_link_hosts=not_link_hosts,
+            not_owner_ids=not_owner_ids,
             automated=automated,
             owner_ids=owner_ids,
             sort=sort,

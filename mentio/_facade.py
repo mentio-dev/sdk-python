@@ -182,7 +182,7 @@ class _Keywords:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
+    def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
         Start tracking a word or phrase; mentions arrive from the next poll.
@@ -206,7 +206,7 @@ class _Keywords:
           reviewSources: Review pages this keyword collects (app store apps, Trustpilot pages, Google Maps places): every new review is a mention, whatever it says. Polled daily; a newly connected page brings 30 days back, free. See [Reviews](/platforms/reviews).
           feeds: RSS or Atom feeds only this keyword reads: a feed's URL, or a page that advertises one (else a 400). Read hourly; an item holding the term is a mention. See [RSS](/platforms/rss#a-keywords-own-feeds).
           readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
-        return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
+        return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str) -> Any:
         """Delete a keyword
@@ -214,7 +214,7 @@ class _Keywords:
         Removes the keyword and its matches. Posts also matched by another keyword stay."""
         return _result(_ops.keywords.delete_keyword.sync_detailed(id, client=self._client))
 
-    def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
+    def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Keyword:
         """Duplicate a keyword
 
         Create a keyword with this one's settings under a new term or group.
@@ -225,7 +225,7 @@ class _Keywords:
           term (required): The term of the copy. The same term as the original only in another group (groupId): a term is tracked once per group. Wrap it in double quotes for the exact phrase only.
           groupId: The group of the copy (grp_...); omit for the original's group.
           include: Also copy these: reviewSources (its review apps) and feeds (its RSS or Atom feeds). Off by default, since two keywords on one app or feed collect, and bill, every review or item twice."""
-        return _result(_ops.keywords.duplicate_keyword.sync_detailed(id, client=self._client, body=_body(_m.DuplicateKeywordBody, body, fields)))
+        return _result(_ops.keywords.duplicate_keyword.sync_detailed(id, client=self._client, body=_body(_m.DuplicateKeywordBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def get(self, id: str) -> _m.Keyword:
         """Get a keyword"""
@@ -353,6 +353,7 @@ class _Mentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_keyword_kinds: Never matches of keywords of these kinds. Repeatable, or comma-separated.
           tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -428,6 +429,7 @@ class _Mentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_keyword_kinds: Never matches of keywords of these kinds. Repeatable, or comma-separated.
           tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -510,6 +512,7 @@ class _Mentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_keyword_kinds: Never matches of keywords of these kinds. Repeatable, or comma-separated.
           tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -549,7 +552,7 @@ class _Mentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100 (default 50)."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "not_keyword_kinds": (_enum_list, _m.SearchMentionsNotKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(_ops.mentions.search_mentions.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -634,10 +637,13 @@ class _People:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          not_stages: Nobody at these outreach stages. Repeatable, or comma-separated.
+          not_link_hosts: Nobody with a mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          not_owner_ids: Nobody owned by these members (user ids); `none` drops the people nobody owns. Repeatable, or comma-separated.
           automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "range_": (_enum, _m.ExportPeopleCsvRange), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "range_": (_enum, _m.ExportPeopleCsvRange), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "not_stages": (_enum_list, _m.ExportPeopleCsvNotStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(_ops.people.export_people_csv.sync_detailed(client=self._client, **params))
 
     def get(self, id: str, **params: Any) -> _m.Person:
@@ -686,15 +692,18 @@ class _People:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          not_stages: Nobody at these outreach stages. Repeatable, or comma-separated.
+          not_link_hosts: Nobody with a mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          not_owner_ids: Nobody owned by these members (user ids); `none` drops the people nobody owns. Repeatable, or comma-separated.
           automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "range_": (_enum, _m.ListPeopleRange), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "range_": (_enum, _m.ListPeopleRange), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "not_stages": (_enum_list, _m.ListPeopleNotStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(_ops.people.list_people.sync_detailed(client=self._client, **params))
 
-    def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
+    def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
         Record that a teammate reached out to this person: an email, a DM, a call.
@@ -711,9 +720,9 @@ class _People:
           note: What was sent or said, briefly.
           occurredAt: When the contact happened (ISO 8601, or epoch ms). Defaults to now.
           memberId: The member who reached out (user id). Defaults to the signed-in member; an API key that omits it logs an unattributed activity."""
-        return _result(_ops.people.log_person_activity.sync_detailed(id, client=self._client, body=_body(_m.LogPersonActivityBody, body, fields)))
+        return _result(_ops.people.log_person_activity.sync_detailed(id, client=self._client, body=_body(_m.LogPersonActivityBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
+    def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
         Declare that this account and another person are the same human, for your workspace only.
@@ -727,9 +736,9 @@ class _People:
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
-        return _result(_ops.people.merge_people.sync_detailed(id, client=self._client, body=_body(_m.MergePeopleBody, body, fields)))
+        return _result(_ops.people.merge_people.sync_detailed(id, client=self._client, body=_body(_m.MergePeopleBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    def split(self, id: str, **params: Any) -> _m.Person:
+    def split(self, id: str, idempotency_key: str | None = None, **params: Any) -> _m.Person:
         """Undo a merge
 
         The account becomes its own person again.
@@ -738,7 +747,7 @@ class _People:
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
-        return _result(_ops.people.split_person.sync_detailed(id, client=self._client, **params))
+        return _result(_ops.people.split_person.sync_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
@@ -752,7 +761,7 @@ class _People:
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
-          notes:
+          notes: Notes, up to 2,000 characters; replaces the current notes.
           muted: true hides their posts from the feed, alerts and digests; false shows them again. Without groupId for the whole workspace; with it, for that group's keywords only.
           ownerId: The member who owns the contact (user id); null clears.
           stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
@@ -764,7 +773,7 @@ class _Segments:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, **fields: Any) -> _m.Segment:
+    def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Segment:
         """Create a segment
 
         Save a named filter over your people.
@@ -775,10 +784,10 @@ class _Segments:
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name (required):
-          description:
-          filter:"""
-        return _result(_ops.segments.create_segment.sync_detailed(client=self._client, body=_body(_m.CreateSegmentBody, body, fields)))
+          name (required): Segment name, unique in its scope.
+          description: What the segment is for.
+          filter: The people filter (the fields of GET /v1/people)."""
+        return _result(_ops.segments.create_segment.sync_detailed(client=self._client, body=_body(_m.CreateSegmentBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str, **params: Any) -> Any:
         """Delete a segment
@@ -824,8 +833,8 @@ class _Segments:
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          description:
+          name: Segment name, unique in its scope.
+          description: What the segment is for.
           filter: Replaces the whole filter."""
         return _result(_ops.segments.update_segment.sync_detailed(id, client=self._client, body=_body(_m.UpdateSegmentBody, body, fields)))
 
@@ -835,7 +844,7 @@ class _Alerts:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
+    def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
         Create an alert: a rule (what to watch) sent to channels.
@@ -846,14 +855,14 @@ class _Alerts:
         See [Alerts](/alerts).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name (required):
-          enabled:
+          name (required): Rule name.
+          enabled: false: the rule sends nothing. Default true.
           mode:
-          filter:
+          filter: Which mentions the rule sends. Default: every relevant mention.
           schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday). Hourly alerts take none: they send every UTC hour, so a time of day and a zone are ignored and a weekday is refused.
           event: Custom event name for webhook payloads; null for the mode default.
           channelIds: Channel ids from GET /v1/channels."""
-        return _result(_ops.alerts.create_alert.sync_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields)))
+        return _result(_ops.alerts.create_alert.sync_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str) -> Any:
         """Delete an alert"""
@@ -867,7 +876,7 @@ class _Alerts:
         """List alerts"""
         return _result(_ops.alerts.list_alerts.sync_detailed(client=self._client))
 
-    def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+    def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Alert:
         """Mute authors on an alert
 
         Add authors to the alert's muted list, leaving the rest of its filter.
@@ -876,17 +885,17 @@ class _Alerts:
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
-        return _result(_ops.alerts.mute_alert_authors.sync_detailed(id, client=self._client, body=_body(_m.MuteAlertAuthorsBody, body, fields)))
+        return _result(_ops.alerts.mute_alert_authors.sync_detailed(id, client=self._client, body=_body(_m.MuteAlertAuthorsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    def run(self, id: str) -> _m.RunAlertDigestResponse200:
+    def run(self, id: str, idempotency_key: str | None = None) -> _m.RunAlertDigestResponse200:
         """Send a digest now"""
-        return _result(_ops.alerts.run_alert_digest.sync_detailed(id, client=self._client))
+        return _result(_ops.alerts.run_alert_digest.sync_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    def test(self, id: str) -> _m.TestAlertResponse200:
+    def test(self, id: str, idempotency_key: str | None = None) -> _m.TestAlertResponse200:
         """Send a test through an alert's channels"""
-        return _result(_ops.alerts.test_alert.sync_detailed(id, client=self._client))
+        return _result(_ops.alerts.test_alert.sync_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+    def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Alert:
         """Unmute authors on an alert
 
         Remove authors from the alert's muted list without touching the rest of its filter.
@@ -895,14 +904,14 @@ class _Alerts:
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
-        return _result(_ops.alerts.unmute_alert_authors.sync_detailed(id, client=self._client, body=_body(_m.UnmuteAlertAuthorsBody, body, fields)))
+        return _result(_ops.alerts.unmute_alert_authors.sync_detailed(id, client=self._client, body=_body(_m.UnmuteAlertAuthorsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Update an alert
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          enabled:
+          name: Rule name.
+          enabled: false: the rule sends nothing.
           mode:
           filter: Replaces the whole filter.
           schedule: Daily and weekly alerts. Ignored on an hourly one, except a weekday, which is refused.
@@ -916,11 +925,11 @@ class _Channels:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | None = None, **fields: Any) -> Any:
+    def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | None = None, idempotency_key: str | None = None, **fields: Any) -> Any:
         """Create a channel
 
         Body: a dict with `kind` (slack, email, webhook) or a model; fields may also be passed as keyword arguments:
-          kind:
+          kind: Channel kind.
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
           events: Attention events to receive here, on top of whatever rules send. Omit for none.
@@ -928,7 +937,7 @@ class _Channels:
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
           headers: Extra request headers to send, for your own auth."""
-        return _result(_ops.channels.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
+        return _result(_ops.channels.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str) -> Any:
         """Delete a channel"""
@@ -950,19 +959,19 @@ class _Channels:
         """List channels"""
         return _result(_ops.channels.list_channels.sync_detailed(client=self._client))
 
-    def rotate_secret(self, id: str) -> Any:
+    def rotate_secret(self, id: str, idempotency_key: str | None = None) -> Any:
         """Rotate a webhook secret"""
-        return _result(_ops.channels.rotate_webhook_secret.sync_detailed(id, client=self._client))
+        return _result(_ops.channels.rotate_webhook_secret.sync_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    def test(self, id: str) -> _m.TestChannelResponse200:
+    def test(self, id: str, idempotency_key: str | None = None) -> _m.TestChannelResponse200:
         """Send a test to a channel"""
-        return _result(_ops.channels.test_channel.sync_detailed(id, client=self._client))
+        return _result(_ops.channels.test_channel.sync_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateChannelBody | None = None, **fields: Any) -> Any:
         """Update a channel
 
         Body: a dict, a model, or the fields as keyword arguments:
-          label:
+          label: Your name for the channel.
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
           events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
@@ -986,8 +995,8 @@ class _Company:
         Changing profile fields recomposes the classifier context; setting `context` directly overrides it until the next profile edit. Relevance scores for new mentions follow at once.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          description:
+          name: Company name.
+          description: What the company does; the classifier reads it.
           useCases: Replaces the whole list.
           accounts:
           website: The company website; null clears it.
@@ -1015,6 +1024,8 @@ class _Analytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
           by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window."""
@@ -1036,10 +1047,12 @@ class _Analytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
           bucket: Series bucket: day (default up to 90 days) or week."""
-        _coerce(params, {"range_": (_enum, _m.GetReviewsReportRange), "platforms": (_enum_list, _m.GetReviewsReportPlatformsItem), "bucket": (_enum, _m.GetReviewsReportBucket)})
+        _coerce(params, {"range_": (_enum, _m.GetReviewsReportRange), "platforms": (_enum_list, _m.GetReviewsReportPlatformsItem), "not_platforms": (_enum_list, _m.GetReviewsReportNotPlatformsItem), "bucket": (_enum, _m.GetReviewsReportBucket)})
         return _result(_ops.analytics.get_reviews_report.sync_detailed(client=self._client, **params))
 
     def series(self, **params: Any) -> _m.AnalyticsSeries:
@@ -1055,11 +1068,13 @@ class _Analytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
           bucket: Point granularity: hour (windows of at most 14 days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
           by: Split into one series per platform, per keyword (the top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral, negative, unclassified). Omit for one total series."""
-        _coerce(params, {"range_": (_enum, _m.GetAnalyticsSeriesRange), "platforms": (_enum_list, _m.GetAnalyticsSeriesPlatformsItem), "bucket": (_enum, _m.GetAnalyticsSeriesBucket), "by": (_enum, _m.GetAnalyticsSeriesBy)})
+        _coerce(params, {"range_": (_enum, _m.GetAnalyticsSeriesRange), "platforms": (_enum_list, _m.GetAnalyticsSeriesPlatformsItem), "not_platforms": (_enum_list, _m.GetAnalyticsSeriesNotPlatformsItem), "bucket": (_enum, _m.GetAnalyticsSeriesBucket), "by": (_enum, _m.GetAnalyticsSeriesBy)})
         return _result(_ops.analytics.get_analytics_series.sync_detailed(client=self._client, **params))
 
     def share_of_voice(self, **params: Any) -> _m.ShareOfVoice:
@@ -1077,9 +1092,11 @@ class _Analytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window."""
-        _coerce(params, {"range_": (_enum, _m.GetShareOfVoiceRange), "platforms": (_enum_list, _m.GetShareOfVoicePlatformsItem)})
+        _coerce(params, {"range_": (_enum, _m.GetShareOfVoiceRange), "platforms": (_enum_list, _m.GetShareOfVoicePlatformsItem), "not_platforms": (_enum_list, _m.GetShareOfVoiceNotPlatformsItem)})
         return _result(_ops.analytics.get_share_of_voice.sync_detailed(client=self._client, **params))
 
     def summary(self, **params: Any) -> _m.AnalyticsSummary:
@@ -1095,6 +1112,8 @@ class _Analytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsSummaryRange), "platforms": (_enum_list, _m.GetAnalyticsSummaryPlatformsItem)})
@@ -1106,7 +1125,7 @@ class _ApiKeys:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
+    def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
         """Create an API key
 
         Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
@@ -1117,7 +1136,7 @@ class _ApiKeys:
           name: A label for the key; "default" when omitted.
           scope: read: GET only. write: everything.
           expiresAt: When the key stops working (ISO 8601, or epoch ms), for a key handed to a script or a contractor. Must be in the future. Omit or null for a key that never expires."""
-        return _result(_ops.api_keys.create_api_key.sync_detailed(client=self._client, body=_body(_m.CreateApiKeyBody, body, fields)))
+        return _result(_ops.api_keys.create_api_key.sync_detailed(client=self._client, body=_body(_m.CreateApiKeyBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def list(self) -> _m.ListApiKeysResponse200:
         """List API keys"""
@@ -1145,7 +1164,7 @@ class _Feeds:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, **fields: Any) -> _m.Feed:
+    def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Feed:
         """Connect a feed
 
         Connect an RSS or Atom feed, or a page advertising one, for the workspace's keywords to read hourly.
@@ -1158,7 +1177,7 @@ class _Feeds:
         Body: a dict, a model, or the fields as keyword arguments:
           url (required): A feed's address (https://forum.example.com/posts.rss), or a page's (https://forum.example.com): the feed the page advertises is used.
           auth: A sign-in for a members-only feed: a cookie, or one header. Write-only: stored encrypted, sent to the feed's own site alone, never shown again. A feed with a sign-in is read for this workspace alone."""
-        return _result(_ops.feeds.create_feed.sync_detailed(client=self._client, body=_body(_m.CreateFeedBody, body, fields)))
+        return _result(_ops.feeds.create_feed.sync_detailed(client=self._client, body=_body(_m.CreateFeedBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str) -> Any:
         """Disconnect a feed
@@ -1170,7 +1189,7 @@ class _Feeds:
         """Get a feed"""
         return _result(_ops.feeds.get_feed.sync_detailed(id, client=self._client))
 
-    def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
+    def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
         """Connect many feeds
 
         Connect up to 100 feeds in one call, each reported added, already or failed, in order.
@@ -1179,7 +1198,7 @@ class _Feeds:
 
         Body: a dict, a model, or the fields as keyword arguments:
           feeds (required): Up to 100 feeds, each { url } or { url, auth } for a members-only one. Each is checked on its own: one that fails never stops the others."""
-        return _result(_ops.feeds.import_feeds.sync_detailed(client=self._client, body=_body(_m.ImportFeedsBody, body, fields)))
+        return _result(_ops.feeds.import_feeds.sync_detailed(client=self._client, body=_body(_m.ImportFeedsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def list(self, **params: Any) -> _m.ListFeedsResponse200:
         """List feeds
@@ -1240,7 +1259,7 @@ class _Views:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
+    def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.View:
         """Save a view
 
         Save a named filter over mentions, evaluated whenever it is read.
@@ -1251,7 +1270,7 @@ class _Views:
           name (required): Unique per workspace, case-insensitive.
           description: What the view is for, shown under its name.
           filter: The filter; empty selects every mention."""
-        return _result(_ops.views.create_view.sync_detailed(client=self._client, body=_body(_m.CreateViewBody, body, fields)))
+        return _result(_ops.views.create_view.sync_detailed(client=self._client, body=_body(_m.CreateViewBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str) -> Any:
         """Delete a view
@@ -1277,8 +1296,8 @@ class _Views:
         Rename, describe or refilter a view. `filter` replaces the whole filter.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          description:
+          name: View name, unique in the workspace.
+          description: What the view is for.
           filter: Replaces the whole filter."""
         return _result(_ops.views.update_view.sync_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
@@ -1288,13 +1307,13 @@ class _Attention:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def dismiss(self, id: str) -> _m.AttentionItem:
+    def dismiss(self, id: str, idempotency_key: str | None = None) -> _m.AttentionItem:
         """Dismiss an attention item
 
         Put an attention item away. Idempotent.
 
         It leaves the open list and does not come back while its condition lasts. Once the condition clears, a new episode may open a new item."""
-        return _result(_ops.attention.dismiss_attention.sync_detailed(id, client=self._client))
+        return _result(_ops.attention.dismiss_attention.sync_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def list(self, **params: Any) -> _m.ListAttentionResponse200:
         """List attention items
@@ -1317,7 +1336,7 @@ class _Groups:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
+    def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Group:
         """Create a group
 
         Create a keyword group, then pass its id as `groupId` when creating keywords.
@@ -1328,7 +1347,7 @@ class _Groups:
           name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
           externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=.
           context: What the classifier reads as "the company" for this group's keywords, instead of the WHOLE workspace profile (guidelines and competitors included). Null: the workspace profile. See [Groups](/guides/groups#a-company-description-per-group)."""
-        return _result(_ops.groups.create_group.sync_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
+        return _result(_ops.groups.create_group.sync_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str) -> Any:
         """Delete a group and its keywords
@@ -1392,7 +1411,7 @@ class _Members:
         Invitations sent and not yet accepted, declined or expired. An accepted one appears in GET /v1/members instead."""
         return _result(_ops.members.list_invitations.sync_detailed(client=self._client))
 
-    def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, **fields: Any) -> _m.Invitation:
+    def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Invitation:
         """Invite a member
 
         Invite someone by email as admin or member; the invitation expires after 48 hours.
@@ -1402,7 +1421,7 @@ class _Members:
         Body: a dict, a model, or the fields as keyword arguments:
           email (required): The address to invite; it receives an email with a link to join.
           role: The role they join with. Ownership is only handed over in the dashboard."""
-        return _result(_ops.members.create_invitation.sync_detailed(client=self._client, body=_body(_m.CreateInvitationBody, body, fields)))
+        return _result(_ops.members.create_invitation.sync_detailed(client=self._client, body=_body(_m.CreateInvitationBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def list(self) -> _m.ListMembersResponse200:
         """List members
@@ -1449,9 +1468,12 @@ class _Usage:
           keyword_ids: Only these keywords (kw_...), deleted ones included. Repeatable, or comma-separated.
           group_ids: Only these groups (grp_...): a keyword-day by the group it was metered under, a mention or a comment by its keyword's group as it is now. Repeatable, or comma-separated.
           platforms: Only these platforms. A keyword-day belongs to no platform, so with this filter the keyword line reads 0 and only mentions and comments count. Repeatable, or comma-separated.
+          not_keyword_ids: Never these keywords (kw_...). Repeatable, or comma-separated.
+          not_group_ids: Never keywords of these groups (grp_...). Repeatable, or comma-separated.
+          not_platforms: Never mentions or comments from these platforms; keyword-days, which belong to no platform, still count. Repeatable, or comma-separated.
           limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
           offset: Skip this many rows."""
-        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange), "platforms": (_enum_list, _m.GetUsageBreakdownPlatformsItem)})
+        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange), "platforms": (_enum_list, _m.GetUsageBreakdownPlatformsItem), "not_platforms": (_enum_list, _m.GetUsageBreakdownNotPlatformsItem)})
         return _result(_ops.usage.get_usage_breakdown.sync_detailed(client=self._client, **params))
 
     def get(self) -> _m.UsageSummary:
@@ -1494,7 +1516,7 @@ class _Billing:
           limit: Page size, 1 to 100 (default 50)."""
         return _result(_ops.billing.list_ledger.sync_detailed(client=self._client, **params))
 
-    def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
+    def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
         """Create a top-up checkout
 
         Get a hosted checkout URL for a top-up; this call charges nothing.
@@ -1504,7 +1526,7 @@ class _Billing:
         Body: a dict, a model, or the fields as keyword arguments:
           amountCents (required): Amount to add, in USD cents (2000 to 500000). Prefilled at checkout, editable there.
           successUrl: Where the customer lands after paying: a page on an origin this deployment trusts (the dashboard). Omit it and the dashboard's billing page is used."""
-        return _result(_ops.billing.create_top_up.sync_detailed(client=self._client, body=_body(_m.CreateTopUpBody, body, fields)))
+        return _result(_ops.billing.create_top_up.sync_detailed(client=self._client, body=_body(_m.CreateTopUpBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def wallet(self) -> _m.Wallet:
         """Get the wallet
@@ -1520,7 +1542,7 @@ class _AsyncKeywords:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
+    async def create(self, body: dict[str, Any] | _m.CreateKeywordBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Keyword:
         """Track a keyword
 
         Start tracking a word or phrase; mentions arrive from the next poll.
@@ -1544,7 +1566,7 @@ class _AsyncKeywords:
           reviewSources: Review pages this keyword collects (app store apps, Trustpilot pages, Google Maps places): every new review is a mention, whatever it says. Polled daily; a newly connected page brings 30 days back, free. See [Reviews](/platforms/reviews).
           feeds: RSS or Atom feeds only this keyword reads: a feed's URL, or a page that advertises one (else a 400). Read hourly; an item holding the term is a mention. See [RSS](/platforms/rss#a-keywords-own-feeds).
           readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
-        return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields)))
+        return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str) -> Any:
         """Delete a keyword
@@ -1552,7 +1574,7 @@ class _AsyncKeywords:
         Removes the keyword and its matches. Posts also matched by another keyword stay."""
         return _result(await _ops.keywords.delete_keyword.asyncio_detailed(id, client=self._client))
 
-    async def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
+    async def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Keyword:
         """Duplicate a keyword
 
         Create a keyword with this one's settings under a new term or group.
@@ -1563,7 +1585,7 @@ class _AsyncKeywords:
           term (required): The term of the copy. The same term as the original only in another group (groupId): a term is tracked once per group. Wrap it in double quotes for the exact phrase only.
           groupId: The group of the copy (grp_...); omit for the original's group.
           include: Also copy these: reviewSources (its review apps) and feeds (its RSS or Atom feeds). Off by default, since two keywords on one app or feed collect, and bill, every review or item twice."""
-        return _result(await _ops.keywords.duplicate_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.DuplicateKeywordBody, body, fields)))
+        return _result(await _ops.keywords.duplicate_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.DuplicateKeywordBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def get(self, id: str) -> _m.Keyword:
         """Get a keyword"""
@@ -1691,6 +1713,7 @@ class _AsyncMentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_keyword_kinds: Never matches of keywords of these kinds. Repeatable, or comma-separated.
           tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -1766,6 +1789,7 @@ class _AsyncMentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_keyword_kinds: Never matches of keywords of these kinds. Repeatable, or comma-separated.
           tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -1848,6 +1872,7 @@ class _AsyncMentions:
           alert_id: Apply an alert rule's filter (an id from GET /v1/alerts) on top of the other filters: the same mentions the rule would send, for a feed-shaped export or a preview. Unknown ids are a 404.
           view_id: Apply a saved view's filter (an id from GET /v1/views) on top of the other filters, every condition ANDed: exactly what the view selects. Unknown ids are a 404.
           keyword_kinds: Only matches of keywords of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+          not_keyword_kinds: Never matches of keywords of these kinds. Repeatable, or comma-separated.
           tags: Only authors tagged with any of these (exact, case-sensitive), in the workspace's tags or those of the mention's own keyword group. Repeatable, or comma-separated.
           link_hosts: Only posts linking to any of these hosts, the host itself or a subdomain of it (octolens.com also matches blog.octolens.com). Repeatable, or comma-separated.
           platforms: Only posts from any of these platforms.
@@ -1887,7 +1912,7 @@ class _AsyncMentions:
           sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100 (default 50)."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "not_keyword_kinds": (_enum_list, _m.SearchMentionsNotKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(await _ops.mentions.search_mentions.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -1972,10 +1997,13 @@ class _AsyncPeople:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          not_stages: Nobody at these outreach stages. Repeatable, or comma-separated.
+          not_link_hosts: Nobody with a mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          not_owner_ids: Nobody owned by these members (user ids); `none` drops the people nobody owns. Repeatable, or comma-separated.
           automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first."""
-        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "range_": (_enum, _m.ExportPeopleCsvRange), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
+        _coerce(params, {"platform": (_enum, _m.ExportPeopleCsvPlatform), "range_": (_enum, _m.ExportPeopleCsvRange), "since": (_instant, None), "platforms": (_enum_list, _m.ExportPeopleCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportPeopleCsvNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ExportPeopleCsvKeywordKindsItem), "stages": (_enum_list, _m.ExportPeopleCsvStagesItem), "not_stages": (_enum_list, _m.ExportPeopleCsvNotStagesItem), "sort": (_enum, _m.ExportPeopleCsvSort)})
         return _result(await _ops.people.export_people_csv.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str, **params: Any) -> _m.Person:
@@ -2024,15 +2052,18 @@ class _AsyncPeople:
           new_since_days: First seen within this many days.
           link_hosts: People with at least one mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
           stages: People at any of these outreach stages. Repeatable, or comma-separated.
+          not_stages: Nobody at these outreach stages. Repeatable, or comma-separated.
+          not_link_hosts: Nobody with a mention linking to any of these hosts, the host itself or a subdomain of it. Repeatable, or comma-separated.
+          not_owner_ids: Nobody owned by these members (user ids); `none` drops the people nobody owns. Repeatable, or comma-separated.
           automated: true: only people whose matched posts are mostly machine-made (bot accounts); false: only the rest; omitted: everyone.
           owner_ids: People owned by any of these members (user ids); `none` matches people nobody owns. Repeatable, or comma-separated.
           sort: mentions: most matches first. recent: last seen first. reach: most followers first, unknown last. new: first seen most recently first.
           limit: Page size, 1 to 100.
           offset: Skip this many people. Offset paging: a grouped read over hundreds of people, not a stream."""
-        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "range_": (_enum, _m.ListPeopleRange), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "sort": (_enum, _m.ListPeopleSort)})
+        _coerce(params, {"platform": (_enum, _m.ListPeoplePlatform), "range_": (_enum, _m.ListPeopleRange), "since": (_instant, None), "platforms": (_enum_list, _m.ListPeoplePlatformsItem), "not_platforms": (_enum_list, _m.ListPeopleNotPlatformsItem), "keyword_kinds": (_enum_list, _m.ListPeopleKeywordKindsItem), "never_keyword_kinds": (_enum_list, _m.ListPeopleNeverKeywordKindsItem), "stages": (_enum_list, _m.ListPeopleStagesItem), "not_stages": (_enum_list, _m.ListPeopleNotStagesItem), "sort": (_enum, _m.ListPeopleSort)})
         return _result(await _ops.people.list_people.asyncio_detailed(client=self._client, **params))
 
-    async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, **fields: Any) -> _m.PersonActivity:
+    async def log_activity(self, id: str, body: dict[str, Any] | _m.LogPersonActivityBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.PersonActivity:
         """Log an outreach activity
 
         Record that a teammate reached out to this person: an email, a DM, a call.
@@ -2049,9 +2080,9 @@ class _AsyncPeople:
           note: What was sent or said, briefly.
           occurredAt: When the contact happened (ISO 8601, or epoch ms). Defaults to now.
           memberId: The member who reached out (user id). Defaults to the signed-in member; an API key that omits it logs an unattributed activity."""
-        return _result(await _ops.people.log_person_activity.asyncio_detailed(id, client=self._client, body=_body(_m.LogPersonActivityBody, body, fields)))
+        return _result(await _ops.people.log_person_activity.asyncio_detailed(id, client=self._client, body=_body(_m.LogPersonActivityBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    async def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, **fields: Any) -> _m.Person:
+    async def merge(self, id: str, body: dict[str, Any] | _m.MergePeopleBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Person:
         """Merge an account into a person
 
         Declare that this account and another person are the same human, for your workspace only.
@@ -2065,9 +2096,9 @@ class _AsyncPeople:
 
         Body: a dict, a model, or the fields as keyword arguments:
           into (required): The person to fold this account into (their id)."""
-        return _result(await _ops.people.merge_people.asyncio_detailed(id, client=self._client, body=_body(_m.MergePeopleBody, body, fields)))
+        return _result(await _ops.people.merge_people.asyncio_detailed(id, client=self._client, body=_body(_m.MergePeopleBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    async def split(self, id: str, **params: Any) -> _m.Person:
+    async def split(self, id: str, idempotency_key: str | None = None, **params: Any) -> _m.Person:
         """Undo a merge
 
         The account becomes its own person again.
@@ -2076,7 +2107,7 @@ class _AsyncPeople:
 
         Keyword arguments (query):
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace."""
-        return _result(await _ops.people.split_person.asyncio_detailed(id, client=self._client, **params))
+        return _result(await _ops.people.split_person.asyncio_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdatePersonBody | None = None, **fields: Any) -> _m.Person:
         """Update your annotations on a person
@@ -2090,7 +2121,7 @@ class _AsyncPeople:
 
         Body: a dict, a model, or the fields as keyword arguments:
           tags: Replaces the whole list.
-          notes:
+          notes: Notes, up to 2,000 characters; replaces the current notes.
           muted: true hides their posts from the feed, alerts and digests; false shows them again. Without groupId for the whole workspace; with it, for that group's keywords only.
           ownerId: The member who owns the contact (user id); null clears.
           stage: Where your workspace stands with the person: not_contacted, contacted, replied, in_talks, customer or not_a_fit."""
@@ -2102,7 +2133,7 @@ class _AsyncSegments:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, **fields: Any) -> _m.Segment:
+    async def create(self, body: dict[str, Any] | _m.CreateSegmentBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Segment:
         """Create a segment
 
         Save a named filter over your people.
@@ -2113,10 +2144,10 @@ class _AsyncSegments:
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name (required):
-          description:
-          filter:"""
-        return _result(await _ops.segments.create_segment.asyncio_detailed(client=self._client, body=_body(_m.CreateSegmentBody, body, fields)))
+          name (required): Segment name, unique in its scope.
+          description: What the segment is for.
+          filter: The people filter (the fields of GET /v1/people)."""
+        return _result(await _ops.segments.create_segment.asyncio_detailed(client=self._client, body=_body(_m.CreateSegmentBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str, **params: Any) -> Any:
         """Delete a segment
@@ -2162,8 +2193,8 @@ class _AsyncSegments:
           group_id: Scope to one keyword group (grp_...): only people who mentioned that group's keywords, with that group's own tags, notes, mute, merges, activities and segments. Omit for the whole workspace.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          description:
+          name: Segment name, unique in its scope.
+          description: What the segment is for.
           filter: Replaces the whole filter."""
         return _result(await _ops.segments.update_segment.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateSegmentBody, body, fields)))
 
@@ -2173,7 +2204,7 @@ class _AsyncAlerts:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, **fields: Any) -> _m.Alert:
+    async def create(self, body: dict[str, Any] | _m.CreateAlertBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Alert:
         """Create an alert
 
         Create an alert: a rule (what to watch) sent to channels.
@@ -2184,14 +2215,14 @@ class _AsyncAlerts:
         See [Alerts](/alerts).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name (required):
-          enabled:
+          name (required): Rule name.
+          enabled: false: the rule sends nothing. Default true.
           mode:
-          filter:
+          filter: Which mentions the rule sends. Default: every relevant mention.
           schedule: Required for daily and weekly alerts (weekly ones also need schedule.weekday). Hourly alerts take none: they send every UTC hour, so a time of day and a zone are ignored and a weekday is refused.
           event: Custom event name for webhook payloads; null for the mode default.
           channelIds: Channel ids from GET /v1/channels."""
-        return _result(await _ops.alerts.create_alert.asyncio_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields)))
+        return _result(await _ops.alerts.create_alert.asyncio_detailed(client=self._client, body=_body(_m.CreateAlertBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str) -> Any:
         """Delete an alert"""
@@ -2205,7 +2236,7 @@ class _AsyncAlerts:
         """List alerts"""
         return _result(await _ops.alerts.list_alerts.asyncio_detailed(client=self._client))
 
-    async def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+    async def mute(self, id: str, body: dict[str, Any] | _m.MuteAlertAuthorsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Alert:
         """Mute authors on an alert
 
         Add authors to the alert's muted list, leaving the rest of its filter.
@@ -2214,17 +2245,17 @@ class _AsyncAlerts:
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
-        return _result(await _ops.alerts.mute_alert_authors.asyncio_detailed(id, client=self._client, body=_body(_m.MuteAlertAuthorsBody, body, fields)))
+        return _result(await _ops.alerts.mute_alert_authors.asyncio_detailed(id, client=self._client, body=_body(_m.MuteAlertAuthorsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    async def run(self, id: str) -> _m.RunAlertDigestResponse200:
+    async def run(self, id: str, idempotency_key: str | None = None) -> _m.RunAlertDigestResponse200:
         """Send a digest now"""
-        return _result(await _ops.alerts.run_alert_digest.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.alerts.run_alert_digest.asyncio_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    async def test(self, id: str) -> _m.TestAlertResponse200:
+    async def test(self, id: str, idempotency_key: str | None = None) -> _m.TestAlertResponse200:
         """Send a test through an alert's channels"""
-        return _result(await _ops.alerts.test_alert.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.alerts.test_alert.asyncio_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    async def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, **fields: Any) -> _m.Alert:
+    async def unmute(self, id: str, body: dict[str, Any] | _m.UnmuteAlertAuthorsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Alert:
         """Unmute authors on an alert
 
         Remove authors from the alert's muted list without touching the rest of its filter.
@@ -2233,14 +2264,14 @@ class _AsyncAlerts:
 
         Body: a dict, a model, or the fields as keyword arguments:
           authors (required): Profile or post links (x.com/name, linkedin.com/in/name, reddit.com/user/name, a post URL), handles (@name, u/name), Bluesky DIDs or display names. A link is stored as the author's profile; a plain name or handle matches that name on every platform."""
-        return _result(await _ops.alerts.unmute_alert_authors.asyncio_detailed(id, client=self._client, body=_body(_m.UnmuteAlertAuthorsBody, body, fields)))
+        return _result(await _ops.alerts.unmute_alert_authors.asyncio_detailed(id, client=self._client, body=_body(_m.UnmuteAlertAuthorsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateAlertBody | None = None, **fields: Any) -> _m.Alert:
         """Update an alert
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          enabled:
+          name: Rule name.
+          enabled: false: the rule sends nothing.
           mode:
           filter: Replaces the whole filter.
           schedule: Daily and weekly alerts. Ignored on an hourly one, except a weekday, which is refused.
@@ -2254,11 +2285,11 @@ class _AsyncChannels:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | None = None, **fields: Any) -> Any:
+    async def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | None = None, idempotency_key: str | None = None, **fields: Any) -> Any:
         """Create a channel
 
         Body: a dict with `kind` (slack, email, webhook) or a model; fields may also be passed as keyword arguments:
-          kind:
+          kind: Channel kind.
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
           events: Attention events to receive here, on top of whatever rules send. Omit for none.
@@ -2266,7 +2297,7 @@ class _AsyncChannels:
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
           headers: Extra request headers to send, for your own auth."""
-        return _result(await _ops.channels.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields)))
+        return _result(await _ops.channels.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str) -> Any:
         """Delete a channel"""
@@ -2288,19 +2319,19 @@ class _AsyncChannels:
         """List channels"""
         return _result(await _ops.channels.list_channels.asyncio_detailed(client=self._client))
 
-    async def rotate_secret(self, id: str) -> Any:
+    async def rotate_secret(self, id: str, idempotency_key: str | None = None) -> Any:
         """Rotate a webhook secret"""
-        return _result(await _ops.channels.rotate_webhook_secret.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.channels.rotate_webhook_secret.asyncio_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
-    async def test(self, id: str) -> _m.TestChannelResponse200:
+    async def test(self, id: str, idempotency_key: str | None = None) -> _m.TestChannelResponse200:
         """Send a test to a channel"""
-        return _result(await _ops.channels.test_channel.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.channels.test_channel.asyncio_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateChannelBody | None = None, **fields: Any) -> Any:
         """Update a channel
 
         Body: a dict, a model, or the fields as keyword arguments:
-          label:
+          label: Your name for the channel.
           url: Webhooks only.
           headers: Webhooks only; replaces the whole set.
           events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
@@ -2324,8 +2355,8 @@ class _AsyncCompany:
         Changing profile fields recomposes the classifier context; setting `context` directly overrides it until the next profile edit. Relevance scores for new mentions follow at once.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          description:
+          name: Company name.
+          description: What the company does; the classifier reads it.
           useCases: Replaces the whole list.
           accounts:
           website: The company website; null clears it.
@@ -2353,6 +2384,8 @@ class _AsyncAnalytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
           by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window."""
@@ -2374,10 +2407,12 @@ class _AsyncAnalytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
           bucket: Series bucket: day (default up to 90 days) or week."""
-        _coerce(params, {"range_": (_enum, _m.GetReviewsReportRange), "platforms": (_enum_list, _m.GetReviewsReportPlatformsItem), "bucket": (_enum, _m.GetReviewsReportBucket)})
+        _coerce(params, {"range_": (_enum, _m.GetReviewsReportRange), "platforms": (_enum_list, _m.GetReviewsReportPlatformsItem), "not_platforms": (_enum_list, _m.GetReviewsReportNotPlatformsItem), "bucket": (_enum, _m.GetReviewsReportBucket)})
         return _result(await _ops.analytics.get_reviews_report.asyncio_detailed(client=self._client, **params))
 
     async def series(self, **params: Any) -> _m.AnalyticsSeries:
@@ -2393,11 +2428,13 @@ class _AsyncAnalytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
           bucket: Point granularity: hour (windows of at most 14 days), day, week (Monday start) or month. Default: day up to 90 days, week beyond.
           by: Split into one series per platform, per keyword (the top 20 by matched, the rest folded into "other") or per sentiment (positive, neutral, negative, unclassified). Omit for one total series."""
-        _coerce(params, {"range_": (_enum, _m.GetAnalyticsSeriesRange), "platforms": (_enum_list, _m.GetAnalyticsSeriesPlatformsItem), "bucket": (_enum, _m.GetAnalyticsSeriesBucket), "by": (_enum, _m.GetAnalyticsSeriesBy)})
+        _coerce(params, {"range_": (_enum, _m.GetAnalyticsSeriesRange), "platforms": (_enum_list, _m.GetAnalyticsSeriesPlatformsItem), "not_platforms": (_enum_list, _m.GetAnalyticsSeriesNotPlatformsItem), "bucket": (_enum, _m.GetAnalyticsSeriesBucket), "by": (_enum, _m.GetAnalyticsSeriesBy)})
         return _result(await _ops.analytics.get_analytics_series.asyncio_detailed(client=self._client, **params))
 
     async def share_of_voice(self, **params: Any) -> _m.ShareOfVoice:
@@ -2415,9 +2452,11 @@ class _AsyncAnalytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window."""
-        _coerce(params, {"range_": (_enum, _m.GetShareOfVoiceRange), "platforms": (_enum_list, _m.GetShareOfVoicePlatformsItem)})
+        _coerce(params, {"range_": (_enum, _m.GetShareOfVoiceRange), "platforms": (_enum_list, _m.GetShareOfVoicePlatformsItem), "not_platforms": (_enum_list, _m.GetShareOfVoiceNotPlatformsItem)})
         return _result(await _ops.analytics.get_share_of_voice.asyncio_detailed(client=self._client, **params))
 
     async def summary(self, **params: Any) -> _m.AnalyticsSummary:
@@ -2433,6 +2472,8 @@ class _AsyncAnalytics:
           to: Last day, YYYY-MM-DD, inclusive, in `timezone`. Default today.
           keyword_ids: Only these keyword ids. Repeatable, or comma-separated; omit for every keyword.
           platforms: Only these platforms. Repeatable, or comma-separated; omit for every platform.
+          not_keyword_ids: Never these keyword ids. Repeatable, or comma-separated.
+          not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsSummaryRange), "platforms": (_enum_list, _m.GetAnalyticsSummaryPlatformsItem)})
@@ -2444,7 +2485,7 @@ class _AsyncApiKeys:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
+    async def create(self, body: dict[str, Any] | _m.CreateApiKeyBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.CreateApiKeyResponse201:
         """Create an API key
 
         Mint an API key for this workspace. The key itself is returned once; only its hash is stored.
@@ -2455,7 +2496,7 @@ class _AsyncApiKeys:
           name: A label for the key; "default" when omitted.
           scope: read: GET only. write: everything.
           expiresAt: When the key stops working (ISO 8601, or epoch ms), for a key handed to a script or a contractor. Must be in the future. Omit or null for a key that never expires."""
-        return _result(await _ops.api_keys.create_api_key.asyncio_detailed(client=self._client, body=_body(_m.CreateApiKeyBody, body, fields)))
+        return _result(await _ops.api_keys.create_api_key.asyncio_detailed(client=self._client, body=_body(_m.CreateApiKeyBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def list(self) -> _m.ListApiKeysResponse200:
         """List API keys"""
@@ -2483,7 +2524,7 @@ class _AsyncFeeds:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, **fields: Any) -> _m.Feed:
+    async def create(self, body: dict[str, Any] | _m.CreateFeedBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Feed:
         """Connect a feed
 
         Connect an RSS or Atom feed, or a page advertising one, for the workspace's keywords to read hourly.
@@ -2496,7 +2537,7 @@ class _AsyncFeeds:
         Body: a dict, a model, or the fields as keyword arguments:
           url (required): A feed's address (https://forum.example.com/posts.rss), or a page's (https://forum.example.com): the feed the page advertises is used.
           auth: A sign-in for a members-only feed: a cookie, or one header. Write-only: stored encrypted, sent to the feed's own site alone, never shown again. A feed with a sign-in is read for this workspace alone."""
-        return _result(await _ops.feeds.create_feed.asyncio_detailed(client=self._client, body=_body(_m.CreateFeedBody, body, fields)))
+        return _result(await _ops.feeds.create_feed.asyncio_detailed(client=self._client, body=_body(_m.CreateFeedBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str) -> Any:
         """Disconnect a feed
@@ -2508,7 +2549,7 @@ class _AsyncFeeds:
         """Get a feed"""
         return _result(await _ops.feeds.get_feed.asyncio_detailed(id, client=self._client))
 
-    async def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
+    async def import_(self, body: dict[str, Any] | _m.ImportFeedsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.ImportFeedsResponse200:
         """Connect many feeds
 
         Connect up to 100 feeds in one call, each reported added, already or failed, in order.
@@ -2517,7 +2558,7 @@ class _AsyncFeeds:
 
         Body: a dict, a model, or the fields as keyword arguments:
           feeds (required): Up to 100 feeds, each { url } or { url, auth } for a members-only one. Each is checked on its own: one that fails never stops the others."""
-        return _result(await _ops.feeds.import_feeds.asyncio_detailed(client=self._client, body=_body(_m.ImportFeedsBody, body, fields)))
+        return _result(await _ops.feeds.import_feeds.asyncio_detailed(client=self._client, body=_body(_m.ImportFeedsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def list(self, **params: Any) -> _m.ListFeedsResponse200:
         """List feeds
@@ -2578,7 +2619,7 @@ class _AsyncViews:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, **fields: Any) -> _m.View:
+    async def create(self, body: dict[str, Any] | _m.CreateViewBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.View:
         """Save a view
 
         Save a named filter over mentions, evaluated whenever it is read.
@@ -2589,7 +2630,7 @@ class _AsyncViews:
           name (required): Unique per workspace, case-insensitive.
           description: What the view is for, shown under its name.
           filter: The filter; empty selects every mention."""
-        return _result(await _ops.views.create_view.asyncio_detailed(client=self._client, body=_body(_m.CreateViewBody, body, fields)))
+        return _result(await _ops.views.create_view.asyncio_detailed(client=self._client, body=_body(_m.CreateViewBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str) -> Any:
         """Delete a view
@@ -2615,8 +2656,8 @@ class _AsyncViews:
         Rename, describe or refilter a view. `filter` replaces the whole filter.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          name:
-          description:
+          name: View name, unique in the workspace.
+          description: What the view is for.
           filter: Replaces the whole filter."""
         return _result(await _ops.views.update_view.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
@@ -2626,13 +2667,13 @@ class _AsyncAttention:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def dismiss(self, id: str) -> _m.AttentionItem:
+    async def dismiss(self, id: str, idempotency_key: str | None = None) -> _m.AttentionItem:
         """Dismiss an attention item
 
         Put an attention item away. Idempotent.
 
         It leaves the open list and does not come back while its condition lasts. Once the condition clears, a new episode may open a new item."""
-        return _result(await _ops.attention.dismiss_attention.asyncio_detailed(id, client=self._client))
+        return _result(await _ops.attention.dismiss_attention.asyncio_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def list(self, **params: Any) -> _m.ListAttentionResponse200:
         """List attention items
@@ -2655,7 +2696,7 @@ class _AsyncGroups:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, **fields: Any) -> _m.Group:
+    async def create(self, body: dict[str, Any] | _m.CreateGroupBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Group:
         """Create a group
 
         Create a keyword group, then pass its id as `groupId` when creating keywords.
@@ -2666,7 +2707,7 @@ class _AsyncGroups:
           name (required): The group's name: a customer, a campaign, a product. Unique per workspace.
           externalId: Your own id for the group (a customer id, say). Unique per workspace; find the group by it with GET /v1/groups?externalId=.
           context: What the classifier reads as "the company" for this group's keywords, instead of the WHOLE workspace profile (guidelines and competitors included). Null: the workspace profile. See [Groups](/guides/groups#a-company-description-per-group)."""
-        return _result(await _ops.groups.create_group.asyncio_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields)))
+        return _result(await _ops.groups.create_group.asyncio_detailed(client=self._client, body=_body(_m.CreateGroupBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str) -> Any:
         """Delete a group and its keywords
@@ -2730,7 +2771,7 @@ class _AsyncMembers:
         Invitations sent and not yet accepted, declined or expired. An accepted one appears in GET /v1/members instead."""
         return _result(await _ops.members.list_invitations.asyncio_detailed(client=self._client))
 
-    async def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, **fields: Any) -> _m.Invitation:
+    async def invite(self, body: dict[str, Any] | _m.CreateInvitationBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Invitation:
         """Invite a member
 
         Invite someone by email as admin or member; the invitation expires after 48 hours.
@@ -2740,7 +2781,7 @@ class _AsyncMembers:
         Body: a dict, a model, or the fields as keyword arguments:
           email (required): The address to invite; it receives an email with a link to join.
           role: The role they join with. Ownership is only handed over in the dashboard."""
-        return _result(await _ops.members.create_invitation.asyncio_detailed(client=self._client, body=_body(_m.CreateInvitationBody, body, fields)))
+        return _result(await _ops.members.create_invitation.asyncio_detailed(client=self._client, body=_body(_m.CreateInvitationBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def list(self) -> _m.ListMembersResponse200:
         """List members
@@ -2787,9 +2828,12 @@ class _AsyncUsage:
           keyword_ids: Only these keywords (kw_...), deleted ones included. Repeatable, or comma-separated.
           group_ids: Only these groups (grp_...): a keyword-day by the group it was metered under, a mention or a comment by its keyword's group as it is now. Repeatable, or comma-separated.
           platforms: Only these platforms. A keyword-day belongs to no platform, so with this filter the keyword line reads 0 and only mentions and comments count. Repeatable, or comma-separated.
+          not_keyword_ids: Never these keywords (kw_...). Repeatable, or comma-separated.
+          not_group_ids: Never keywords of these groups (grp_...). Repeatable, or comma-separated.
+          not_platforms: Never mentions or comments from these platforms; keyword-days, which belong to no platform, still count. Repeatable, or comma-separated.
           limit: Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a page; a window has at most 90 days and a dozen platforms.
           offset: Skip this many rows."""
-        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange), "platforms": (_enum_list, _m.GetUsageBreakdownPlatformsItem)})
+        _coerce(params, {"by": (_enum, _m.GetUsageBreakdownBy), "range_": (_enum, _m.GetUsageBreakdownRange), "platforms": (_enum_list, _m.GetUsageBreakdownPlatformsItem), "not_platforms": (_enum_list, _m.GetUsageBreakdownNotPlatformsItem)})
         return _result(await _ops.usage.get_usage_breakdown.asyncio_detailed(client=self._client, **params))
 
     async def get(self) -> _m.UsageSummary:
@@ -2832,7 +2876,7 @@ class _AsyncBilling:
           limit: Page size, 1 to 100 (default 50)."""
         return _result(await _ops.billing.list_ledger.asyncio_detailed(client=self._client, **params))
 
-    async def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
+    async def top_up(self, body: dict[str, Any] | _m.CreateTopUpBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.CreateTopUpResponse200:
         """Create a top-up checkout
 
         Get a hosted checkout URL for a top-up; this call charges nothing.
@@ -2842,7 +2886,7 @@ class _AsyncBilling:
         Body: a dict, a model, or the fields as keyword arguments:
           amountCents (required): Amount to add, in USD cents (2000 to 500000). Prefilled at checkout, editable there.
           successUrl: Where the customer lands after paying: a page on an origin this deployment trusts (the dashboard). Omit it and the dashboard's billing page is used."""
-        return _result(await _ops.billing.create_top_up.asyncio_detailed(client=self._client, body=_body(_m.CreateTopUpBody, body, fields)))
+        return _result(await _ops.billing.create_top_up.asyncio_detailed(client=self._client, body=_body(_m.CreateTopUpBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def wallet(self) -> _m.Wallet:
         """Get the wallet

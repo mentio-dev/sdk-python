@@ -15,6 +15,9 @@ from ...models.export_mentions_csv_kind import ExportMentionsCsvKind
 from ...models.export_mentions_csv_not_countries_item import (
     ExportMentionsCsvNotCountriesItem,
 )
+from ...models.export_mentions_csv_not_keyword_kinds_item import (
+    ExportMentionsCsvNotKeywordKindsItem,
+)
 from ...models.export_mentions_csv_not_platforms_item import (
     ExportMentionsCsvNotPlatformsItem,
 )
@@ -59,6 +62,7 @@ def _get_kwargs(
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
     keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
+    not_keyword_kinds: list[ExportMentionsCsvNotKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -207,6 +211,15 @@ def _get_kwargs(
             json_keyword_kinds.append(keyword_kinds_item)
 
     params["keywordKinds"] = json_keyword_kinds
+
+    json_not_keyword_kinds: list[str] | Unset = UNSET
+    if not isinstance(not_keyword_kinds, Unset):
+        json_not_keyword_kinds = []
+        for not_keyword_kinds_item_data in not_keyword_kinds:
+            not_keyword_kinds_item = not_keyword_kinds_item_data.value
+            json_not_keyword_kinds.append(not_keyword_kinds_item)
+
+    params["notKeywordKinds"] = json_not_keyword_kinds
 
     json_tags: list[str] | None | Unset
     if isinstance(tags, Unset):
@@ -552,6 +565,7 @@ def sync_detailed(
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
     keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
+    not_keyword_kinds: list[ExportMentionsCsvNotKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -655,6 +669,8 @@ def sync_detailed(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+        not_keyword_kinds (list[ExportMentionsCsvNotKeywordKindsItem] | Unset): Never matches of
+            keywords of these kinds. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
             sensitive), in the workspace's tags or those of the mention's own keyword group.
             Repeatable, or comma-separated.
@@ -767,6 +783,7 @@ def sync_detailed(
         alert_id=alert_id,
         view_id=view_id,
         keyword_kinds=keyword_kinds,
+        not_keyword_kinds=not_keyword_kinds,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -840,6 +857,7 @@ def sync(
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
     keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
+    not_keyword_kinds: list[ExportMentionsCsvNotKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -943,6 +961,8 @@ def sync(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+        not_keyword_kinds (list[ExportMentionsCsvNotKeywordKindsItem] | Unset): Never matches of
+            keywords of these kinds. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
             sensitive), in the workspace's tags or those of the mention's own keyword group.
             Repeatable, or comma-separated.
@@ -1056,6 +1076,7 @@ def sync(
         alert_id=alert_id,
         view_id=view_id,
         keyword_kinds=keyword_kinds,
+        not_keyword_kinds=not_keyword_kinds,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -1123,6 +1144,7 @@ async def asyncio_detailed(
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
     keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
+    not_keyword_kinds: list[ExportMentionsCsvNotKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -1226,6 +1248,8 @@ async def asyncio_detailed(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+        not_keyword_kinds (list[ExportMentionsCsvNotKeywordKindsItem] | Unset): Never matches of
+            keywords of these kinds. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
             sensitive), in the workspace's tags or those of the mention's own keyword group.
             Repeatable, or comma-separated.
@@ -1338,6 +1362,7 @@ async def asyncio_detailed(
         alert_id=alert_id,
         view_id=view_id,
         keyword_kinds=keyword_kinds,
+        not_keyword_kinds=not_keyword_kinds,
         tags=tags,
         link_hosts=link_hosts,
         platforms=platforms,
@@ -1409,6 +1434,7 @@ async def asyncio(
     alert_id: str | Unset = UNSET,
     view_id: str | Unset = UNSET,
     keyword_kinds: list[ExportMentionsCsvKeywordKindsItem] | Unset = UNSET,
+    not_keyword_kinds: list[ExportMentionsCsvNotKeywordKindsItem] | Unset = UNSET,
     tags: list[str] | None | Unset = UNSET,
     link_hosts: list[str] | None | Unset = UNSET,
     platforms: list[ExportMentionsCsvPlatformsItem] | Unset = UNSET,
@@ -1512,6 +1538,8 @@ async def asyncio(
             404.
         keyword_kinds (list[ExportMentionsCsvKeywordKindsItem] | Unset): Only matches of keywords
             of any of these kinds: brand, competitor, topic. Repeatable, or comma-separated.
+        not_keyword_kinds (list[ExportMentionsCsvNotKeywordKindsItem] | Unset): Never matches of
+            keywords of these kinds. Repeatable, or comma-separated.
         tags (list[str] | None | Unset): Only authors tagged with any of these (exact, case-
             sensitive), in the workspace's tags or those of the mention's own keyword group.
             Repeatable, or comma-separated.
@@ -1626,6 +1654,7 @@ async def asyncio(
             alert_id=alert_id,
             view_id=view_id,
             keyword_kinds=keyword_kinds,
+            not_keyword_kinds=not_keyword_kinds,
             tags=tags,
             link_hosts=link_hosts,
             platforms=platforms,

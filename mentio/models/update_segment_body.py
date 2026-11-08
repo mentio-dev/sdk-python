@@ -20,8 +20,8 @@ class UpdateSegmentBody:
     """Omitted fields are untouched.
 
     Attributes:
-        name (str | Unset):
-        description (str | Unset):
+        name (str | Unset): Segment name, unique in its scope.
+        description (str | Unset): What the segment is for.
         filter_ (UpdateSegmentBodyFilter | Unset): Replaces the whole filter.
     """
 

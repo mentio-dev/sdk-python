@@ -7,6 +7,9 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.get_usage_breakdown_by import GetUsageBreakdownBy
+from ...models.get_usage_breakdown_not_platforms_item import (
+    GetUsageBreakdownNotPlatformsItem,
+)
 from ...models.get_usage_breakdown_platforms_item import GetUsageBreakdownPlatformsItem
 from ...models.get_usage_breakdown_range import GetUsageBreakdownRange
 from ...models.usage_breakdown import UsageBreakdown
@@ -23,6 +26,9 @@ def _get_kwargs(
     keyword_ids: list[str] | None | Unset = UNSET,
     group_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetUsageBreakdownPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetUsageBreakdownNotPlatformsItem] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | None | Unset = 0,
 ) -> dict[str, Any]:
@@ -75,6 +81,35 @@ def _get_kwargs(
             json_platforms.append(platforms_item)
 
     params["platforms"] = json_platforms
+
+    json_not_keyword_ids: list[str] | None | Unset
+    if isinstance(not_keyword_ids, Unset):
+        json_not_keyword_ids = UNSET
+    elif isinstance(not_keyword_ids, list):
+        json_not_keyword_ids = not_keyword_ids
+
+    else:
+        json_not_keyword_ids = not_keyword_ids
+    params["notKeywordIds"] = json_not_keyword_ids
+
+    json_not_group_ids: list[str] | None | Unset
+    if isinstance(not_group_ids, Unset):
+        json_not_group_ids = UNSET
+    elif isinstance(not_group_ids, list):
+        json_not_group_ids = not_group_ids
+
+    else:
+        json_not_group_ids = not_group_ids
+    params["notGroupIds"] = json_not_group_ids
+
+    json_not_platforms: list[str] | Unset = UNSET
+    if not isinstance(not_platforms, Unset):
+        json_not_platforms = []
+        for not_platforms_item_data in not_platforms:
+            not_platforms_item = not_platforms_item_data.value
+            json_not_platforms.append(not_platforms_item)
+
+    params["notPlatforms"] = json_not_platforms
 
     params["limit"] = limit
 
@@ -147,6 +182,9 @@ def sync_detailed(
     keyword_ids: list[str] | None | Unset = UNSET,
     group_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetUsageBreakdownPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetUsageBreakdownNotPlatformsItem] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | None | Unset = 0,
 ) -> Response[ErrorResponse | UsageBreakdown]:
@@ -179,6 +217,13 @@ def sync_detailed(
         platforms (list[GetUsageBreakdownPlatformsItem] | Unset): Only these platforms. A keyword-
             day belongs to no platform, so with this filter the keyword line reads 0 and only mentions
             and comments count. Repeatable, or comma-separated.
+        not_keyword_ids (list[str] | None | Unset): Never these keywords (kw_...). Repeatable, or
+            comma-separated.
+        not_group_ids (list[str] | None | Unset): Never keywords of these groups (grp_...).
+            Repeatable, or comma-separated.
+        not_platforms (list[GetUsageBreakdownNotPlatformsItem] | Unset): Never mentions or
+            comments from these platforms; keyword-days, which belong to no platform, still count.
+            Repeatable, or comma-separated.
         limit (int | Unset): Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a
             page; a window has at most 90 days and a dozen platforms. Default: 100.
         offset (int | None | Unset): Skip this many rows. Default: 0.
@@ -200,6 +245,9 @@ def sync_detailed(
         keyword_ids=keyword_ids,
         group_ids=group_ids,
         platforms=platforms,
+        not_keyword_ids=not_keyword_ids,
+        not_group_ids=not_group_ids,
+        not_platforms=not_platforms,
         limit=limit,
         offset=offset,
     )
@@ -222,6 +270,9 @@ def sync(
     keyword_ids: list[str] | None | Unset = UNSET,
     group_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetUsageBreakdownPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetUsageBreakdownNotPlatformsItem] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | None | Unset = 0,
 ) -> ErrorResponse | UsageBreakdown | None:
@@ -254,6 +305,13 @@ def sync(
         platforms (list[GetUsageBreakdownPlatformsItem] | Unset): Only these platforms. A keyword-
             day belongs to no platform, so with this filter the keyword line reads 0 and only mentions
             and comments count. Repeatable, or comma-separated.
+        not_keyword_ids (list[str] | None | Unset): Never these keywords (kw_...). Repeatable, or
+            comma-separated.
+        not_group_ids (list[str] | None | Unset): Never keywords of these groups (grp_...).
+            Repeatable, or comma-separated.
+        not_platforms (list[GetUsageBreakdownNotPlatformsItem] | Unset): Never mentions or
+            comments from these platforms; keyword-days, which belong to no platform, still count.
+            Repeatable, or comma-separated.
         limit (int | Unset): Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a
             page; a window has at most 90 days and a dozen platforms. Default: 100.
         offset (int | None | Unset): Skip this many rows. Default: 0.
@@ -276,6 +334,9 @@ def sync(
         keyword_ids=keyword_ids,
         group_ids=group_ids,
         platforms=platforms,
+        not_keyword_ids=not_keyword_ids,
+        not_group_ids=not_group_ids,
+        not_platforms=not_platforms,
         limit=limit,
         offset=offset,
     ).parsed
@@ -292,6 +353,9 @@ async def asyncio_detailed(
     keyword_ids: list[str] | None | Unset = UNSET,
     group_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetUsageBreakdownPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetUsageBreakdownNotPlatformsItem] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | None | Unset = 0,
 ) -> Response[ErrorResponse | UsageBreakdown]:
@@ -324,6 +388,13 @@ async def asyncio_detailed(
         platforms (list[GetUsageBreakdownPlatformsItem] | Unset): Only these platforms. A keyword-
             day belongs to no platform, so with this filter the keyword line reads 0 and only mentions
             and comments count. Repeatable, or comma-separated.
+        not_keyword_ids (list[str] | None | Unset): Never these keywords (kw_...). Repeatable, or
+            comma-separated.
+        not_group_ids (list[str] | None | Unset): Never keywords of these groups (grp_...).
+            Repeatable, or comma-separated.
+        not_platforms (list[GetUsageBreakdownNotPlatformsItem] | Unset): Never mentions or
+            comments from these platforms; keyword-days, which belong to no platform, still count.
+            Repeatable, or comma-separated.
         limit (int | Unset): Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a
             page; a window has at most 90 days and a dozen platforms. Default: 100.
         offset (int | None | Unset): Skip this many rows. Default: 0.
@@ -345,6 +416,9 @@ async def asyncio_detailed(
         keyword_ids=keyword_ids,
         group_ids=group_ids,
         platforms=platforms,
+        not_keyword_ids=not_keyword_ids,
+        not_group_ids=not_group_ids,
+        not_platforms=not_platforms,
         limit=limit,
         offset=offset,
     )
@@ -365,6 +439,9 @@ async def asyncio(
     keyword_ids: list[str] | None | Unset = UNSET,
     group_ids: list[str] | None | Unset = UNSET,
     platforms: list[GetUsageBreakdownPlatformsItem] | Unset = UNSET,
+    not_keyword_ids: list[str] | None | Unset = UNSET,
+    not_group_ids: list[str] | None | Unset = UNSET,
+    not_platforms: list[GetUsageBreakdownNotPlatformsItem] | Unset = UNSET,
     limit: int | Unset = 100,
     offset: int | None | Unset = 0,
 ) -> ErrorResponse | UsageBreakdown | None:
@@ -397,6 +474,13 @@ async def asyncio(
         platforms (list[GetUsageBreakdownPlatformsItem] | Unset): Only these platforms. A keyword-
             day belongs to no platform, so with this filter the keyword line reads 0 and only mentions
             and comments count. Repeatable, or comma-separated.
+        not_keyword_ids (list[str] | None | Unset): Never these keywords (kw_...). Repeatable, or
+            comma-separated.
+        not_group_ids (list[str] | None | Unset): Never keywords of these groups (grp_...).
+            Repeatable, or comma-separated.
+        not_platforms (list[GetUsageBreakdownNotPlatformsItem] | Unset): Never mentions or
+            comments from these platforms; keyword-days, which belong to no platform, still count.
+            Repeatable, or comma-separated.
         limit (int | Unset): Rows per page, 1 to 500 (default 100). Only by=keyword can outgrow a
             page; a window has at most 90 days and a dozen platforms. Default: 100.
         offset (int | None | Unset): Skip this many rows. Default: 0.
@@ -420,6 +504,9 @@ async def asyncio(
             keyword_ids=keyword_ids,
             group_ids=group_ids,
             platforms=platforms,
+            not_keyword_ids=not_keyword_ids,
+            not_group_ids=not_group_ids,
+            not_platforms=not_platforms,
             limit=limit,
             offset=offset,
         )

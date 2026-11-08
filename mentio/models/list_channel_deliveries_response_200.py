@@ -19,7 +19,7 @@ T = TypeVar("T", bound="ListChannelDeliveriesResponse200")
 class ListChannelDeliveriesResponse200:
     """
     Attributes:
-        data (list[ListChannelDeliveriesResponse200DataItem]):
+        data (list[ListChannelDeliveriesResponse200DataItem]): Deliveries, newest first.
         next_cursor (None | str): Pass back as `cursor` for the next page; null on the last page.
     """
 

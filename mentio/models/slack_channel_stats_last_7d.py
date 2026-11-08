@@ -14,8 +14,8 @@ class SlackChannelStatsLast7D:
     """Deliveries in the last 7 days.
 
     Attributes:
-        total (int):
-        failed (int):
+        total (int): Sends attempted.
+        failed (int): Sends that failed.
     """
 
     total: int

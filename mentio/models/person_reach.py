@@ -14,9 +14,9 @@ class PersonReach:
     """Platform counts as of their newest post; null where the platform has no such number.
 
     Attributes:
-        followers (int | None):
-        following (int | None):
-        posts (int | None):
+        followers (int | None): Followers when last seen; null when unknown.
+        following (int | None): Accounts they follow; null when unknown.
+        posts (int | None): Posts on the platform; null when unknown.
     """
 
     followers: int | None

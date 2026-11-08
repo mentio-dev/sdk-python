@@ -21,10 +21,10 @@ T = TypeVar("T", bound="CreateAlertBody")
 class CreateAlertBody:
     """
     Attributes:
-        name (str):
-        enabled (bool | Unset):  Default: True.
+        name (str): Rule name.
+        enabled (bool | Unset): false: the rule sends nothing. Default true. Default: True.
         mode (CreateAlertBodyMode | Unset):  Default: CreateAlertBodyMode.INSTANT.
-        filter_ (CreateAlertBodyFilter | Unset):
+        filter_ (CreateAlertBodyFilter | Unset): Which mentions the rule sends. Default: every relevant mention.
         schedule (CreateAlertBodySchedule | Unset): Required for daily and weekly alerts (weekly ones also need
             schedule.weekday). Hourly alerts take none: they send every UTC hour, so a time of day and a zone are ignored
             and a weekday is refused.

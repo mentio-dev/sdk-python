@@ -34,8 +34,8 @@ class ListChannelDeliveriesResponse200DataItem:
             weekly summary. event: an account event the channel subscribed to.
         event (str): The event name the payload carried: the rule's (mention.matched unless it set one, digest for a
             summary) or the account event's.
-        status (ListChannelDeliveriesResponse200DataItemStatus):
-        attempts (int):
+        status (ListChannelDeliveriesResponse200DataItemStatus): pending, delivered or failed.
+        attempts (int): Send attempts so far.
         error (None | str): The last failure, when there was one.
         sent_at (None | str): ISO 8601 timestamp, UTC.
         created_at (str): ISO 8601 timestamp, UTC.

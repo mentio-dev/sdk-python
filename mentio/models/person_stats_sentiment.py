@@ -11,11 +11,12 @@ T = TypeVar("T", bound="PersonStatsSentiment")
 
 @_attrs_define
 class PersonStatsSentiment:
-    """
+    """Their matched mentions by sentiment.
+
     Attributes:
-        positive (int):
-        neutral (int):
-        negative (int):
+        positive (int): Scored positive.
+        neutral (int): Scored neutral.
+        negative (int): Scored negative.
     """
 
     positive: int

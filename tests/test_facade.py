@@ -223,3 +223,16 @@ async def test_the_async_client_mirrors_the_sync_one():
         summary = await client.analytics.summary(range_="7d", compare=False)
     assert summary.matched == 7
     assert summary.window.timezone == "UTC"
+
+
+def test_create_sends_the_idempotency_key_only_when_given():
+    seen = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request.headers.get("idempotency-key"))
+        return json_response(201, _minimal(SCHEMAS["Keyword"]))
+
+    m = make_client(handler)
+    m.keywords.create(term="acme", idempotency_key="k-1")
+    m.keywords.create(term="acme")
+    assert seen == ["k-1", None]

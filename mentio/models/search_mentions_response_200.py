@@ -17,7 +17,7 @@ T = TypeVar("T", bound="SearchMentionsResponse200")
 class SearchMentionsResponse200:
     """
     Attributes:
-        data (list[Mention]):
+        data (list[Mention]): The page of mentions.
         next_cursor (None | str): Pass as cursor for the next page; null on the last page.
     """
 

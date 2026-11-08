@@ -20,8 +20,8 @@ class UpdateCompanyBody:
     """Omitted fields are untouched.
 
     Attributes:
-        name (str | Unset):
-        description (str | Unset):
+        name (str | Unset): Company name.
+        description (str | Unset): What the company does; the classifier reads it.
         use_cases (list[str] | Unset): Replaces the whole list.
         accounts (UpdateCompanyBodyAccounts | Unset):
         website (None | str | Unset): The company website; null clears it.

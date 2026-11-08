@@ -15,6 +15,9 @@ from ..models.list_segments_response_200_data_item_filter_never_keyword_kinds_it
 from ..models.list_segments_response_200_data_item_filter_not_platforms_item import (
     ListSegmentsResponse200DataItemFilterNotPlatformsItem,
 )
+from ..models.list_segments_response_200_data_item_filter_not_stages_item import (
+    ListSegmentsResponse200DataItemFilterNotStagesItem,
+)
 from ..models.list_segments_response_200_data_item_filter_platforms_item import (
     ListSegmentsResponse200DataItemFilterPlatformsItem,
 )
@@ -28,7 +31,8 @@ T = TypeVar("T", bound="ListSegmentsResponse200DataItemFilter")
 
 @_attrs_define
 class ListSegmentsResponse200DataItemFilter:
-    """
+    """The people filter it saves (the fields of GET /v1/people).
+
     Attributes:
         platforms (list[ListSegmentsResponse200DataItemFilterPlatformsItem] | Unset): People with an account on any of
             these platforms.
@@ -51,6 +55,11 @@ class ListSegmentsResponse200DataItemFilter:
             subdomain of it.
         muted (bool | Unset): true: only muted people; false: only unmuted.
         stages (list[ListSegmentsResponse200DataItemFilterStagesItem] | Unset): People at any of these outreach stages.
+        not_stages (list[ListSegmentsResponse200DataItemFilterNotStagesItem] | Unset): Nobody at these outreach stages.
+        not_link_hosts (list[str] | Unset): Nobody with a mention linking to any of these hosts, the host itself or a
+            subdomain of it.
+        not_owner_ids (list[str] | Unset): Nobody owned by these members (user ids); "none" drops the people nobody
+            owns.
         automated (bool | Unset): true: only people whose matched posts are mostly machine-made (bot accounts); false:
             only the rest.
         owner_ids (list[str] | Unset): People owned by any of these members (user ids); "none" matches people nobody
@@ -79,6 +88,9 @@ class ListSegmentsResponse200DataItemFilter:
     link_hosts: list[str] | Unset = UNSET
     muted: bool | Unset = UNSET
     stages: list[ListSegmentsResponse200DataItemFilterStagesItem] | Unset = UNSET
+    not_stages: list[ListSegmentsResponse200DataItemFilterNotStagesItem] | Unset = UNSET
+    not_link_hosts: list[str] | Unset = UNSET
+    not_owner_ids: list[str] | Unset = UNSET
     automated: bool | Unset = UNSET
     owner_ids: list[str] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -151,6 +163,21 @@ class ListSegmentsResponse200DataItemFilter:
                 stages_item = stages_item_data.value
                 stages.append(stages_item)
 
+        not_stages: list[str] | Unset = UNSET
+        if not isinstance(self.not_stages, Unset):
+            not_stages = []
+            for not_stages_item_data in self.not_stages:
+                not_stages_item = not_stages_item_data.value
+                not_stages.append(not_stages_item)
+
+        not_link_hosts: list[str] | Unset = UNSET
+        if not isinstance(self.not_link_hosts, Unset):
+            not_link_hosts = self.not_link_hosts
+
+        not_owner_ids: list[str] | Unset = UNSET
+        if not isinstance(self.not_owner_ids, Unset):
+            not_owner_ids = self.not_owner_ids
+
         automated = self.automated
 
         owner_ids: list[str] | Unset = UNSET
@@ -192,6 +219,12 @@ class ListSegmentsResponse200DataItemFilter:
             field_dict["muted"] = muted
         if stages is not UNSET:
             field_dict["stages"] = stages
+        if not_stages is not UNSET:
+            field_dict["notStages"] = not_stages
+        if not_link_hosts is not UNSET:
+            field_dict["notLinkHosts"] = not_link_hosts
+        if not_owner_ids is not UNSET:
+            field_dict["notOwnerIds"] = not_owner_ids
         if automated is not UNSET:
             field_dict["automated"] = automated
         if owner_ids is not UNSET:
@@ -293,6 +326,23 @@ class ListSegmentsResponse200DataItemFilter:
 
                 stages.append(stages_item)
 
+        _not_stages = d.pop("notStages", UNSET)
+        not_stages: list[ListSegmentsResponse200DataItemFilterNotStagesItem] | Unset = (
+            UNSET
+        )
+        if _not_stages is not UNSET:
+            not_stages = []
+            for not_stages_item_data in _not_stages:
+                not_stages_item = ListSegmentsResponse200DataItemFilterNotStagesItem(
+                    not_stages_item_data
+                )
+
+                not_stages.append(not_stages_item)
+
+        not_link_hosts = cast(list[str], d.pop("notLinkHosts", UNSET))
+
+        not_owner_ids = cast(list[str], d.pop("notOwnerIds", UNSET))
+
         automated = d.pop("automated", UNSET)
 
         owner_ids = cast(list[str], d.pop("ownerIds", UNSET))
@@ -314,6 +364,9 @@ class ListSegmentsResponse200DataItemFilter:
             link_hosts=link_hosts,
             muted=muted,
             stages=stages,
+            not_stages=not_stages,
+            not_link_hosts=not_link_hosts,
+            not_owner_ids=not_owner_ids,
             automated=automated,
             owner_ids=owner_ids,
         )

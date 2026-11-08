@@ -142,20 +142,25 @@ function methodSource(op: CliOperation, isAsync: boolean): string {
   const head = isAsync ? 'async def' : 'def';
   const pathArgs = pathParams.map((p) => `${p}: str`).join(', ');
   const doc = `"""${docstring(op, generated, body)}"""`;
+  // Header parameters (Idempotency-Key) become named keyword arguments,
+  // passed through only when given.
+  const headerParams = op.params.filter((p) => p.in === 'header').map((p) => snake(p.name.replace(/-/g, '_')));
+  const headerArgs = headerParams.map((p) => `, ${p}: str | None = None`).join('');
+  const headerPass = headerParams.map((p) => `, ${p}=${p} if ${p} is not None else UNSET`).join('');
   const lines: string[] = [];
   if (body) {
     const bodyType = body.kind === 'model' ? `dict[str, Any] | _m.${body.cls} | None` : `dict[str, Any] | ${Object.values(body.byKind).map((c) => `_m.${c}`).join(' | ')} | None`;
-    lines.push(`${head} ${name}(self${pathArgs ? `, ${pathArgs}` : ''}, body: ${bodyType} = None, **fields: Any) -> ${returns}:`);
+    lines.push(`${head} ${name}(self${pathArgs ? `, ${pathArgs}` : ''}, body: ${bodyType} = None${headerArgs}, **fields: Any) -> ${returns}:`);
     lines.push(indent(doc, 4));
-    lines.push(`    return ${call(`${pathParams.join(', ')}${pathParams.length ? ', ' : ''}client=self._client, body=_body(${bodyExpr(body)}, body, fields)`)}`);
+    lines.push(`    return ${call(`${pathParams.join(', ')}${pathParams.length ? ', ' : ''}client=self._client, body=_body(${bodyExpr(body)}, body, fields)${headerPass}`)}`);
   } else {
     const hasQuery = op.params.some((p) => p.in === 'query');
-    lines.push(`${head} ${name}(self${pathArgs ? `, ${pathArgs}` : ''}${hasQuery ? ', **params: Any' : ''}) -> ${returns}:`);
+    lines.push(`${head} ${name}(self${pathArgs ? `, ${pathArgs}` : ''}${headerArgs}${hasQuery ? ', **params: Any' : ''}) -> ${returns}:`);
     lines.push(indent(doc, 4));
     if (coerce.length > 0) {
       lines.push(`    _coerce(params, {${coerce.map((c) => `${q(c.py)}: (${c.fn}, ${c.cls ? `_m.${c.cls}` : 'None'})`).join(', ')}})`);
     }
-    lines.push(`    return ${call(`${pathParams.join(', ')}${pathParams.length ? ', ' : ''}client=self._client${hasQuery ? ', **params' : ''}`)}`);
+    lines.push(`    return ${call(`${pathParams.join(', ')}${pathParams.length ? ', ' : ''}client=self._client${headerPass}${hasQuery ? ', **params' : ''}`)}`);
   }
   return lines.join('\n');
 }

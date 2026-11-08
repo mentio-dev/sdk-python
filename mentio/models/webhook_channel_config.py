@@ -18,7 +18,8 @@ T = TypeVar("T", bound="WebhookChannelConfig")
 
 @_attrs_define
 class WebhookChannelConfig:
-    """
+    """The channel's settings for its kind; secrets are never returned.
+
     Attributes:
         url (str): Where the signed POSTs go.
         headers (WebhookChannelConfigHeaders): Extra request headers you configured.

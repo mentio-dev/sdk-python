@@ -33,15 +33,15 @@ class ListAlertsResponse200DataItem:
     """
     Attributes:
         id (str): Alert id (feed_...).
-        name (str):
-        enabled (bool):
+        name (str): Rule name.
+        enabled (bool): false: the rule sends nothing.
         mode (ListAlertsResponse200DataItemMode): When it sends; see [Alerts](/alerts).
 
             - instant: each matching mention as it happens.
             - hourly: the previous UTC hour, at five past; never email.
             - daily: one digest at the scheduled local time.
             - weekly: one digest a week, on schedule.weekday.
-        filter_ (ListAlertsResponse200DataItemFilter):
+        filter_ (ListAlertsResponse200DataItemFilter): Which mentions the rule sends.
         schedule (ListAlertsResponse200DataItemScheduleType0 | None): Daily and weekly alerts only; null for instant and
             hourly ones.
         event (str): Event name carried in webhook payloads; the mode default unless you set one.

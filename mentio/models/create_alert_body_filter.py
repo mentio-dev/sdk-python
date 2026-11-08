@@ -29,7 +29,8 @@ T = TypeVar("T", bound="CreateAlertBodyFilter")
 
 @_attrs_define
 class CreateAlertBodyFilter:
-    """
+    """Which mentions the rule sends. Default: every relevant mention.
+
     Attributes:
         keyword_ids (list[str] | Unset): Only these keywords.
         group_ids (list[str] | Unset): Only keywords in these groups (grp_...): one rule per customer, say.

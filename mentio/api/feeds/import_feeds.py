@@ -8,14 +8,17 @@ from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.import_feeds_body import ImportFeedsBody
 from ...models.import_feeds_response_200 import ImportFeedsResponse200
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     body: ImportFeedsBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
+    if not isinstance(idempotency_key, Unset):
+        headers["idempotency-key"] = idempotency_key
 
     _kwargs: dict[str, Any] = {
         "method": "post",
@@ -37,6 +40,11 @@ def _parse_response(
         response_200 = ImportFeedsResponse200.from_dict(response.json())
 
         return response_200
+
+    if response.status_code == 400:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
 
     if response.status_code == 401:
         response_401 = ErrorResponse.from_dict(response.json())
@@ -69,6 +77,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: ImportFeedsBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | ImportFeedsResponse200]:
     """Connect many feeds
 
@@ -78,6 +87,9 @@ def sync_detailed(
     added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (ImportFeedsBody):
 
     Raises:
@@ -90,6 +102,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         body=body,
+        idempotency_key=idempotency_key,
     )
 
     response = client.get_httpx_client().request(
@@ -103,6 +116,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: ImportFeedsBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | ImportFeedsResponse200 | None:
     """Connect many feeds
 
@@ -112,6 +126,9 @@ def sync(
     added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (ImportFeedsBody):
 
     Raises:
@@ -125,6 +142,7 @@ def sync(
     return sync_detailed(
         client=client,
         body=body,
+        idempotency_key=idempotency_key,
     ).parsed
 
 
@@ -132,6 +150,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: ImportFeedsBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> Response[ErrorResponse | ImportFeedsResponse200]:
     """Connect many feeds
 
@@ -141,6 +160,9 @@ async def asyncio_detailed(
     added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (ImportFeedsBody):
 
     Raises:
@@ -153,6 +175,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         body=body,
+        idempotency_key=idempotency_key,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -164,6 +187,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: ImportFeedsBody,
+    idempotency_key: str | Unset = UNSET,
 ) -> ErrorResponse | ImportFeedsResponse200 | None:
     """Connect many feeds
 
@@ -173,6 +197,9 @@ async def asyncio(
     added bring a look-back. See [RSS](/platforms/rss#workspace-feeds).
 
     Args:
+        idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
+            same key within 24 hours returns the first response instead of creating twice. Example:
+            7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
         body (ImportFeedsBody):
 
     Raises:
@@ -187,5 +214,6 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             body=body,
+            idempotency_key=idempotency_key,
         )
     ).parsed

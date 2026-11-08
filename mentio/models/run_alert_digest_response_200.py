@@ -25,9 +25,9 @@ class RunAlertDigestResponse200:
     Attributes:
         skipped (RunAlertDigestResponse200Skipped): Why nothing was sent: the period already went out, nothing to show,
             an hourly retry window closed, or another run is sending it now.
-        matched (int):
-        relevant (int):
-        outcomes (list[RunAlertDigestResponse200OutcomesItem]):
+        matched (int): Matches in the window.
+        relevant (int): Relevant matches in the window.
+        outcomes (list[RunAlertDigestResponse200OutcomesItem]): One result per channel.
     """
 
     skipped: RunAlertDigestResponse200Skipped

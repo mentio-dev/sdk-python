@@ -13,7 +13,8 @@ T = TypeVar("T", bound="SlackChannelConfig")
 
 @_attrs_define
 class SlackChannelConfig:
-    """
+    """The channel's settings for its kind; secrets are never returned.
+
     Attributes:
         channel_id (str): Slack channel id.
         channel_name (str): Slack channel name, without the #.

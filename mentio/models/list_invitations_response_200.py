@@ -17,7 +17,7 @@ T = TypeVar("T", bound="ListInvitationsResponse200")
 class ListInvitationsResponse200:
     """
     Attributes:
-        data (list[Invitation]):
+        data (list[Invitation]): The open invitations.
     """
 
     data: list[Invitation]

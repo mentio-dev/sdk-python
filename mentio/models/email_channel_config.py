@@ -19,7 +19,8 @@ T = TypeVar("T", bound="EmailChannelConfig")
 
 @_attrs_define
 class EmailChannelConfig:
-    """
+    """The channel's settings for its kind; secrets are never returned.
+
     Attributes:
         recipients (list[EmailChannelConfigRecipientsItem]): Every address on the list and whether it confirmed.
         events (list[EmailChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
