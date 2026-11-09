@@ -87,10 +87,10 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Mention]:
     """Update a mention
 
-     Triage, assign, snooze, annotate or correct the classification of a mention.
+     Triage, assign, snooze, label, annotate or correct the classification of a mention.
 
-    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
-    restores the classifier's.
+    - `relevant` and `sentiment` are your verdict; null restores the classifier's.
+    - `labels` replaces the whole list.
     - Omitted fields stay. Delivery and billing never change.
 
     Args:
@@ -125,10 +125,10 @@ def sync(
 ) -> ErrorResponse | Mention | None:
     """Update a mention
 
-     Triage, assign, snooze, annotate or correct the classification of a mention.
+     Triage, assign, snooze, label, annotate or correct the classification of a mention.
 
-    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
-    restores the classifier's.
+    - `relevant` and `sentiment` are your verdict; null restores the classifier's.
+    - `labels` replaces the whole list.
     - Omitted fields stay. Delivery and billing never change.
 
     Args:
@@ -158,10 +158,10 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Mention]:
     """Update a mention
 
-     Triage, assign, snooze, annotate or correct the classification of a mention.
+     Triage, assign, snooze, label, annotate or correct the classification of a mention.
 
-    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
-    restores the classifier's.
+    - `relevant` and `sentiment` are your verdict; null restores the classifier's.
+    - `labels` replaces the whole list.
     - Omitted fields stay. Delivery and billing never change.
 
     Args:
@@ -194,10 +194,10 @@ async def asyncio(
 ) -> ErrorResponse | Mention | None:
     """Update a mention
 
-     Triage, assign, snooze, annotate or correct the classification of a mention.
+     Triage, assign, snooze, label, annotate or correct the classification of a mention.
 
-    - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null
-    restores the classifier's.
+    - `relevant` and `sentiment` are your verdict; null restores the classifier's.
+    - `labels` replaces the whole list.
     - Omitted fields stay. Delivery and billing never change.
 
     Args:

@@ -85,6 +85,8 @@ class ListViewsResponse200DataItemFilter:
             mention's own keyword group.
         not_tags (list[str] | Unset): Never authors tagged with any of these, in the workspace's tags or those of the
             mention's own keyword group.
+        labels (list[str] | Unset): Only mentions carrying any of these labels (exact, case-sensitive).
+        not_labels (list[str] | Unset): Never mentions carrying any of these labels.
         link_hosts (list[str] | Unset): Only posts linking to any of these hosts, the host itself or a subdomain of it.
         not_link_hosts (list[str] | Unset): Never posts linking to these hosts.
         subreddits (list[str] | Unset): Only Reddit posts from any of these subreddits (names without the r/, any case);
@@ -153,6 +155,8 @@ class ListViewsResponse200DataItemFilter:
     organization: bool | Unset = UNSET
     tags: list[str] | Unset = UNSET
     not_tags: list[str] | Unset = UNSET
+    labels: list[str] | Unset = UNSET
+    not_labels: list[str] | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
     not_link_hosts: list[str] | Unset = UNSET
     subreddits: list[str] | Unset = UNSET
@@ -287,6 +291,14 @@ class ListViewsResponse200DataItemFilter:
         if not isinstance(self.not_tags, Unset):
             not_tags = self.not_tags
 
+        labels: list[str] | Unset = UNSET
+        if not isinstance(self.labels, Unset):
+            labels = self.labels
+
+        not_labels: list[str] | Unset = UNSET
+        if not isinstance(self.not_labels, Unset):
+            not_labels = self.not_labels
+
         link_hosts: list[str] | Unset = UNSET
         if not isinstance(self.link_hosts, Unset):
             link_hosts = self.link_hosts
@@ -401,6 +413,10 @@ class ListViewsResponse200DataItemFilter:
             field_dict["tags"] = tags
         if not_tags is not UNSET:
             field_dict["notTags"] = not_tags
+        if labels is not UNSET:
+            field_dict["labels"] = labels
+        if not_labels is not UNSET:
+            field_dict["notLabels"] = not_labels
         if link_hosts is not UNSET:
             field_dict["linkHosts"] = link_hosts
         if not_link_hosts is not UNSET:
@@ -590,6 +606,10 @@ class ListViewsResponse200DataItemFilter:
 
         not_tags = cast(list[str], d.pop("notTags", UNSET))
 
+        labels = cast(list[str], d.pop("labels", UNSET))
+
+        not_labels = cast(list[str], d.pop("notLabels", UNSET))
+
         link_hosts = cast(list[str], d.pop("linkHosts", UNSET))
 
         not_link_hosts = cast(list[str], d.pop("notLinkHosts", UNSET))
@@ -666,6 +686,8 @@ class ListViewsResponse200DataItemFilter:
             organization=organization,
             tags=tags,
             not_tags=not_tags,
+            labels=labels,
+            not_labels=not_labels,
             link_hosts=link_hosts,
             not_link_hosts=not_link_hosts,
             subreddits=subreddits,

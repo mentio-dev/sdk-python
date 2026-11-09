@@ -105,6 +105,12 @@ import mentio.api.api_keys.revoke_api_key  # noqa: F401
 import mentio.api.attention.dismiss_attention  # noqa: F401
 import mentio.api.attention.list_attention  # noqa: F401
 import mentio.api.auth.whoami  # noqa: F401
+import mentio.api.automations.create_automation  # noqa: F401
+import mentio.api.automations.delete_automation  # noqa: F401
+import mentio.api.automations.get_automation  # noqa: F401
+import mentio.api.automations.list_automations  # noqa: F401
+import mentio.api.automations.list_labels  # noqa: F401
+import mentio.api.automations.update_automation  # noqa: F401
 import mentio.api.billing.create_top_up  # noqa: F401
 import mentio.api.billing.get_invoice_url  # noqa: F401
 import mentio.api.billing.get_wallet  # noqa: F401
@@ -151,6 +157,7 @@ import mentio.api.mentions.get_mention  # noqa: F401
 import mentio.api.mentions.list_mention_comments  # noqa: F401
 import mentio.api.mentions.search_mentions  # noqa: F401
 import mentio.api.mentions.update_mention  # noqa: F401
+import mentio.api.mentions.update_mentions  # noqa: F401
 import mentio.api.people.delete_person_activity  # noqa: F401
 import mentio.api.people.export_people_csv  # noqa: F401
 import mentio.api.people.get_person  # noqa: F401
@@ -300,7 +307,7 @@ class _Keywords:
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
-    """mentions: comments, export, export_json, get, search, update."""
+    """mentions: comments, export, export_json, get, search, update, update_many."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -370,6 +377,8 @@ class _Mentions:
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
+          labels: Only mentions carrying any of these labels (exact, case-sensitive). Repeatable, or comma-separated.
+          not_labels: Never mentions carrying any of these labels. Repeatable, or comma-separated.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
@@ -446,6 +455,8 @@ class _Mentions:
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
+          labels: Only mentions carrying any of these labels (exact, case-sensitive). Repeatable, or comma-separated.
+          not_labels: Never mentions carrying any of these labels. Repeatable, or comma-separated.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
@@ -529,6 +540,8 @@ class _Mentions:
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
+          labels: Only mentions carrying any of these labels (exact, case-sensitive). Repeatable, or comma-separated.
+          not_labels: Never mentions carrying any of these labels. Repeatable, or comma-separated.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
@@ -558,9 +571,10 @@ class _Mentions:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
         """Update a mention
 
-        Triage, assign, snooze, annotate or correct the classification of a mention.
+        Triage, assign, snooze, label, annotate or correct the classification of a mention.
 
-        - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null restores the classifier's.
+        - `relevant` and `sentiment` are your verdict; null restores the classifier's.
+        - `labels` replaces the whole list.
         - Omitted fields stay. Delivery and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
@@ -568,9 +582,24 @@ class _Mentions:
           assigneeId: A workspace member (user id), or null to unassign.
           snoozedUntil: ISO 8601 (or epoch ms) until which the mention leaves the feed; null wakes it.
           note: Internal note; null or empty clears it.
+          labels: Replaces the mention's whole list of labels (exact, case-sensitive, at most 20); [] removes every label. To add or remove a few without reading first, use POST /v1/mentions/batch.
           relevant: Your verdict: true sets relevance to 100 (a filtered mention becomes relevant), false to 0; null restores the classifier's score. Billing never changes. 409 classification_pending while it is still being classified.
           sentiment: Your corrected sentiment; null withdraws the correction and restores the classifier's."""
         return _result(_ops.mentions.update_mention.sync_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
+
+    def update_many(self, body: dict[str, Any] | _m.UpdateMentionsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.MentionBatchResult:
+        """Update many mentions
+
+        Change up to 100 mentions at once: status, assignee, labels to add or remove.
+
+        - All of it lands, or none of it.
+        - Unknown ids come back in `notFound`.
+        - Removals run before additions. See [Labels and automations](/guides/labels).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          ids (required): Mention ids (mm_...), 1 to 100: a page of GET /v1/mentions.
+          update (required): Every field is optional, at least one is required; omitted fields are untouched."""
+        return _result(_ops.mentions.update_mentions.sync_detailed(client=self._client, body=_body(_m.UpdateMentionsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
 class _People:
     """people: activities, delete_activity, export, get, list, log_activity, merge, split, update."""
@@ -1301,6 +1330,73 @@ class _Views:
           filter: Replaces the whole filter."""
         return _result(_ops.views.update_view.sync_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
+class _Automations:
+    """automations: create, delete, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateAutomationBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Automation:
+        """Create an automation
+
+        Act on every new mention a filter selects: add labels, assign a member.
+
+        - Runs after scoring and before delivery, so alert rules see its labels.
+        - At most 25. Existing mentions are untouched; use POST /v1/mentions/batch. See [Labels and automations](/guides/labels).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): Unique per workspace, case-insensitive.
+          enabled: false saves it without running it.
+          filter: Which new mentions it acts on; empty acts on every one.
+          actions (required): What to do to each mention the filter selects; at least one action."""
+        return _result(_ops.automations.create_automation.sync_detailed(client=self._client, body=_body(_m.CreateAutomationBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def delete(self, id: str) -> Any:
+        """Delete an automation
+
+        Removes the automation. The labels it added stay on their mentions."""
+        return _result(_ops.automations.delete_automation.sync_detailed(id, client=self._client))
+
+    def get(self, id: str) -> _m.Automation:
+        """Get an automation"""
+        return _result(_ops.automations.get_automation.sync_detailed(id, client=self._client))
+
+    def list(self) -> _m.ListAutomationsResponse200:
+        """List automations
+
+        The workspace's automations, in the order they run, oldest first. See [Labels and automations](/guides/labels)."""
+        return _result(_ops.automations.list_automations.sync_detailed(client=self._client))
+
+    def update(self, id: str, body: dict[str, Any] | _m.UpdateAutomationBody | None = None, **fields: Any) -> _m.Automation:
+        """Update an automation
+
+        Rename, pause or change an automation. `filter` and `actions` each replace the whole of themselves. A change applies to mentions scored from then on.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: Automation name, unique in the workspace.
+          enabled: false stops it; true runs it again on new mentions.
+          filter: Replaces the whole filter.
+          actions: Replaces every action."""
+        return _result(_ops.automations.update_automation.sync_detailed(id, client=self._client, body=_body(_m.UpdateAutomationBody, body, fields)))
+
+class _Labels:
+    """labels: list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def list(self, **params: Any) -> _m.ListLabelsResponse200:
+        """List labels
+
+        Labels in the workspace and how many mentions carry each, the most used first.
+
+        A label exists while a mention carries it. Filter mentions with `labels` / `notLabels`.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          offset: Skip this many labels."""
+        return _result(_ops.automations.list_labels.sync_detailed(client=self._client, **params))
+
 class _Attention:
     """attention: dismiss, list."""
 
@@ -1660,7 +1756,7 @@ class _AsyncKeywords:
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:
-    """mentions: comments, export, export_json, get, search, update."""
+    """mentions: comments, export, export_json, get, search, update, update_many."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -1730,6 +1826,8 @@ class _AsyncMentions:
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
+          labels: Only mentions carrying any of these labels (exact, case-sensitive). Repeatable, or comma-separated.
+          not_labels: Never mentions carrying any of these labels. Repeatable, or comma-separated.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
@@ -1806,6 +1904,8 @@ class _AsyncMentions:
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
+          labels: Only mentions carrying any of these labels (exact, case-sensitive). Repeatable, or comma-separated.
+          not_labels: Never mentions carrying any of these labels. Repeatable, or comma-separated.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
@@ -1889,6 +1989,8 @@ class _AsyncMentions:
           subreddits: Only Reddit posts from any of these subreddits: subreddits=SaaS,startups (names without the r/, any case). Every other post fails it. Repeatable, or comma-separated.
           not_subreddits: Never Reddit posts from these subreddits; posts from other platforms still pass.
           not_tags: Never authors tagged with any of these, in the workspace's tags or those of the mention's own keyword group.
+          labels: Only mentions carrying any of these labels (exact, case-sensitive). Repeatable, or comma-separated.
+          not_labels: Never mentions carrying any of these labels. Repeatable, or comma-separated.
           languages: Only posts in any of these languages (ISO 639-1: en, es, de). A post whose language is unknown never passes.
           not_languages: Never posts in these languages. A post whose language is unknown still passes.
           countries: Only posts whose author is in any of these countries (ISO 3166-1 alpha-2: us, in, de), as the classifier read the author's profile and the post. A post whose country is unknown never passes.
@@ -1918,9 +2020,10 @@ class _AsyncMentions:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
         """Update a mention
 
-        Triage, assign, snooze, annotate or correct the classification of a mention.
+        Triage, assign, snooze, label, annotate or correct the classification of a mention.
 
-        - `relevant` and `sentiment` are your verdict; every list, digest and report follows it. null restores the classifier's.
+        - `relevant` and `sentiment` are your verdict; null restores the classifier's.
+        - `labels` replaces the whole list.
         - Omitted fields stay. Delivery and billing never change.
 
         Body: a dict, a model, or the fields as keyword arguments:
@@ -1928,9 +2031,24 @@ class _AsyncMentions:
           assigneeId: A workspace member (user id), or null to unassign.
           snoozedUntil: ISO 8601 (or epoch ms) until which the mention leaves the feed; null wakes it.
           note: Internal note; null or empty clears it.
+          labels: Replaces the mention's whole list of labels (exact, case-sensitive, at most 20); [] removes every label. To add or remove a few without reading first, use POST /v1/mentions/batch.
           relevant: Your verdict: true sets relevance to 100 (a filtered mention becomes relevant), false to 0; null restores the classifier's score. Billing never changes. 409 classification_pending while it is still being classified.
           sentiment: Your corrected sentiment; null withdraws the correction and restores the classifier's."""
         return _result(await _ops.mentions.update_mention.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateMentionBody, body, fields)))
+
+    async def update_many(self, body: dict[str, Any] | _m.UpdateMentionsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.MentionBatchResult:
+        """Update many mentions
+
+        Change up to 100 mentions at once: status, assignee, labels to add or remove.
+
+        - All of it lands, or none of it.
+        - Unknown ids come back in `notFound`.
+        - Removals run before additions. See [Labels and automations](/guides/labels).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          ids (required): Mention ids (mm_...), 1 to 100: a page of GET /v1/mentions.
+          update (required): Every field is optional, at least one is required; omitted fields are untouched."""
+        return _result(await _ops.mentions.update_mentions.asyncio_detailed(client=self._client, body=_body(_m.UpdateMentionsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
 class _AsyncPeople:
     """people: activities, delete_activity, export, get, list, log_activity, merge, split, update."""
@@ -2661,6 +2779,73 @@ class _AsyncViews:
           filter: Replaces the whole filter."""
         return _result(await _ops.views.update_view.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
+class _AsyncAutomations:
+    """automations: create, delete, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateAutomationBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Automation:
+        """Create an automation
+
+        Act on every new mention a filter selects: add labels, assign a member.
+
+        - Runs after scoring and before delivery, so alert rules see its labels.
+        - At most 25. Existing mentions are untouched; use POST /v1/mentions/batch. See [Labels and automations](/guides/labels).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): Unique per workspace, case-insensitive.
+          enabled: false saves it without running it.
+          filter: Which new mentions it acts on; empty acts on every one.
+          actions (required): What to do to each mention the filter selects; at least one action."""
+        return _result(await _ops.automations.create_automation.asyncio_detailed(client=self._client, body=_body(_m.CreateAutomationBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def delete(self, id: str) -> Any:
+        """Delete an automation
+
+        Removes the automation. The labels it added stay on their mentions."""
+        return _result(await _ops.automations.delete_automation.asyncio_detailed(id, client=self._client))
+
+    async def get(self, id: str) -> _m.Automation:
+        """Get an automation"""
+        return _result(await _ops.automations.get_automation.asyncio_detailed(id, client=self._client))
+
+    async def list(self) -> _m.ListAutomationsResponse200:
+        """List automations
+
+        The workspace's automations, in the order they run, oldest first. See [Labels and automations](/guides/labels)."""
+        return _result(await _ops.automations.list_automations.asyncio_detailed(client=self._client))
+
+    async def update(self, id: str, body: dict[str, Any] | _m.UpdateAutomationBody | None = None, **fields: Any) -> _m.Automation:
+        """Update an automation
+
+        Rename, pause or change an automation. `filter` and `actions` each replace the whole of themselves. A change applies to mentions scored from then on.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: Automation name, unique in the workspace.
+          enabled: false stops it; true runs it again on new mentions.
+          filter: Replaces the whole filter.
+          actions: Replaces every action."""
+        return _result(await _ops.automations.update_automation.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateAutomationBody, body, fields)))
+
+class _AsyncLabels:
+    """labels: list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def list(self, **params: Any) -> _m.ListLabelsResponse200:
+        """List labels
+
+        Labels in the workspace and how many mentions carry each, the most used first.
+
+        A label exists while a mention carries it. Filter mentions with `labels` / `notLabels`.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          offset: Skip this many labels."""
+        return _result(await _ops.automations.list_labels.asyncio_detailed(client=self._client, **params))
+
 class _AsyncAttention:
     """attention: dismiss, list."""
 
@@ -2940,6 +3125,8 @@ class Mentio:
         self.feeds = _Feeds(self.client)
         self.filters = _Filters(self.client)
         self.views = _Views(self.client)
+        self.automations = _Automations(self.client)
+        self.labels = _Labels(self.client)
         self.attention = _Attention(self.client)
         self.groups = _Groups(self.client)
         self.auth = _Auth(self.client)
@@ -2998,6 +3185,8 @@ class AsyncMentio:
         self.feeds = _AsyncFeeds(self.client)
         self.filters = _AsyncFilters(self.client)
         self.views = _AsyncViews(self.client)
+        self.automations = _AsyncAutomations(self.client)
+        self.labels = _AsyncLabels(self.client)
         self.attention = _AsyncAttention(self.client)
         self.groups = _AsyncGroups(self.client)
         self.auth = _AsyncAuth(self.client)

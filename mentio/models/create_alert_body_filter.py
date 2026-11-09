@@ -45,6 +45,9 @@ class CreateAlertBodyFilter:
         min_followers (int | Unset): Only authors with at least this many followers. Unknown reach never passes.
         tags (list[str] | Unset): Only authors tagged with any of these, in the workspace's tags or those of the
             mention's own keyword group.
+        labels (list[str] | Unset): Only mentions carrying any of these labels. An automation labels a mention before it
+            is delivered, so a rule can route what an automation labelled.
+        not_labels (list[str] | Unset): Never mentions carrying any of these labels.
         link_hosts (list[str] | Unset): Only posts linking to any of these hosts, the host itself or a subdomain of it
             (octolens.com also matches blog.octolens.com). A post with no links never passes.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es, de). A post whose
@@ -88,6 +91,8 @@ class CreateAlertBodyFilter:
     exclude_authors: list[str] | Unset = UNSET
     min_followers: int | Unset = UNSET
     tags: list[str] | Unset = UNSET
+    labels: list[str] | Unset = UNSET
+    not_labels: list[str] | Unset = UNSET
     link_hosts: list[str] | Unset = UNSET
     languages: list[str] | Unset = UNSET
     countries: list[CreateAlertBodyFilterCountriesItem] | Unset = UNSET
@@ -145,6 +150,14 @@ class CreateAlertBodyFilter:
         tags: list[str] | Unset = UNSET
         if not isinstance(self.tags, Unset):
             tags = self.tags
+
+        labels: list[str] | Unset = UNSET
+        if not isinstance(self.labels, Unset):
+            labels = self.labels
+
+        not_labels: list[str] | Unset = UNSET
+        if not isinstance(self.not_labels, Unset):
+            not_labels = self.not_labels
 
         link_hosts: list[str] | Unset = UNSET
         if not isinstance(self.link_hosts, Unset):
@@ -222,6 +235,10 @@ class CreateAlertBodyFilter:
             field_dict["minFollowers"] = min_followers
         if tags is not UNSET:
             field_dict["tags"] = tags
+        if labels is not UNSET:
+            field_dict["labels"] = labels
+        if not_labels is not UNSET:
+            field_dict["notLabels"] = not_labels
         if link_hosts is not UNSET:
             field_dict["linkHosts"] = link_hosts
         if languages is not UNSET:
@@ -296,6 +313,10 @@ class CreateAlertBodyFilter:
 
         tags = cast(list[str], d.pop("tags", UNSET))
 
+        labels = cast(list[str], d.pop("labels", UNSET))
+
+        not_labels = cast(list[str], d.pop("notLabels", UNSET))
+
         link_hosts = cast(list[str], d.pop("linkHosts", UNSET))
 
         languages = cast(list[str], d.pop("languages", UNSET))
@@ -360,6 +381,8 @@ class CreateAlertBodyFilter:
             exclude_authors=exclude_authors,
             min_followers=min_followers,
             tags=tags,
+            labels=labels,
+            not_labels=not_labels,
             link_hosts=link_hosts,
             languages=languages,
             countries=countries,

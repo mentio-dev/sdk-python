@@ -46,6 +46,8 @@ class Mention:
         classification (MentionClassificationType0 | None): The classifier verdict, as corrected by your feedback; null
             while the post is still queued for classification.
         triage (MentionTriage): What your team did with it: status, assignee, snooze and notes.
+        labels (list[str]): Your labels on this mention (hot-lead, replied...), alphabetical. Set them with PATCH, POST
+            /v1/mentions/batch or an automation.
         duplicate_of (None | str): On a cross-post (same author, text and keyword within three days), the original's id.
             Billed like any mention, listed only under its original, never alerted alone. null for an original. See [Cross-
             posts](/how-it-works#cross-posts).
@@ -67,6 +69,7 @@ class Mention:
     review: MentionReviewType0 | None
     classification: MentionClassificationType0 | None
     triage: MentionTriage
+    labels: list[str]
     duplicate_of: None | str
     duplicates: list[MentionDuplicatesItem]
     stats: MentionStats
@@ -115,6 +118,8 @@ class Mention:
 
         triage = self.triage.to_dict()
 
+        labels = self.labels
+
         duplicate_of: None | str
         duplicate_of = self.duplicate_of
 
@@ -143,6 +148,7 @@ class Mention:
                 "review": review,
                 "classification": classification,
                 "triage": triage,
+                "labels": labels,
                 "duplicateOf": duplicate_of,
                 "duplicates": duplicates,
                 "stats": stats,
@@ -232,6 +238,8 @@ class Mention:
 
         triage = MentionTriage.from_dict(d.pop("triage"))
 
+        labels = cast(list[str], d.pop("labels"))
+
         def _parse_duplicate_of(data: object) -> None | str:
             if data is None:
                 return data
@@ -263,6 +271,7 @@ class Mention:
             review=review,
             classification=classification,
             triage=triage,
+            labels=labels,
             duplicate_of=duplicate_of,
             duplicates=duplicates,
             stats=stats,

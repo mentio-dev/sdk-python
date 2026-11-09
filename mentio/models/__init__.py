@@ -82,6 +82,21 @@ from .attention_item_kind import AttentionItemKind
 from .attention_item_status import AttentionItemStatus
 from .attention_item_subject import AttentionItemSubject
 from .attention_item_subject_type import AttentionItemSubjectType
+from .automation import Automation
+from .automation_actions import AutomationActions
+from .automation_filter import AutomationFilter
+from .automation_filter_countries_item import AutomationFilterCountriesItem
+from .automation_filter_keyword_kinds_item import AutomationFilterKeywordKindsItem
+from .automation_filter_kind import AutomationFilterKind
+from .automation_filter_not_countries_item import AutomationFilterNotCountriesItem
+from .automation_filter_not_keyword_kinds_item import (
+    AutomationFilterNotKeywordKindsItem,
+)
+from .automation_filter_not_platforms_item import AutomationFilterNotPlatformsItem
+from .automation_filter_not_sentiments_item import AutomationFilterNotSentimentsItem
+from .automation_filter_platforms_item import AutomationFilterPlatformsItem
+from .automation_filter_sentiments_item import AutomationFilterSentimentsItem
+from .automation_filter_status import AutomationFilterStatus
 from .channel_failing_event_data import ChannelFailingEventData
 from .channel_failing_event_data_channel import ChannelFailingEventDataChannel
 from .channel_failing_event_data_channel_kind import ChannelFailingEventDataChannelKind
@@ -103,6 +118,35 @@ from .create_api_key_body import CreateApiKeyBody
 from .create_api_key_body_scope import CreateApiKeyBodyScope
 from .create_api_key_response_201 import CreateApiKeyResponse201
 from .create_api_key_response_201_scope import CreateApiKeyResponse201Scope
+from .create_automation_body import CreateAutomationBody
+from .create_automation_body_actions import CreateAutomationBodyActions
+from .create_automation_body_filter import CreateAutomationBodyFilter
+from .create_automation_body_filter_countries_item import (
+    CreateAutomationBodyFilterCountriesItem,
+)
+from .create_automation_body_filter_keyword_kinds_item import (
+    CreateAutomationBodyFilterKeywordKindsItem,
+)
+from .create_automation_body_filter_kind import CreateAutomationBodyFilterKind
+from .create_automation_body_filter_not_countries_item import (
+    CreateAutomationBodyFilterNotCountriesItem,
+)
+from .create_automation_body_filter_not_keyword_kinds_item import (
+    CreateAutomationBodyFilterNotKeywordKindsItem,
+)
+from .create_automation_body_filter_not_platforms_item import (
+    CreateAutomationBodyFilterNotPlatformsItem,
+)
+from .create_automation_body_filter_not_sentiments_item import (
+    CreateAutomationBodyFilterNotSentimentsItem,
+)
+from .create_automation_body_filter_platforms_item import (
+    CreateAutomationBodyFilterPlatformsItem,
+)
+from .create_automation_body_filter_sentiments_item import (
+    CreateAutomationBodyFilterSentimentsItem,
+)
+from .create_automation_body_filter_status import CreateAutomationBodyFilterStatus
 from .create_email_channel import CreateEmailChannel
 from .create_email_channel_events_item import CreateEmailChannelEventsItem
 from .create_email_channel_kind import CreateEmailChannelKind
@@ -497,6 +541,44 @@ from .list_api_keys_response_200_data_item_scope import (
 )
 from .list_attention_response_200 import ListAttentionResponse200
 from .list_attention_status import ListAttentionStatus
+from .list_automations_response_200 import ListAutomationsResponse200
+from .list_automations_response_200_data_item import ListAutomationsResponse200DataItem
+from .list_automations_response_200_data_item_actions import (
+    ListAutomationsResponse200DataItemActions,
+)
+from .list_automations_response_200_data_item_filter import (
+    ListAutomationsResponse200DataItemFilter,
+)
+from .list_automations_response_200_data_item_filter_countries_item import (
+    ListAutomationsResponse200DataItemFilterCountriesItem,
+)
+from .list_automations_response_200_data_item_filter_keyword_kinds_item import (
+    ListAutomationsResponse200DataItemFilterKeywordKindsItem,
+)
+from .list_automations_response_200_data_item_filter_kind import (
+    ListAutomationsResponse200DataItemFilterKind,
+)
+from .list_automations_response_200_data_item_filter_not_countries_item import (
+    ListAutomationsResponse200DataItemFilterNotCountriesItem,
+)
+from .list_automations_response_200_data_item_filter_not_keyword_kinds_item import (
+    ListAutomationsResponse200DataItemFilterNotKeywordKindsItem,
+)
+from .list_automations_response_200_data_item_filter_not_platforms_item import (
+    ListAutomationsResponse200DataItemFilterNotPlatformsItem,
+)
+from .list_automations_response_200_data_item_filter_not_sentiments_item import (
+    ListAutomationsResponse200DataItemFilterNotSentimentsItem,
+)
+from .list_automations_response_200_data_item_filter_platforms_item import (
+    ListAutomationsResponse200DataItemFilterPlatformsItem,
+)
+from .list_automations_response_200_data_item_filter_sentiments_item import (
+    ListAutomationsResponse200DataItemFilterSentimentsItem,
+)
+from .list_automations_response_200_data_item_filter_status import (
+    ListAutomationsResponse200DataItemFilterStatus,
+)
 from .list_channel_deliveries_response_200 import ListChannelDeliveriesResponse200
 from .list_channel_deliveries_response_200_data_item import (
     ListChannelDeliveriesResponse200DataItem,
@@ -621,6 +703,8 @@ from .list_keywords_response_200_data_item_stats_noise import (
 from .list_keywords_sort import ListKeywordsSort
 from .list_keywords_status_item import ListKeywordsStatusItem
 from .list_keywords_statuses_item import ListKeywordsStatusesItem
+from .list_labels_response_200 import ListLabelsResponse200
+from .list_labels_response_200_data_item import ListLabelsResponse200DataItem
 from .list_members_response_200 import ListMembersResponse200
 from .list_mention_comments_response_200 import ListMentionCommentsResponse200
 from .list_people_keyword_kinds_item import ListPeopleKeywordKindsItem
@@ -739,6 +823,7 @@ from .member import Member
 from .member_role import MemberRole
 from .mention import Mention
 from .mention_author_type_0 import MentionAuthorType0
+from .mention_batch_result import MentionBatchResult
 from .mention_classification_type_0 import MentionClassificationType0
 from .mention_classification_type_0_feedback_type_0 import (
     MentionClassificationType0FeedbackType0,
@@ -905,6 +990,35 @@ from .update_alert_body_filter_sentiments_item import (
 )
 from .update_alert_body_mode import UpdateAlertBodyMode
 from .update_alert_body_schedule_type_0 import UpdateAlertBodyScheduleType0
+from .update_automation_body import UpdateAutomationBody
+from .update_automation_body_actions import UpdateAutomationBodyActions
+from .update_automation_body_filter import UpdateAutomationBodyFilter
+from .update_automation_body_filter_countries_item import (
+    UpdateAutomationBodyFilterCountriesItem,
+)
+from .update_automation_body_filter_keyword_kinds_item import (
+    UpdateAutomationBodyFilterKeywordKindsItem,
+)
+from .update_automation_body_filter_kind import UpdateAutomationBodyFilterKind
+from .update_automation_body_filter_not_countries_item import (
+    UpdateAutomationBodyFilterNotCountriesItem,
+)
+from .update_automation_body_filter_not_keyword_kinds_item import (
+    UpdateAutomationBodyFilterNotKeywordKindsItem,
+)
+from .update_automation_body_filter_not_platforms_item import (
+    UpdateAutomationBodyFilterNotPlatformsItem,
+)
+from .update_automation_body_filter_not_sentiments_item import (
+    UpdateAutomationBodyFilterNotSentimentsItem,
+)
+from .update_automation_body_filter_platforms_item import (
+    UpdateAutomationBodyFilterPlatformsItem,
+)
+from .update_automation_body_filter_sentiments_item import (
+    UpdateAutomationBodyFilterSentimentsItem,
+)
+from .update_automation_body_filter_status import UpdateAutomationBodyFilterStatus
 from .update_channel_body import UpdateChannelBody
 from .update_channel_body_events_item import UpdateChannelBodyEventsItem
 from .update_channel_body_headers import UpdateChannelBodyHeaders
@@ -960,6 +1074,9 @@ from .update_keyword_body_review_sources_item_platform import (
 from .update_mention_body import UpdateMentionBody
 from .update_mention_body_sentiment import UpdateMentionBodySentiment
 from .update_mention_body_status import UpdateMentionBodyStatus
+from .update_mentions_body import UpdateMentionsBody
+from .update_mentions_body_update import UpdateMentionsBodyUpdate
+from .update_mentions_body_update_status import UpdateMentionsBodyUpdateStatus
 from .update_person_body import UpdatePersonBody
 from .update_person_body_stage import UpdatePersonBodyStage
 from .update_segment_body import UpdateSegmentBody
@@ -1099,6 +1216,19 @@ __all__ = (
     "AttentionItemStatus",
     "AttentionItemSubject",
     "AttentionItemSubjectType",
+    "Automation",
+    "AutomationActions",
+    "AutomationFilter",
+    "AutomationFilterCountriesItem",
+    "AutomationFilterKeywordKindsItem",
+    "AutomationFilterKind",
+    "AutomationFilterNotCountriesItem",
+    "AutomationFilterNotKeywordKindsItem",
+    "AutomationFilterNotPlatformsItem",
+    "AutomationFilterNotSentimentsItem",
+    "AutomationFilterPlatformsItem",
+    "AutomationFilterSentimentsItem",
+    "AutomationFilterStatus",
     "ChannelFailingEventData",
     "ChannelFailingEventDataChannel",
     "ChannelFailingEventDataChannelKind",
@@ -1116,6 +1246,19 @@ __all__ = (
     "CreateApiKeyBodyScope",
     "CreateApiKeyResponse201",
     "CreateApiKeyResponse201Scope",
+    "CreateAutomationBody",
+    "CreateAutomationBodyActions",
+    "CreateAutomationBodyFilter",
+    "CreateAutomationBodyFilterCountriesItem",
+    "CreateAutomationBodyFilterKeywordKindsItem",
+    "CreateAutomationBodyFilterKind",
+    "CreateAutomationBodyFilterNotCountriesItem",
+    "CreateAutomationBodyFilterNotKeywordKindsItem",
+    "CreateAutomationBodyFilterNotPlatformsItem",
+    "CreateAutomationBodyFilterNotSentimentsItem",
+    "CreateAutomationBodyFilterPlatformsItem",
+    "CreateAutomationBodyFilterSentimentsItem",
+    "CreateAutomationBodyFilterStatus",
     "CreateEmailChannel",
     "CreateEmailChannelEventsItem",
     "CreateEmailChannelKind",
@@ -1388,6 +1531,20 @@ __all__ = (
     "ListApiKeysResponse200DataItemScope",
     "ListAttentionResponse200",
     "ListAttentionStatus",
+    "ListAutomationsResponse200",
+    "ListAutomationsResponse200DataItem",
+    "ListAutomationsResponse200DataItemActions",
+    "ListAutomationsResponse200DataItemFilter",
+    "ListAutomationsResponse200DataItemFilterCountriesItem",
+    "ListAutomationsResponse200DataItemFilterKeywordKindsItem",
+    "ListAutomationsResponse200DataItemFilterKind",
+    "ListAutomationsResponse200DataItemFilterNotCountriesItem",
+    "ListAutomationsResponse200DataItemFilterNotKeywordKindsItem",
+    "ListAutomationsResponse200DataItemFilterNotPlatformsItem",
+    "ListAutomationsResponse200DataItemFilterNotSentimentsItem",
+    "ListAutomationsResponse200DataItemFilterPlatformsItem",
+    "ListAutomationsResponse200DataItemFilterSentimentsItem",
+    "ListAutomationsResponse200DataItemFilterStatus",
     "ListChannelDeliveriesResponse200",
     "ListChannelDeliveriesResponse200DataItem",
     "ListChannelDeliveriesResponse200DataItemAlert",
@@ -1444,6 +1601,8 @@ __all__ = (
     "ListKeywordsSort",
     "ListKeywordsStatusItem",
     "ListKeywordsStatusesItem",
+    "ListLabelsResponse200",
+    "ListLabelsResponse200DataItem",
     "ListMembersResponse200",
     "ListMentionCommentsResponse200",
     "ListPeopleKeywordKindsItem",
@@ -1502,6 +1661,7 @@ __all__ = (
     "MemberRole",
     "Mention",
     "MentionAuthorType0",
+    "MentionBatchResult",
     "MentionClassificationType0",
     "MentionClassificationType0FeedbackType0",
     "MentionClassificationType0FeedbackType0Original",
@@ -1642,6 +1802,19 @@ __all__ = (
     "UpdateAlertBodyFilterSentimentsItem",
     "UpdateAlertBodyMode",
     "UpdateAlertBodyScheduleType0",
+    "UpdateAutomationBody",
+    "UpdateAutomationBodyActions",
+    "UpdateAutomationBodyFilter",
+    "UpdateAutomationBodyFilterCountriesItem",
+    "UpdateAutomationBodyFilterKeywordKindsItem",
+    "UpdateAutomationBodyFilterKind",
+    "UpdateAutomationBodyFilterNotCountriesItem",
+    "UpdateAutomationBodyFilterNotKeywordKindsItem",
+    "UpdateAutomationBodyFilterNotPlatformsItem",
+    "UpdateAutomationBodyFilterNotSentimentsItem",
+    "UpdateAutomationBodyFilterPlatformsItem",
+    "UpdateAutomationBodyFilterSentimentsItem",
+    "UpdateAutomationBodyFilterStatus",
     "UpdateChannelBody",
     "UpdateChannelBodyEventsItem",
     "UpdateChannelBodyHeaders",
@@ -1679,6 +1852,9 @@ __all__ = (
     "UpdateMentionBody",
     "UpdateMentionBodySentiment",
     "UpdateMentionBodyStatus",
+    "UpdateMentionsBody",
+    "UpdateMentionsBodyUpdate",
+    "UpdateMentionsBodyUpdateStatus",
     "UpdatePersonBody",
     "UpdatePersonBodyStage",
     "UpdateSegmentBody",

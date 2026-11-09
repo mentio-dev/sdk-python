@@ -3,10 +3,13 @@ from enum import StrEnum
 
 class ErrorResponseErrorCode(StrEnum):
     ALREADY_MEMBER = "already_member"
+    AUTOMATION_FILTER_UNREADABLE = "automation_filter_unreadable"
+    AUTOMATION_LIMIT_REACHED = "automation_limit_reached"
     BILLING_NOT_CONFIGURED = "billing_not_configured"
     CLASSIFICATION_PENDING = "classification_pending"
     DEFAULT_GROUP = "default_group"
     DEFAULT_GROUP_CONTEXT = "default_group_context"
+    DUPLICATE_AUTOMATION = "duplicate_automation"
     DUPLICATE_GROUP = "duplicate_group"
     DUPLICATE_KEYWORD = "duplicate_keyword"
     DUPLICATE_SEGMENT = "duplicate_segment"

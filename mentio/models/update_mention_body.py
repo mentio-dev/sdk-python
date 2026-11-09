@@ -24,6 +24,8 @@ class UpdateMentionBody:
         snoozed_until (datetime.datetime | Unset): ISO 8601 (or epoch ms) until which the mention leaves the feed; null
             wakes it.
         note (None | str | Unset): Internal note; null or empty clears it.
+        labels (list[str] | Unset): Replaces the mention's whole list of labels (exact, case-sensitive, at most 20); []
+            removes every label. To add or remove a few without reading first, use POST /v1/mentions/batch.
         relevant (bool | None | Unset): Your verdict: true sets relevance to 100 (a filtered mention becomes relevant),
             false to 0; null restores the classifier's score. Billing never changes. 409 classification_pending while it is
             still being classified.
@@ -35,6 +37,7 @@ class UpdateMentionBody:
     assignee_id: None | str | Unset = UNSET
     snoozed_until: datetime.datetime | Unset = UNSET
     note: None | str | Unset = UNSET
+    labels: list[str] | Unset = UNSET
     relevant: bool | None | Unset = UNSET
     sentiment: UpdateMentionBodySentiment | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -60,6 +63,10 @@ class UpdateMentionBody:
         else:
             note = self.note
 
+        labels: list[str] | Unset = UNSET
+        if not isinstance(self.labels, Unset):
+            labels = self.labels
+
         relevant: bool | None | Unset
         if isinstance(self.relevant, Unset):
             relevant = UNSET
@@ -81,6 +88,8 @@ class UpdateMentionBody:
             field_dict["snoozedUntil"] = snoozed_until
         if note is not UNSET:
             field_dict["note"] = note
+        if labels is not UNSET:
+            field_dict["labels"] = labels
         if relevant is not UNSET:
             field_dict["relevant"] = relevant
         if sentiment is not UNSET:
@@ -123,6 +132,8 @@ class UpdateMentionBody:
 
         note = _parse_note(d.pop("note", UNSET))
 
+        labels = cast(list[str], d.pop("labels", UNSET))
+
         def _parse_relevant(data: object) -> bool | None | Unset:
             if data is None:
                 return data
@@ -144,6 +155,7 @@ class UpdateMentionBody:
             assignee_id=assignee_id,
             snoozed_until=snoozed_until,
             note=note,
+            labels=labels,
             relevant=relevant,
             sentiment=sentiment,
         )

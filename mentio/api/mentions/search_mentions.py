@@ -73,6 +73,8 @@ def _get_kwargs(
     subreddits: list[str] | None | Unset = UNSET,
     not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    labels: list[str] | None | Unset = UNSET,
+    not_labels: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     countries: list[SearchMentionsCountriesItem] | Unset = UNSET,
@@ -374,6 +376,26 @@ def _get_kwargs(
         json_not_tags = not_tags
     params["notTags"] = json_not_tags
 
+    json_labels: list[str] | None | Unset
+    if isinstance(labels, Unset):
+        json_labels = UNSET
+    elif isinstance(labels, list):
+        json_labels = labels
+
+    else:
+        json_labels = labels
+    params["labels"] = json_labels
+
+    json_not_labels: list[str] | None | Unset
+    if isinstance(not_labels, Unset):
+        json_not_labels = UNSET
+    elif isinstance(not_labels, list):
+        json_not_labels = not_labels
+
+    else:
+        json_not_labels = not_labels
+    params["notLabels"] = json_not_labels
+
     json_languages: list[str] | Unset = UNSET
     if not isinstance(languages, Unset):
         json_languages = languages
@@ -585,6 +607,8 @@ def sync_detailed(
     subreddits: list[str] | None | Unset = UNSET,
     not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    labels: list[str] | None | Unset = UNSET,
+    not_labels: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     countries: list[SearchMentionsCountriesItem] | Unset = UNSET,
@@ -708,6 +732,10 @@ def sync_detailed(
             from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
             workspace's tags or those of the mention's own keyword group.
+        labels (list[str] | None | Unset): Only mentions carrying any of these labels (exact,
+            case-sensitive). Repeatable, or comma-separated.
+        not_labels (list[str] | None | Unset): Never mentions carrying any of these labels.
+            Repeatable, or comma-separated.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
@@ -812,6 +840,8 @@ def sync_detailed(
         subreddits=subreddits,
         not_subreddits=not_subreddits,
         not_tags=not_tags,
+        labels=labels,
+        not_labels=not_labels,
         languages=languages,
         not_languages=not_languages,
         countries=countries,
@@ -889,6 +919,8 @@ def sync(
     subreddits: list[str] | None | Unset = UNSET,
     not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    labels: list[str] | None | Unset = UNSET,
+    not_labels: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     countries: list[SearchMentionsCountriesItem] | Unset = UNSET,
@@ -1012,6 +1044,10 @@ def sync(
             from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
             workspace's tags or those of the mention's own keyword group.
+        labels (list[str] | None | Unset): Only mentions carrying any of these labels (exact,
+            case-sensitive). Repeatable, or comma-separated.
+        not_labels (list[str] | None | Unset): Never mentions carrying any of these labels.
+            Repeatable, or comma-separated.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
@@ -1117,6 +1153,8 @@ def sync(
         subreddits=subreddits,
         not_subreddits=not_subreddits,
         not_tags=not_tags,
+        labels=labels,
+        not_labels=not_labels,
         languages=languages,
         not_languages=not_languages,
         countries=countries,
@@ -1188,6 +1226,8 @@ async def asyncio_detailed(
     subreddits: list[str] | None | Unset = UNSET,
     not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    labels: list[str] | None | Unset = UNSET,
+    not_labels: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     countries: list[SearchMentionsCountriesItem] | Unset = UNSET,
@@ -1311,6 +1351,10 @@ async def asyncio_detailed(
             from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
             workspace's tags or those of the mention's own keyword group.
+        labels (list[str] | None | Unset): Only mentions carrying any of these labels (exact,
+            case-sensitive). Repeatable, or comma-separated.
+        not_labels (list[str] | None | Unset): Never mentions carrying any of these labels.
+            Repeatable, or comma-separated.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
@@ -1415,6 +1459,8 @@ async def asyncio_detailed(
         subreddits=subreddits,
         not_subreddits=not_subreddits,
         not_tags=not_tags,
+        labels=labels,
+        not_labels=not_labels,
         languages=languages,
         not_languages=not_languages,
         countries=countries,
@@ -1490,6 +1536,8 @@ async def asyncio(
     subreddits: list[str] | None | Unset = UNSET,
     not_subreddits: list[str] | None | Unset = UNSET,
     not_tags: list[str] | None | Unset = UNSET,
+    labels: list[str] | None | Unset = UNSET,
+    not_labels: list[str] | None | Unset = UNSET,
     languages: list[str] | Unset = UNSET,
     not_languages: list[str] | Unset = UNSET,
     countries: list[SearchMentionsCountriesItem] | Unset = UNSET,
@@ -1613,6 +1661,10 @@ async def asyncio(
             from other platforms still pass.
         not_tags (list[str] | None | Unset): Never authors tagged with any of these, in the
             workspace's tags or those of the mention's own keyword group.
+        labels (list[str] | None | Unset): Only mentions carrying any of these labels (exact,
+            case-sensitive). Repeatable, or comma-separated.
+        not_labels (list[str] | None | Unset): Never mentions carrying any of these labels.
+            Repeatable, or comma-separated.
         languages (list[str] | Unset): Only posts in any of these languages (ISO 639-1: en, es,
             de). A post whose language is unknown never passes.
         not_languages (list[str] | Unset): Never posts in these languages. A post whose language
@@ -1719,6 +1771,8 @@ async def asyncio(
             subreddits=subreddits,
             not_subreddits=not_subreddits,
             not_tags=not_tags,
+            labels=labels,
+            not_labels=not_labels,
             languages=languages,
             not_languages=not_languages,
             countries=countries,
