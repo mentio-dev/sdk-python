@@ -42,6 +42,10 @@ class KeywordSuggestionPatch:
         Attributes:
             term (str | Unset): Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id,
                 settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it.
+                Clears query.
+            query (str | Unset): Rewrites the term (a rename) and the term rules from a boolean query; the other matching
+                fields stay. Never with term or those rules (400). A later hand change of either clears it. See
+                [Keywords](/guides/keywords#write-it-as-a-query).
             kind (KeywordSuggestionPatchKind | Unset): Reclassify it as brand, competitor or topic.
             muted (bool | Unset): A muted keyword stops polling and matching; its mentions stay.
             platforms (list[KeywordSuggestionPatchPlatformsType0Item] | None | Unset): Replaces the platform list; null
@@ -70,6 +74,7 @@ class KeywordSuggestionPatch:
     """
 
     term: str | Unset = UNSET
+    query: str | Unset = UNSET
     kind: KeywordSuggestionPatchKind | Unset = UNSET
     muted: bool | Unset = UNSET
     platforms: list[KeywordSuggestionPatchPlatformsType0Item] | None | Unset = UNSET
@@ -90,6 +95,8 @@ class KeywordSuggestionPatch:
         )
 
         term = self.term
+
+        query = self.query
 
         kind: str | Unset = UNSET
         if not isinstance(self.kind, Unset):
@@ -158,6 +165,8 @@ class KeywordSuggestionPatch:
         field_dict.update({})
         if term is not UNSET:
             field_dict["term"] = term
+        if query is not UNSET:
+            field_dict["query"] = query
         if kind is not UNSET:
             field_dict["kind"] = kind
         if muted is not UNSET:
@@ -208,6 +217,8 @@ class KeywordSuggestionPatch:
 
         d = dict(src_dict)
         term = d.pop("term", UNSET)
+
+        query = d.pop("query", UNSET)
 
         _kind = d.pop("kind", UNSET)
         kind: KeywordSuggestionPatchKind | Unset
@@ -319,6 +330,7 @@ class KeywordSuggestionPatch:
 
         keyword_suggestion_patch = cls(
             term=term,
+            query=query,
             kind=kind,
             muted=muted,
             platforms=platforms,

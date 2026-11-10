@@ -92,7 +92,7 @@ def sync_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Update a keyword
 
-     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+     Change a keyword's term, query, mute, kind, platforms, context, matching rules or mention cap.
 
     - A new `term` is tracked from now on, no look-back; old mentions stay.
     - An empty rule list clears it; `cap` null removes the cap.
@@ -130,7 +130,7 @@ def sync(
 ) -> ErrorResponse | Keyword | None:
     """Update a keyword
 
-     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+     Change a keyword's term, query, mute, kind, platforms, context, matching rules or mention cap.
 
     - A new `term` is tracked from now on, no look-back; old mentions stay.
     - An empty rule list clears it; `cap` null removes the cap.
@@ -163,7 +163,7 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | Keyword]:
     """Update a keyword
 
-     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+     Change a keyword's term, query, mute, kind, platforms, context, matching rules or mention cap.
 
     - A new `term` is tracked from now on, no look-back; old mentions stay.
     - An empty rule list clears it; `cap` null removes the cap.
@@ -199,7 +199,7 @@ async def asyncio(
 ) -> ErrorResponse | Keyword | None:
     """Update a keyword
 
-     Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+     Change a keyword's term, query, mute, kind, platforms, context, matching rules or mention cap.
 
     - A new `term` is tracked from now on, no look-back; old mentions stay.
     - An empty rule list clears it; `cap` null removes the cap.

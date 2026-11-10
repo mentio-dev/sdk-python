@@ -3,10 +3,14 @@ from enum import StrEnum
 
 class AnalyticsBreakdownBy(StrEnum):
     COUNTRY = "country"
+    DOMAIN = "domain"
+    EMOTION = "emotion"
+    HASHTAG = "hashtag"
     HOUR = "hour"
     INTENT = "intent"
     KEYWORD = "keyword"
     LANGUAGE = "language"
+    LINK = "link"
     PERSON = "person"
     PLATFORM = "platform"
     SENTIMENT = "sentiment"

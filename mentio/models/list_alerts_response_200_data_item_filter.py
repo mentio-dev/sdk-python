@@ -9,8 +9,14 @@ from attrs import field as _attrs_field
 from ..models.list_alerts_response_200_data_item_filter_countries_item import (
     ListAlertsResponse200DataItemFilterCountriesItem,
 )
+from ..models.list_alerts_response_200_data_item_filter_emotions_item import (
+    ListAlertsResponse200DataItemFilterEmotionsItem,
+)
 from ..models.list_alerts_response_200_data_item_filter_not_countries_item import (
     ListAlertsResponse200DataItemFilterNotCountriesItem,
+)
+from ..models.list_alerts_response_200_data_item_filter_not_emotions_item import (
+    ListAlertsResponse200DataItemFilterNotEmotionsItem,
 )
 from ..models.list_alerts_response_200_data_item_filter_platforms_item import (
     ListAlertsResponse200DataItemFilterPlatformsItem,
@@ -40,6 +46,10 @@ class ListAlertsResponse200DataItemFilter:
         min_confidence (float | Unset): Only mentions whose classifier confidence is at least this, 0 to 1. A mention
             without a confidence never passes.
         sentiments (list[ListAlertsResponse200DataItemFilterSentimentsItem] | Unset): Only these sentiments.
+        emotions (list[ListAlertsResponse200DataItemFilterEmotionsItem] | Unset): Only mentions showing any of these
+            emotions toward the keyword. A mention whose emotion was not judged never passes.
+        not_emotions (list[ListAlertsResponse200DataItemFilterNotEmotionsItem] | Unset): Never these emotions:
+            ["anger"]. A mention whose emotion was not judged still passes.
         intents (list[str] | Unset): At least one of these intent or topic tags.
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
         min_followers (int | Unset): Only authors with at least this many followers. Unknown reach never passes.
@@ -87,6 +97,10 @@ class ListAlertsResponse200DataItemFilter:
     min_relevance: int | Unset = UNSET
     min_confidence: float | Unset = UNSET
     sentiments: list[ListAlertsResponse200DataItemFilterSentimentsItem] | Unset = UNSET
+    emotions: list[ListAlertsResponse200DataItemFilterEmotionsItem] | Unset = UNSET
+    not_emotions: list[ListAlertsResponse200DataItemFilterNotEmotionsItem] | Unset = (
+        UNSET
+    )
     intents: list[str] | Unset = UNSET
     exclude_authors: list[str] | Unset = UNSET
     min_followers: int | Unset = UNSET
@@ -138,6 +152,20 @@ class ListAlertsResponse200DataItemFilter:
             for sentiments_item_data in self.sentiments:
                 sentiments_item = sentiments_item_data.value
                 sentiments.append(sentiments_item)
+
+        emotions: list[str] | Unset = UNSET
+        if not isinstance(self.emotions, Unset):
+            emotions = []
+            for emotions_item_data in self.emotions:
+                emotions_item = emotions_item_data.value
+                emotions.append(emotions_item)
+
+        not_emotions: list[str] | Unset = UNSET
+        if not isinstance(self.not_emotions, Unset):
+            not_emotions = []
+            for not_emotions_item_data in self.not_emotions:
+                not_emotions_item = not_emotions_item_data.value
+                not_emotions.append(not_emotions_item)
 
         intents: list[str] | Unset = UNSET
         if not isinstance(self.intents, Unset):
@@ -229,6 +257,10 @@ class ListAlertsResponse200DataItemFilter:
             field_dict["minConfidence"] = min_confidence
         if sentiments is not UNSET:
             field_dict["sentiments"] = sentiments
+        if emotions is not UNSET:
+            field_dict["emotions"] = emotions
+        if not_emotions is not UNSET:
+            field_dict["notEmotions"] = not_emotions
         if intents is not UNSET:
             field_dict["intents"] = intents
         if exclude_authors is not UNSET:
@@ -313,6 +345,30 @@ class ListAlertsResponse200DataItemFilter:
 
                 sentiments.append(sentiments_item)
 
+        _emotions = d.pop("emotions", UNSET)
+        emotions: list[ListAlertsResponse200DataItemFilterEmotionsItem] | Unset = UNSET
+        if _emotions is not UNSET:
+            emotions = []
+            for emotions_item_data in _emotions:
+                emotions_item = ListAlertsResponse200DataItemFilterEmotionsItem(
+                    emotions_item_data
+                )
+
+                emotions.append(emotions_item)
+
+        _not_emotions = d.pop("notEmotions", UNSET)
+        not_emotions: (
+            list[ListAlertsResponse200DataItemFilterNotEmotionsItem] | Unset
+        ) = UNSET
+        if _not_emotions is not UNSET:
+            not_emotions = []
+            for not_emotions_item_data in _not_emotions:
+                not_emotions_item = ListAlertsResponse200DataItemFilterNotEmotionsItem(
+                    not_emotions_item_data
+                )
+
+                not_emotions.append(not_emotions_item)
+
         intents = cast(list[str], d.pop("intents", UNSET))
 
         exclude_authors = cast(list[str], d.pop("excludeAuthors", UNSET))
@@ -393,6 +449,8 @@ class ListAlertsResponse200DataItemFilter:
             min_relevance=min_relevance,
             min_confidence=min_confidence,
             sentiments=sentiments,
+            emotions=emotions,
+            not_emotions=not_emotions,
             intents=intents,
             exclude_authors=exclude_authors,
             min_followers=min_followers,

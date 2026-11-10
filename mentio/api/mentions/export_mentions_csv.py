@@ -8,12 +8,16 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.error_response import ErrorResponse
 from ...models.export_mentions_csv_countries_item import ExportMentionsCsvCountriesItem
+from ...models.export_mentions_csv_emotions_item import ExportMentionsCsvEmotionsItem
 from ...models.export_mentions_csv_keyword_kinds_item import (
     ExportMentionsCsvKeywordKindsItem,
 )
 from ...models.export_mentions_csv_kind import ExportMentionsCsvKind
 from ...models.export_mentions_csv_not_countries_item import (
     ExportMentionsCsvNotCountriesItem,
+)
+from ...models.export_mentions_csv_not_emotions_item import (
+    ExportMentionsCsvNotEmotionsItem,
 )
 from ...models.export_mentions_csv_not_keyword_kinds_item import (
     ExportMentionsCsvNotKeywordKindsItem,
@@ -73,6 +77,8 @@ def _get_kwargs(
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    emotions: list[ExportMentionsCsvEmotionsItem] | Unset = UNSET,
+    not_emotions: list[ExportMentionsCsvNotEmotionsItem] | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
@@ -318,6 +324,24 @@ def _get_kwargs(
             json_not_sentiments.append(not_sentiments_item)
 
     params["notSentiments"] = json_not_sentiments
+
+    json_emotions: list[str] | Unset = UNSET
+    if not isinstance(emotions, Unset):
+        json_emotions = []
+        for emotions_item_data in emotions:
+            emotions_item = emotions_item_data.value
+            json_emotions.append(emotions_item)
+
+    params["emotions"] = json_emotions
+
+    json_not_emotions: list[str] | Unset = UNSET
+    if not isinstance(not_emotions, Unset):
+        json_not_emotions = []
+        for not_emotions_item_data in not_emotions:
+            not_emotions_item = not_emotions_item_data.value
+            json_not_emotions.append(not_emotions_item)
+
+    params["notEmotions"] = json_not_emotions
 
     json_intents: list[str] | None | Unset
     if isinstance(intents, Unset):
@@ -598,6 +622,8 @@ def sync_detailed(
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    emotions: list[ExportMentionsCsvEmotionsItem] | Unset = UNSET,
+    not_emotions: list[ExportMentionsCsvNotEmotionsItem] | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
@@ -713,6 +739,11 @@ def sync_detailed(
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
             A mention the classifier has not scored yet still passes.
+        emotions (list[ExportMentionsCsvEmotionsItem] | Unset): Only mentions showing any of these
+            emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration,
+            anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+        not_emotions (list[ExportMentionsCsvNotEmotionsItem] | Unset): Never these emotions. A
+            mention whose emotion was not judged still passes.
         intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
             tags.
         not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
@@ -822,6 +853,8 @@ def sync_detailed(
         not_keyword_ids=not_keyword_ids,
         sentiments=sentiments,
         not_sentiments=not_sentiments,
+        emotions=emotions,
+        not_emotions=not_emotions,
         intents=intents,
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
@@ -898,6 +931,8 @@ def sync(
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    emotions: list[ExportMentionsCsvEmotionsItem] | Unset = UNSET,
+    not_emotions: list[ExportMentionsCsvNotEmotionsItem] | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
@@ -1013,6 +1048,11 @@ def sync(
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
             A mention the classifier has not scored yet still passes.
+        emotions (list[ExportMentionsCsvEmotionsItem] | Unset): Only mentions showing any of these
+            emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration,
+            anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+        not_emotions (list[ExportMentionsCsvNotEmotionsItem] | Unset): Never these emotions. A
+            mention whose emotion was not judged still passes.
         intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
             tags.
         not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
@@ -1123,6 +1163,8 @@ def sync(
         not_keyword_ids=not_keyword_ids,
         sentiments=sentiments,
         not_sentiments=not_sentiments,
+        emotions=emotions,
+        not_emotions=not_emotions,
         intents=intents,
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
@@ -1193,6 +1235,8 @@ async def asyncio_detailed(
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    emotions: list[ExportMentionsCsvEmotionsItem] | Unset = UNSET,
+    not_emotions: list[ExportMentionsCsvNotEmotionsItem] | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
@@ -1308,6 +1352,11 @@ async def asyncio_detailed(
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
             A mention the classifier has not scored yet still passes.
+        emotions (list[ExportMentionsCsvEmotionsItem] | Unset): Only mentions showing any of these
+            emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration,
+            anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+        not_emotions (list[ExportMentionsCsvNotEmotionsItem] | Unset): Never these emotions. A
+            mention whose emotion was not judged still passes.
         intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
             tags.
         not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
@@ -1417,6 +1466,8 @@ async def asyncio_detailed(
         not_keyword_ids=not_keyword_ids,
         sentiments=sentiments,
         not_sentiments=not_sentiments,
+        emotions=emotions,
+        not_emotions=not_emotions,
         intents=intents,
         not_intents=not_intents,
         not_link_hosts=not_link_hosts,
@@ -1491,6 +1542,8 @@ async def asyncio(
     not_keyword_ids: list[str] | None | Unset = UNSET,
     sentiments: list[ExportMentionsCsvSentimentsItem] | Unset = UNSET,
     not_sentiments: list[ExportMentionsCsvNotSentimentsItem] | Unset = UNSET,
+    emotions: list[ExportMentionsCsvEmotionsItem] | Unset = UNSET,
+    not_emotions: list[ExportMentionsCsvNotEmotionsItem] | Unset = UNSET,
     intents: list[str] | None | Unset = UNSET,
     not_intents: list[str] | None | Unset = UNSET,
     not_link_hosts: list[str] | None | Unset = UNSET,
@@ -1606,6 +1659,11 @@ async def asyncio(
         sentiments (list[ExportMentionsCsvSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[ExportMentionsCsvNotSentimentsItem] | Unset): Never these sentiments.
             A mention the classifier has not scored yet still passes.
+        emotions (list[ExportMentionsCsvEmotionsItem] | Unset): Only mentions showing any of these
+            emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration,
+            anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+        not_emotions (list[ExportMentionsCsvNotEmotionsItem] | Unset): Never these emotions. A
+            mention whose emotion was not judged still passes.
         intents (list[str] | None | Unset): Only mentions carrying any of these intent or topic
             tags.
         not_intents (list[str] | None | Unset): Never mentions carrying these intent or topic
@@ -1717,6 +1775,8 @@ async def asyncio(
             not_keyword_ids=not_keyword_ids,
             sentiments=sentiments,
             not_sentiments=not_sentiments,
+            emotions=emotions,
+            not_emotions=not_emotions,
             intents=intents,
             not_intents=not_intents,
             not_link_hosts=not_link_hosts,

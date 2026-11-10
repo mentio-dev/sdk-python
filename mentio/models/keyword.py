@@ -30,6 +30,8 @@ class Keyword:
     Attributes:
         id (str): Keyword id (kw_...).
         term (str): The tracked text, as typed.
+        query (None | str): The boolean query the keyword was written as, as sent; term and matching hold what it
+            compiled to. Null for a keyword defined by its fields, or once its term or term rules changed by hand.
         kind (KeywordKind): brand (your own name), competitor, or topic.
         muted (bool): Not polled or matched. Paused by you, by the wallet (see pausedForBalance) or by the noise brake
             (see pausedForNoise). A keyword at its mention cap is not muted (see pausedForCap).
@@ -67,6 +69,7 @@ class Keyword:
 
     id: str
     term: str
+    query: None | str
     kind: KeywordKind
     muted: bool
     paused_for_balance: bool
@@ -93,6 +96,9 @@ class Keyword:
         id = self.id
 
         term = self.term
+
+        query: None | str
+        query = self.query
 
         kind = self.kind.value
 
@@ -158,6 +164,7 @@ class Keyword:
             {
                 "id": id,
                 "term": term,
+                "query": query,
                 "kind": kind,
                 "muted": muted,
                 "pausedForBalance": paused_for_balance,
@@ -197,6 +204,13 @@ class Keyword:
         id = d.pop("id")
 
         term = d.pop("term")
+
+        def _parse_query(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        query = _parse_query(d.pop("query"))
 
         kind = KeywordKind(d.pop("kind"))
 
@@ -290,6 +304,7 @@ class Keyword:
         keyword = cls(
             id=id,
             term=term,
+            query=query,
             kind=kind,
             muted=muted,
             paused_for_balance=paused_for_balance,

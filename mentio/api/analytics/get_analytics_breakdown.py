@@ -177,6 +177,7 @@ def sync_detailed(
 
             - platform or keyword.
             - sentiment: unclassified included.
+            - emotion: the emotion toward the keyword; "unclassified" if not judged.
             - intent: a mention can carry several.
             - status: open, ignored, done.
             - hour: weekday and hour of day in `timezone`.
@@ -184,6 +185,9 @@ def sync_detailed(
             - language: ISO 639-1; "unknown" if none, "other" if unnamed.
             - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
             - subreddit: Reddit posts only; `share` stays of the whole window.
+            - domain: hosts posts link to; a post can carry several.
+            - link: URLs posts link to; a post can carry several.
+            - hashtag: lowercase, no #; a post can carry several.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -255,6 +259,7 @@ def sync(
 
             - platform or keyword.
             - sentiment: unclassified included.
+            - emotion: the emotion toward the keyword; "unclassified" if not judged.
             - intent: a mention can carry several.
             - status: open, ignored, done.
             - hour: weekday and hour of day in `timezone`.
@@ -262,6 +267,9 @@ def sync(
             - language: ISO 639-1; "unknown" if none, "other" if unnamed.
             - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
             - subreddit: Reddit posts only; `share` stays of the whole window.
+            - domain: hosts posts link to; a post can carry several.
+            - link: URLs posts link to; a post can carry several.
+            - hashtag: lowercase, no #; a post can carry several.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -328,6 +336,7 @@ async def asyncio_detailed(
 
             - platform or keyword.
             - sentiment: unclassified included.
+            - emotion: the emotion toward the keyword; "unclassified" if not judged.
             - intent: a mention can carry several.
             - status: open, ignored, done.
             - hour: weekday and hour of day in `timezone`.
@@ -335,6 +344,9 @@ async def asyncio_detailed(
             - language: ISO 639-1; "unknown" if none, "other" if unnamed.
             - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
             - subreddit: Reddit posts only; `share` stays of the whole window.
+            - domain: hosts posts link to; a post can carry several.
+            - link: URLs posts link to; a post can carry several.
+            - hashtag: lowercase, no #; a post can carry several.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -404,6 +416,7 @@ async def asyncio(
 
             - platform or keyword.
             - sentiment: unclassified included.
+            - emotion: the emotion toward the keyword; "unclassified" if not judged.
             - intent: a mention can carry several.
             - status: open, ignored, done.
             - hour: weekday and hour of day in `timezone`.
@@ -411,6 +424,9 @@ async def asyncio(
             - language: ISO 639-1; "unknown" if none, "other" if unnamed.
             - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise.
             - subreddit: Reddit posts only; `share` stays of the whole window.
+            - domain: hosts posts link to; a post can carry several.
+            - link: URLs posts link to; a post can carry several.
+            - hashtag: lowercase, no #; a post can carry several.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

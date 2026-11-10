@@ -9,12 +9,18 @@ from attrs import field as _attrs_field
 from ..models.create_view_body_filter_countries_item import (
     CreateViewBodyFilterCountriesItem,
 )
+from ..models.create_view_body_filter_emotions_item import (
+    CreateViewBodyFilterEmotionsItem,
+)
 from ..models.create_view_body_filter_keyword_kinds_item import (
     CreateViewBodyFilterKeywordKindsItem,
 )
 from ..models.create_view_body_filter_kind import CreateViewBodyFilterKind
 from ..models.create_view_body_filter_not_countries_item import (
     CreateViewBodyFilterNotCountriesItem,
+)
+from ..models.create_view_body_filter_not_emotions_item import (
+    CreateViewBodyFilterNotEmotionsItem,
 )
 from ..models.create_view_body_filter_not_keyword_kinds_item import (
     CreateViewBodyFilterNotKeywordKindsItem,
@@ -64,6 +70,10 @@ class CreateViewBodyFilter:
         sentiments (list[CreateViewBodyFilterSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[CreateViewBodyFilterNotSentimentsItem] | Unset): Never these sentiments; an unscored
             mention still passes.
+        emotions (list[CreateViewBodyFilterEmotionsItem] | Unset): Only mentions showing any of these emotions toward
+            the keyword. A mention whose emotion was not judged never passes.
+        not_emotions (list[CreateViewBodyFilterNotEmotionsItem] | Unset): Never these emotions; a mention whose emotion
+            was not judged still passes.
         intents (list[str] | Unset): Only mentions carrying any of these intent or topic tags.
         not_intents (list[str] | Unset): Never mentions carrying these tags.
         automated (bool | Unset): true: only posts that read as machine-made; false: only the rest.
@@ -129,6 +139,8 @@ class CreateViewBodyFilter:
     min_confidence: float | Unset = UNSET
     sentiments: list[CreateViewBodyFilterSentimentsItem] | Unset = UNSET
     not_sentiments: list[CreateViewBodyFilterNotSentimentsItem] | Unset = UNSET
+    emotions: list[CreateViewBodyFilterEmotionsItem] | Unset = UNSET
+    not_emotions: list[CreateViewBodyFilterNotEmotionsItem] | Unset = UNSET
     intents: list[str] | Unset = UNSET
     not_intents: list[str] | Unset = UNSET
     automated: bool | Unset = UNSET
@@ -232,6 +244,20 @@ class CreateViewBodyFilter:
             for not_sentiments_item_data in self.not_sentiments:
                 not_sentiments_item = not_sentiments_item_data.value
                 not_sentiments.append(not_sentiments_item)
+
+        emotions: list[str] | Unset = UNSET
+        if not isinstance(self.emotions, Unset):
+            emotions = []
+            for emotions_item_data in self.emotions:
+                emotions_item = emotions_item_data.value
+                emotions.append(emotions_item)
+
+        not_emotions: list[str] | Unset = UNSET
+        if not isinstance(self.not_emotions, Unset):
+            not_emotions = []
+            for not_emotions_item_data in self.not_emotions:
+                not_emotions_item = not_emotions_item_data.value
+                not_emotions.append(not_emotions_item)
 
         intents: list[str] | Unset = UNSET
         if not isinstance(self.intents, Unset):
@@ -377,6 +403,10 @@ class CreateViewBodyFilter:
             field_dict["sentiments"] = sentiments
         if not_sentiments is not UNSET:
             field_dict["notSentiments"] = not_sentiments
+        if emotions is not UNSET:
+            field_dict["emotions"] = emotions
+        if not_emotions is not UNSET:
+            field_dict["notEmotions"] = not_emotions
         if intents is not UNSET:
             field_dict["intents"] = intents
         if not_intents is not UNSET:
@@ -534,6 +564,26 @@ class CreateViewBodyFilter:
 
                 not_sentiments.append(not_sentiments_item)
 
+        _emotions = d.pop("emotions", UNSET)
+        emotions: list[CreateViewBodyFilterEmotionsItem] | Unset = UNSET
+        if _emotions is not UNSET:
+            emotions = []
+            for emotions_item_data in _emotions:
+                emotions_item = CreateViewBodyFilterEmotionsItem(emotions_item_data)
+
+                emotions.append(emotions_item)
+
+        _not_emotions = d.pop("notEmotions", UNSET)
+        not_emotions: list[CreateViewBodyFilterNotEmotionsItem] | Unset = UNSET
+        if _not_emotions is not UNSET:
+            not_emotions = []
+            for not_emotions_item_data in _not_emotions:
+                not_emotions_item = CreateViewBodyFilterNotEmotionsItem(
+                    not_emotions_item_data
+                )
+
+                not_emotions.append(not_emotions_item)
+
         intents = cast(list[str], d.pop("intents", UNSET))
 
         not_intents = cast(list[str], d.pop("notIntents", UNSET))
@@ -640,6 +690,8 @@ class CreateViewBodyFilter:
             min_confidence=min_confidence,
             sentiments=sentiments,
             not_sentiments=not_sentiments,
+            emotions=emotions,
+            not_emotions=not_emotions,
             intents=intents,
             not_intents=not_intents,
             automated=automated,

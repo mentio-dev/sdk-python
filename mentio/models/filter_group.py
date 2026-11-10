@@ -6,9 +6,11 @@ from typing import Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 
 from ..models.filter_group_countries_item import FilterGroupCountriesItem
+from ..models.filter_group_emotions_item import FilterGroupEmotionsItem
 from ..models.filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
 from ..models.filter_group_kind import FilterGroupKind
 from ..models.filter_group_not_countries_item import FilterGroupNotCountriesItem
+from ..models.filter_group_not_emotions_item import FilterGroupNotEmotionsItem
 from ..models.filter_group_not_keyword_kinds_item import FilterGroupNotKeywordKindsItem
 from ..models.filter_group_not_platforms_item import FilterGroupNotPlatformsItem
 from ..models.filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
@@ -42,6 +44,10 @@ class FilterGroup:
         sentiments (list[FilterGroupSentimentsItem] | Unset): Only these sentiments.
         not_sentiments (list[FilterGroupNotSentimentsItem] | Unset): Never these sentiments; an unscored mention still
             passes.
+        emotions (list[FilterGroupEmotionsItem] | Unset): Only mentions showing any of these emotions toward the
+            keyword. A mention whose emotion was not judged never passes.
+        not_emotions (list[FilterGroupNotEmotionsItem] | Unset): Never these emotions; a mention whose emotion was not
+            judged still passes.
         intents (list[str] | Unset): Only mentions carrying any of these intent or topic tags.
         not_intents (list[str] | Unset): Never mentions carrying these tags.
         automated (bool | Unset): true: only posts that read as machine-made; false: only the rest.
@@ -104,6 +110,8 @@ class FilterGroup:
     min_confidence: float | Unset = UNSET
     sentiments: list[FilterGroupSentimentsItem] | Unset = UNSET
     not_sentiments: list[FilterGroupNotSentimentsItem] | Unset = UNSET
+    emotions: list[FilterGroupEmotionsItem] | Unset = UNSET
+    not_emotions: list[FilterGroupNotEmotionsItem] | Unset = UNSET
     intents: list[str] | Unset = UNSET
     not_intents: list[str] | Unset = UNSET
     automated: bool | Unset = UNSET
@@ -205,6 +213,20 @@ class FilterGroup:
             for not_sentiments_item_data in self.not_sentiments:
                 not_sentiments_item = not_sentiments_item_data.value
                 not_sentiments.append(not_sentiments_item)
+
+        emotions: list[str] | Unset = UNSET
+        if not isinstance(self.emotions, Unset):
+            emotions = []
+            for emotions_item_data in self.emotions:
+                emotions_item = emotions_item_data.value
+                emotions.append(emotions_item)
+
+        not_emotions: list[str] | Unset = UNSET
+        if not isinstance(self.not_emotions, Unset):
+            not_emotions = []
+            for not_emotions_item_data in self.not_emotions:
+                not_emotions_item = not_emotions_item_data.value
+                not_emotions.append(not_emotions_item)
 
         intents: list[str] | Unset = UNSET
         if not isinstance(self.intents, Unset):
@@ -343,6 +365,10 @@ class FilterGroup:
             field_dict["sentiments"] = sentiments
         if not_sentiments is not UNSET:
             field_dict["notSentiments"] = not_sentiments
+        if emotions is not UNSET:
+            field_dict["emotions"] = emotions
+        if not_emotions is not UNSET:
+            field_dict["notEmotions"] = not_emotions
         if intents is not UNSET:
             field_dict["intents"] = intents
         if not_intents is not UNSET:
@@ -494,6 +520,24 @@ class FilterGroup:
 
                 not_sentiments.append(not_sentiments_item)
 
+        _emotions = d.pop("emotions", UNSET)
+        emotions: list[FilterGroupEmotionsItem] | Unset = UNSET
+        if _emotions is not UNSET:
+            emotions = []
+            for emotions_item_data in _emotions:
+                emotions_item = FilterGroupEmotionsItem(emotions_item_data)
+
+                emotions.append(emotions_item)
+
+        _not_emotions = d.pop("notEmotions", UNSET)
+        not_emotions: list[FilterGroupNotEmotionsItem] | Unset = UNSET
+        if _not_emotions is not UNSET:
+            not_emotions = []
+            for not_emotions_item_data in _not_emotions:
+                not_emotions_item = FilterGroupNotEmotionsItem(not_emotions_item_data)
+
+                not_emotions.append(not_emotions_item)
+
         intents = cast(list[str], d.pop("intents", UNSET))
 
         not_intents = cast(list[str], d.pop("notIntents", UNSET))
@@ -591,6 +635,8 @@ class FilterGroup:
             min_confidence=min_confidence,
             sentiments=sentiments,
             not_sentiments=not_sentiments,
+            emotions=emotions,
+            not_emotions=not_emotions,
             intents=intents,
             not_intents=not_intents,
             automated=automated,

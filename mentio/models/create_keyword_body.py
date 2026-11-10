@@ -30,8 +30,15 @@ T = TypeVar("T", bound="CreateKeywordBody")
 class CreateKeywordBody:
     """
     Attributes:
-        term (str): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its
-            words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
+        term (str | Unset): The word or phrase to track, case-insensitive. Required unless `query` is sent. A multi-word
+            term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes
+            for the exact phrase only.
+        query (str | Unset): The keyword as one boolean query instead of term and matching, like "acme cloud" AND
+            (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)):
+
+            - Phrases, words, AND, OR, NOT or -word, parentheses, word-end *
+            - Compiled into term and the term rules; never sent with them (400).
+            - Each alternative starts with the term; else 400 query_needs_one_term.
         kind (CreateKeywordBodyKind | Unset): brand: your own names. competitor: theirs. topic: the space. Drives share
             of voice and segments. Default: CreateKeywordBodyKind.BRAND.
         platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to search the term on; omit or
@@ -59,7 +66,8 @@ class CreateKeywordBody:
             default true. A new keyword reading them gets the look-back of the 8 most recently connected.
     """
 
-    term: str
+    term: str | Unset = UNSET
+    query: str | Unset = UNSET
     kind: CreateKeywordBodyKind | Unset = CreateKeywordBodyKind.BRAND
     platforms: list[CreateKeywordBodyPlatformsType0Item] | None | Unset = UNSET
     context: None | str | Unset = UNSET
@@ -77,6 +85,8 @@ class CreateKeywordBody:
         from ..models.create_keyword_body_cap_type_0 import CreateKeywordBodyCapType0
 
         term = self.term
+
+        query = self.query
 
         kind: str | Unset = UNSET
         if not isinstance(self.kind, Unset):
@@ -140,11 +150,11 @@ class CreateKeywordBody:
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "term": term,
-            }
-        )
+        field_dict.update({})
+        if term is not UNSET:
+            field_dict["term"] = term
+        if query is not UNSET:
+            field_dict["query"] = query
         if kind is not UNSET:
             field_dict["kind"] = kind
         if platforms is not UNSET:
@@ -182,7 +192,9 @@ class CreateKeywordBody:
         )
 
         d = dict(src_dict)
-        term = d.pop("term")
+        term = d.pop("term", UNSET)
+
+        query = d.pop("query", UNSET)
 
         _kind = d.pop("kind", UNSET)
         kind: CreateKeywordBodyKind | Unset
@@ -290,6 +302,7 @@ class CreateKeywordBody:
 
         create_keyword_body = cls(
             term=term,
+            query=query,
             kind=kind,
             platforms=platforms,
             context=context,

@@ -9,8 +9,14 @@ from attrs import field as _attrs_field
 from ..models.update_alert_body_filter_countries_item import (
     UpdateAlertBodyFilterCountriesItem,
 )
+from ..models.update_alert_body_filter_emotions_item import (
+    UpdateAlertBodyFilterEmotionsItem,
+)
 from ..models.update_alert_body_filter_not_countries_item import (
     UpdateAlertBodyFilterNotCountriesItem,
+)
+from ..models.update_alert_body_filter_not_emotions_item import (
+    UpdateAlertBodyFilterNotEmotionsItem,
 )
 from ..models.update_alert_body_filter_platforms_item import (
     UpdateAlertBodyFilterPlatformsItem,
@@ -40,6 +46,10 @@ class UpdateAlertBodyFilter:
         min_confidence (float | Unset): Only mentions whose classifier confidence is at least this, 0 to 1. A mention
             without a confidence never passes.
         sentiments (list[UpdateAlertBodyFilterSentimentsItem] | Unset): Only these sentiments.
+        emotions (list[UpdateAlertBodyFilterEmotionsItem] | Unset): Only mentions showing any of these emotions toward
+            the keyword. A mention whose emotion was not judged never passes.
+        not_emotions (list[UpdateAlertBodyFilterNotEmotionsItem] | Unset): Never these emotions: ["anger"]. A mention
+            whose emotion was not judged still passes.
         intents (list[str] | Unset): At least one of these intent or topic tags.
         exclude_authors (list[str] | Unset): Never these authors: display names, handles or profile URLs.
         min_followers (int | Unset): Only authors with at least this many followers. Unknown reach never passes.
@@ -87,6 +97,8 @@ class UpdateAlertBodyFilter:
     min_relevance: int | Unset = UNSET
     min_confidence: float | Unset = UNSET
     sentiments: list[UpdateAlertBodyFilterSentimentsItem] | Unset = UNSET
+    emotions: list[UpdateAlertBodyFilterEmotionsItem] | Unset = UNSET
+    not_emotions: list[UpdateAlertBodyFilterNotEmotionsItem] | Unset = UNSET
     intents: list[str] | Unset = UNSET
     exclude_authors: list[str] | Unset = UNSET
     min_followers: int | Unset = UNSET
@@ -136,6 +148,20 @@ class UpdateAlertBodyFilter:
             for sentiments_item_data in self.sentiments:
                 sentiments_item = sentiments_item_data.value
                 sentiments.append(sentiments_item)
+
+        emotions: list[str] | Unset = UNSET
+        if not isinstance(self.emotions, Unset):
+            emotions = []
+            for emotions_item_data in self.emotions:
+                emotions_item = emotions_item_data.value
+                emotions.append(emotions_item)
+
+        not_emotions: list[str] | Unset = UNSET
+        if not isinstance(self.not_emotions, Unset):
+            not_emotions = []
+            for not_emotions_item_data in self.not_emotions:
+                not_emotions_item = not_emotions_item_data.value
+                not_emotions.append(not_emotions_item)
 
         intents: list[str] | Unset = UNSET
         if not isinstance(self.intents, Unset):
@@ -227,6 +253,10 @@ class UpdateAlertBodyFilter:
             field_dict["minConfidence"] = min_confidence
         if sentiments is not UNSET:
             field_dict["sentiments"] = sentiments
+        if emotions is not UNSET:
+            field_dict["emotions"] = emotions
+        if not_emotions is not UNSET:
+            field_dict["notEmotions"] = not_emotions
         if intents is not UNSET:
             field_dict["intents"] = intents
         if exclude_authors is not UNSET:
@@ -305,6 +335,26 @@ class UpdateAlertBodyFilter:
 
                 sentiments.append(sentiments_item)
 
+        _emotions = d.pop("emotions", UNSET)
+        emotions: list[UpdateAlertBodyFilterEmotionsItem] | Unset = UNSET
+        if _emotions is not UNSET:
+            emotions = []
+            for emotions_item_data in _emotions:
+                emotions_item = UpdateAlertBodyFilterEmotionsItem(emotions_item_data)
+
+                emotions.append(emotions_item)
+
+        _not_emotions = d.pop("notEmotions", UNSET)
+        not_emotions: list[UpdateAlertBodyFilterNotEmotionsItem] | Unset = UNSET
+        if _not_emotions is not UNSET:
+            not_emotions = []
+            for not_emotions_item_data in _not_emotions:
+                not_emotions_item = UpdateAlertBodyFilterNotEmotionsItem(
+                    not_emotions_item_data
+                )
+
+                not_emotions.append(not_emotions_item)
+
         intents = cast(list[str], d.pop("intents", UNSET))
 
         exclude_authors = cast(list[str], d.pop("excludeAuthors", UNSET))
@@ -377,6 +427,8 @@ class UpdateAlertBodyFilter:
             min_relevance=min_relevance,
             min_confidence=min_confidence,
             sentiments=sentiments,
+            emotions=emotions,
+            not_emotions=not_emotions,
             intents=intents,
             exclude_authors=exclude_authors,
             min_followers=min_followers,

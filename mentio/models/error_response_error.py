@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar
+from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.error_response_error_code import ErrorResponseErrorCode
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.error_response_error_details import ErrorResponseErrorDetails
+
 
 T = TypeVar("T", bound="ErrorResponseError")
 
@@ -23,12 +27,15 @@ class ErrorResponseError:
         request_id (str | Unset): The id of this request (also the X-Request-Id response header); quote it to support.
         retry_after_seconds (int | Unset): For rate_limited and other retryable errors: how long to wait before retrying
             (mirrors the Retry-After header).
+        details (ErrorResponseErrorDetails | Unset): Machine-readable facts about this error, when the code has any: for
+            a keyword query, `reason`, `position` (the character a syntax error was found at) or `terms` (one keyword each).
     """
 
     code: ErrorResponseErrorCode
     message: str
     request_id: str | Unset = UNSET
     retry_after_seconds: int | Unset = UNSET
+    details: ErrorResponseErrorDetails | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -39,6 +46,10 @@ class ErrorResponseError:
         request_id = self.request_id
 
         retry_after_seconds = self.retry_after_seconds
+
+        details: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.details, Unset):
+            details = self.details.to_dict()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -52,11 +63,15 @@ class ErrorResponseError:
             field_dict["requestId"] = request_id
         if retry_after_seconds is not UNSET:
             field_dict["retryAfterSeconds"] = retry_after_seconds
+        if details is not UNSET:
+            field_dict["details"] = details
 
         return field_dict
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.error_response_error_details import ErrorResponseErrorDetails
+
         d = dict(src_dict)
         code = ErrorResponseErrorCode(d.pop("code"))
 
@@ -66,11 +81,19 @@ class ErrorResponseError:
 
         retry_after_seconds = d.pop("retryAfterSeconds", UNSET)
 
+        _details = d.pop("details", UNSET)
+        details: ErrorResponseErrorDetails | Unset
+        if isinstance(_details, Unset):
+            details = UNSET
+        else:
+            details = ErrorResponseErrorDetails.from_dict(_details)
+
         error_response_error = cls(
             code=code,
             message=message,
             request_id=request_id,
             retry_after_seconds=retry_after_seconds,
+            details=details,
         )
 
         error_response_error.additional_properties = d

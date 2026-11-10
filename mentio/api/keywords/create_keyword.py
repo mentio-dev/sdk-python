@@ -89,8 +89,9 @@ def sync_detailed(
      Start tracking a word or phrase; mentions arrive from the next poll.
 
     - $5 a month, charged daily; up to 500 per funded workspace.
-    - `matching` filters posts before they are stored, so rejected posts never bill.
-    - `cap` limits matched mentions per period.
+    - `matching` filters posts before storage, rejected posts never bill; `query` writes both as one
+    query.
+    - `cap` limits mentions per period.
 
     See [Keywords](/guides/keywords).
 
@@ -131,8 +132,9 @@ def sync(
      Start tracking a word or phrase; mentions arrive from the next poll.
 
     - $5 a month, charged daily; up to 500 per funded workspace.
-    - `matching` filters posts before they are stored, so rejected posts never bill.
-    - `cap` limits matched mentions per period.
+    - `matching` filters posts before storage, rejected posts never bill; `query` writes both as one
+    query.
+    - `cap` limits mentions per period.
 
     See [Keywords](/guides/keywords).
 
@@ -168,8 +170,9 @@ async def asyncio_detailed(
      Start tracking a word or phrase; mentions arrive from the next poll.
 
     - $5 a month, charged daily; up to 500 per funded workspace.
-    - `matching` filters posts before they are stored, so rejected posts never bill.
-    - `cap` limits matched mentions per period.
+    - `matching` filters posts before storage, rejected posts never bill; `query` writes both as one
+    query.
+    - `cap` limits mentions per period.
 
     See [Keywords](/guides/keywords).
 
@@ -208,8 +211,9 @@ async def asyncio(
      Start tracking a word or phrase; mentions arrive from the next poll.
 
     - $5 a month, charged daily; up to 500 per funded workspace.
-    - `matching` filters posts before they are stored, so rejected posts never bill.
-    - `cap` limits matched mentions per period.
+    - `matching` filters posts before storage, rejected posts never bill; `query` writes both as one
+    query.
+    - `cap` limits mentions per period.
 
     See [Keywords](/guides/keywords).
 

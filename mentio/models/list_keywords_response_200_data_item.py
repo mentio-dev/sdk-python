@@ -46,6 +46,8 @@ class ListKeywordsResponse200DataItem:
     Attributes:
         id (str): Keyword id (kw_...).
         term (str): The tracked text, as typed.
+        query (None | str): The boolean query the keyword was written as, as sent; term and matching hold what it
+            compiled to. Null for a keyword defined by its fields, or once its term or term rules changed by hand.
         kind (ListKeywordsResponse200DataItemKind): brand (your own name), competitor, or topic.
         muted (bool): Not polled or matched. Paused by you, by the wallet (see pausedForBalance) or by the noise brake
             (see pausedForNoise). A keyword at its mention cap is not muted (see pausedForCap).
@@ -85,6 +87,7 @@ class ListKeywordsResponse200DataItem:
 
     id: str
     term: str
+    query: None | str
     kind: ListKeywordsResponse200DataItemKind
     muted: bool
     paused_for_balance: bool
@@ -113,6 +116,9 @@ class ListKeywordsResponse200DataItem:
         id = self.id
 
         term = self.term
+
+        query: None | str
+        query = self.query
 
         kind = self.kind.value
 
@@ -178,6 +184,7 @@ class ListKeywordsResponse200DataItem:
             {
                 "id": id,
                 "term": term,
+                "query": query,
                 "kind": kind,
                 "muted": muted,
                 "pausedForBalance": paused_for_balance,
@@ -229,6 +236,13 @@ class ListKeywordsResponse200DataItem:
         id = d.pop("id")
 
         term = d.pop("term")
+
+        def _parse_query(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        query = _parse_query(d.pop("query"))
 
         kind = ListKeywordsResponse200DataItemKind(d.pop("kind"))
 
@@ -330,6 +344,7 @@ class ListKeywordsResponse200DataItem:
         list_keywords_response_200_data_item = cls(
             id=id,
             term=term,
+            query=query,
             kind=kind,
             muted=muted,
             paused_for_balance=paused_for_balance,

@@ -6,6 +6,9 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.mention_classification_type_0_emotion import (
+    MentionClassificationType0Emotion,
+)
 from ..models.mention_classification_type_0_sentiment import (
     MentionClassificationType0Sentiment,
 )
@@ -26,6 +29,19 @@ class MentionClassificationType0:
     Attributes:
         relevance (int | None): 0 to 100; null only when classification failed.
         sentiment (MentionClassificationType0Sentiment): positive, neutral or negative; null until classified.
+        emotion (MentionClassificationType0Emotion): The author's dominant emotion toward the keyword, apart from
+            sentiment; null when not judged.
+
+            - joy: delight or excitement about it.
+            - trust: relies on it, vouches for it.
+            - anticipation: looks forward to a launch or update.
+            - surprise: caught off guard by it.
+            - confusion: unsure how it works, stuck.
+            - frustration: annoyed it fails or gets in the way.
+            - anger: outraged, feels wronged by it.
+            - fear: worried: risk, security, lock-in, cost.
+            - sadness: disappointed, regrets a loss or shutdown.
+            - neutral: no emotion shown, or only named.
         intents (list[str]): Intent and topic tags:
 
             - buy_intent, question, complaint, praise, comparison, bug_report, pricing, hiring, event, promotional.
@@ -56,6 +72,7 @@ class MentionClassificationType0:
 
     relevance: int | None
     sentiment: MentionClassificationType0Sentiment
+    emotion: MentionClassificationType0Emotion
     intents: list[str]
     automated: bool
     language: None | str
@@ -77,6 +94,8 @@ class MentionClassificationType0:
         relevance = self.relevance
 
         sentiment = self.sentiment.value
+
+        emotion = self.emotion.value
 
         intents = self.intents
 
@@ -112,6 +131,7 @@ class MentionClassificationType0:
             {
                 "relevance": relevance,
                 "sentiment": sentiment,
+                "emotion": emotion,
                 "intents": intents,
                 "automated": automated,
                 "language": language,
@@ -143,6 +163,8 @@ class MentionClassificationType0:
         relevance = _parse_relevance(d.pop("relevance"))
 
         sentiment = MentionClassificationType0Sentiment(d.pop("sentiment"))
+
+        emotion = MentionClassificationType0Emotion(d.pop("emotion"))
 
         intents = cast(list[str], d.pop("intents"))
 
@@ -204,6 +226,7 @@ class MentionClassificationType0:
         mention_classification_type_0 = cls(
             relevance=relevance,
             sentiment=sentiment,
+            emotion=emotion,
             intents=intents,
             automated=automated,
             language=language,

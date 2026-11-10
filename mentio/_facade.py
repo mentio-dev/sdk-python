@@ -195,13 +195,14 @@ class _Keywords:
         Start tracking a word or phrase; mentions arrive from the next poll.
 
         - $5 a month, charged daily; up to 500 per funded workspace.
-        - `matching` filters posts before they are stored, so rejected posts never bill.
-        - `cap` limits matched mentions per period.
+        - `matching` filters posts before storage, rejected posts never bill; `query` writes both as one query.
+        - `cap` limits mentions per period.
 
         See [Keywords](/guides/keywords).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term (required): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
+          term: The word or phrase to track, case-insensitive. Required unless `query` is sent. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
+          query: The keyword as one boolean query instead of term and matching, like "acme cloud" AND (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)): - Phrases, words, AND, OR, NOT or -word, parentheses, word-end * - Compiled into term and the term rules; never sent with them (400). - Each alternative starts with the term; else 400 query_needs_one_term.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
@@ -284,14 +285,15 @@ class _Keywords:
     def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+        Change a keyword's term, query, mute, kind, platforms, context, matching rules or mention cap.
 
         - A new `term` is tracked from now on, no look-back; old mentions stay.
         - An empty rule list clears it; `cap` null removes the cap.
         - Changes apply to new mentions only.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term: Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id, settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it.
+          term: Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id, settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it. Clears query.
+          query: Rewrites the term (a rename) and the term rules from a boolean query; the other matching fields stay. Never with term or those rules (400). A later hand change of either clears it. See [Keywords](/guides/keywords#write-it-as-a-query).
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
@@ -371,6 +373,8 @@ class _Mentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          emotions: Only mentions showing any of these emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration, anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+          not_emotions: Never these emotions. A mention whose emotion was not judged still passes.
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
@@ -399,7 +403,7 @@ class _Mentions:
           timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
           since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "range_": (_enum, _m.ExportMentionsCsvRange), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "emotions": (_enum_list, _m.ExportMentionsCsvEmotionsItem), "not_emotions": (_enum_list, _m.ExportMentionsCsvNotEmotionsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "range_": (_enum, _m.ExportMentionsCsvRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_csv.sync_detailed(client=self._client, **params))
 
     def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -449,6 +453,8 @@ class _Mentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          emotions: Only mentions showing any of these emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration, anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+          not_emotions: Never these emotions. A mention whose emotion was not judged still passes.
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
@@ -477,7 +483,7 @@ class _Mentions:
           timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
           since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "range_": (_enum, _m.ExportMentionsJsonRange), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "emotions": (_enum_list, _m.ExportMentionsJsonEmotionsItem), "not_emotions": (_enum_list, _m.ExportMentionsJsonNotEmotionsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "range_": (_enum, _m.ExportMentionsJsonRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(_ops.mentions.export_mentions_json.sync_detailed(client=self._client, **params))
 
     def get(self, id: str) -> _m.Mention:
@@ -534,6 +540,8 @@ class _Mentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          emotions: Only mentions showing any of these emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration, anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+          not_emotions: Never these emotions. A mention whose emotion was not judged still passes.
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
@@ -562,10 +570,10 @@ class _Mentions:
           timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
           since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms).
-          sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
+          sort: How to order the list: - newest: by match time. - priority: attention score, last 30 days of matches. - reach: author followers, unknown last; counts update, so pages can shift. - engagement: likes, reposts, replies and quotes; none last. - reach and engagement: the last 30 days unless a window is set.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100 (default 50)."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "not_keyword_kinds": (_enum_list, _m.SearchMentionsNotKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "not_keyword_kinds": (_enum_list, _m.SearchMentionsNotKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "emotions": (_enum_list, _m.SearchMentionsEmotionsItem), "not_emotions": (_enum_list, _m.SearchMentionsNotEmotionsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(_ops.mentions.search_mentions.sync_detailed(client=self._client, **params))
 
     def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -1057,7 +1065,7 @@ class _Analytics:
           not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window."""
+          by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - emotion: the emotion toward the keyword; "unclassified" if not judged. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window. - domain: hosts posts link to; a post can carry several. - link: URLs posts link to; a post can carry several. - hashtag: lowercase, no #; a post can carry several."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(_ops.analytics.get_analytics_breakdown.sync_detailed(client=self._client, **params))
 
@@ -1644,13 +1652,14 @@ class _AsyncKeywords:
         Start tracking a word or phrase; mentions arrive from the next poll.
 
         - $5 a month, charged daily; up to 500 per funded workspace.
-        - `matching` filters posts before they are stored, so rejected posts never bill.
-        - `cap` limits matched mentions per period.
+        - `matching` filters posts before storage, rejected posts never bill; `query` writes both as one query.
+        - `cap` limits mentions per period.
 
         See [Keywords](/guides/keywords).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term (required): The word or phrase to track, case-insensitive. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
+          term: The word or phrase to track, case-insensitive. Required unless `query` is sent. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
+          query: The keyword as one boolean query instead of term and matching, like "acme cloud" AND (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)): - Phrases, words, AND, OR, NOT or -word, parentheses, word-end * - Compiled into term and the term rules; never sent with them (400). - Each alternative starts with the term; else 400 query_needs_one_term.
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
           platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
           context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
@@ -1733,14 +1742,15 @@ class _AsyncKeywords:
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateKeywordBody | None = None, **fields: Any) -> _m.Keyword:
         """Update a keyword
 
-        Change a keyword's term, mute, kind, platforms, context, matching rules or mention cap.
+        Change a keyword's term, query, mute, kind, platforms, context, matching rules or mention cap.
 
         - A new `term` is tracked from now on, no look-back; old mentions stay.
         - An empty rule list clears it; `cap` null removes the cap.
         - Changes apply to new mentions only.
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term: Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id, settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it.
+          term: Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id, settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it. Clears query.
+          query: Rewrites the term (a rename) and the term rules from a boolean query; the other matching fields stay. Never with term or those rules (400). A later hand change of either clears it. See [Keywords](/guides/keywords#write-it-as-a-query).
           kind: Reclassify it as brand, competitor or topic.
           muted: A muted keyword stops polling and matching; its mentions stay.
           platforms: Replaces the platform list; null means every platform, [] none (reviews only, when the keyword has reviewSources).
@@ -1820,6 +1830,8 @@ class _AsyncMentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          emotions: Only mentions showing any of these emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration, anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+          not_emotions: Never these emotions. A mention whose emotion was not judged still passes.
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
@@ -1848,7 +1860,7 @@ class _AsyncMentions:
           timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
           since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "range_": (_enum, _m.ExportMentionsCsvRange), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsCsvPlatform), "status": (_enum, _m.ExportMentionsCsvStatus), "sentiment": (_enum, _m.ExportMentionsCsvSentiment), "kind": (_enum, _m.ExportMentionsCsvKind), "keyword_kinds": (_enum_list, _m.ExportMentionsCsvKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsCsvPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsCsvNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsCsvSentimentsItem), "not_sentiments": (_enum_list, _m.ExportMentionsCsvNotSentimentsItem), "emotions": (_enum_list, _m.ExportMentionsCsvEmotionsItem), "not_emotions": (_enum_list, _m.ExportMentionsCsvNotEmotionsItem), "countries": (_enum_list, _m.ExportMentionsCsvCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsCsvNotCountriesItem), "range_": (_enum, _m.ExportMentionsCsvRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_csv.asyncio_detailed(client=self._client, **params))
 
     async def export_json(self, **params: Any) -> _m.ExportMentionsJsonResponse200:
@@ -1898,6 +1910,8 @@ class _AsyncMentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          emotions: Only mentions showing any of these emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration, anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+          not_emotions: Never these emotions. A mention whose emotion was not judged still passes.
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
@@ -1926,7 +1940,7 @@ class _AsyncMentions:
           timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
           since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms)."""
-        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "range_": (_enum, _m.ExportMentionsJsonRange), "since": (_instant, None), "until": (_instant, None)})
+        _coerce(params, {"platform": (_enum, _m.ExportMentionsJsonPlatform), "status": (_enum, _m.ExportMentionsJsonStatus), "sentiment": (_enum, _m.ExportMentionsJsonSentiment), "kind": (_enum, _m.ExportMentionsJsonKind), "keyword_kinds": (_enum_list, _m.ExportMentionsJsonKeywordKindsItem), "platforms": (_enum_list, _m.ExportMentionsJsonPlatformsItem), "not_platforms": (_enum_list, _m.ExportMentionsJsonNotPlatformsItem), "sentiments": (_enum_list, _m.ExportMentionsJsonSentimentsItem), "emotions": (_enum_list, _m.ExportMentionsJsonEmotionsItem), "not_emotions": (_enum_list, _m.ExportMentionsJsonNotEmotionsItem), "countries": (_enum_list, _m.ExportMentionsJsonCountriesItem), "not_countries": (_enum_list, _m.ExportMentionsJsonNotCountriesItem), "range_": (_enum, _m.ExportMentionsJsonRange), "since": (_instant, None), "until": (_instant, None)})
         return _result(await _ops.mentions.export_mentions_json.asyncio_detailed(client=self._client, **params))
 
     async def get(self, id: str) -> _m.Mention:
@@ -1983,6 +1997,8 @@ class _AsyncMentions:
           not_keyword_ids: Never matches of these keywords.
           sentiments: Only these sentiments.
           not_sentiments: Never these sentiments. A mention the classifier has not scored yet still passes.
+          emotions: Only mentions showing any of these emotions toward the keyword (joy, trust, anticipation, surprise, confusion, frustration, anger, fear, sadness, neutral). A mention whose emotion was not judged never passes.
+          not_emotions: Never these emotions. A mention whose emotion was not judged still passes.
           intents: Only mentions carrying any of these intent or topic tags.
           not_intents: Never mentions carrying these intent or topic tags.
           not_link_hosts: Never posts linking to these hosts, the host itself or a subdomain of it.
@@ -2011,10 +2027,10 @@ class _AsyncMentions:
           timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
           since: Deprecated: use from. Only posts published at or after this instant (ISO 8601, or epoch ms).
           until: Deprecated: use to. Only posts published at or before this instant (ISO 8601, or epoch ms).
-          sort: newest: by match time, newest first. priority: by attention score, highest first; priority ranks the last 30 days of matches only, older ones stay reachable under newest. Cursors are specific to a sort.
+          sort: How to order the list: - newest: by match time. - priority: attention score, last 30 days of matches. - reach: author followers, unknown last; counts update, so pages can shift. - engagement: likes, reposts, replies and quotes; none last. - reach and engagement: the last 30 days unless a window is set.
           cursor: nextCursor from the previous page; pass the same filters and sort.
           limit: Page size, 1 to 100 (default 50)."""
-        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "not_keyword_kinds": (_enum_list, _m.SearchMentionsNotKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
+        _coerce(params, {"platform": (_enum, _m.SearchMentionsPlatform), "status": (_enum, _m.SearchMentionsStatus), "sentiment": (_enum, _m.SearchMentionsSentiment), "kind": (_enum, _m.SearchMentionsKind), "keyword_kinds": (_enum_list, _m.SearchMentionsKeywordKindsItem), "not_keyword_kinds": (_enum_list, _m.SearchMentionsNotKeywordKindsItem), "platforms": (_enum_list, _m.SearchMentionsPlatformsItem), "not_platforms": (_enum_list, _m.SearchMentionsNotPlatformsItem), "sentiments": (_enum_list, _m.SearchMentionsSentimentsItem), "not_sentiments": (_enum_list, _m.SearchMentionsNotSentimentsItem), "emotions": (_enum_list, _m.SearchMentionsEmotionsItem), "not_emotions": (_enum_list, _m.SearchMentionsNotEmotionsItem), "countries": (_enum_list, _m.SearchMentionsCountriesItem), "not_countries": (_enum_list, _m.SearchMentionsNotCountriesItem), "range_": (_enum, _m.SearchMentionsRange), "since": (_instant, None), "until": (_instant, None), "sort": (_enum, _m.SearchMentionsSort)})
         return _result(await _ops.mentions.search_mentions.asyncio_detailed(client=self._client, **params))
 
     async def update(self, id: str, body: dict[str, Any] | _m.UpdateMentionBody | None = None, **fields: Any) -> _m.Mention:
@@ -2506,7 +2522,7 @@ class _AsyncAnalytics:
           not_platforms: Never these platforms. Repeatable, or comma-separated.
           compare: true adds the period of the same length right before the window as `previous`.
           timezone: IANA zone the days are cut in (Europe/Madrid). Default UTC. One offset, the zone's at the end of the window, applies to the whole window.
-          by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window."""
+          by: The dimension to group by: - platform or keyword. - sentiment: unclassified included. - emotion: the emotion toward the keyword; "unclassified" if not judged. - intent: a mention can carry several. - status: open, ignored, done. - hour: weekday and hour of day in `timezone`. - person: who posted; anonymous posts are left out. - language: ISO 639-1; "unknown" if none, "other" if unnamed. - country: the author's, ISO 3166-1 alpha-2; "unknown", "other" likewise. - subreddit: Reddit posts only; `share` stays of the whole window. - domain: hosts posts link to; a post can carry several. - link: URLs posts link to; a post can carry several. - hashtag: lowercase, no #; a post can carry several."""
         _coerce(params, {"range_": (_enum, _m.GetAnalyticsBreakdownRange), "platforms": (_enum_list, _m.GetAnalyticsBreakdownPlatformsItem), "by": (_enum, _m.GetAnalyticsBreakdownBy)})
         return _result(await _ops.analytics.get_analytics_breakdown.asyncio_detailed(client=self._client, **params))
 

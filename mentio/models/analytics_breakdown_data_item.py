@@ -31,8 +31,9 @@ T = TypeVar("T", bound="AnalyticsBreakdownDataItem")
 class AnalyticsBreakdownDataItem:
     """
     Attributes:
-        key (str): The group: platform name, keyword id, sentiment, intent, status, "weekday-hour" for by=hour, an
-            opaque person key, or the subreddit in lowercase.
+        key (str): The group: platform name, keyword id, sentiment, emotion, intent, status, "weekday-hour" for by=hour,
+            an opaque person key, the subreddit in lowercase, the host (by=domain), the URL (by=link) or the hashtag without
+            its #.
         label (str): Readable name: the keyword term, the person name, the subreddit as Reddit spells it, otherwise the
             key.
         keyword (AnalyticsBreakdownDataItemKeywordType0 | None): by=keyword only; null otherwise.
@@ -41,8 +42,8 @@ class AnalyticsBreakdownDataItem:
             otherwise.
         matched (int): Matches in the group.
         relevant (int): Of those, scored at or above the relevance threshold.
-        share (float): Percent of the window's matched mentions in this group, one decimal. Intents overlap, so their
-            shares can add up past 100.
+        share (float): Percent of the window's matched mentions in this group, one decimal. Intents, domains, links and
+            hashtags overlap, so their shares can add up past 100.
         sentiment (AnalyticsBreakdownDataItemSentiment): Matched mentions by classifier sentiment.
         previous (AnalyticsBreakdownDataItemPreviousType0 | None): The same group over the period right before the
             window; null unless compare=true.

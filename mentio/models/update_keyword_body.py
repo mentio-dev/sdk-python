@@ -33,6 +33,10 @@ class UpdateKeywordBody:
     Attributes:
         term (str | Unset): Renames the keyword: the new term is tracked from now on, with no look-back, keeping its id,
             settings and old mentions. Double quotes mean the exact phrase only. 409 when its group already tracks it.
+            Clears query.
+        query (str | Unset): Rewrites the term (a rename) and the term rules from a boolean query; the other matching
+            fields stay. Never with term or those rules (400). A later hand change of either clears it. See
+            [Keywords](/guides/keywords#write-it-as-a-query).
         kind (UpdateKeywordBodyKind | Unset): Reclassify it as brand, competitor or topic.
         muted (bool | Unset): A muted keyword stops polling and matching; its mentions stay.
         platforms (list[UpdateKeywordBodyPlatformsType0Item] | None | Unset): Replaces the platform list; null means
@@ -61,6 +65,7 @@ class UpdateKeywordBody:
     """
 
     term: str | Unset = UNSET
+    query: str | Unset = UNSET
     kind: UpdateKeywordBodyKind | Unset = UNSET
     muted: bool | Unset = UNSET
     platforms: list[UpdateKeywordBodyPlatformsType0Item] | None | Unset = UNSET
@@ -79,6 +84,8 @@ class UpdateKeywordBody:
         from ..models.update_keyword_body_cap_type_0 import UpdateKeywordBodyCapType0
 
         term = self.term
+
+        query = self.query
 
         kind: str | Unset = UNSET
         if not isinstance(self.kind, Unset):
@@ -147,6 +154,8 @@ class UpdateKeywordBody:
         field_dict.update({})
         if term is not UNSET:
             field_dict["term"] = term
+        if query is not UNSET:
+            field_dict["query"] = query
         if kind is not UNSET:
             field_dict["kind"] = kind
         if muted is not UNSET:
@@ -187,6 +196,8 @@ class UpdateKeywordBody:
 
         d = dict(src_dict)
         term = d.pop("term", UNSET)
+
+        query = d.pop("query", UNSET)
 
         _kind = d.pop("kind", UNSET)
         kind: UpdateKeywordBodyKind | Unset
@@ -296,6 +307,7 @@ class UpdateKeywordBody:
 
         update_keyword_body = cls(
             term=term,
+            query=query,
             kind=kind,
             muted=muted,
             platforms=platforms,

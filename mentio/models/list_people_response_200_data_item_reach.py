@@ -15,11 +15,14 @@ class ListPeopleResponse200DataItemReach:
 
     Attributes:
         followers (int | None): Followers when last seen; null when unknown.
+        influence (int | None): How far their voice carries, 0 to 100 from followers on a log scale: round(20 *
+            log10(followers + 1)), capped at 100 (1,000 followers is 60). Null when followers are unknown.
         following (int | None): Accounts they follow; null when unknown.
         posts (int | None): Posts on the platform; null when unknown.
     """
 
     followers: int | None
+    influence: int | None
     following: int | None
     posts: int | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -27,6 +30,9 @@ class ListPeopleResponse200DataItemReach:
     def to_dict(self) -> dict[str, Any]:
         followers: int | None
         followers = self.followers
+
+        influence: int | None
+        influence = self.influence
 
         following: int | None
         following = self.following
@@ -39,6 +45,7 @@ class ListPeopleResponse200DataItemReach:
         field_dict.update(
             {
                 "followers": followers,
+                "influence": influence,
                 "following": following,
                 "posts": posts,
             }
@@ -57,6 +64,13 @@ class ListPeopleResponse200DataItemReach:
 
         followers = _parse_followers(d.pop("followers"))
 
+        def _parse_influence(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        influence = _parse_influence(d.pop("influence"))
+
         def _parse_following(data: object) -> int | None:
             if data is None:
                 return data
@@ -73,6 +87,7 @@ class ListPeopleResponse200DataItemReach:
 
         list_people_response_200_data_item_reach = cls(
             followers=followers,
+            influence=influence,
             following=following,
             posts=posts,
         )

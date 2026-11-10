@@ -5,7 +5,9 @@ from .alert_channels_item import AlertChannelsItem
 from .alert_channels_item_kind import AlertChannelsItemKind
 from .alert_filter import AlertFilter
 from .alert_filter_countries_item import AlertFilterCountriesItem
+from .alert_filter_emotions_item import AlertFilterEmotionsItem
 from .alert_filter_not_countries_item import AlertFilterNotCountriesItem
+from .alert_filter_not_emotions_item import AlertFilterNotEmotionsItem
 from .alert_filter_platforms_item import AlertFilterPlatformsItem
 from .alert_filter_sentiments_item import AlertFilterSentimentsItem
 from .alert_mode import AlertMode
@@ -86,9 +88,11 @@ from .automation import Automation
 from .automation_actions import AutomationActions
 from .automation_filter import AutomationFilter
 from .automation_filter_countries_item import AutomationFilterCountriesItem
+from .automation_filter_emotions_item import AutomationFilterEmotionsItem
 from .automation_filter_keyword_kinds_item import AutomationFilterKeywordKindsItem
 from .automation_filter_kind import AutomationFilterKind
 from .automation_filter_not_countries_item import AutomationFilterNotCountriesItem
+from .automation_filter_not_emotions_item import AutomationFilterNotEmotionsItem
 from .automation_filter_not_keyword_kinds_item import (
     AutomationFilterNotKeywordKindsItem,
 )
@@ -105,8 +109,12 @@ from .company_accounts import CompanyAccounts
 from .create_alert_body import CreateAlertBody
 from .create_alert_body_filter import CreateAlertBodyFilter
 from .create_alert_body_filter_countries_item import CreateAlertBodyFilterCountriesItem
+from .create_alert_body_filter_emotions_item import CreateAlertBodyFilterEmotionsItem
 from .create_alert_body_filter_not_countries_item import (
     CreateAlertBodyFilterNotCountriesItem,
+)
+from .create_alert_body_filter_not_emotions_item import (
+    CreateAlertBodyFilterNotEmotionsItem,
 )
 from .create_alert_body_filter_platforms_item import CreateAlertBodyFilterPlatformsItem
 from .create_alert_body_filter_sentiments_item import (
@@ -124,12 +132,18 @@ from .create_automation_body_filter import CreateAutomationBodyFilter
 from .create_automation_body_filter_countries_item import (
     CreateAutomationBodyFilterCountriesItem,
 )
+from .create_automation_body_filter_emotions_item import (
+    CreateAutomationBodyFilterEmotionsItem,
+)
 from .create_automation_body_filter_keyword_kinds_item import (
     CreateAutomationBodyFilterKeywordKindsItem,
 )
 from .create_automation_body_filter_kind import CreateAutomationBodyFilterKind
 from .create_automation_body_filter_not_countries_item import (
     CreateAutomationBodyFilterNotCountriesItem,
+)
+from .create_automation_body_filter_not_emotions_item import (
+    CreateAutomationBodyFilterNotEmotionsItem,
 )
 from .create_automation_body_filter_not_keyword_kinds_item import (
     CreateAutomationBodyFilterNotKeywordKindsItem,
@@ -223,12 +237,16 @@ from .create_top_up_response_200 import CreateTopUpResponse200
 from .create_view_body import CreateViewBody
 from .create_view_body_filter import CreateViewBodyFilter
 from .create_view_body_filter_countries_item import CreateViewBodyFilterCountriesItem
+from .create_view_body_filter_emotions_item import CreateViewBodyFilterEmotionsItem
 from .create_view_body_filter_keyword_kinds_item import (
     CreateViewBodyFilterKeywordKindsItem,
 )
 from .create_view_body_filter_kind import CreateViewBodyFilterKind
 from .create_view_body_filter_not_countries_item import (
     CreateViewBodyFilterNotCountriesItem,
+)
+from .create_view_body_filter_not_emotions_item import (
+    CreateViewBodyFilterNotEmotionsItem,
 )
 from .create_view_body_filter_not_keyword_kinds_item import (
     CreateViewBodyFilterNotKeywordKindsItem,
@@ -258,10 +276,13 @@ from .email_channel_stats_last_7d import EmailChannelStatsLast7D
 from .error_response import ErrorResponse
 from .error_response_error import ErrorResponseError
 from .error_response_error_code import ErrorResponseErrorCode
+from .error_response_error_details import ErrorResponseErrorDetails
 from .export_mentions_csv_countries_item import ExportMentionsCsvCountriesItem
+from .export_mentions_csv_emotions_item import ExportMentionsCsvEmotionsItem
 from .export_mentions_csv_keyword_kinds_item import ExportMentionsCsvKeywordKindsItem
 from .export_mentions_csv_kind import ExportMentionsCsvKind
 from .export_mentions_csv_not_countries_item import ExportMentionsCsvNotCountriesItem
+from .export_mentions_csv_not_emotions_item import ExportMentionsCsvNotEmotionsItem
 from .export_mentions_csv_not_keyword_kinds_item import (
     ExportMentionsCsvNotKeywordKindsItem,
 )
@@ -274,9 +295,11 @@ from .export_mentions_csv_sentiment import ExportMentionsCsvSentiment
 from .export_mentions_csv_sentiments_item import ExportMentionsCsvSentimentsItem
 from .export_mentions_csv_status import ExportMentionsCsvStatus
 from .export_mentions_json_countries_item import ExportMentionsJsonCountriesItem
+from .export_mentions_json_emotions_item import ExportMentionsJsonEmotionsItem
 from .export_mentions_json_keyword_kinds_item import ExportMentionsJsonKeywordKindsItem
 from .export_mentions_json_kind import ExportMentionsJsonKind
 from .export_mentions_json_not_countries_item import ExportMentionsJsonNotCountriesItem
+from .export_mentions_json_not_emotions_item import ExportMentionsJsonNotEmotionsItem
 from .export_mentions_json_not_keyword_kinds_item import (
     ExportMentionsJsonNotKeywordKindsItem,
 )
@@ -314,9 +337,11 @@ from .feed_health_status import FeedHealthStatus
 from .feed_stats import FeedStats
 from .filter_group import FilterGroup
 from .filter_group_countries_item import FilterGroupCountriesItem
+from .filter_group_emotions_item import FilterGroupEmotionsItem
 from .filter_group_keyword_kinds_item import FilterGroupKeywordKindsItem
 from .filter_group_kind import FilterGroupKind
 from .filter_group_not_countries_item import FilterGroupNotCountriesItem
+from .filter_group_not_emotions_item import FilterGroupNotEmotionsItem
 from .filter_group_not_keyword_kinds_item import FilterGroupNotKeywordKindsItem
 from .filter_group_not_platforms_item import FilterGroupNotPlatformsItem
 from .filter_group_not_sentiments_item import FilterGroupNotSentimentsItem
@@ -520,8 +545,14 @@ from .list_alerts_response_200_data_item_filter import (
 from .list_alerts_response_200_data_item_filter_countries_item import (
     ListAlertsResponse200DataItemFilterCountriesItem,
 )
+from .list_alerts_response_200_data_item_filter_emotions_item import (
+    ListAlertsResponse200DataItemFilterEmotionsItem,
+)
 from .list_alerts_response_200_data_item_filter_not_countries_item import (
     ListAlertsResponse200DataItemFilterNotCountriesItem,
+)
+from .list_alerts_response_200_data_item_filter_not_emotions_item import (
+    ListAlertsResponse200DataItemFilterNotEmotionsItem,
 )
 from .list_alerts_response_200_data_item_filter_platforms_item import (
     ListAlertsResponse200DataItemFilterPlatformsItem,
@@ -552,6 +583,9 @@ from .list_automations_response_200_data_item_filter import (
 from .list_automations_response_200_data_item_filter_countries_item import (
     ListAutomationsResponse200DataItemFilterCountriesItem,
 )
+from .list_automations_response_200_data_item_filter_emotions_item import (
+    ListAutomationsResponse200DataItemFilterEmotionsItem,
+)
 from .list_automations_response_200_data_item_filter_keyword_kinds_item import (
     ListAutomationsResponse200DataItemFilterKeywordKindsItem,
 )
@@ -560,6 +594,9 @@ from .list_automations_response_200_data_item_filter_kind import (
 )
 from .list_automations_response_200_data_item_filter_not_countries_item import (
     ListAutomationsResponse200DataItemFilterNotCountriesItem,
+)
+from .list_automations_response_200_data_item_filter_not_emotions_item import (
+    ListAutomationsResponse200DataItemFilterNotEmotionsItem,
 )
 from .list_automations_response_200_data_item_filter_not_keyword_kinds_item import (
     ListAutomationsResponse200DataItemFilterNotKeywordKindsItem,
@@ -790,6 +827,9 @@ from .list_views_response_200_data_item_filter import ListViewsResponse200DataIt
 from .list_views_response_200_data_item_filter_countries_item import (
     ListViewsResponse200DataItemFilterCountriesItem,
 )
+from .list_views_response_200_data_item_filter_emotions_item import (
+    ListViewsResponse200DataItemFilterEmotionsItem,
+)
 from .list_views_response_200_data_item_filter_keyword_kinds_item import (
     ListViewsResponse200DataItemFilterKeywordKindsItem,
 )
@@ -798,6 +838,9 @@ from .list_views_response_200_data_item_filter_kind import (
 )
 from .list_views_response_200_data_item_filter_not_countries_item import (
     ListViewsResponse200DataItemFilterNotCountriesItem,
+)
+from .list_views_response_200_data_item_filter_not_emotions_item import (
+    ListViewsResponse200DataItemFilterNotEmotionsItem,
 )
 from .list_views_response_200_data_item_filter_not_keyword_kinds_item import (
     ListViewsResponse200DataItemFilterNotKeywordKindsItem,
@@ -825,6 +868,7 @@ from .mention import Mention
 from .mention_author_type_0 import MentionAuthorType0
 from .mention_batch_result import MentionBatchResult
 from .mention_classification_type_0 import MentionClassificationType0
+from .mention_classification_type_0_emotion import MentionClassificationType0Emotion
 from .mention_classification_type_0_feedback_type_0 import (
     MentionClassificationType0FeedbackType0,
 )
@@ -917,9 +961,11 @@ from .run_alert_digest_response_200_outcomes_item import (
 )
 from .run_alert_digest_response_200_skipped import RunAlertDigestResponse200Skipped
 from .search_mentions_countries_item import SearchMentionsCountriesItem
+from .search_mentions_emotions_item import SearchMentionsEmotionsItem
 from .search_mentions_keyword_kinds_item import SearchMentionsKeywordKindsItem
 from .search_mentions_kind import SearchMentionsKind
 from .search_mentions_not_countries_item import SearchMentionsNotCountriesItem
+from .search_mentions_not_emotions_item import SearchMentionsNotEmotionsItem
 from .search_mentions_not_keyword_kinds_item import SearchMentionsNotKeywordKindsItem
 from .search_mentions_not_platforms_item import SearchMentionsNotPlatformsItem
 from .search_mentions_not_sentiments_item import SearchMentionsNotSentimentsItem
@@ -981,8 +1027,12 @@ from .unmute_alert_authors_body import UnmuteAlertAuthorsBody
 from .update_alert_body import UpdateAlertBody
 from .update_alert_body_filter import UpdateAlertBodyFilter
 from .update_alert_body_filter_countries_item import UpdateAlertBodyFilterCountriesItem
+from .update_alert_body_filter_emotions_item import UpdateAlertBodyFilterEmotionsItem
 from .update_alert_body_filter_not_countries_item import (
     UpdateAlertBodyFilterNotCountriesItem,
+)
+from .update_alert_body_filter_not_emotions_item import (
+    UpdateAlertBodyFilterNotEmotionsItem,
 )
 from .update_alert_body_filter_platforms_item import UpdateAlertBodyFilterPlatformsItem
 from .update_alert_body_filter_sentiments_item import (
@@ -996,12 +1046,18 @@ from .update_automation_body_filter import UpdateAutomationBodyFilter
 from .update_automation_body_filter_countries_item import (
     UpdateAutomationBodyFilterCountriesItem,
 )
+from .update_automation_body_filter_emotions_item import (
+    UpdateAutomationBodyFilterEmotionsItem,
+)
 from .update_automation_body_filter_keyword_kinds_item import (
     UpdateAutomationBodyFilterKeywordKindsItem,
 )
 from .update_automation_body_filter_kind import UpdateAutomationBodyFilterKind
 from .update_automation_body_filter_not_countries_item import (
     UpdateAutomationBodyFilterNotCountriesItem,
+)
+from .update_automation_body_filter_not_emotions_item import (
+    UpdateAutomationBodyFilterNotEmotionsItem,
 )
 from .update_automation_body_filter_not_keyword_kinds_item import (
     UpdateAutomationBodyFilterNotKeywordKindsItem,
@@ -1100,12 +1156,16 @@ from .update_segment_body_filter_stages_item import UpdateSegmentBodyFilterStage
 from .update_view_body import UpdateViewBody
 from .update_view_body_filter import UpdateViewBodyFilter
 from .update_view_body_filter_countries_item import UpdateViewBodyFilterCountriesItem
+from .update_view_body_filter_emotions_item import UpdateViewBodyFilterEmotionsItem
 from .update_view_body_filter_keyword_kinds_item import (
     UpdateViewBodyFilterKeywordKindsItem,
 )
 from .update_view_body_filter_kind import UpdateViewBodyFilterKind
 from .update_view_body_filter_not_countries_item import (
     UpdateViewBodyFilterNotCountriesItem,
+)
+from .update_view_body_filter_not_emotions_item import (
+    UpdateViewBodyFilterNotEmotionsItem,
 )
 from .update_view_body_filter_not_keyword_kinds_item import (
     UpdateViewBodyFilterNotKeywordKindsItem,
@@ -1136,9 +1196,11 @@ from .usage_summary_mentions import UsageSummaryMentions
 from .view import View
 from .view_filter import ViewFilter
 from .view_filter_countries_item import ViewFilterCountriesItem
+from .view_filter_emotions_item import ViewFilterEmotionsItem
 from .view_filter_keyword_kinds_item import ViewFilterKeywordKindsItem
 from .view_filter_kind import ViewFilterKind
 from .view_filter_not_countries_item import ViewFilterNotCountriesItem
+from .view_filter_not_emotions_item import ViewFilterNotEmotionsItem
 from .view_filter_not_keyword_kinds_item import ViewFilterNotKeywordKindsItem
 from .view_filter_not_platforms_item import ViewFilterNotPlatformsItem
 from .view_filter_not_sentiments_item import ViewFilterNotSentimentsItem
@@ -1171,7 +1233,9 @@ __all__ = (
     "AlertChannelsItemKind",
     "AlertFilter",
     "AlertFilterCountriesItem",
+    "AlertFilterEmotionsItem",
     "AlertFilterNotCountriesItem",
+    "AlertFilterNotEmotionsItem",
     "AlertFilterPlatformsItem",
     "AlertFilterSentimentsItem",
     "AlertMode",
@@ -1220,9 +1284,11 @@ __all__ = (
     "AutomationActions",
     "AutomationFilter",
     "AutomationFilterCountriesItem",
+    "AutomationFilterEmotionsItem",
     "AutomationFilterKeywordKindsItem",
     "AutomationFilterKind",
     "AutomationFilterNotCountriesItem",
+    "AutomationFilterNotEmotionsItem",
     "AutomationFilterNotKeywordKindsItem",
     "AutomationFilterNotPlatformsItem",
     "AutomationFilterNotSentimentsItem",
@@ -1237,7 +1303,9 @@ __all__ = (
     "CreateAlertBody",
     "CreateAlertBodyFilter",
     "CreateAlertBodyFilterCountriesItem",
+    "CreateAlertBodyFilterEmotionsItem",
     "CreateAlertBodyFilterNotCountriesItem",
+    "CreateAlertBodyFilterNotEmotionsItem",
     "CreateAlertBodyFilterPlatformsItem",
     "CreateAlertBodyFilterSentimentsItem",
     "CreateAlertBodyMode",
@@ -1250,9 +1318,11 @@ __all__ = (
     "CreateAutomationBodyActions",
     "CreateAutomationBodyFilter",
     "CreateAutomationBodyFilterCountriesItem",
+    "CreateAutomationBodyFilterEmotionsItem",
     "CreateAutomationBodyFilterKeywordKindsItem",
     "CreateAutomationBodyFilterKind",
     "CreateAutomationBodyFilterNotCountriesItem",
+    "CreateAutomationBodyFilterNotEmotionsItem",
     "CreateAutomationBodyFilterNotKeywordKindsItem",
     "CreateAutomationBodyFilterNotPlatformsItem",
     "CreateAutomationBodyFilterNotSentimentsItem",
@@ -1307,9 +1377,11 @@ __all__ = (
     "CreateViewBody",
     "CreateViewBodyFilter",
     "CreateViewBodyFilterCountriesItem",
+    "CreateViewBodyFilterEmotionsItem",
     "CreateViewBodyFilterKeywordKindsItem",
     "CreateViewBodyFilterKind",
     "CreateViewBodyFilterNotCountriesItem",
+    "CreateViewBodyFilterNotEmotionsItem",
     "CreateViewBodyFilterNotKeywordKindsItem",
     "CreateViewBodyFilterNotPlatformsItem",
     "CreateViewBodyFilterNotSentimentsItem",
@@ -1332,10 +1404,13 @@ __all__ = (
     "ErrorResponse",
     "ErrorResponseError",
     "ErrorResponseErrorCode",
+    "ErrorResponseErrorDetails",
     "ExportMentionsCsvCountriesItem",
+    "ExportMentionsCsvEmotionsItem",
     "ExportMentionsCsvKeywordKindsItem",
     "ExportMentionsCsvKind",
     "ExportMentionsCsvNotCountriesItem",
+    "ExportMentionsCsvNotEmotionsItem",
     "ExportMentionsCsvNotKeywordKindsItem",
     "ExportMentionsCsvNotPlatformsItem",
     "ExportMentionsCsvNotSentimentsItem",
@@ -1346,9 +1421,11 @@ __all__ = (
     "ExportMentionsCsvSentimentsItem",
     "ExportMentionsCsvStatus",
     "ExportMentionsJsonCountriesItem",
+    "ExportMentionsJsonEmotionsItem",
     "ExportMentionsJsonKeywordKindsItem",
     "ExportMentionsJsonKind",
     "ExportMentionsJsonNotCountriesItem",
+    "ExportMentionsJsonNotEmotionsItem",
     "ExportMentionsJsonNotKeywordKindsItem",
     "ExportMentionsJsonNotPlatformsItem",
     "ExportMentionsJsonNotSentimentsItem",
@@ -1380,9 +1457,11 @@ __all__ = (
     "FeedStats",
     "FilterGroup",
     "FilterGroupCountriesItem",
+    "FilterGroupEmotionsItem",
     "FilterGroupKeywordKindsItem",
     "FilterGroupKind",
     "FilterGroupNotCountriesItem",
+    "FilterGroupNotEmotionsItem",
     "FilterGroupNotKeywordKindsItem",
     "FilterGroupNotPlatformsItem",
     "FilterGroupNotSentimentsItem",
@@ -1520,7 +1599,9 @@ __all__ = (
     "ListAlertsResponse200DataItemChannelsItemKind",
     "ListAlertsResponse200DataItemFilter",
     "ListAlertsResponse200DataItemFilterCountriesItem",
+    "ListAlertsResponse200DataItemFilterEmotionsItem",
     "ListAlertsResponse200DataItemFilterNotCountriesItem",
+    "ListAlertsResponse200DataItemFilterNotEmotionsItem",
     "ListAlertsResponse200DataItemFilterPlatformsItem",
     "ListAlertsResponse200DataItemFilterSentimentsItem",
     "ListAlertsResponse200DataItemMode",
@@ -1536,9 +1617,11 @@ __all__ = (
     "ListAutomationsResponse200DataItemActions",
     "ListAutomationsResponse200DataItemFilter",
     "ListAutomationsResponse200DataItemFilterCountriesItem",
+    "ListAutomationsResponse200DataItemFilterEmotionsItem",
     "ListAutomationsResponse200DataItemFilterKeywordKindsItem",
     "ListAutomationsResponse200DataItemFilterKind",
     "ListAutomationsResponse200DataItemFilterNotCountriesItem",
+    "ListAutomationsResponse200DataItemFilterNotEmotionsItem",
     "ListAutomationsResponse200DataItemFilterNotKeywordKindsItem",
     "ListAutomationsResponse200DataItemFilterNotPlatformsItem",
     "ListAutomationsResponse200DataItemFilterNotSentimentsItem",
@@ -1646,9 +1729,11 @@ __all__ = (
     "ListViewsResponse200DataItem",
     "ListViewsResponse200DataItemFilter",
     "ListViewsResponse200DataItemFilterCountriesItem",
+    "ListViewsResponse200DataItemFilterEmotionsItem",
     "ListViewsResponse200DataItemFilterKeywordKindsItem",
     "ListViewsResponse200DataItemFilterKind",
     "ListViewsResponse200DataItemFilterNotCountriesItem",
+    "ListViewsResponse200DataItemFilterNotEmotionsItem",
     "ListViewsResponse200DataItemFilterNotKeywordKindsItem",
     "ListViewsResponse200DataItemFilterNotPlatformsItem",
     "ListViewsResponse200DataItemFilterNotSentimentsItem",
@@ -1663,6 +1748,7 @@ __all__ = (
     "MentionAuthorType0",
     "MentionBatchResult",
     "MentionClassificationType0",
+    "MentionClassificationType0Emotion",
     "MentionClassificationType0FeedbackType0",
     "MentionClassificationType0FeedbackType0Original",
     "MentionClassificationType0FeedbackType0OriginalSentiment",
@@ -1739,9 +1825,11 @@ __all__ = (
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",
     "SearchMentionsCountriesItem",
+    "SearchMentionsEmotionsItem",
     "SearchMentionsKeywordKindsItem",
     "SearchMentionsKind",
     "SearchMentionsNotCountriesItem",
+    "SearchMentionsNotEmotionsItem",
     "SearchMentionsNotKeywordKindsItem",
     "SearchMentionsNotPlatformsItem",
     "SearchMentionsNotSentimentsItem",
@@ -1797,7 +1885,9 @@ __all__ = (
     "UpdateAlertBody",
     "UpdateAlertBodyFilter",
     "UpdateAlertBodyFilterCountriesItem",
+    "UpdateAlertBodyFilterEmotionsItem",
     "UpdateAlertBodyFilterNotCountriesItem",
+    "UpdateAlertBodyFilterNotEmotionsItem",
     "UpdateAlertBodyFilterPlatformsItem",
     "UpdateAlertBodyFilterSentimentsItem",
     "UpdateAlertBodyMode",
@@ -1806,9 +1896,11 @@ __all__ = (
     "UpdateAutomationBodyActions",
     "UpdateAutomationBodyFilter",
     "UpdateAutomationBodyFilterCountriesItem",
+    "UpdateAutomationBodyFilterEmotionsItem",
     "UpdateAutomationBodyFilterKeywordKindsItem",
     "UpdateAutomationBodyFilterKind",
     "UpdateAutomationBodyFilterNotCountriesItem",
+    "UpdateAutomationBodyFilterNotEmotionsItem",
     "UpdateAutomationBodyFilterNotKeywordKindsItem",
     "UpdateAutomationBodyFilterNotPlatformsItem",
     "UpdateAutomationBodyFilterNotSentimentsItem",
@@ -1868,9 +1960,11 @@ __all__ = (
     "UpdateViewBody",
     "UpdateViewBodyFilter",
     "UpdateViewBodyFilterCountriesItem",
+    "UpdateViewBodyFilterEmotionsItem",
     "UpdateViewBodyFilterKeywordKindsItem",
     "UpdateViewBodyFilterKind",
     "UpdateViewBodyFilterNotCountriesItem",
+    "UpdateViewBodyFilterNotEmotionsItem",
     "UpdateViewBodyFilterNotKeywordKindsItem",
     "UpdateViewBodyFilterNotPlatformsItem",
     "UpdateViewBodyFilterNotSentimentsItem",
@@ -1894,9 +1988,11 @@ __all__ = (
     "View",
     "ViewFilter",
     "ViewFilterCountriesItem",
+    "ViewFilterEmotionsItem",
     "ViewFilterKeywordKindsItem",
     "ViewFilterKind",
     "ViewFilterNotCountriesItem",
+    "ViewFilterNotEmotionsItem",
     "ViewFilterNotKeywordKindsItem",
     "ViewFilterNotPlatformsItem",
     "ViewFilterNotSentimentsItem",

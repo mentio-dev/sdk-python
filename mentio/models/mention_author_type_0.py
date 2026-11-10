@@ -21,6 +21,8 @@ class MentionAuthorType0:
         url (None | str): Profile URL.
         avatar_url (None | str): Profile picture; null where the platform has none.
         followers (int | None): Follower count as of their newest post; null where the platform has none.
+        influence (int | None): How far their voice carries, 0 to 100 from followers on a log scale: round(20 *
+            log10(followers + 1)), capped at 100 (1,000 followers is 60). Null when followers are unknown.
         tags (list[str]): Your tags on this person: the workspace's, then those the mention's own keyword group gave
             them (set with groupId on /v1/people), each once.
     """
@@ -31,6 +33,7 @@ class MentionAuthorType0:
     url: None | str
     avatar_url: None | str
     followers: int | None
+    influence: int | None
     tags: list[str]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -53,6 +56,9 @@ class MentionAuthorType0:
         followers: int | None
         followers = self.followers
 
+        influence: int | None
+        influence = self.influence
+
         tags = self.tags
 
         field_dict: dict[str, Any] = {}
@@ -65,6 +71,7 @@ class MentionAuthorType0:
                 "url": url,
                 "avatarUrl": avatar_url,
                 "followers": followers,
+                "influence": influence,
                 "tags": tags,
             }
         )
@@ -117,6 +124,13 @@ class MentionAuthorType0:
 
         followers = _parse_followers(d.pop("followers"))
 
+        def _parse_influence(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        influence = _parse_influence(d.pop("influence"))
+
         tags = cast(list[str], d.pop("tags"))
 
         mention_author_type_0 = cls(
@@ -126,6 +140,7 @@ class MentionAuthorType0:
             url=url,
             avatar_url=avatar_url,
             followers=followers,
+            influence=influence,
             tags=tags,
         )
 
