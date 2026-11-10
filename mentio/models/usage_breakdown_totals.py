@@ -27,10 +27,15 @@ class UsageBreakdownTotals:
         billable_comments (int): Comments billed in the window (the comments line): comments delivered under your
             mentions and comments that matched a keyword, each once per workspace.
         comment_cents (int): The billed comments at $0.008 each, rounded once on the total.
-        total_cents (int): keywordCents plus mentionCents plus commentCents.
+        total_cents (int): keywordCents, mentionCents and commentCents, plus searchCents when the report is not
+            filtered: then the window's whole list price. The rows carry keyword spend only.
         ledger_debit_cents (int): What the ledger has debited for the window's days, by the day each debit settled, for
-            the whole workspace whatever the filters. Lags totalCents by unsettled mentions; see [The ledger](/billing#the-
-            ledger).
+            the whole workspace whatever the filters, on-demand searches included. Lags totalCents by unsettled mentions;
+            see [The ledger](/billing#the-ledger).
+        search_results (int): On-demand search results billed in the window (scored then), for the whole workspace
+            whatever the filters.
+        search_cents (int): searchResults at $0.008 each, in totals.totalCents when the report is not filtered (never in
+            a row: rows are keyword spend).
         unattributed_billable (int): Billed mentions whose match row is gone (deleted keyword), so no platform or
             keyword row claims them; charged all the same. Comments never are (by=group puts a deleted keyword's comments on
             the no-group row).
@@ -46,6 +51,8 @@ class UsageBreakdownTotals:
     comment_cents: int
     total_cents: int
     ledger_debit_cents: int
+    search_results: int
+    search_cents: int
     unattributed_billable: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -70,6 +77,10 @@ class UsageBreakdownTotals:
 
         ledger_debit_cents = self.ledger_debit_cents
 
+        search_results = self.search_results
+
+        search_cents = self.search_cents
+
         unattributed_billable = self.unattributed_billable
 
         field_dict: dict[str, Any] = {}
@@ -86,6 +97,8 @@ class UsageBreakdownTotals:
                 "commentCents": comment_cents,
                 "totalCents": total_cents,
                 "ledgerDebitCents": ledger_debit_cents,
+                "searchResults": search_results,
+                "searchCents": search_cents,
                 "unattributedBillable": unattributed_billable,
             }
         )
@@ -115,6 +128,10 @@ class UsageBreakdownTotals:
 
         ledger_debit_cents = d.pop("ledgerDebitCents")
 
+        search_results = d.pop("searchResults")
+
+        search_cents = d.pop("searchCents")
+
         unattributed_billable = d.pop("unattributedBillable")
 
         usage_breakdown_totals = cls(
@@ -128,6 +145,8 @@ class UsageBreakdownTotals:
             comment_cents=comment_cents,
             total_cents=total_cents,
             ledger_debit_cents=ledger_debit_cents,
+            search_results=search_results,
+            search_cents=search_cents,
             unattributed_billable=unattributed_billable,
         )
 

@@ -16,8 +16,8 @@ class LedgerListDataItem:
     """
     Attributes:
         id (str): Ledger entry id (led_...).
-        kind (LedgerListDataItemKind): signup_credit, topup, refund, debit_keyword_days, debit_mentions, debit_comments
-            or adjustment.
+        kind (LedgerListDataItemKind): signup_credit, topup, refund, debit_keyword_days, debit_mentions, debit_comments,
+            debit_searches (on-demand search results) or adjustment.
         amount_cents (int): Integer USD cents; credits positive, debits negative.
         day (None | str): Debit rows: the last UTC day the row settled (YYYY-MM-DD).
         units (int | None): Debit rows: cumulative units (mentions or keyword-days) settled up to this row.

@@ -6,6 +6,7 @@ class LedgerListDataItemKind(StrEnum):
     DEBIT_COMMENTS = "debit_comments"
     DEBIT_KEYWORD_DAYS = "debit_keyword_days"
     DEBIT_MENTIONS = "debit_mentions"
+    DEBIT_SEARCHES = "debit_searches"
     REFUND = "refund"
     SIGNUP_CREDIT = "signup_credit"
     TOPUP = "topup"

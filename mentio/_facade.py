@@ -167,6 +167,10 @@ import mentio.api.people.log_person_activity  # noqa: F401
 import mentio.api.people.merge_people  # noqa: F401
 import mentio.api.people.split_person  # noqa: F401
 import mentio.api.people.update_person  # noqa: F401
+import mentio.api.searches.create_search  # noqa: F401
+import mentio.api.searches.get_search  # noqa: F401
+import mentio.api.searches.list_search_results  # noqa: F401
+import mentio.api.searches.list_searches  # noqa: F401
 import mentio.api.segments.create_segment  # noqa: F401
 import mentio.api.segments.delete_segment  # noqa: F401
 import mentio.api.segments.get_segment  # noqa: F401
@@ -1337,6 +1341,58 @@ class _Views:
           description: What the view is for.
           filter: Replaces the whole filter."""
         return _result(_ops.views.update_view.sync_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
+
+class _Searches:
+    """searches: create, get, list, results."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateSearchBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Search:
+        """Start a search
+
+        Search a term over the last 24 hours, 7 or 30 days, without a keyword.
+
+        - Results are scored and kept apart from your mentions.
+        - $0.008 per scored result; the balance must cover `maxCostCents`.
+        - See [Search](/guides/search).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
+          range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
+          platforms: The platforms to read; omit for every platform that can search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook). devto and news have no search and are reported as skipped.
+          kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
+          context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
+        return _result(_ops.searches.create_search.sync_detailed(client=self._client, body=_body(_m.CreateSearchBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def get(self, id: str) -> _m.Search:
+        """Get a search
+
+        Its status, each platform's progress and counts, and what it cost so far."""
+        return _result(_ops.searches.get_search.sync_detailed(id, client=self._client))
+
+    def list(self, **params: Any) -> _m.ListSearchesResponse200:
+        """List searches
+
+        The workspace's searches, newest first, kept for 30 days.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page."""
+        return _result(_ops.searches.list_searches.sync_detailed(client=self._client, **params))
+
+    def results(self, id: str, **params: Any) -> _m.ListSearchResultsResponse200:
+        """List a search's results
+
+        The posts the search found, newest first, with their verdicts.
+
+        A verdict is null while it waits; `alreadyInWorkspace` says the post is already one of your mentions. Readable while the search runs.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page.
+          min_relevance: Only results scored at least this relevant (0 to 100); unscored results are left out when set."""
+        return _result(_ops.searches.list_search_results.sync_detailed(id, client=self._client, **params))
 
 class _Automations:
     """automations: create, delete, get, list, update."""
@@ -2795,6 +2851,58 @@ class _AsyncViews:
           filter: Replaces the whole filter."""
         return _result(await _ops.views.update_view.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateViewBody, body, fields)))
 
+class _AsyncSearches:
+    """searches: create, get, list, results."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateSearchBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Search:
+        """Start a search
+
+        Search a term over the last 24 hours, 7 or 30 days, without a keyword.
+
+        - Results are scored and kept apart from your mentions.
+        - $0.008 per scored result; the balance must cover `maxCostCents`.
+        - See [Search](/guides/search).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
+          range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
+          platforms: The platforms to read; omit for every platform that can search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook). devto and news have no search and are reported as skipped.
+          kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
+          context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
+        return _result(await _ops.searches.create_search.asyncio_detailed(client=self._client, body=_body(_m.CreateSearchBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def get(self, id: str) -> _m.Search:
+        """Get a search
+
+        Its status, each platform's progress and counts, and what it cost so far."""
+        return _result(await _ops.searches.get_search.asyncio_detailed(id, client=self._client))
+
+    async def list(self, **params: Any) -> _m.ListSearchesResponse200:
+        """List searches
+
+        The workspace's searches, newest first, kept for 30 days.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page."""
+        return _result(await _ops.searches.list_searches.asyncio_detailed(client=self._client, **params))
+
+    async def results(self, id: str, **params: Any) -> _m.ListSearchResultsResponse200:
+        """List a search's results
+
+        The posts the search found, newest first, with their verdicts.
+
+        A verdict is null while it waits; `alreadyInWorkspace` says the post is already one of your mentions. Readable while the search runs.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page.
+          min_relevance: Only results scored at least this relevant (0 to 100); unscored results are left out when set."""
+        return _result(await _ops.searches.list_search_results.asyncio_detailed(id, client=self._client, **params))
+
 class _AsyncAutomations:
     """automations: create, delete, get, list, update."""
 
@@ -3141,6 +3249,7 @@ class Mentio:
         self.feeds = _Feeds(self.client)
         self.filters = _Filters(self.client)
         self.views = _Views(self.client)
+        self.searches = _Searches(self.client)
         self.automations = _Automations(self.client)
         self.labels = _Labels(self.client)
         self.attention = _Attention(self.client)
@@ -3201,6 +3310,7 @@ class AsyncMentio:
         self.feeds = _AsyncFeeds(self.client)
         self.filters = _AsyncFilters(self.client)
         self.views = _AsyncViews(self.client)
+        self.searches = _AsyncSearches(self.client)
         self.automations = _AsyncAutomations(self.client)
         self.labels = _AsyncLabels(self.client)
         self.attention = _AsyncAttention(self.client)

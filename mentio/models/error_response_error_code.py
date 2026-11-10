@@ -22,6 +22,7 @@ class ErrorResponseErrorCode(StrEnum):
     FEED_UNREADABLE = "feed_unreadable"
     FILTER_TOO_COMPLEX = "filter_too_complex"
     FORBIDDEN = "forbidden"
+    FUNDING_REQUIRED = "funding_required"
     GROUP_CHANGED = "group_changed"
     HOURLY_EMAIL_UNSUPPORTED = "hourly_email_unsupported"
     IDEMPOTENCY_KEY_IN_USE = "idempotency_key_in_use"

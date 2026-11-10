@@ -211,6 +211,10 @@ from .create_keyword_body_review_sources_item import CreateKeywordBodyReviewSour
 from .create_keyword_body_review_sources_item_platform import (
     CreateKeywordBodyReviewSourcesItemPlatform,
 )
+from .create_search_body import CreateSearchBody
+from .create_search_body_kind import CreateSearchBodyKind
+from .create_search_body_platforms_item import CreateSearchBodyPlatformsItem
+from .create_search_body_range import CreateSearchBodyRange
 from .create_segment_body import CreateSegmentBody
 from .create_segment_body_filter import CreateSegmentBodyFilter
 from .create_segment_body_filter_keyword_kinds_item import (
@@ -797,6 +801,33 @@ from .list_person_activities_response_200_data_item_channel import (
 from .list_person_activities_response_200_data_item_member_type_0 import (
     ListPersonActivitiesResponse200DataItemMemberType0,
 )
+from .list_search_results_response_200 import ListSearchResultsResponse200
+from .list_searches_response_200 import ListSearchesResponse200
+from .list_searches_response_200_data_item import ListSearchesResponse200DataItem
+from .list_searches_response_200_data_item_kind import (
+    ListSearchesResponse200DataItemKind,
+)
+from .list_searches_response_200_data_item_platforms_item import (
+    ListSearchesResponse200DataItemPlatformsItem,
+)
+from .list_searches_response_200_data_item_platforms_item_platform import (
+    ListSearchesResponse200DataItemPlatformsItemPlatform,
+)
+from .list_searches_response_200_data_item_platforms_item_reason import (
+    ListSearchesResponse200DataItemPlatformsItemReason,
+)
+from .list_searches_response_200_data_item_platforms_item_status import (
+    ListSearchesResponse200DataItemPlatformsItemStatus,
+)
+from .list_searches_response_200_data_item_range import (
+    ListSearchesResponse200DataItemRange,
+)
+from .list_searches_response_200_data_item_stats import (
+    ListSearchesResponse200DataItemStats,
+)
+from .list_searches_response_200_data_item_status import (
+    ListSearchesResponse200DataItemStatus,
+)
 from .list_segment_presets_response_200 import ListSegmentPresetsResponse200
 from .list_segments_response_200 import ListSegmentsResponse200
 from .list_segments_response_200_data_item import ListSegmentsResponse200DataItem
@@ -960,6 +991,8 @@ from .run_alert_digest_response_200_outcomes_item import (
     RunAlertDigestResponse200OutcomesItem,
 )
 from .run_alert_digest_response_200_skipped import RunAlertDigestResponse200Skipped
+from .search import Search
+from .search_kind import SearchKind
 from .search_mentions_countries_item import SearchMentionsCountriesItem
 from .search_mentions_emotions_item import SearchMentionsEmotionsItem
 from .search_mentions_keyword_kinds_item import SearchMentionsKeywordKindsItem
@@ -977,6 +1010,28 @@ from .search_mentions_sentiment import SearchMentionsSentiment
 from .search_mentions_sentiments_item import SearchMentionsSentimentsItem
 from .search_mentions_sort import SearchMentionsSort
 from .search_mentions_status import SearchMentionsStatus
+from .search_platforms_item import SearchPlatformsItem
+from .search_platforms_item_platform import SearchPlatformsItemPlatform
+from .search_platforms_item_reason import SearchPlatformsItemReason
+from .search_platforms_item_status import SearchPlatformsItemStatus
+from .search_range import SearchRange
+from .search_result import SearchResult
+from .search_result_author_type_0 import SearchResultAuthorType0
+from .search_result_classification_type_0 import SearchResultClassificationType0
+from .search_result_classification_type_0_sentiment import (
+    SearchResultClassificationType0Sentiment,
+)
+from .search_result_post import SearchResultPost
+from .search_result_post_engagement_type_0 import SearchResultPostEngagementType0
+from .search_result_post_kind import SearchResultPostKind
+from .search_result_post_platform import SearchResultPostPlatform
+from .search_result_post_reply_to_type_0 import SearchResultPostReplyToType0
+from .search_result_post_repository_type_0 import SearchResultPostRepositoryType0
+from .search_result_post_repository_type_0_event import (
+    SearchResultPostRepositoryType0Event,
+)
+from .search_stats import SearchStats
+from .search_status import SearchStatus
 from .segment import Segment
 from .segment_filter import SegmentFilter
 from .segment_filter_keyword_kinds_item import SegmentFilterKeywordKindsItem
@@ -1361,6 +1416,10 @@ __all__ = (
     "CreateKeywordBodyPlatformsType0Item",
     "CreateKeywordBodyReviewSourcesItem",
     "CreateKeywordBodyReviewSourcesItemPlatform",
+    "CreateSearchBody",
+    "CreateSearchBodyKind",
+    "CreateSearchBodyPlatformsItem",
+    "CreateSearchBodyRange",
     "CreateSegmentBody",
     "CreateSegmentBodyFilter",
     "CreateSegmentBodyFilterKeywordKindsItem",
@@ -1715,6 +1774,17 @@ __all__ = (
     "ListPersonActivitiesResponse200DataItem",
     "ListPersonActivitiesResponse200DataItemChannel",
     "ListPersonActivitiesResponse200DataItemMemberType0",
+    "ListSearchResultsResponse200",
+    "ListSearchesResponse200",
+    "ListSearchesResponse200DataItem",
+    "ListSearchesResponse200DataItemKind",
+    "ListSearchesResponse200DataItemPlatformsItem",
+    "ListSearchesResponse200DataItemPlatformsItemPlatform",
+    "ListSearchesResponse200DataItemPlatformsItemReason",
+    "ListSearchesResponse200DataItemPlatformsItemStatus",
+    "ListSearchesResponse200DataItemRange",
+    "ListSearchesResponse200DataItemStats",
+    "ListSearchesResponse200DataItemStatus",
     "ListSegmentPresetsResponse200",
     "ListSegmentsResponse200",
     "ListSegmentsResponse200DataItem",
@@ -1824,6 +1894,8 @@ __all__ = (
     "RunAlertDigestResponse200",
     "RunAlertDigestResponse200OutcomesItem",
     "RunAlertDigestResponse200Skipped",
+    "Search",
+    "SearchKind",
     "SearchMentionsCountriesItem",
     "SearchMentionsEmotionsItem",
     "SearchMentionsKeywordKindsItem",
@@ -1841,6 +1913,24 @@ __all__ = (
     "SearchMentionsSentimentsItem",
     "SearchMentionsSort",
     "SearchMentionsStatus",
+    "SearchPlatformsItem",
+    "SearchPlatformsItemPlatform",
+    "SearchPlatformsItemReason",
+    "SearchPlatformsItemStatus",
+    "SearchRange",
+    "SearchResult",
+    "SearchResultAuthorType0",
+    "SearchResultClassificationType0",
+    "SearchResultClassificationType0Sentiment",
+    "SearchResultPost",
+    "SearchResultPostEngagementType0",
+    "SearchResultPostKind",
+    "SearchResultPostPlatform",
+    "SearchResultPostReplyToType0",
+    "SearchResultPostRepositoryType0",
+    "SearchResultPostRepositoryType0Event",
+    "SearchStats",
+    "SearchStatus",
     "Segment",
     "SegmentFilter",
     "SegmentFilterKeywordKindsItem",
