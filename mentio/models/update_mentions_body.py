@@ -24,9 +24,8 @@ class UpdateMentionsBody:
             untouched.
         ids (list[str] | Unset): Mention ids (mm_...), 1 to 100: a page of GET /v1/mentions. Send ids or filter, never
             both.
-        filter_ (UpdateMentionsBodyFilter | Unset): Instead of ids: act on every mention these filters select, up to
-            1000 a call, newest first. While nextCursor comes back, call again with the same filter and that cursor; the set
-            is fixed when the first call runs, so mentions arriving meanwhile are left alone.
+        filter_ (UpdateMentionsBodyFilter | Unset): Instead of ids: every mention GET /v1/mentions would list with these
+            filters, up to 1000 a call, newest first. Repeat with the same filter and nextCursor until it is null.
         cursor (str | Unset): With filter only: nextCursor from the previous call, to carry on where it stopped.
     """
 

@@ -53,9 +53,8 @@ T = TypeVar("T", bound="UpdateMentionsBodyFilter")
 
 @_attrs_define
 class UpdateMentionsBodyFilter:
-    """Instead of ids: act on every mention these filters select, up to 1000 a call, newest first. While nextCursor comes
-    back, call again with the same filter and that cursor; the set is fixed when the first call runs, so mentions
-    arriving meanwhile are left alone.
+    """Instead of ids: every mention GET /v1/mentions would list with these filters, up to 1000 a call, newest first.
+    Repeat with the same filter and nextCursor until it is null.
 
         Attributes:
             keyword_id (str | Unset): Deprecated: use keywordIds. Only matches of this keyword; combines with keywordIds as
