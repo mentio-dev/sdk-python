@@ -1186,6 +1186,42 @@ from .update_mention_body import UpdateMentionBody
 from .update_mention_body_sentiment import UpdateMentionBodySentiment
 from .update_mention_body_status import UpdateMentionBodyStatus
 from .update_mentions_body import UpdateMentionsBody
+from .update_mentions_body_filter import UpdateMentionsBodyFilter
+from .update_mentions_body_filter_countries_item import (
+    UpdateMentionsBodyFilterCountriesItem,
+)
+from .update_mentions_body_filter_emotions_item import (
+    UpdateMentionsBodyFilterEmotionsItem,
+)
+from .update_mentions_body_filter_keyword_kinds_item import (
+    UpdateMentionsBodyFilterKeywordKindsItem,
+)
+from .update_mentions_body_filter_kind import UpdateMentionsBodyFilterKind
+from .update_mentions_body_filter_not_countries_item import (
+    UpdateMentionsBodyFilterNotCountriesItem,
+)
+from .update_mentions_body_filter_not_emotions_item import (
+    UpdateMentionsBodyFilterNotEmotionsItem,
+)
+from .update_mentions_body_filter_not_keyword_kinds_item import (
+    UpdateMentionsBodyFilterNotKeywordKindsItem,
+)
+from .update_mentions_body_filter_not_platforms_item import (
+    UpdateMentionsBodyFilterNotPlatformsItem,
+)
+from .update_mentions_body_filter_not_sentiments_item import (
+    UpdateMentionsBodyFilterNotSentimentsItem,
+)
+from .update_mentions_body_filter_platform import UpdateMentionsBodyFilterPlatform
+from .update_mentions_body_filter_platforms_item import (
+    UpdateMentionsBodyFilterPlatformsItem,
+)
+from .update_mentions_body_filter_range import UpdateMentionsBodyFilterRange
+from .update_mentions_body_filter_sentiment import UpdateMentionsBodyFilterSentiment
+from .update_mentions_body_filter_sentiments_item import (
+    UpdateMentionsBodyFilterSentimentsItem,
+)
+from .update_mentions_body_filter_status import UpdateMentionsBodyFilterStatus
 from .update_mentions_body_update import UpdateMentionsBodyUpdate
 from .update_mentions_body_update_status import UpdateMentionsBodyUpdateStatus
 from .update_person_body import UpdatePersonBody
@@ -2035,6 +2071,22 @@ __all__ = (
     "UpdateMentionBodySentiment",
     "UpdateMentionBodyStatus",
     "UpdateMentionsBody",
+    "UpdateMentionsBodyFilter",
+    "UpdateMentionsBodyFilterCountriesItem",
+    "UpdateMentionsBodyFilterEmotionsItem",
+    "UpdateMentionsBodyFilterKeywordKindsItem",
+    "UpdateMentionsBodyFilterKind",
+    "UpdateMentionsBodyFilterNotCountriesItem",
+    "UpdateMentionsBodyFilterNotEmotionsItem",
+    "UpdateMentionsBodyFilterNotKeywordKindsItem",
+    "UpdateMentionsBodyFilterNotPlatformsItem",
+    "UpdateMentionsBodyFilterNotSentimentsItem",
+    "UpdateMentionsBodyFilterPlatform",
+    "UpdateMentionsBodyFilterPlatformsItem",
+    "UpdateMentionsBodyFilterRange",
+    "UpdateMentionsBodyFilterSentiment",
+    "UpdateMentionsBodyFilterSentimentsItem",
+    "UpdateMentionsBodyFilterStatus",
     "UpdateMentionsBodyUpdate",
     "UpdateMentionsBodyUpdateStatus",
     "UpdatePersonBody",

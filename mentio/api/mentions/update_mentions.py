@@ -51,6 +51,11 @@ def _parse_response(
 
         return response_401
 
+    if response.status_code == 404:
+        response_404 = ErrorResponse.from_dict(response.json())
+
+        return response_404
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -76,10 +81,12 @@ def sync_detailed(
 ) -> Response[ErrorResponse | MentionBatchResult]:
     """Update many mentions
 
-     Change up to 100 mentions at once: status, assignee, labels to add or remove.
+     Change many mentions at once: status, assignee, labels to add or remove. Name them by `ids` (up to
+    100), or by `filter` to act on everything the mentions list would show (Mark all as done).
 
-    - All of it lands, or none of it.
-    - Unknown ids come back in `notFound`.
+    - By ids, all of it lands or none of it; unknown ids come back in `notFound`.
+    - By filter, up to 1,000 a call, newest first: while `nextCursor` comes back, call again with the
+    same filter and that cursor. Mentions matched after the first call are left alone.
     - Removals run before additions. See [Labels and automations](/guides/labels).
 
     Args:
@@ -116,10 +123,12 @@ def sync(
 ) -> ErrorResponse | MentionBatchResult | None:
     """Update many mentions
 
-     Change up to 100 mentions at once: status, assignee, labels to add or remove.
+     Change many mentions at once: status, assignee, labels to add or remove. Name them by `ids` (up to
+    100), or by `filter` to act on everything the mentions list would show (Mark all as done).
 
-    - All of it lands, or none of it.
-    - Unknown ids come back in `notFound`.
+    - By ids, all of it lands or none of it; unknown ids come back in `notFound`.
+    - By filter, up to 1,000 a call, newest first: while `nextCursor` comes back, call again with the
+    same filter and that cursor. Mentions matched after the first call are left alone.
     - Removals run before additions. See [Labels and automations](/guides/labels).
 
     Args:
@@ -151,10 +160,12 @@ async def asyncio_detailed(
 ) -> Response[ErrorResponse | MentionBatchResult]:
     """Update many mentions
 
-     Change up to 100 mentions at once: status, assignee, labels to add or remove.
+     Change many mentions at once: status, assignee, labels to add or remove. Name them by `ids` (up to
+    100), or by `filter` to act on everything the mentions list would show (Mark all as done).
 
-    - All of it lands, or none of it.
-    - Unknown ids come back in `notFound`.
+    - By ids, all of it lands or none of it; unknown ids come back in `notFound`.
+    - By filter, up to 1,000 a call, newest first: while `nextCursor` comes back, call again with the
+    same filter and that cursor. Mentions matched after the first call are left alone.
     - Removals run before additions. See [Labels and automations](/guides/labels).
 
     Args:
@@ -189,10 +200,12 @@ async def asyncio(
 ) -> ErrorResponse | MentionBatchResult | None:
     """Update many mentions
 
-     Change up to 100 mentions at once: status, assignee, labels to add or remove.
+     Change many mentions at once: status, assignee, labels to add or remove. Name them by `ids` (up to
+    100), or by `filter` to act on everything the mentions list would show (Mark all as done).
 
-    - All of it lands, or none of it.
-    - Unknown ids come back in `notFound`.
+    - By ids, all of it lands or none of it; unknown ids come back in `notFound`.
+    - By filter, up to 1,000 a call, newest first: while `nextCursor` comes back, call again with the
+    same filter and that cursor. Mentions matched after the first call are left alone.
     - Removals run before additions. See [Labels and automations](/guides/labels).
 
     Args:

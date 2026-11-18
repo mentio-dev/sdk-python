@@ -602,14 +602,16 @@ class _Mentions:
     def update_many(self, body: dict[str, Any] | _m.UpdateMentionsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.MentionBatchResult:
         """Update many mentions
 
-        Change up to 100 mentions at once: status, assignee, labels to add or remove.
+        Change many mentions at once: status, assignee, labels to add or remove. Name them by `ids` (up to 100), or by `filter` to act on everything the mentions list would show (Mark all as done).
 
-        - All of it lands, or none of it.
-        - Unknown ids come back in `notFound`.
+        - By ids, all of it lands or none of it; unknown ids come back in `notFound`.
+        - By filter, up to 1,000 a call, newest first: while `nextCursor` comes back, call again with the same filter and that cursor. Mentions matched after the first call are left alone.
         - Removals run before additions. See [Labels and automations](/guides/labels).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          ids (required): Mention ids (mm_...), 1 to 100: a page of GET /v1/mentions.
+          ids: Mention ids (mm_...), 1 to 100: a page of GET /v1/mentions. Send ids or filter, never both.
+          filter: Instead of ids: act on every mention these filters select, up to 1000 a call, newest first. While nextCursor comes back, call again with the same filter and that cursor; the set is fixed when the first call runs, so mentions arriving meanwhile are left alone.
+          cursor: With filter only: nextCursor from the previous call, to carry on where it stopped.
           update (required): Every field is optional, at least one is required; omitted fields are untouched."""
         return _result(_ops.mentions.update_mentions.sync_detailed(client=self._client, body=_body(_m.UpdateMentionsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
@@ -2111,14 +2113,16 @@ class _AsyncMentions:
     async def update_many(self, body: dict[str, Any] | _m.UpdateMentionsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.MentionBatchResult:
         """Update many mentions
 
-        Change up to 100 mentions at once: status, assignee, labels to add or remove.
+        Change many mentions at once: status, assignee, labels to add or remove. Name them by `ids` (up to 100), or by `filter` to act on everything the mentions list would show (Mark all as done).
 
-        - All of it lands, or none of it.
-        - Unknown ids come back in `notFound`.
+        - By ids, all of it lands or none of it; unknown ids come back in `notFound`.
+        - By filter, up to 1,000 a call, newest first: while `nextCursor` comes back, call again with the same filter and that cursor. Mentions matched after the first call are left alone.
         - Removals run before additions. See [Labels and automations](/guides/labels).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          ids (required): Mention ids (mm_...), 1 to 100: a page of GET /v1/mentions.
+          ids: Mention ids (mm_...), 1 to 100: a page of GET /v1/mentions. Send ids or filter, never both.
+          filter: Instead of ids: act on every mention these filters select, up to 1000 a call, newest first. While nextCursor comes back, call again with the same filter and that cursor; the set is fixed when the first call runs, so mentions arriving meanwhile are left alone.
+          cursor: With filter only: nextCursor from the previous call, to carry on where it stopped.
           update (required): Every field is optional, at least one is required; omitted fields are untouched."""
         return _result(await _ops.mentions.update_mentions.asyncio_detailed(client=self._client, body=_body(_m.UpdateMentionsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
