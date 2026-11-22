@@ -1,0 +1,215 @@
+from http import HTTPStatus
+from typing import Any
+from urllib.parse import quote
+
+import httpx
+
+from ... import errors
+from ...client import AuthenticatedClient, Client
+from ...models.error_response import ErrorResponse
+from ...models.list_transfers_response_200 import ListTransfersResponse200
+from ...types import UNSET, Response, Unset
+
+
+def _get_kwargs(
+    id: str,
+    *,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
+) -> dict[str, Any]:
+
+    params: dict[str, Any] = {}
+
+    params["cursor"] = cursor
+
+    params["limit"] = limit
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
+    _kwargs: dict[str, Any] = {
+        "method": "get",
+        "url": "/v1/workspaces/{id}/transfers".format(
+            id=quote(str(id), safe=""),
+        ),
+        "params": params,
+    }
+
+    return _kwargs
+
+
+def _parse_response(
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> ErrorResponse | ListTransfersResponse200 | None:
+    if response.status_code == 200:
+        response_200 = ListTransfersResponse200.from_dict(response.json())
+
+        return response_200
+
+    if response.status_code == 400:
+        response_400 = ErrorResponse.from_dict(response.json())
+
+        return response_400
+
+    if response.status_code == 401:
+        response_401 = ErrorResponse.from_dict(response.json())
+
+        return response_401
+
+    if response.status_code == 404:
+        response_404 = ErrorResponse.from_dict(response.json())
+
+        return response_404
+
+    if client.raise_on_unexpected_status:
+        raise errors.UnexpectedStatus(response.status_code, response.content)
+    else:
+        return None
+
+
+def _build_response(
+    *, client: AuthenticatedClient | Client, response: httpx.Response
+) -> Response[ErrorResponse | ListTransfersResponse200]:
+    return Response(
+        status_code=HTTPStatus(response.status_code),
+        content=response.content,
+        headers=response.headers,
+        parsed=_parse_response(client=client, response=response),
+    )
+
+
+def sync_detailed(
+    id: str,
+    *,
+    client: AuthenticatedClient,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
+) -> Response[ErrorResponse | ListTransfersResponse200]:
+    """List a child workspace's transfers
+
+     Every transfer between your workspace and this child, newest first, automatic refills included.
+
+    Args:
+        id (str): Child workspace id (org_...). Example: org_abc123.
+        cursor (str | Unset): The nextCursor of the previous page.
+        limit (int | Unset): Transfers per page, 1 to 100 (default 50). Default: 50.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[ErrorResponse | ListTransfersResponse200]
+    """
+
+    kwargs = _get_kwargs(
+        id=id,
+        cursor=cursor,
+        limit=limit,
+    )
+
+    response = client.get_httpx_client().request(
+        **kwargs,
+    )
+
+    return _build_response(client=client, response=response)
+
+
+def sync(
+    id: str,
+    *,
+    client: AuthenticatedClient,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
+) -> ErrorResponse | ListTransfersResponse200 | None:
+    """List a child workspace's transfers
+
+     Every transfer between your workspace and this child, newest first, automatic refills included.
+
+    Args:
+        id (str): Child workspace id (org_...). Example: org_abc123.
+        cursor (str | Unset): The nextCursor of the previous page.
+        limit (int | Unset): Transfers per page, 1 to 100 (default 50). Default: 50.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        ErrorResponse | ListTransfersResponse200
+    """
+
+    return sync_detailed(
+        id=id,
+        client=client,
+        cursor=cursor,
+        limit=limit,
+    ).parsed
+
+
+async def asyncio_detailed(
+    id: str,
+    *,
+    client: AuthenticatedClient,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
+) -> Response[ErrorResponse | ListTransfersResponse200]:
+    """List a child workspace's transfers
+
+     Every transfer between your workspace and this child, newest first, automatic refills included.
+
+    Args:
+        id (str): Child workspace id (org_...). Example: org_abc123.
+        cursor (str | Unset): The nextCursor of the previous page.
+        limit (int | Unset): Transfers per page, 1 to 100 (default 50). Default: 50.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        Response[ErrorResponse | ListTransfersResponse200]
+    """
+
+    kwargs = _get_kwargs(
+        id=id,
+        cursor=cursor,
+        limit=limit,
+    )
+
+    response = await client.get_async_httpx_client().request(**kwargs)
+
+    return _build_response(client=client, response=response)
+
+
+async def asyncio(
+    id: str,
+    *,
+    client: AuthenticatedClient,
+    cursor: str | Unset = UNSET,
+    limit: int | Unset = 50,
+) -> ErrorResponse | ListTransfersResponse200 | None:
+    """List a child workspace's transfers
+
+     Every transfer between your workspace and this child, newest first, automatic refills included.
+
+    Args:
+        id (str): Child workspace id (org_...). Example: org_abc123.
+        cursor (str | Unset): The nextCursor of the previous page.
+        limit (int | Unset): Transfers per page, 1 to 100 (default 50). Default: 50.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        ErrorResponse | ListTransfersResponse200
+    """
+
+    return (
+        await asyncio_detailed(
+            id=id,
+            client=client,
+            cursor=cursor,
+            limit=limit,
+        )
+    ).parsed

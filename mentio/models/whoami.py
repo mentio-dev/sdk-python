@@ -19,7 +19,8 @@ T = TypeVar("T", bound="Whoami")
 class Whoami:
     """
     Attributes:
-        workspace (WhoamiWorkspace): The workspace this credential acts on.
+        workspace (WhoamiWorkspace): The workspace this credential acts on: the child named by the Mentio-Workspace
+            header, when one is sent.
         auth (WhoamiAuth): The credential.
         user (None | WhoamiUserType0): The person behind an OAuth token or a session; null for an API key, which has no
             person behind it.

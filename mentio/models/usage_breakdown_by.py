@@ -6,6 +6,7 @@ class UsageBreakdownBy(StrEnum):
     GROUP = "group"
     KEYWORD = "keyword"
     PLATFORM = "platform"
+    WORKSPACE = "workspace"
 
     def __str__(self) -> str:
         return str(self.value)

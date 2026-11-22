@@ -1,12 +1,18 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.ledger_list_data_item_kind import LedgerListDataItemKind
+
+if TYPE_CHECKING:
+    from ..models.ledger_list_data_item_transfer_type_0 import (
+        LedgerListDataItemTransferType0,
+    )
+
 
 T = TypeVar("T", bound="LedgerListDataItem")
 
@@ -17,13 +23,16 @@ class LedgerListDataItem:
     Attributes:
         id (str): Ledger entry id (led_...).
         kind (LedgerListDataItemKind): signup_credit, topup, refund, debit_keyword_days, debit_mentions, debit_comments,
-            debit_searches (on-demand search results), debit_estimates (paid samples of keyword estimates) or adjustment.
+            debit_searches (on-demand search results), debit_estimates (paid samples of keyword estimates), adjustment,
+            transfer_in (money moved in from the parent or a child workspace) or transfer_out (money moved out to one).
         amount_cents (int): Integer USD cents; credits positive, debits negative.
         day (None | str): Debit rows: the last UTC day the row settled (YYYY-MM-DD).
         units (int | None): Debit rows: cumulative units (mentions or keyword-days) settled up to this row; on
             debit_estimates, the paid samples of that one estimate.
         note (None | str): Free text on credits and adjustments.
         polar_order_id (None | str): Top-ups and refunds: the Polar order.
+        transfer (LedgerListDataItemTransferType0 | None): transfer_in and transfer_out rows: the transfer and the other
+            workspace; null on every other row.
         created_at (str): ISO 8601 timestamp, UTC.
     """
 
@@ -34,10 +43,15 @@ class LedgerListDataItem:
     units: int | None
     note: None | str
     polar_order_id: None | str
+    transfer: LedgerListDataItemTransferType0 | None
     created_at: str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.ledger_list_data_item_transfer_type_0 import (
+            LedgerListDataItemTransferType0,
+        )
+
         id = self.id
 
         kind = self.kind.value
@@ -56,6 +70,12 @@ class LedgerListDataItem:
         polar_order_id: None | str
         polar_order_id = self.polar_order_id
 
+        transfer: dict[str, Any] | None
+        if isinstance(self.transfer, LedgerListDataItemTransferType0):
+            transfer = self.transfer.to_dict()
+        else:
+            transfer = self.transfer
+
         created_at = self.created_at
 
         field_dict: dict[str, Any] = {}
@@ -69,6 +89,7 @@ class LedgerListDataItem:
                 "units": units,
                 "note": note,
                 "polarOrderId": polar_order_id,
+                "transfer": transfer,
                 "createdAt": created_at,
             }
         )
@@ -77,6 +98,10 @@ class LedgerListDataItem:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.ledger_list_data_item_transfer_type_0 import (
+            LedgerListDataItemTransferType0,
+        )
+
         d = dict(src_dict)
         id = d.pop("id")
 
@@ -112,6 +137,21 @@ class LedgerListDataItem:
 
         polar_order_id = _parse_polar_order_id(d.pop("polarOrderId"))
 
+        def _parse_transfer(data: object) -> LedgerListDataItemTransferType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                transfer_type_0 = LedgerListDataItemTransferType0.from_dict(data)
+
+                return transfer_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(LedgerListDataItemTransferType0 | None, data)
+
+        transfer = _parse_transfer(d.pop("transfer"))
+
         created_at = d.pop("createdAt")
 
         ledger_list_data_item = cls(
@@ -122,6 +162,7 @@ class LedgerListDataItem:
             units=units,
             note=note,
             polar_order_id=polar_order_id,
+            transfer=transfer,
             created_at=created_at,
         )
 

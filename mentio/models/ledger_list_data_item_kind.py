@@ -11,6 +11,8 @@ class LedgerListDataItemKind(StrEnum):
     REFUND = "refund"
     SIGNUP_CREDIT = "signup_credit"
     TOPUP = "topup"
+    TRANSFER_IN = "transfer_in"
+    TRANSFER_OUT = "transfer_out"
 
     def __str__(self) -> str:
         return str(self.value)

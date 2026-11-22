@@ -198,9 +198,14 @@ def sync_detailed(
     See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
-        by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, keyword (default: the row a margin is computed from), or group
-            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
+        by (GetUsageBreakdownBy | Unset): The dimension to group by:
+
+            - day: one row per UTC day.
+            - platform.
+            - keyword (default): where a margin is read.
+            - group: what a customer or campaign cost.
+            - workspace: your workspace and each child (no filters). Default:
+            GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from
@@ -286,9 +291,14 @@ def sync(
     See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
-        by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, keyword (default: the row a margin is computed from), or group
-            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
+        by (GetUsageBreakdownBy | Unset): The dimension to group by:
+
+            - day: one row per UTC day.
+            - platform.
+            - keyword (default): where a margin is read.
+            - group: what a customer or campaign cost.
+            - workspace: your workspace and each child (no filters). Default:
+            GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from
@@ -369,9 +379,14 @@ async def asyncio_detailed(
     See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
-        by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, keyword (default: the row a margin is computed from), or group
-            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
+        by (GetUsageBreakdownBy | Unset): The dimension to group by:
+
+            - day: one row per UTC day.
+            - platform.
+            - keyword (default): where a margin is read.
+            - group: what a customer or campaign cost.
+            - workspace: your workspace and each child (no filters). Default:
+            GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from
@@ -455,9 +470,14 @@ async def asyncio(
     See [Cost per keyword](/billing#cost-per-keyword).
 
     Args:
-        by (GetUsageBreakdownBy | Unset): The dimension to group by: day (one row per UTC day of
-            the window), platform, keyword (default: the row a margin is computed from), or group
-            (what a customer or a campaign cost). Default: GetUsageBreakdownBy.KEYWORD.
+        by (GetUsageBreakdownBy | Unset): The dimension to group by:
+
+            - day: one row per UTC day.
+            - platform.
+            - keyword (default): where a margin is read.
+            - group: what a customer or campaign cost.
+            - workspace: your workspace and each child (no filters). Default:
+            GetUsageBreakdownBy.KEYWORD.
         range_ (GetUsageBreakdownRange | Unset): Trailing window of UTC days ending today: 7d,
             30d, 90d (default 30d). Ignored when `month` is given.
         month (str | Unset): A calendar month (YYYY-MM, UTC) instead of a trailing window: from

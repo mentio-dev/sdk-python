@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from ..models.usage_breakdown_data_item_keyword_type_0 import (
         UsageBreakdownDataItemKeywordType0,
     )
+    from ..models.usage_breakdown_data_item_workspace_type_0 import (
+        UsageBreakdownDataItemWorkspaceType0,
+    )
 
 
 T = TypeVar("T", bound="UsageBreakdownDataItem")
@@ -23,10 +26,11 @@ class UsageBreakdownDataItem:
     """
     Attributes:
         key (str): The row's key: the UTC day (YYYY-MM-DD) for by=day, the platform for by=platform, the keyword id for
-            by=keyword, the group id for by=group.
+            by=keyword, the group id for by=group, the workspace id for by=workspace.
         label (str): Readable name: the keyword term or the group name, otherwise the key.
         keyword (None | UsageBreakdownDataItemKeywordType0): by=keyword only; null otherwise.
         group (None | UsageBreakdownDataItemGroupType0): by=group only; null otherwise.
+        workspace (None | UsageBreakdownDataItemWorkspaceType0): by=workspace only; null otherwise.
         keyword_days (int | None): Keyword-days the daily tick charged in this row. Null for by=platform and for days
             before the first recorded tick (unknown, not zero); before window.keywordDaysFrom a keyword row is a floor.
         keyword_cents (int): The keyword-days at the keyword rate ($5 a month, 500/30 cents a day), rounded once on the
@@ -48,6 +52,7 @@ class UsageBreakdownDataItem:
     label: str
     keyword: None | UsageBreakdownDataItemKeywordType0
     group: None | UsageBreakdownDataItemGroupType0
+    workspace: None | UsageBreakdownDataItemWorkspaceType0
     keyword_days: int | None
     keyword_cents: int
     matched_mentions: int
@@ -66,6 +71,9 @@ class UsageBreakdownDataItem:
         from ..models.usage_breakdown_data_item_keyword_type_0 import (
             UsageBreakdownDataItemKeywordType0,
         )
+        from ..models.usage_breakdown_data_item_workspace_type_0 import (
+            UsageBreakdownDataItemWorkspaceType0,
+        )
 
         key = self.key
 
@@ -82,6 +90,12 @@ class UsageBreakdownDataItem:
             group = self.group.to_dict()
         else:
             group = self.group
+
+        workspace: dict[str, Any] | None
+        if isinstance(self.workspace, UsageBreakdownDataItemWorkspaceType0):
+            workspace = self.workspace.to_dict()
+        else:
+            workspace = self.workspace
 
         keyword_days: int | None
         keyword_days = self.keyword_days
@@ -110,6 +124,7 @@ class UsageBreakdownDataItem:
                 "label": label,
                 "keyword": keyword,
                 "group": group,
+                "workspace": workspace,
                 "keywordDays": keyword_days,
                 "keywordCents": keyword_cents,
                 "matchedMentions": matched_mentions,
@@ -131,6 +146,9 @@ class UsageBreakdownDataItem:
         )
         from ..models.usage_breakdown_data_item_keyword_type_0 import (
             UsageBreakdownDataItemKeywordType0,
+        )
+        from ..models.usage_breakdown_data_item_workspace_type_0 import (
+            UsageBreakdownDataItemWorkspaceType0,
         )
 
         d = dict(src_dict)
@@ -168,6 +186,23 @@ class UsageBreakdownDataItem:
 
         group = _parse_group(d.pop("group"))
 
+        def _parse_workspace(
+            data: object,
+        ) -> None | UsageBreakdownDataItemWorkspaceType0:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                workspace_type_0 = UsageBreakdownDataItemWorkspaceType0.from_dict(data)
+
+                return workspace_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | UsageBreakdownDataItemWorkspaceType0, data)
+
+        workspace = _parse_workspace(d.pop("workspace"))
+
         def _parse_keyword_days(data: object) -> int | None:
             if data is None:
                 return data
@@ -196,6 +231,7 @@ class UsageBreakdownDataItem:
             label=label,
             keyword=keyword,
             group=group,
+            workspace=workspace,
             keyword_days=keyword_days,
             keyword_cents=keyword_cents,
             matched_mentions=matched_mentions,

@@ -201,6 +201,16 @@ import mentio.api.views.delete_view  # noqa: F401
 import mentio.api.views.get_view  # noqa: F401
 import mentio.api.views.list_views  # noqa: F401
 import mentio.api.views.update_view  # noqa: F401
+import mentio.api.workspaces.create_transfer  # noqa: F401
+import mentio.api.workspaces.create_workspace  # noqa: F401
+import mentio.api.workspaces.create_workspace_invitations  # noqa: F401
+import mentio.api.workspaces.delete_workspace  # noqa: F401
+import mentio.api.workspaces.get_workspace  # noqa: F401
+import mentio.api.workspaces.list_transfers  # noqa: F401
+import mentio.api.workspaces.list_workspace_members  # noqa: F401
+import mentio.api.workspaces.list_workspaces  # noqa: F401
+import mentio.api.workspaces.remove_workspace_member  # noqa: F401
+import mentio.api.workspaces.update_workspace  # noqa: F401
 
 
 class _Keywords:
@@ -1802,6 +1812,112 @@ class _Members:
         The link in the email stops working at once. Needs a signed-in owner or admin; an API key answers 403."""
         return _result(_ops.members.revoke_invitation.sync_detailed(id, client=self._client))
 
+class _Workspaces:
+    """workspaces: create, delete, get, list, transfer, transfers, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateWorkspaceBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Workspace:
+        """Create a child workspace
+
+        A workspace of its own for a client, apart from yours and your other clients'. It starts with no balance and no welcome credit: fund it with a transfer or `autoRefill`. See [Agency workspaces](/guides/agency-workspaces).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): The workspace name, 1 to 100 characters.
+          externalId: Your own id for it (a customer id), unique among your workspaces; a second create with the same one is a 409.
+          monthlyLimitCents: The most you move into it in a UTC calendar month, in USD cents; omit or null for no limit.
+          autoRefill: Refill it from your balance when it runs low; omit or null for off."""
+        return _result(_ops.workspaces.create_workspace.sync_detailed(client=self._client, body=_body(_m.CreateWorkspaceBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def delete(self, id: str) -> Any:
+        """Delete a child workspace
+
+        Deletes the workspace with everything in it: keywords, mentions, alerts, channels, API keys, members. Its effective balance comes back to your workspace first, and usage it owes is settled from yours. Cannot be undone."""
+        return _result(_ops.workspaces.delete_workspace.sync_detailed(id, client=self._client))
+
+    def get(self, id: str) -> _m.Workspace:
+        """Get a child workspace"""
+        return _result(_ops.workspaces.get_workspace.sync_detailed(id, client=self._client))
+
+    def list(self) -> _m.ListWorkspacesResponse200:
+        """List child workspaces
+
+        The child workspaces your workspace created, oldest first, each with its own wallet, its funding settings and counts. Act inside one by sending its id as the `Mentio-Workspace` header on any other call. See [Agency workspaces](/guides/agency-workspaces)."""
+        return _result(_ops.workspaces.list_workspaces.sync_detailed(client=self._client))
+
+    def transfer(self, id: str, body: dict[str, Any] | _m.CreateTransferBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Transfer:
+        """Move money to or from a child workspace
+
+        Moves USD cents between your balance and the child's, one ledger row on each side. The payer's effective balance must cover it; a transfer in counts against the child's monthly limit. Nothing charges a card or pays out. See [Agency workspaces](/guides/agency-workspaces#fund-a-child).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          amountCents (required): How much to move, in USD cents (1 to 500000).
+          direction: to_workspace: from the parent into the child workspace. to_parent: from the child back to the parent.
+          note: Free text kept on both ledger rows, up to 200 characters."""
+        return _result(_ops.workspaces.create_transfer.sync_detailed(id, client=self._client, body=_body(_m.CreateTransferBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def transfers(self, id: str, **params: Any) -> _m.ListTransfersResponse200:
+        """List a child workspace's transfers
+
+        Every transfer between your workspace and this child, newest first, automatic refills included.
+
+        Keyword arguments (query):
+          cursor: The nextCursor of the previous page.
+          limit: Transfers per page, 1 to 100 (default 50)."""
+        return _result(_ops.workspaces.list_transfers.sync_detailed(id, client=self._client, **params))
+
+    def update(self, id: str, body: dict[str, Any] | _m.UpdateWorkspaceBody | None = None, **fields: Any) -> _m.Workspace:
+        """Update a child workspace
+
+        Rename it, change its externalId, its monthly limit on transfers in or its automatic refill. Omitted fields stay; null clears.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: New name, 1 to 100 characters.
+          externalId: Your own id for it; null clears it.
+          monthlyLimitCents: The monthly ceiling on transfers in, in USD cents; null removes it.
+          autoRefill: The automatic refill; null turns it off."""
+        return _result(_ops.workspaces.update_workspace.sync_detailed(id, client=self._client, body=_body(_m.UpdateWorkspaceBody, body, fields)))
+
+class _WorkspaceMembers:
+    """workspace-members: list, remove."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def list(self) -> _m.ListWorkspaceMembersResponse200:
+        """List members across your workspaces
+
+        Everyone in your workspace or its children, one row per person. Each row lists the workspaces they belong to and their role in each."""
+        return _result(_ops.workspaces.list_workspace_members.sync_detailed(client=self._client))
+
+    def remove(self, id: str, **params: Any) -> Any:
+        """Remove someone from your child workspaces
+
+        Removes the person from every child workspace, or from the ones `workspaceIds` names, or from all but `notWorkspaceIds`. Never from your own workspace (that is DELETE /v1/members/{id}). Needs a signed-in owner or admin, not an API key.
+
+        Keyword arguments (query):
+          workspace_ids: Only from these child workspaces (org_...); default every child. Never the parent: its own team is managed on /v1/members. Repeatable, or comma-separated.
+          not_workspace_ids: From every child workspace except these (org_...). Repeatable, or comma-separated."""
+        return _result(_ops.workspaces.remove_workspace_member.sync_detailed(id, client=self._client, **params))
+
+class _WorkspaceInvitations:
+    """workspace-invitations: create."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateWorkspaceInvitationsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.CreateWorkspaceInvitationsResponse201:
+        """Invite someone to several child workspaces
+
+        Invites one address to several child workspaces, one email each. A member or an open invitation is reported, never sent twice. Needs a signed-in owner or admin, not an API key.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          email (required): The address to invite; it receives one email per workspace with a link to join.
+          role: The role they join each workspace with.
+          workspaceIds (required): The child workspaces (org_...) to invite them to."""
+        return _result(_ops.workspaces.create_workspace_invitations.sync_detailed(client=self._client, body=_body(_m.CreateWorkspaceInvitationsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
 class _Usage:
     """usage: breakdown, get."""
 
@@ -1819,7 +1935,7 @@ class _Usage:
         See [Cost per keyword](/billing#cost-per-keyword).
 
         Keyword arguments (query):
-          by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
+          by: The dimension to group by: - day: one row per UTC day. - platform. - keyword (default): where a margin is read. - group: what a customer or campaign cost. - workspace: your workspace and each child (no filters).
           range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
           month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
           from_: First UTC day of a custom window, YYYY-MM-DD, inclusive; with `to` (default today). At most 366 days. Wins over `range` and `month`.
@@ -3494,6 +3610,112 @@ class _AsyncMembers:
         The link in the email stops working at once. Needs a signed-in owner or admin; an API key answers 403."""
         return _result(await _ops.members.revoke_invitation.asyncio_detailed(id, client=self._client))
 
+class _AsyncWorkspaces:
+    """workspaces: create, delete, get, list, transfer, transfers, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateWorkspaceBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Workspace:
+        """Create a child workspace
+
+        A workspace of its own for a client, apart from yours and your other clients'. It starts with no balance and no welcome credit: fund it with a transfer or `autoRefill`. See [Agency workspaces](/guides/agency-workspaces).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): The workspace name, 1 to 100 characters.
+          externalId: Your own id for it (a customer id), unique among your workspaces; a second create with the same one is a 409.
+          monthlyLimitCents: The most you move into it in a UTC calendar month, in USD cents; omit or null for no limit.
+          autoRefill: Refill it from your balance when it runs low; omit or null for off."""
+        return _result(await _ops.workspaces.create_workspace.asyncio_detailed(client=self._client, body=_body(_m.CreateWorkspaceBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def delete(self, id: str) -> Any:
+        """Delete a child workspace
+
+        Deletes the workspace with everything in it: keywords, mentions, alerts, channels, API keys, members. Its effective balance comes back to your workspace first, and usage it owes is settled from yours. Cannot be undone."""
+        return _result(await _ops.workspaces.delete_workspace.asyncio_detailed(id, client=self._client))
+
+    async def get(self, id: str) -> _m.Workspace:
+        """Get a child workspace"""
+        return _result(await _ops.workspaces.get_workspace.asyncio_detailed(id, client=self._client))
+
+    async def list(self) -> _m.ListWorkspacesResponse200:
+        """List child workspaces
+
+        The child workspaces your workspace created, oldest first, each with its own wallet, its funding settings and counts. Act inside one by sending its id as the `Mentio-Workspace` header on any other call. See [Agency workspaces](/guides/agency-workspaces)."""
+        return _result(await _ops.workspaces.list_workspaces.asyncio_detailed(client=self._client))
+
+    async def transfer(self, id: str, body: dict[str, Any] | _m.CreateTransferBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Transfer:
+        """Move money to or from a child workspace
+
+        Moves USD cents between your balance and the child's, one ledger row on each side. The payer's effective balance must cover it; a transfer in counts against the child's monthly limit. Nothing charges a card or pays out. See [Agency workspaces](/guides/agency-workspaces#fund-a-child).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          amountCents (required): How much to move, in USD cents (1 to 500000).
+          direction: to_workspace: from the parent into the child workspace. to_parent: from the child back to the parent.
+          note: Free text kept on both ledger rows, up to 200 characters."""
+        return _result(await _ops.workspaces.create_transfer.asyncio_detailed(id, client=self._client, body=_body(_m.CreateTransferBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def transfers(self, id: str, **params: Any) -> _m.ListTransfersResponse200:
+        """List a child workspace's transfers
+
+        Every transfer between your workspace and this child, newest first, automatic refills included.
+
+        Keyword arguments (query):
+          cursor: The nextCursor of the previous page.
+          limit: Transfers per page, 1 to 100 (default 50)."""
+        return _result(await _ops.workspaces.list_transfers.asyncio_detailed(id, client=self._client, **params))
+
+    async def update(self, id: str, body: dict[str, Any] | _m.UpdateWorkspaceBody | None = None, **fields: Any) -> _m.Workspace:
+        """Update a child workspace
+
+        Rename it, change its externalId, its monthly limit on transfers in or its automatic refill. Omitted fields stay; null clears.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: New name, 1 to 100 characters.
+          externalId: Your own id for it; null clears it.
+          monthlyLimitCents: The monthly ceiling on transfers in, in USD cents; null removes it.
+          autoRefill: The automatic refill; null turns it off."""
+        return _result(await _ops.workspaces.update_workspace.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateWorkspaceBody, body, fields)))
+
+class _AsyncWorkspaceMembers:
+    """workspace-members: list, remove."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def list(self) -> _m.ListWorkspaceMembersResponse200:
+        """List members across your workspaces
+
+        Everyone in your workspace or its children, one row per person. Each row lists the workspaces they belong to and their role in each."""
+        return _result(await _ops.workspaces.list_workspace_members.asyncio_detailed(client=self._client))
+
+    async def remove(self, id: str, **params: Any) -> Any:
+        """Remove someone from your child workspaces
+
+        Removes the person from every child workspace, or from the ones `workspaceIds` names, or from all but `notWorkspaceIds`. Never from your own workspace (that is DELETE /v1/members/{id}). Needs a signed-in owner or admin, not an API key.
+
+        Keyword arguments (query):
+          workspace_ids: Only from these child workspaces (org_...); default every child. Never the parent: its own team is managed on /v1/members. Repeatable, or comma-separated.
+          not_workspace_ids: From every child workspace except these (org_...). Repeatable, or comma-separated."""
+        return _result(await _ops.workspaces.remove_workspace_member.asyncio_detailed(id, client=self._client, **params))
+
+class _AsyncWorkspaceInvitations:
+    """workspace-invitations: create."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateWorkspaceInvitationsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.CreateWorkspaceInvitationsResponse201:
+        """Invite someone to several child workspaces
+
+        Invites one address to several child workspaces, one email each. A member or an open invitation is reported, never sent twice. Needs a signed-in owner or admin, not an API key.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          email (required): The address to invite; it receives one email per workspace with a link to join.
+          role: The role they join each workspace with.
+          workspaceIds (required): The child workspaces (org_...) to invite them to."""
+        return _result(await _ops.workspaces.create_workspace_invitations.asyncio_detailed(client=self._client, body=_body(_m.CreateWorkspaceInvitationsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
 class _AsyncUsage:
     """usage: breakdown, get."""
 
@@ -3511,7 +3733,7 @@ class _AsyncUsage:
         See [Cost per keyword](/billing#cost-per-keyword).
 
         Keyword arguments (query):
-          by: The dimension to group by: day (one row per UTC day of the window), platform, keyword (default: the row a margin is computed from), or group (what a customer or a campaign cost).
+          by: The dimension to group by: - day: one row per UTC day. - platform. - keyword (default): where a margin is read. - group: what a customer or campaign cost. - workspace: your workspace and each child (no filters).
           range_: Trailing window of UTC days ending today: 7d, 30d, 90d (default 30d). Ignored when `month` is given.
           month: A calendar month (YYYY-MM, UTC) instead of a trailing window: from its first day to its last, or to today for the running month. A future month is a 400.
           from_: First UTC day of a custom window, YYYY-MM-DD, inclusive; with `to` (default today). At most 366 days. Wins over `range` and `month`.
@@ -3641,6 +3863,9 @@ class Mentio:
         self.groups = _Groups(self.client)
         self.auth = _Auth(self.client)
         self.members = _Members(self.client)
+        self.workspaces = _Workspaces(self.client)
+        self.workspace_members = _WorkspaceMembers(self.client)
+        self.workspace_invitations = _WorkspaceInvitations(self.client)
         self.usage = _Usage(self.client)
         self.billing = _Billing(self.client)
 
@@ -3705,6 +3930,9 @@ class AsyncMentio:
         self.groups = _AsyncGroups(self.client)
         self.auth = _AsyncAuth(self.client)
         self.members = _AsyncMembers(self.client)
+        self.workspaces = _AsyncWorkspaces(self.client)
+        self.workspace_members = _AsyncWorkspaceMembers(self.client)
+        self.workspace_invitations = _AsyncWorkspaceInvitations(self.client)
         self.usage = _AsyncUsage(self.client)
         self.billing = _AsyncBilling(self.client)
 

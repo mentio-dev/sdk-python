@@ -15,6 +15,7 @@ class ErrorResponseErrorCode(StrEnum):
     DUPLICATE_KEYWORD = "duplicate_keyword"
     DUPLICATE_SEGMENT = "duplicate_segment"
     DUPLICATE_VIEW = "duplicate_view"
+    DUPLICATE_WORKSPACE = "duplicate_workspace"
     EMAIL_NOT_CONFIGURED = "email_not_configured"
     EXPORTS_NOT_CONFIGURED = "exports_not_configured"
     EXPORT_EXPIRED = "export_expired"
@@ -56,11 +57,14 @@ class ErrorResponseErrorCode(StrEnum):
     SLACK_NOT_CONFIGURED = "slack_not_configured"
     SLACK_NOT_CONNECTED = "slack_not_connected"
     TELEGRAM_NOT_CONFIGURED = "telegram_not_configured"
+    TRANSFER_LIMIT_REACHED = "transfer_limit_reached"
     UNAUTHORIZED = "unauthorized"
     UNKNOWN_CHANNEL = "unknown_channel"
     UPSTREAM_UNAVAILABLE = "upstream_unavailable"
     VALIDATION_ERROR = "validation_error"
     WEBHOOK_NOT_CONFIGURED = "webhook_not_configured"
+    WORKSPACE_HAS_CHILDREN = "workspace_has_children"
+    WORKSPACE_LIMIT_REACHED = "workspace_limit_reached"
 
     def __str__(self) -> str:
         return str(self.value)
