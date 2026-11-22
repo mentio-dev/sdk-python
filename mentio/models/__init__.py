@@ -311,6 +311,8 @@ from .create_keyword_body_review_sources_item import CreateKeywordBodyReviewSour
 from .create_keyword_body_review_sources_item_platform import (
     CreateKeywordBodyReviewSourcesItemPlatform,
 )
+from .create_keyword_body_subreddit import CreateKeywordBodySubreddit
+from .create_keyword_body_subreddit_keep import CreateKeywordBodySubredditKeep
 from .create_keyword_estimate_body import CreateKeywordEstimateBody
 from .create_keyword_estimate_body_matching import CreateKeywordEstimateBodyMatching
 from .create_keyword_estimate_body_matching_required_mode import (
@@ -869,6 +871,8 @@ from .keyword_stats_cost import KeywordStatsCost
 from .keyword_stats_feedback import KeywordStatsFeedback
 from .keyword_stats_health import KeywordStatsHealth
 from .keyword_stats_noise import KeywordStatsNoise
+from .keyword_subreddit_type_0 import KeywordSubredditType0
+from .keyword_subreddit_type_0_keep import KeywordSubredditType0Keep
 from .keyword_suggestion import KeywordSuggestion
 from .keyword_suggestion_effect_type_0 import KeywordSuggestionEffectType0
 from .keyword_suggestion_effect_type_0_sample import KeywordSuggestionEffectType0Sample
@@ -922,6 +926,8 @@ from .keyword_suggestion_patch_review_sources_item import (
 from .keyword_suggestion_patch_review_sources_item_platform import (
     KeywordSuggestionPatchReviewSourcesItemPlatform,
 )
+from .keyword_suggestion_patch_subreddit import KeywordSuggestionPatchSubreddit
+from .keyword_suggestion_patch_subreddit_keep import KeywordSuggestionPatchSubredditKeep
 from .keyword_suggestion_source import KeywordSuggestionSource
 from .keyword_suggestion_type import KeywordSuggestionType
 from .ledger_list import LedgerList
@@ -1700,6 +1706,8 @@ from .update_keyword_body_review_sources_item import UpdateKeywordBodyReviewSour
 from .update_keyword_body_review_sources_item_platform import (
     UpdateKeywordBodyReviewSourcesItemPlatform,
 )
+from .update_keyword_body_subreddit import UpdateKeywordBodySubreddit
+from .update_keyword_body_subreddit_keep import UpdateKeywordBodySubredditKeep
 from .update_mention_body import UpdateMentionBody
 from .update_mention_body_sentiment import UpdateMentionBodySentiment
 from .update_mention_body_status import UpdateMentionBodyStatus
@@ -2026,6 +2034,8 @@ __all__ = (
     "CreateKeywordBodyPlatformsType0Item",
     "CreateKeywordBodyReviewSourcesItem",
     "CreateKeywordBodyReviewSourcesItemPlatform",
+    "CreateKeywordBodySubreddit",
+    "CreateKeywordBodySubredditKeep",
     "CreateKeywordEstimateBody",
     "CreateKeywordEstimateBodyMatching",
     "CreateKeywordEstimateBodyMatchingRequiredMode",
@@ -2382,6 +2392,8 @@ __all__ = (
     "KeywordStatsFeedback",
     "KeywordStatsHealth",
     "KeywordStatsNoise",
+    "KeywordSubredditType0",
+    "KeywordSubredditType0Keep",
     "KeywordSuggestion",
     "KeywordSuggestionEffectType0",
     "KeywordSuggestionEffectType0Sample",
@@ -2407,6 +2419,8 @@ __all__ = (
     "KeywordSuggestionPatchPlatformsType0Item",
     "KeywordSuggestionPatchReviewSourcesItem",
     "KeywordSuggestionPatchReviewSourcesItemPlatform",
+    "KeywordSuggestionPatchSubreddit",
+    "KeywordSuggestionPatchSubredditKeep",
     "KeywordSuggestionSource",
     "KeywordSuggestionType",
     "LedgerList",
@@ -2855,6 +2869,8 @@ __all__ = (
     "UpdateKeywordBodyPlatformsType0Item",
     "UpdateKeywordBodyReviewSourcesItem",
     "UpdateKeywordBodyReviewSourcesItemPlatform",
+    "UpdateKeywordBodySubreddit",
+    "UpdateKeywordBodySubredditKeep",
     "UpdateMentionBody",
     "UpdateMentionBodySentiment",
     "UpdateMentionBodyStatus",

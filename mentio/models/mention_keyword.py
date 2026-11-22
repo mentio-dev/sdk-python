@@ -24,9 +24,9 @@ class MentionKeyword:
         id (str): Keyword id (kw_...).
         term (str): The tracked term.
         group (GroupRef): The group the keyword belongs to.
-        matched_as (MentionKeywordMatchedAs): phrase: the post holds the term as written. close_words: it holds the
-            term's words close together, in another order or form (kept and billed only because the classifier scored it
-            relevant).
+        matched_as (MentionKeywordMatchedAs): phrase: the post holds the term as written. close_words: its words close
+            together, in another order or form (kept because the classifier scored it relevant). subreddit: a post of the
+            followed subreddit, which need not name anything.
         matched_in (MentionKeywordMatchedIn): text: the term is in the post itself (its text, caption, hashtags or
             review). speech: it is only in what is said in the video (TikTok), whose transcript follows the 🎙 mark in
             post.text.

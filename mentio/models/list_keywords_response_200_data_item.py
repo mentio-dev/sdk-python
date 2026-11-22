@@ -16,6 +16,7 @@ from ..models.list_keywords_response_200_data_item_platforms_type_0_item import 
 if TYPE_CHECKING:
     from ..models.group_ref import GroupRef
     from ..models.keyword_feed import KeywordFeed
+    from ..models.keyword_subreddit_type_0 import KeywordSubredditType0
     from ..models.list_keywords_response_200_data_item_cap_type_0 import (
         ListKeywordsResponse200DataItemCapType0,
     )
@@ -68,7 +69,10 @@ class ListKeywordsResponse200DataItem:
             countries).
         group (GroupRef): The group the keyword belongs to.
         platforms (list[ListKeywordsResponse200DataItemPlatformsType0Item] | None): Platforms the term is searched on;
-            null means every platform, [] none (the keyword only collects reviews).
+            null means every platform, [] none (the keyword only collects reviews). ["reddit"] on a keyword that follows a
+            subreddit.
+        subreddit (KeywordSubredditType0 | None): The subreddit this keyword follows instead of a phrase (its term reads
+            r/<name>); null on a phrase keyword.
         feeds (list[KeywordFeed]): RSS and Atom feeds this keyword reads; empty for none.
         reads_workspace_feeds (bool): true (the default): the keyword also reads every feed of the workspace (GET
             /v1/feeds), on top of its own `feeds`. false: its own feeds alone.
@@ -98,6 +102,7 @@ class ListKeywordsResponse200DataItem:
     display: ListKeywordsResponse200DataItemDisplay
     group: GroupRef
     platforms: list[ListKeywordsResponse200DataItemPlatformsType0Item] | None
+    subreddit: KeywordSubredditType0 | None
     feeds: list[KeywordFeed]
     reads_workspace_feeds: bool
     review_sources: list[ReviewSource]
@@ -109,6 +114,7 @@ class ListKeywordsResponse200DataItem:
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.keyword_subreddit_type_0 import KeywordSubredditType0
         from ..models.list_keywords_response_200_data_item_cap_type_0 import (
             ListKeywordsResponse200DataItemCapType0,
         )
@@ -151,6 +157,12 @@ class ListKeywordsResponse200DataItem:
 
         else:
             platforms = self.platforms
+
+        subreddit: dict[str, Any] | None
+        if isinstance(self.subreddit, KeywordSubredditType0):
+            subreddit = self.subreddit.to_dict()
+        else:
+            subreddit = self.subreddit
 
         feeds = []
         for feeds_item_data in self.feeds:
@@ -195,6 +207,7 @@ class ListKeywordsResponse200DataItem:
                 "display": display,
                 "group": group,
                 "platforms": platforms,
+                "subreddit": subreddit,
                 "feeds": feeds,
                 "readsWorkspaceFeeds": reads_workspace_feeds,
                 "reviewSources": review_sources,
@@ -212,6 +225,7 @@ class ListKeywordsResponse200DataItem:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.group_ref import GroupRef
         from ..models.keyword_feed import KeywordFeed
+        from ..models.keyword_subreddit_type_0 import KeywordSubredditType0
         from ..models.list_keywords_response_200_data_item_cap_type_0 import (
             ListKeywordsResponse200DataItemCapType0,
         )
@@ -303,6 +317,23 @@ class ListKeywordsResponse200DataItem:
 
         platforms = _parse_platforms(d.pop("platforms"))
 
+        def _parse_subreddit(data: object) -> KeywordSubredditType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_keyword_subreddit_type_0 = (
+                    KeywordSubredditType0.from_dict(data)
+                )
+
+                return componentsschemas_keyword_subreddit_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(KeywordSubredditType0 | None, data)
+
+        subreddit = _parse_subreddit(d.pop("subreddit"))
+
         feeds = []
         _feeds = d.pop("feeds")
         for feeds_item_data in _feeds:
@@ -355,6 +386,7 @@ class ListKeywordsResponse200DataItem:
             display=display,
             group=group,
             platforms=platforms,
+            subreddit=subreddit,
             feeds=feeds,
             reads_workspace_feeds=reads_workspace_feeds,
             review_sources=review_sources,

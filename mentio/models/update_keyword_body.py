@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from ..models.update_keyword_body_review_sources_item import (
         UpdateKeywordBodyReviewSourcesItem,
     )
+    from ..models.update_keyword_body_subreddit import UpdateKeywordBodySubreddit
 
 
 T = TypeVar("T", bound="UpdateKeywordBody")
@@ -62,6 +63,8 @@ class UpdateKeywordBody:
             days; one already listed keeps its place.
         reads_workspace_feeds (bool | Unset): true: the keyword also reads the workspace's feeds (GET /v1/feeds), live
             from now on. false: its own feeds alone.
+        subreddit (UpdateKeywordBodySubreddit | Unset): A keyword that follows a subreddit: what it keeps from now on.
+            The subreddit itself cannot change (create another keyword), and a phrase keyword cannot become one (400).
     """
 
     term: str | Unset = UNSET
@@ -78,6 +81,7 @@ class UpdateKeywordBody:
     review_sources: list[UpdateKeywordBodyReviewSourcesItem] | Unset = UNSET
     feeds: list[UpdateKeywordBodyFeedsItem] | Unset = UNSET
     reads_workspace_feeds: bool | Unset = UNSET
+    subreddit: UpdateKeywordBodySubreddit | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -149,6 +153,10 @@ class UpdateKeywordBody:
 
         reads_workspace_feeds = self.reads_workspace_feeds
 
+        subreddit: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.subreddit, Unset):
+            subreddit = self.subreddit.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -180,6 +188,8 @@ class UpdateKeywordBody:
             field_dict["feeds"] = feeds
         if reads_workspace_feeds is not UNSET:
             field_dict["readsWorkspaceFeeds"] = reads_workspace_feeds
+        if subreddit is not UNSET:
+            field_dict["subreddit"] = subreddit
 
         return field_dict
 
@@ -193,6 +203,7 @@ class UpdateKeywordBody:
         from ..models.update_keyword_body_review_sources_item import (
             UpdateKeywordBodyReviewSourcesItem,
         )
+        from ..models.update_keyword_body_subreddit import UpdateKeywordBodySubreddit
 
         d = dict(src_dict)
         term = d.pop("term", UNSET)
@@ -305,6 +316,13 @@ class UpdateKeywordBody:
 
         reads_workspace_feeds = d.pop("readsWorkspaceFeeds", UNSET)
 
+        _subreddit = d.pop("subreddit", UNSET)
+        subreddit: UpdateKeywordBodySubreddit | Unset
+        if isinstance(_subreddit, Unset):
+            subreddit = UNSET
+        else:
+            subreddit = UpdateKeywordBodySubreddit.from_dict(_subreddit)
+
         update_keyword_body = cls(
             term=term,
             query=query,
@@ -320,6 +338,7 @@ class UpdateKeywordBody:
             review_sources=review_sources,
             feeds=feeds,
             reads_workspace_feeds=reads_workspace_feeds,
+            subreddit=subreddit,
         )
 
         update_keyword_body.additional_properties = d

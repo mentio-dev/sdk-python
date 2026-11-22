@@ -231,10 +231,11 @@ class _Keywords:
         See [Keywords](/guides/keywords).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term: The word or phrase to track, case-insensitive. Required unless `query` is sent. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
+          term: The word or phrase to track, case-insensitive; send exactly one of term, `query` and `subreddit`. A multi-word term also matches its words close together (see matching.exactPhrase); double quotes mean the exact phrase only.
           query: The keyword as one boolean query instead of term and matching, like "acme cloud" AND (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)): - Phrases, words, AND, OR, NOT or -word, parentheses, word-end * - Compiled into term and the term rules; never sent with them (400). - Each alternative starts with the term; else 400 query_needs_one_term.
+          subreddit: Follow a whole subreddit in place of `term`: its new posts are read every 3 hours, named or not. Send no `platforms`; `context` says what to keep. See [Follow a whole subreddit](/platforms/reddit#follow-a-whole-subreddit).
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
+          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds. Not with `subreddit` (its platform is Reddit).
           context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A mention cap per day, week or month (per, default month); omit or null for none.
@@ -358,7 +359,8 @@ class _Keywords:
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
           reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.
           feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place.
-          readsWorkspaceFeeds: true: the keyword also reads the workspace's feeds (GET /v1/feeds), live from now on. false: its own feeds alone."""
+          readsWorkspaceFeeds: true: the keyword also reads the workspace's feeds (GET /v1/feeds), live from now on. false: its own feeds alone.
+          subreddit: A keyword that follows a subreddit: what it keeps from now on. The subreddit itself cannot change (create another keyword), and a phrase keyword cannot become one (400)."""
         return _result(_ops.keywords.update_keyword.sync_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _Mentions:
@@ -2029,10 +2031,11 @@ class _AsyncKeywords:
         See [Keywords](/guides/keywords).
 
         Body: a dict, a model, or the fields as keyword arguments:
-          term: The word or phrase to track, case-insensitive. Required unless `query` is sent. A multi-word term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes for the exact phrase only.
+          term: The word or phrase to track, case-insensitive; send exactly one of term, `query` and `subreddit`. A multi-word term also matches its words close together (see matching.exactPhrase); double quotes mean the exact phrase only.
           query: The keyword as one boolean query instead of term and matching, like "acme cloud" AND (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)): - Phrases, words, AND, OR, NOT or -word, parentheses, word-end * - Compiled into term and the term rules; never sent with them (400). - Each alternative starts with the term; else 400 query_needs_one_term.
+          subreddit: Follow a whole subreddit in place of `term`: its new posts are read every 3 hours, named or not. Send no `platforms`; `context` says what to keep. See [Follow a whole subreddit](/platforms/reddit#follow-a-whole-subreddit).
           kind: brand: your own names. competitor: theirs. topic: the space. Drives share of voice and segments.
-          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds.
+          platforms: Platforms to search the term on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then needs reviewSources or feeds. Not with `subreddit` (its platform is Reddit).
           context: A sentence the classifier reads for this keyword only, on top of the company profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word." Null clears it.
           matching: Omitted fields are untouched; an empty list clears one.
           cap: A mention cap per day, week or month (per, default month); omit or null for none.
@@ -2156,7 +2159,8 @@ class _AsyncKeywords:
           groupId: Moves the keyword to this group (grp_...). A 409 when that group already tracks the term.
           reviewSources: Replaces the list of apps whose reviews this keyword collects; [] disconnects them all (their reviews stay). An app or country added here gets the free 30-day look-back; one already listed keeps its place.
           feeds: Replaces the feeds this keyword reads; [] disconnects them all (their mentions stay). A feed added here is checked now and brings its newest 10 matching items of the last 30 days; one already listed keeps its place.
-          readsWorkspaceFeeds: true: the keyword also reads the workspace's feeds (GET /v1/feeds), live from now on. false: its own feeds alone."""
+          readsWorkspaceFeeds: true: the keyword also reads the workspace's feeds (GET /v1/feeds), live from now on. false: its own feeds alone.
+          subreddit: A keyword that follows a subreddit: what it keeps from now on. The subreddit itself cannot change (create another keyword), and a phrase keyword cannot become one (400)."""
         return _result(await _ops.keywords.update_keyword.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateKeywordBody, body, fields)))
 
 class _AsyncMentions:

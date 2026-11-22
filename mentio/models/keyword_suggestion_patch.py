@@ -29,6 +29,9 @@ if TYPE_CHECKING:
     from ..models.keyword_suggestion_patch_review_sources_item import (
         KeywordSuggestionPatchReviewSourcesItem,
     )
+    from ..models.keyword_suggestion_patch_subreddit import (
+        KeywordSuggestionPatchSubreddit,
+    )
 
 
 T = TypeVar("T", bound="KeywordSuggestionPatch")
@@ -71,6 +74,8 @@ class KeywordSuggestionPatch:
                 last 30 days; one already listed keeps its place.
             reads_workspace_feeds (bool | Unset): true: the keyword also reads the workspace's feeds (GET /v1/feeds), live
                 from now on. false: its own feeds alone.
+            subreddit (KeywordSuggestionPatchSubreddit | Unset): A keyword that follows a subreddit: what it keeps from now
+                on. The subreddit itself cannot change (create another keyword), and a phrase keyword cannot become one (400).
     """
 
     term: str | Unset = UNSET
@@ -87,6 +92,7 @@ class KeywordSuggestionPatch:
     review_sources: list[KeywordSuggestionPatchReviewSourcesItem] | Unset = UNSET
     feeds: list[KeywordSuggestionPatchFeedsItem] | Unset = UNSET
     reads_workspace_feeds: bool | Unset = UNSET
+    subreddit: KeywordSuggestionPatchSubreddit | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -160,6 +166,10 @@ class KeywordSuggestionPatch:
 
         reads_workspace_feeds = self.reads_workspace_feeds
 
+        subreddit: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.subreddit, Unset):
+            subreddit = self.subreddit.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -191,6 +201,8 @@ class KeywordSuggestionPatch:
             field_dict["feeds"] = feeds
         if reads_workspace_feeds is not UNSET:
             field_dict["readsWorkspaceFeeds"] = reads_workspace_feeds
+        if subreddit is not UNSET:
+            field_dict["subreddit"] = subreddit
 
         return field_dict
 
@@ -213,6 +225,9 @@ class KeywordSuggestionPatch:
         )
         from ..models.keyword_suggestion_patch_review_sources_item import (
             KeywordSuggestionPatchReviewSourcesItem,
+        )
+        from ..models.keyword_suggestion_patch_subreddit import (
+            KeywordSuggestionPatchSubreddit,
         )
 
         d = dict(src_dict)
@@ -328,6 +343,13 @@ class KeywordSuggestionPatch:
 
         reads_workspace_feeds = d.pop("readsWorkspaceFeeds", UNSET)
 
+        _subreddit = d.pop("subreddit", UNSET)
+        subreddit: KeywordSuggestionPatchSubreddit | Unset
+        if isinstance(_subreddit, Unset):
+            subreddit = UNSET
+        else:
+            subreddit = KeywordSuggestionPatchSubreddit.from_dict(_subreddit)
+
         keyword_suggestion_patch = cls(
             term=term,
             query=query,
@@ -343,6 +365,7 @@ class KeywordSuggestionPatch:
             review_sources=review_sources,
             feeds=feeds,
             reads_workspace_feeds=reads_workspace_feeds,
+            subreddit=subreddit,
         )
 
         keyword_suggestion_patch.additional_properties = d

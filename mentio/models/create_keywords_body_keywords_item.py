@@ -34,38 +34,39 @@ T = TypeVar("T", bound="CreateKeywordsBodyKeywordsItem")
 
 @_attrs_define
 class CreateKeywordsBodyKeywordsItem:
-    """One keyword, as POST /v1/keywords takes it, without reviewSources and feeds (add those to the keyword afterwards).
+    """One keyword, as POST /v1/keywords takes it, without reviewSources and feeds (add those afterwards) or subreddit
+    (follow one with POST /v1/keywords).
 
-    Attributes:
-        term (str | Unset): The word or phrase to track, case-insensitive. Required unless `query` is sent. A multi-word
-            term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes
-            for the exact phrase only.
-        query (str | Unset): The keyword as one boolean query instead of term and matching, like "acme cloud" AND
-            (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)):
+        Attributes:
+            term (str | Unset): The word or phrase to track, case-insensitive; send exactly one of term, `query` and
+                `subreddit`. A multi-word term also matches its words close together (see matching.exactPhrase); double quotes
+                mean the exact phrase only.
+            query (str | Unset): The keyword as one boolean query instead of term and matching, like "acme cloud" AND
+                (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)):
 
-            - Phrases, words, AND, OR, NOT or -word, parentheses, word-end *
-            - Compiled into term and the term rules; never sent with them (400).
-            - Each alternative starts with the term; else 400 query_needs_one_term.
-        kind (CreateKeywordsBodyKeywordsItemKind | Unset): brand: your own names. competitor: theirs. topic: the space.
-            Drives share of voice and segments. Default: CreateKeywordsBodyKeywordsItemKind.BRAND.
-        platforms (list[CreateKeywordsBodyKeywordsItemPlatformsType0Item] | None | Unset): Platforms to search the term
-            on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads
-            feeds, which then needs reviewSources or feeds.
-        context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
-            profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry
-            word." Null clears it.
-        matching (CreateKeywordsBodyKeywordsItemMatching | Unset): Omitted fields are untouched; an empty list clears
-            one.
-        cap (CreateKeywordsBodyKeywordsItemCapType0 | None | Unset): A mention cap per day, week or month (per, default
-            month); omit or null for none.
-        comments (CreateKeywordsBodyKeywordsItemComments | Unset): Comments under this keyword's mentions; omitted
-            fields are untouched (on create: off, 20 per post).
-        display (CreateKeywordsBodyKeywordsItemDisplay | Unset): Which of this keyword's mentions you see, by language
-            and country; each list is replaced when sent, kept when omitted. Hidden mentions are still billed.
-        group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may
-            be tracked once per group.
-        reads_workspace_feeds (bool | Unset): Whether the keyword also reads the workspace's feeds (GET /v1/feeds);
-            default true. A new keyword reading them gets the look-back of the 8 most recently connected.
+                - Phrases, words, AND, OR, NOT or -word, parentheses, word-end *
+                - Compiled into term and the term rules; never sent with them (400).
+                - Each alternative starts with the term; else 400 query_needs_one_term.
+            kind (CreateKeywordsBodyKeywordsItemKind | Unset): brand: your own names. competitor: theirs. topic: the space.
+                Drives share of voice and segments. Default: CreateKeywordsBodyKeywordsItemKind.BRAND.
+            platforms (list[CreateKeywordsBodyKeywordsItemPlatformsType0Item] | None | Unset): Platforms to search the term
+                on; omit or null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads
+                feeds, which then needs reviewSources or feeds. Not with `subreddit` (its platform is Reddit).
+            context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
+                profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry
+                word." Null clears it.
+            matching (CreateKeywordsBodyKeywordsItemMatching | Unset): Omitted fields are untouched; an empty list clears
+                one.
+            cap (CreateKeywordsBodyKeywordsItemCapType0 | None | Unset): A mention cap per day, week or month (per, default
+                month); omit or null for none.
+            comments (CreateKeywordsBodyKeywordsItemComments | Unset): Comments under this keyword's mentions; omitted
+                fields are untouched (on create: off, 20 per post).
+            display (CreateKeywordsBodyKeywordsItemDisplay | Unset): Which of this keyword's mentions you see, by language
+                and country; each list is replaced when sent, kept when omitted. Hidden mentions are still billed.
+            group_id (str | Unset): The group to track it in (grp_...); omit for the workspace's default group. A term may
+                be tracked once per group.
+            reads_workspace_feeds (bool | Unset): Whether the keyword also reads the workspace's feeds (GET /v1/feeds);
+                default true. A new keyword reading them gets the look-back of the 8 most recently connected.
     """
 
     term: str | Unset = UNSET

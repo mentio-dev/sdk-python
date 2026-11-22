@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from ..models.keyword_matching import KeywordMatching
     from ..models.keyword_polling_item import KeywordPollingItem
     from ..models.keyword_stats import KeywordStats
+    from ..models.keyword_subreddit_type_0 import KeywordSubredditType0
     from ..models.review_source import ReviewSource
 
 
@@ -51,7 +52,9 @@ class Keyword:
             (includeHidden=true shows it). See [Keywords](/guides/keywords#show-only-some-languages-or-countries).
         group (GroupRef): The group the keyword belongs to.
         platforms (list[KeywordPlatformsType0Item] | None): Platforms the term is searched on; null means every
-            platform, [] none (the keyword only collects reviews).
+            platform, [] none (the keyword only collects reviews). ["reddit"] on a keyword that follows a subreddit.
+        subreddit (KeywordSubredditType0 | None): The subreddit this keyword follows instead of a phrase (its term reads
+            r/<name>); null on a phrase keyword.
         feeds (list[KeywordFeed]): RSS and Atom feeds this keyword reads; empty for none.
         reads_workspace_feeds (bool): true (the default): the keyword also reads every feed of the workspace (GET
             /v1/feeds), on top of its own `feeds`. false: its own feeds alone.
@@ -80,6 +83,7 @@ class Keyword:
     display: KeywordDisplay
     group: GroupRef
     platforms: list[KeywordPlatformsType0Item] | None
+    subreddit: KeywordSubredditType0 | None
     feeds: list[KeywordFeed]
     reads_workspace_feeds: bool
     review_sources: list[ReviewSource]
@@ -92,6 +96,7 @@ class Keyword:
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.keyword_cap_type_0 import KeywordCapType0
+        from ..models.keyword_subreddit_type_0 import KeywordSubredditType0
 
         id = self.id
 
@@ -131,6 +136,12 @@ class Keyword:
 
         else:
             platforms = self.platforms
+
+        subreddit: dict[str, Any] | None
+        if isinstance(self.subreddit, KeywordSubredditType0):
+            subreddit = self.subreddit.to_dict()
+        else:
+            subreddit = self.subreddit
 
         feeds = []
         for feeds_item_data in self.feeds:
@@ -175,6 +186,7 @@ class Keyword:
                 "display": display,
                 "group": group,
                 "platforms": platforms,
+                "subreddit": subreddit,
                 "feeds": feeds,
                 "readsWorkspaceFeeds": reads_workspace_feeds,
                 "reviewSources": review_sources,
@@ -198,6 +210,7 @@ class Keyword:
         from ..models.keyword_matching import KeywordMatching
         from ..models.keyword_polling_item import KeywordPollingItem
         from ..models.keyword_stats import KeywordStats
+        from ..models.keyword_subreddit_type_0 import KeywordSubredditType0
         from ..models.review_source import ReviewSource
 
         d = dict(src_dict)
@@ -265,6 +278,23 @@ class Keyword:
 
         platforms = _parse_platforms(d.pop("platforms"))
 
+        def _parse_subreddit(data: object) -> KeywordSubredditType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_keyword_subreddit_type_0 = (
+                    KeywordSubredditType0.from_dict(data)
+                )
+
+                return componentsschemas_keyword_subreddit_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(KeywordSubredditType0 | None, data)
+
+        subreddit = _parse_subreddit(d.pop("subreddit"))
+
         feeds = []
         _feeds = d.pop("feeds")
         for feeds_item_data in _feeds:
@@ -315,6 +345,7 @@ class Keyword:
             display=display,
             group=group,
             platforms=platforms,
+            subreddit=subreddit,
             feeds=feeds,
             reads_workspace_feeds=reads_workspace_feeds,
             review_sources=review_sources,

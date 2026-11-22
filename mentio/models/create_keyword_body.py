@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from ..models.create_keyword_body_review_sources_item import (
         CreateKeywordBodyReviewSourcesItem,
     )
+    from ..models.create_keyword_body_subreddit import CreateKeywordBodySubreddit
 
 
 T = TypeVar("T", bound="CreateKeywordBody")
@@ -30,20 +31,23 @@ T = TypeVar("T", bound="CreateKeywordBody")
 class CreateKeywordBody:
     """
     Attributes:
-        term (str | Unset): The word or phrase to track, case-insensitive. Required unless `query` is sent. A multi-word
-            term matches as the phrase or as its words close together (see matching.exactPhrase); wrap it in double quotes
-            for the exact phrase only.
+        term (str | Unset): The word or phrase to track, case-insensitive; send exactly one of term, `query` and
+            `subreddit`. A multi-word term also matches its words close together (see matching.exactPhrase); double quotes
+            mean the exact phrase only.
         query (str | Unset): The keyword as one boolean query instead of term and matching, like "acme cloud" AND
             (pricing OR price*) -jobs ([Keywords](/guides/keywords#write-it-as-a-query)):
 
             - Phrases, words, AND, OR, NOT or -word, parentheses, word-end *
             - Compiled into term and the term rules; never sent with them (400).
             - Each alternative starts with the term; else 400 query_needs_one_term.
+        subreddit (CreateKeywordBodySubreddit | Unset): Follow a whole subreddit in place of `term`: its new posts are
+            read every 3 hours, named or not. Send no `platforms`; `context` says what to keep. See [Follow a whole
+            subreddit](/platforms/reddit#follow-a-whole-subreddit).
         kind (CreateKeywordBodyKind | Unset): brand: your own names. competitor: theirs. topic: the space. Drives share
             of voice and segments. Default: CreateKeywordBodyKind.BRAND.
         platforms (list[CreateKeywordBodyPlatformsType0Item] | None | Unset): Platforms to search the term on; omit or
             null for every platform. [] searches it nowhere: a keyword that only collects reviews or reads feeds, which then
-            needs reviewSources or feeds.
+            needs reviewSources or feeds. Not with `subreddit` (its platform is Reddit).
         context (None | str | Unset): A sentence the classifier reads for this keyword only, on top of the company
             profile or group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry
             word." Null clears it.
@@ -68,6 +72,7 @@ class CreateKeywordBody:
 
     term: str | Unset = UNSET
     query: str | Unset = UNSET
+    subreddit: CreateKeywordBodySubreddit | Unset = UNSET
     kind: CreateKeywordBodyKind | Unset = CreateKeywordBodyKind.BRAND
     platforms: list[CreateKeywordBodyPlatformsType0Item] | None | Unset = UNSET
     context: None | str | Unset = UNSET
@@ -87,6 +92,10 @@ class CreateKeywordBody:
         term = self.term
 
         query = self.query
+
+        subreddit: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.subreddit, Unset):
+            subreddit = self.subreddit.to_dict()
 
         kind: str | Unset = UNSET
         if not isinstance(self.kind, Unset):
@@ -155,6 +164,8 @@ class CreateKeywordBody:
             field_dict["term"] = term
         if query is not UNSET:
             field_dict["query"] = query
+        if subreddit is not UNSET:
+            field_dict["subreddit"] = subreddit
         if kind is not UNSET:
             field_dict["kind"] = kind
         if platforms is not UNSET:
@@ -190,11 +201,19 @@ class CreateKeywordBody:
         from ..models.create_keyword_body_review_sources_item import (
             CreateKeywordBodyReviewSourcesItem,
         )
+        from ..models.create_keyword_body_subreddit import CreateKeywordBodySubreddit
 
         d = dict(src_dict)
         term = d.pop("term", UNSET)
 
         query = d.pop("query", UNSET)
+
+        _subreddit = d.pop("subreddit", UNSET)
+        subreddit: CreateKeywordBodySubreddit | Unset
+        if isinstance(_subreddit, Unset):
+            subreddit = UNSET
+        else:
+            subreddit = CreateKeywordBodySubreddit.from_dict(_subreddit)
 
         _kind = d.pop("kind", UNSET)
         kind: CreateKeywordBodyKind | Unset
@@ -303,6 +322,7 @@ class CreateKeywordBody:
         create_keyword_body = cls(
             term=term,
             query=query,
+            subreddit=subreddit,
             kind=kind,
             platforms=platforms,
             context=context,
