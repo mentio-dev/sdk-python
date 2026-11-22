@@ -10,6 +10,7 @@ class KeywordSuggestionPatchPlatformsType0Item(StrEnum):
     INSTAGRAM = "instagram"
     LINKEDIN = "linkedin"
     NEWS = "news"
+    PODCASTS = "podcasts"
     REDDIT = "reddit"
     STACKOVERFLOW = "stackoverflow"
     TIKTOK = "tiktok"

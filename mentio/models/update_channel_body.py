@@ -22,11 +22,12 @@ class UpdateChannelBody:
 
     Attributes:
         label (str | Unset): Your name for the channel.
-        url (str | Unset): Webhooks only.
+        url (str | Unset): Webhook, Discord and Teams channels: a new URL (for Discord and Teams, a new incoming webhook
+            URL, checked like on create).
         headers (UpdateChannelBodyHeaders | Unset): Webhooks only; replaces the whole set.
         events (list[UpdateChannelBodyEventsItem] | Unset): Replaces the account events the channel receives; empty
-            unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See
-            [Account events](/webhooks/account-events).
+            unsubscribes it from all. A webhook takes any; Slack, email, Telegram, Discord and Teams take the attention
+            events only. See [Account events](/webhooks/account-events).
     """
 
     label: str | Unset = UNSET

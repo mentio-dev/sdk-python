@@ -969,10 +969,10 @@ class _Channels:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | None = None, idempotency_key: str | None = None, **fields: Any) -> Any:
+    def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | _m.CreateDiscordChannel | _m.CreateTeamsChannel | None = None, idempotency_key: str | None = None, **fields: Any) -> Any:
         """Create a channel
 
-        Body: a dict with `kind` (slack, email, webhook) or a model; fields may also be passed as keyword arguments:
+        Body: a dict with `kind` (slack, email, webhook, discord, teams) or a model; fields may also be passed as keyword arguments:
           kind: Channel kind.
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
@@ -981,7 +981,7 @@ class _Channels:
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
           headers: Extra request headers to send, for your own auth."""
-        return _result(_ops.channels.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+        return _result(_ops.channels.create_channel.sync_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel, "discord": _m.CreateDiscordChannel, "teams": _m.CreateTeamsChannel}, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     def delete(self, id: str) -> Any:
         """Delete a channel"""
@@ -1016,9 +1016,9 @@ class _Channels:
 
         Body: a dict, a model, or the fields as keyword arguments:
           label: Your name for the channel.
-          url: Webhooks only.
+          url: Webhook, Discord and Teams channels: a new URL (for Discord and Teams, a new incoming webhook URL, checked like on create).
           headers: Webhooks only; replaces the whole set.
-          events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
+          events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email, Telegram, Discord and Teams take the attention events only. See [Account events](/webhooks/account-events)."""
         return _result(_ops.channels.update_channel.sync_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _Company:
@@ -1363,7 +1363,7 @@ class _Searches:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
           range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
-          platforms: The platforms to read; omit for every platform that can search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook). devto and news have no search and are reported as skipped.
+          platforms: The platforms to read; omit for every platform that can search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts). devto and news have no search and are reported as skipped.
           kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
           context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
         return _result(_ops.searches.create_search.sync_detailed(client=self._client, body=_body(_m.CreateSearchBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
@@ -2481,10 +2481,10 @@ class _AsyncChannels:
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
 
-    async def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | None = None, idempotency_key: str | None = None, **fields: Any) -> Any:
+    async def create(self, body: dict[str, Any] | _m.CreateSlackChannel | _m.CreateEmailChannel | _m.CreateWebhookChannel | _m.CreateDiscordChannel | _m.CreateTeamsChannel | None = None, idempotency_key: str | None = None, **fields: Any) -> Any:
         """Create a channel
 
-        Body: a dict with `kind` (slack, email, webhook) or a model; fields may also be passed as keyword arguments:
+        Body: a dict with `kind` (slack, email, webhook, discord, teams) or a model; fields may also be passed as keyword arguments:
           kind: Channel kind.
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
@@ -2493,7 +2493,7 @@ class _AsyncChannels:
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
           headers: Extra request headers to send, for your own auth."""
-        return _result(await _ops.channels.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel}, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+        return _result(await _ops.channels.create_channel.asyncio_detailed(client=self._client, body=_body({"slack": _m.CreateSlackChannel, "email": _m.CreateEmailChannel, "webhook": _m.CreateWebhookChannel, "discord": _m.CreateDiscordChannel, "teams": _m.CreateTeamsChannel}, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
     async def delete(self, id: str) -> Any:
         """Delete a channel"""
@@ -2528,9 +2528,9 @@ class _AsyncChannels:
 
         Body: a dict, a model, or the fields as keyword arguments:
           label: Your name for the channel.
-          url: Webhooks only.
+          url: Webhook, Discord and Teams channels: a new URL (for Discord and Teams, a new incoming webhook URL, checked like on create).
           headers: Webhooks only; replaces the whole set.
-          events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email and Telegram take the attention events only. See [Account events](/webhooks/account-events)."""
+          events: Replaces the account events the channel receives; empty unsubscribes it from all. A webhook takes any; Slack, email, Telegram, Discord and Teams take the attention events only. See [Account events](/webhooks/account-events)."""
         return _result(await _ops.channels.update_channel.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateChannelBody, body, fields)))
 
 class _AsyncCompany:
@@ -2875,7 +2875,7 @@ class _AsyncSearches:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
           range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
-          platforms: The platforms to read; omit for every platform that can search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook). devto and news have no search and are reported as skipped.
+          platforms: The platforms to read; omit for every platform that can search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts). devto and news have no search and are reported as skipped.
           kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
           context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
         return _result(await _ops.searches.create_search.asyncio_detailed(client=self._client, body=_body(_m.CreateSearchBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))

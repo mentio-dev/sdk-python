@@ -13,6 +13,7 @@ class ExportPeopleCsvPlatform(StrEnum):
     INSTAGRAM = "instagram"
     LINKEDIN = "linkedin"
     NEWS = "news"
+    PODCASTS = "podcasts"
     REDDIT = "reddit"
     RSS = "rss"
     STACKOVERFLOW = "stackoverflow"

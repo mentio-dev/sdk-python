@@ -19,7 +19,7 @@ class ChannelFailingEventDataChannel:
 
     Attributes:
         id (str): Channel id (dest_...).
-        kind (ChannelFailingEventDataChannelKind): slack, email, webhook or telegram.
+        kind (ChannelFailingEventDataChannelKind): slack, email, webhook, telegram, discord or teams.
         label (str): The channel's label.
     """
 

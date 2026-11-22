@@ -20,10 +20,11 @@ class AnalyticsBreakdownDataItemPersonType0:
     Attributes:
         id (None | str): Person id (aut_...); null for posts ingested before people were linked.
         name (None | str): Display name as the platform shows it.
-        platform (AnalyticsBreakdownDataItemPersonType0Platform): Platform: bluesky, hackernews, github, stackoverflow,
-            devto, reddit, x, youtube, news, linkedin, tiktok, instagram, facebook, appstore (App Store reviews), googleplay
-            (Google Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and
-            Atom feeds a keyword reads).
+        platform (AnalyticsBreakdownDataItemPersonType0Platform): Platform, one of:
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Developer: hackernews, github, stackoverflow, devto
+            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
         url (None | str): Profile URL.
         avatar_url (None | str): Avatar image URL, when the platform gave one.
         followers (int | None): From the audience profile; null when unknown.

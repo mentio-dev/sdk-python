@@ -161,6 +161,9 @@ from .create_automation_body_filter_sentiments_item import (
     CreateAutomationBodyFilterSentimentsItem,
 )
 from .create_automation_body_filter_status import CreateAutomationBodyFilterStatus
+from .create_discord_channel import CreateDiscordChannel
+from .create_discord_channel_events_item import CreateDiscordChannelEventsItem
+from .create_discord_channel_kind import CreateDiscordChannelKind
 from .create_email_channel import CreateEmailChannel
 from .create_email_channel_events_item import CreateEmailChannelEventsItem
 from .create_email_channel_kind import CreateEmailChannelKind
@@ -236,6 +239,9 @@ from .create_segment_body_filter_stages_item import CreateSegmentBodyFilterStage
 from .create_slack_channel import CreateSlackChannel
 from .create_slack_channel_events_item import CreateSlackChannelEventsItem
 from .create_slack_channel_kind import CreateSlackChannelKind
+from .create_teams_channel import CreateTeamsChannel
+from .create_teams_channel_events_item import CreateTeamsChannelEventsItem
+from .create_teams_channel_kind import CreateTeamsChannelKind
 from .create_top_up_body import CreateTopUpBody
 from .create_top_up_response_200 import CreateTopUpResponse200
 from .create_view_body import CreateViewBody
@@ -268,6 +274,12 @@ from .create_webhook_channel import CreateWebhookChannel
 from .create_webhook_channel_events_item import CreateWebhookChannelEventsItem
 from .create_webhook_channel_headers import CreateWebhookChannelHeaders
 from .create_webhook_channel_kind import CreateWebhookChannelKind
+from .discord_channel import DiscordChannel
+from .discord_channel_config import DiscordChannelConfig
+from .discord_channel_config_events_item import DiscordChannelConfigEventsItem
+from .discord_channel_kind import DiscordChannelKind
+from .discord_channel_stats import DiscordChannelStats
+from .discord_channel_stats_last_7d import DiscordChannelStatsLast7D
 from .duplicate_keyword_body import DuplicateKeywordBody
 from .duplicate_keyword_body_include_item import DuplicateKeywordBodyIncludeItem
 from .email_channel import EmailChannel
@@ -1067,6 +1079,12 @@ from .slack_channel_config_events_item import SlackChannelConfigEventsItem
 from .slack_channel_kind import SlackChannelKind
 from .slack_channel_stats import SlackChannelStats
 from .slack_channel_stats_last_7d import SlackChannelStatsLast7D
+from .teams_channel import TeamsChannel
+from .teams_channel_config import TeamsChannelConfig
+from .teams_channel_config_events_item import TeamsChannelConfigEventsItem
+from .teams_channel_kind import TeamsChannelKind
+from .teams_channel_stats import TeamsChannelStats
+from .teams_channel_stats_last_7d import TeamsChannelStatsLast7D
 from .telegram_channel import TelegramChannel
 from .telegram_channel_config import TelegramChannelConfig
 from .telegram_channel_config_chat_type import TelegramChannelConfigChatType
@@ -1420,6 +1438,9 @@ __all__ = (
     "CreateAutomationBodyFilterPlatformsItem",
     "CreateAutomationBodyFilterSentimentsItem",
     "CreateAutomationBodyFilterStatus",
+    "CreateDiscordChannel",
+    "CreateDiscordChannelEventsItem",
+    "CreateDiscordChannelKind",
     "CreateEmailChannel",
     "CreateEmailChannelEventsItem",
     "CreateEmailChannelKind",
@@ -1467,6 +1488,9 @@ __all__ = (
     "CreateSlackChannel",
     "CreateSlackChannelEventsItem",
     "CreateSlackChannelKind",
+    "CreateTeamsChannel",
+    "CreateTeamsChannelEventsItem",
+    "CreateTeamsChannelKind",
     "CreateTopUpBody",
     "CreateTopUpResponse200",
     "CreateViewBody",
@@ -1487,6 +1511,12 @@ __all__ = (
     "CreateWebhookChannelEventsItem",
     "CreateWebhookChannelHeaders",
     "CreateWebhookChannelKind",
+    "DiscordChannel",
+    "DiscordChannelConfig",
+    "DiscordChannelConfigEventsItem",
+    "DiscordChannelKind",
+    "DiscordChannelStats",
+    "DiscordChannelStatsLast7D",
     "DuplicateKeywordBody",
     "DuplicateKeywordBodyIncludeItem",
     "EmailChannel",
@@ -1996,6 +2026,12 @@ __all__ = (
     "SlackChannelKind",
     "SlackChannelStats",
     "SlackChannelStatsLast7D",
+    "TeamsChannel",
+    "TeamsChannelConfig",
+    "TeamsChannelConfigEventsItem",
+    "TeamsChannelKind",
+    "TeamsChannelStats",
+    "TeamsChannelStatsLast7D",
     "TelegramChannel",
     "TelegramChannelConfig",
     "TelegramChannelConfigChatType",

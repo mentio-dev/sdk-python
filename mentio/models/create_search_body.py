@@ -24,7 +24,7 @@ class CreateSearchBody:
             reads at most its last 7 days whatever the range. Default: CreateSearchBodyRange.VALUE_1.
         platforms (list[CreateSearchBodyPlatformsItem] | Unset): The platforms to read; omit for every platform that can
             search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok,
-            instagram, facebook). devto and news have no search and are reported as skipped.
+            instagram, facebook, podcasts). devto and news have no search and are reported as skipped.
         kind (CreateSearchBodyKind | Unset): What the term is to you, as on a keyword: brand (your company or product),
             competitor, or topic (the default). The classifier judges relevance with it. Default:
             CreateSearchBodyKind.TOPIC.

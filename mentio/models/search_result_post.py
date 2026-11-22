@@ -27,10 +27,11 @@ class SearchResultPost:
     """The post: platform, text, link, publish time and engagement.
 
     Attributes:
-        platform (SearchResultPostPlatform): Platform: bluesky, hackernews, github, stackoverflow, devto, reddit, x,
-            youtube, news, linkedin, tiktok, instagram, facebook, appstore (App Store reviews), googleplay (Google Play
-            reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and Atom feeds a
-            keyword reads).
+        platform (SearchResultPostPlatform): Platform, one of:
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Developer: hackernews, github, stackoverflow, devto
+            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
         kind (SearchResultPostKind): post: a top-level post. comment: answers a post or comment (Reddit, Hacker News or
             YouTube comments, X or Bluesky replies, Stack Overflow answers). repository: a GitHub repository event (see
             post.repository).

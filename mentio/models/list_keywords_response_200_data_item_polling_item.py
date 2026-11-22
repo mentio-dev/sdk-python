@@ -17,10 +17,11 @@ T = TypeVar("T", bound="ListKeywordsResponse200DataItemPollingItem")
 class ListKeywordsResponse200DataItemPollingItem:
     """
     Attributes:
-        platform (ListKeywordsResponse200DataItemPollingItemPlatform): Platform: bluesky, hackernews, github,
-            stackoverflow, devto, reddit, x, youtube, news, linkedin, tiktok, instagram, facebook, appstore (App Store
-            reviews), googleplay (Google Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a
-            place), rss (RSS and Atom feeds a keyword reads).
+        platform (ListKeywordsResponse200DataItemPollingItemPlatform): Platform, one of:
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Developer: hackernews, github, stackoverflow, devto
+            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
         last_polled_at (None | str): Newest poll of this platform for the term; null until the first one.
         empty_polls (int): Consecutive polls that found nothing new; the scheduler slows down as it grows.
     """

@@ -6,9 +6,11 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.discord_channel import DiscordChannel
 from ...models.email_channel import EmailChannel
 from ...models.error_response import ErrorResponse
 from ...models.slack_channel import SlackChannel
+from ...models.teams_channel import TeamsChannel
 from ...models.telegram_channel import TelegramChannel
 from ...models.webhook_channel import WebhookChannel
 from ...types import UNSET, Response, Unset
@@ -37,8 +39,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> (
-    EmailChannel
+    DiscordChannel
+    | EmailChannel
     | SlackChannel
+    | TeamsChannel
     | TelegramChannel
     | WebhookChannel
     | ErrorResponse
@@ -48,7 +52,14 @@ def _parse_response(
 
         def _parse_response_200(
             data: object,
-        ) -> EmailChannel | SlackChannel | TelegramChannel | WebhookChannel:
+        ) -> (
+            DiscordChannel
+            | EmailChannel
+            | SlackChannel
+            | TeamsChannel
+            | TelegramChannel
+            | WebhookChannel
+        ):
             try:
                 if not isinstance(data, dict):
                     raise TypeError()
@@ -73,11 +84,27 @@ def _parse_response(
                 return componentsschemas_channel_type_2
             except (TypeError, ValueError, AttributeError, KeyError):
                 pass
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_channel_type_3 = TelegramChannel.from_dict(data)
+
+                return componentsschemas_channel_type_3
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_channel_type_4 = DiscordChannel.from_dict(data)
+
+                return componentsschemas_channel_type_4
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
             if not isinstance(data, dict):
                 raise TypeError()
-            componentsschemas_channel_type_3 = TelegramChannel.from_dict(data)
+            componentsschemas_channel_type_5 = TeamsChannel.from_dict(data)
 
-            return componentsschemas_channel_type_3
+            return componentsschemas_channel_type_5
 
         response_200 = _parse_response_200(response.json())
 
@@ -102,7 +129,13 @@ def _parse_response(
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+    DiscordChannel
+    | EmailChannel
+    | SlackChannel
+    | TeamsChannel
+    | TelegramChannel
+    | WebhookChannel
+    | ErrorResponse
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -118,7 +151,13 @@ def sync_detailed(
     client: AuthenticatedClient,
     idempotency_key: str | Unset = UNSET,
 ) -> Response[
-    EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+    DiscordChannel
+    | EmailChannel
+    | SlackChannel
+    | TeamsChannel
+    | TelegramChannel
+    | WebhookChannel
+    | ErrorResponse
 ]:
     """Rotate a webhook secret
 
@@ -133,7 +172,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse]
+        Response[DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse]
     """
 
     kwargs = _get_kwargs(
@@ -154,8 +193,10 @@ def sync(
     client: AuthenticatedClient,
     idempotency_key: str | Unset = UNSET,
 ) -> (
-    EmailChannel
+    DiscordChannel
+    | EmailChannel
     | SlackChannel
+    | TeamsChannel
     | TelegramChannel
     | WebhookChannel
     | ErrorResponse
@@ -174,7 +215,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+        DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse
     """
 
     return sync_detailed(
@@ -190,7 +231,13 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     idempotency_key: str | Unset = UNSET,
 ) -> Response[
-    EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+    DiscordChannel
+    | EmailChannel
+    | SlackChannel
+    | TeamsChannel
+    | TelegramChannel
+    | WebhookChannel
+    | ErrorResponse
 ]:
     """Rotate a webhook secret
 
@@ -205,7 +252,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse]
+        Response[DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse]
     """
 
     kwargs = _get_kwargs(
@@ -224,8 +271,10 @@ async def asyncio(
     client: AuthenticatedClient,
     idempotency_key: str | Unset = UNSET,
 ) -> (
-    EmailChannel
+    DiscordChannel
+    | EmailChannel
     | SlackChannel
+    | TeamsChannel
     | TelegramChannel
     | WebhookChannel
     | ErrorResponse
@@ -244,7 +293,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+        DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse
     """
 
     return (

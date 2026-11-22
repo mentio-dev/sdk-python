@@ -18,10 +18,11 @@ class ListPeopleResponse200DataItemAccountsItem:
     """
     Attributes:
         id (str): The account id (aut_...); the canonical one equals the person id.
-        platform (ListPeopleResponse200DataItemAccountsItemPlatform): Platform: bluesky, hackernews, github,
-            stackoverflow, devto, reddit, x, youtube, news, linkedin, tiktok, instagram, facebook, appstore (App Store
-            reviews), googleplay (Google Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a
-            place), rss (RSS and Atom feeds a keyword reads).
+        platform (ListPeopleResponse200DataItemAccountsItemPlatform): Platform, one of:
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Developer: hackernews, github, stackoverflow, devto
+            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
         name (None | str): Display name as the platform reports it.
         handle (None | str): Platform handle derived from the profile URL, formatted as the platform shows it.
         url (None | str): Profile URL.

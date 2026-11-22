@@ -7,8 +7,10 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
+    from ..models.discord_channel import DiscordChannel
     from ..models.email_channel import EmailChannel
     from ..models.slack_channel import SlackChannel
+    from ..models.teams_channel import TeamsChannel
     from ..models.telegram_channel import TelegramChannel
     from ..models.webhook_channel import WebhookChannel
 
@@ -20,15 +22,25 @@ T = TypeVar("T", bound="ListChannelsResponse200")
 class ListChannelsResponse200:
     """
     Attributes:
-        data (list[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel]): Every channel of the workspace.
+        data (list[DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel]):
+            Every channel of the workspace.
     """
 
-    data: list[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel]
+    data: list[
+        DiscordChannel
+        | EmailChannel
+        | SlackChannel
+        | TeamsChannel
+        | TelegramChannel
+        | WebhookChannel
+    ]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.discord_channel import DiscordChannel
         from ..models.email_channel import EmailChannel
         from ..models.slack_channel import SlackChannel
+        from ..models.telegram_channel import TelegramChannel
         from ..models.webhook_channel import WebhookChannel
 
         data = []
@@ -38,6 +50,8 @@ class ListChannelsResponse200:
                 isinstance(data_item_data, SlackChannel)
                 or isinstance(data_item_data, EmailChannel)
                 or isinstance(data_item_data, WebhookChannel)
+                or isinstance(data_item_data, TelegramChannel)
+                or isinstance(data_item_data, DiscordChannel)
             ):
                 data_item = data_item_data.to_dict()
             else:
@@ -57,8 +71,10 @@ class ListChannelsResponse200:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.discord_channel import DiscordChannel
         from ..models.email_channel import EmailChannel
         from ..models.slack_channel import SlackChannel
+        from ..models.teams_channel import TeamsChannel
         from ..models.telegram_channel import TelegramChannel
         from ..models.webhook_channel import WebhookChannel
 
@@ -69,7 +85,14 @@ class ListChannelsResponse200:
 
             def _parse_data_item(
                 data: object,
-            ) -> EmailChannel | SlackChannel | TelegramChannel | WebhookChannel:
+            ) -> (
+                DiscordChannel
+                | EmailChannel
+                | SlackChannel
+                | TeamsChannel
+                | TelegramChannel
+                | WebhookChannel
+            ):
                 try:
                     if not isinstance(data, dict):
                         raise TypeError()
@@ -94,11 +117,27 @@ class ListChannelsResponse200:
                     return data_item_type_2
                 except (TypeError, ValueError, AttributeError, KeyError):
                     pass
+                try:
+                    if not isinstance(data, dict):
+                        raise TypeError()
+                    data_item_type_3 = TelegramChannel.from_dict(data)
+
+                    return data_item_type_3
+                except (TypeError, ValueError, AttributeError, KeyError):
+                    pass
+                try:
+                    if not isinstance(data, dict):
+                        raise TypeError()
+                    data_item_type_4 = DiscordChannel.from_dict(data)
+
+                    return data_item_type_4
+                except (TypeError, ValueError, AttributeError, KeyError):
+                    pass
                 if not isinstance(data, dict):
                     raise TypeError()
-                data_item_type_3 = TelegramChannel.from_dict(data)
+                data_item_type_5 = TeamsChannel.from_dict(data)
 
-                return data_item_type_3
+                return data_item_type_5
 
             data_item = _parse_data_item(data_item_data)
 

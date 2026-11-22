@@ -5,12 +5,16 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
+from ...models.create_discord_channel import CreateDiscordChannel
 from ...models.create_email_channel import CreateEmailChannel
 from ...models.create_slack_channel import CreateSlackChannel
+from ...models.create_teams_channel import CreateTeamsChannel
 from ...models.create_webhook_channel import CreateWebhookChannel
+from ...models.discord_channel import DiscordChannel
 from ...models.email_channel import EmailChannel
 from ...models.error_response import ErrorResponse
 from ...models.slack_channel import SlackChannel
+from ...models.teams_channel import TeamsChannel
 from ...models.telegram_channel import TelegramChannel
 from ...models.webhook_channel import WebhookChannel
 from ...types import UNSET, Response, Unset
@@ -18,7 +22,11 @@ from ...types import UNSET, Response, Unset
 
 def _get_kwargs(
     *,
-    body: CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel,
+    body: CreateDiscordChannel
+    | CreateEmailChannel
+    | CreateSlackChannel
+    | CreateTeamsChannel
+    | CreateWebhookChannel,
     idempotency_key: str | Unset = UNSET,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
@@ -30,7 +38,12 @@ def _get_kwargs(
         "url": "/v1/channels",
     }
 
-    if isinstance(body, CreateSlackChannel) or isinstance(body, CreateEmailChannel):
+    if (
+        isinstance(body, CreateSlackChannel)
+        or isinstance(body, CreateEmailChannel)
+        or isinstance(body, CreateWebhookChannel)
+        or isinstance(body, CreateDiscordChannel)
+    ):
         _kwargs["json"] = body.to_dict()
     else:
         _kwargs["json"] = body.to_dict()
@@ -44,8 +57,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> (
-    EmailChannel
+    DiscordChannel
+    | EmailChannel
     | SlackChannel
+    | TeamsChannel
     | TelegramChannel
     | WebhookChannel
     | ErrorResponse
@@ -55,7 +70,14 @@ def _parse_response(
 
         def _parse_response_201(
             data: object,
-        ) -> EmailChannel | SlackChannel | TelegramChannel | WebhookChannel:
+        ) -> (
+            DiscordChannel
+            | EmailChannel
+            | SlackChannel
+            | TeamsChannel
+            | TelegramChannel
+            | WebhookChannel
+        ):
             try:
                 if not isinstance(data, dict):
                     raise TypeError()
@@ -80,11 +102,27 @@ def _parse_response(
                 return componentsschemas_channel_type_2
             except (TypeError, ValueError, AttributeError, KeyError):
                 pass
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_channel_type_3 = TelegramChannel.from_dict(data)
+
+                return componentsschemas_channel_type_3
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                componentsschemas_channel_type_4 = DiscordChannel.from_dict(data)
+
+                return componentsschemas_channel_type_4
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
             if not isinstance(data, dict):
                 raise TypeError()
-            componentsschemas_channel_type_3 = TelegramChannel.from_dict(data)
+            componentsschemas_channel_type_5 = TeamsChannel.from_dict(data)
 
-            return componentsschemas_channel_type_3
+            return componentsschemas_channel_type_5
 
         response_201 = _parse_response_201(response.json())
 
@@ -114,7 +152,13 @@ def _parse_response(
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> Response[
-    EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+    DiscordChannel
+    | EmailChannel
+    | SlackChannel
+    | TeamsChannel
+    | TelegramChannel
+    | WebhookChannel
+    | ErrorResponse
 ]:
     return Response(
         status_code=HTTPStatus(response.status_code),
@@ -127,10 +171,20 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    body: CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel,
+    body: CreateDiscordChannel
+    | CreateEmailChannel
+    | CreateSlackChannel
+    | CreateTeamsChannel
+    | CreateWebhookChannel,
     idempotency_key: str | Unset = UNSET,
 ) -> Response[
-    EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+    DiscordChannel
+    | EmailChannel
+    | SlackChannel
+    | TeamsChannel
+    | TelegramChannel
+    | WebhookChannel
+    | ErrorResponse
 ]:
     """Create a channel
 
@@ -138,14 +192,15 @@ def sync_detailed(
         idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
             same key within 24 hours returns the first response instead of creating twice. Example:
             7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
-        body (CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel):
+        body (CreateDiscordChannel | CreateEmailChannel | CreateSlackChannel | CreateTeamsChannel
+            | CreateWebhookChannel):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse]
+        Response[DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse]
     """
 
     kwargs = _get_kwargs(
@@ -163,11 +218,17 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    body: CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel,
+    body: CreateDiscordChannel
+    | CreateEmailChannel
+    | CreateSlackChannel
+    | CreateTeamsChannel
+    | CreateWebhookChannel,
     idempotency_key: str | Unset = UNSET,
 ) -> (
-    EmailChannel
+    DiscordChannel
+    | EmailChannel
     | SlackChannel
+    | TeamsChannel
     | TelegramChannel
     | WebhookChannel
     | ErrorResponse
@@ -179,14 +240,15 @@ def sync(
         idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
             same key within 24 hours returns the first response instead of creating twice. Example:
             7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
-        body (CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel):
+        body (CreateDiscordChannel | CreateEmailChannel | CreateSlackChannel | CreateTeamsChannel
+            | CreateWebhookChannel):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+        DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse
     """
 
     return sync_detailed(
@@ -199,10 +261,20 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    body: CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel,
+    body: CreateDiscordChannel
+    | CreateEmailChannel
+    | CreateSlackChannel
+    | CreateTeamsChannel
+    | CreateWebhookChannel,
     idempotency_key: str | Unset = UNSET,
 ) -> Response[
-    EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+    DiscordChannel
+    | EmailChannel
+    | SlackChannel
+    | TeamsChannel
+    | TelegramChannel
+    | WebhookChannel
+    | ErrorResponse
 ]:
     """Create a channel
 
@@ -210,14 +282,15 @@ async def asyncio_detailed(
         idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
             same key within 24 hours returns the first response instead of creating twice. Example:
             7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
-        body (CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel):
+        body (CreateDiscordChannel | CreateEmailChannel | CreateSlackChannel | CreateTeamsChannel
+            | CreateWebhookChannel):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse]
+        Response[DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse]
     """
 
     kwargs = _get_kwargs(
@@ -233,11 +306,17 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    body: CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel,
+    body: CreateDiscordChannel
+    | CreateEmailChannel
+    | CreateSlackChannel
+    | CreateTeamsChannel
+    | CreateWebhookChannel,
     idempotency_key: str | Unset = UNSET,
 ) -> (
-    EmailChannel
+    DiscordChannel
+    | EmailChannel
     | SlackChannel
+    | TeamsChannel
     | TelegramChannel
     | WebhookChannel
     | ErrorResponse
@@ -249,14 +328,15 @@ async def asyncio(
         idempotency_key (str | Unset): A unique value (a UUID) for this request. Retrying with the
             same key within 24 hours returns the first response instead of creating twice. Example:
             7b1e4c2a-9f3d-4e8a-b6c5-1d2e3f4a5b6c.
-        body (CreateEmailChannel | CreateSlackChannel | CreateWebhookChannel):
+        body (CreateDiscordChannel | CreateEmailChannel | CreateSlackChannel | CreateTeamsChannel
+            | CreateWebhookChannel):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        EmailChannel | SlackChannel | TelegramChannel | WebhookChannel | ErrorResponse
+        DiscordChannel | EmailChannel | SlackChannel | TeamsChannel | TelegramChannel | WebhookChannel | ErrorResponse
     """
 
     return (

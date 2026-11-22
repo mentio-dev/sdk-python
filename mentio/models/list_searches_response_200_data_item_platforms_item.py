@@ -23,10 +23,11 @@ T = TypeVar("T", bound="ListSearchesResponse200DataItemPlatformsItem")
 class ListSearchesResponse200DataItemPlatformsItem:
     """
     Attributes:
-        platform (ListSearchesResponse200DataItemPlatformsItemPlatform): Platform: bluesky, hackernews, github,
-            stackoverflow, devto, reddit, x, youtube, news, linkedin, tiktok, instagram, facebook, appstore (App Store
-            reviews), googleplay (Google Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a
-            place), rss (RSS and Atom feeds a keyword reads).
+        platform (ListSearchesResponse200DataItemPlatformsItemPlatform): Platform, one of:
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Developer: hackernews, github, stackoverflow, devto
+            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
         status (ListSearchesResponse200DataItemPlatformsItemStatus): queued: not read yet. running: being read or
             scored. done: read and scored. skipped: not read (see reason). failed: the read failed (see reason).
         reason (ListSearchesResponse200DataItemPlatformsItemReason): Why a platform was skipped or failed: unsupported

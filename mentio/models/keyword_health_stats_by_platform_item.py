@@ -17,10 +17,11 @@ T = TypeVar("T", bound="KeywordHealthStatsByPlatformItem")
 class KeywordHealthStatsByPlatformItem:
     """
     Attributes:
-        platform (KeywordHealthStatsByPlatformItemPlatform): Platform: bluesky, hackernews, github, stackoverflow,
-            devto, reddit, x, youtube, news, linkedin, tiktok, instagram, facebook, appstore (App Store reviews), googleplay
-            (Google Play reviews), trustpilot (Trustpilot reviews), googlemaps (Google reviews of a place), rss (RSS and
-            Atom feeds a keyword reads).
+        platform (KeywordHealthStatsByPlatformItemPlatform): Platform, one of:
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Developer: hackernews, github, stackoverflow, devto
+            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
         matches (int): Matches on this platform in the window.
         relevant (int): Of those, scored at or above the relevance line (40).
         filtered (int): Of those, scored under the line: the noise.
