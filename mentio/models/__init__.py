@@ -301,6 +301,9 @@ from .create_keyword_body_matching_required_mode import (
     CreateKeywordBodyMatchingRequiredMode,
 )
 from .create_keyword_body_matching_subreddits import CreateKeywordBodyMatchingSubreddits
+from .create_keyword_body_matching_term_in_item import (
+    CreateKeywordBodyMatchingTermInItem,
+)
 from .create_keyword_body_platforms_type_0_item import (
     CreateKeywordBodyPlatformsType0Item,
 )
@@ -363,6 +366,9 @@ from .create_keywords_body_keywords_item_matching_required_mode import (
 )
 from .create_keywords_body_keywords_item_matching_subreddits import (
     CreateKeywordsBodyKeywordsItemMatchingSubreddits,
+)
+from .create_keywords_body_keywords_item_matching_term_in_item import (
+    CreateKeywordsBodyKeywordsItemMatchingTermInItem,
 )
 from .create_keywords_body_keywords_item_platforms_type_0_item import (
     CreateKeywordsBodyKeywordsItemPlatformsType0Item,
@@ -719,6 +725,9 @@ from .keyword_batch_result_data_item_keyword_type_0_matching_required_mode impor
 from .keyword_batch_result_data_item_keyword_type_0_matching_subreddits import (
     KeywordBatchResultDataItemKeywordType0MatchingSubreddits,
 )
+from .keyword_batch_result_data_item_keyword_type_0_matching_term_in_item import (
+    KeywordBatchResultDataItemKeywordType0MatchingTermInItem,
+)
 from .keyword_batch_result_data_item_keyword_type_0_platforms_type_0_item import (
     KeywordBatchResultDataItemKeywordType0PlatformsType0Item,
 )
@@ -824,6 +833,7 @@ from .keyword_matching_repositories_events_item import (
 )
 from .keyword_matching_required_mode import KeywordMatchingRequiredMode
 from .keyword_matching_subreddits import KeywordMatchingSubreddits
+from .keyword_matching_term_in_item import KeywordMatchingTermInItem
 from .keyword_noisy_event_data import KeywordNoisyEventData
 from .keyword_noisy_event_data_keyword import KeywordNoisyEventDataKeyword
 from .keyword_noisy_event_data_keyword_kind import KeywordNoisyEventDataKeywordKind
@@ -875,6 +885,9 @@ from .keyword_suggestion_patch_matching_required_mode import (
 )
 from .keyword_suggestion_patch_matching_subreddits import (
     KeywordSuggestionPatchMatchingSubreddits,
+)
+from .keyword_suggestion_patch_matching_term_in_item import (
+    KeywordSuggestionPatchMatchingTermInItem,
 )
 from .keyword_suggestion_patch_platforms_type_0_item import (
     KeywordSuggestionPatchPlatformsType0Item,
@@ -1074,6 +1087,9 @@ from .list_keywords_response_200_data_item_matching_required_mode import (
 )
 from .list_keywords_response_200_data_item_matching_subreddits import (
     ListKeywordsResponse200DataItemMatchingSubreddits,
+)
+from .list_keywords_response_200_data_item_matching_term_in_item import (
+    ListKeywordsResponse200DataItemMatchingTermInItem,
 )
 from .list_keywords_response_200_data_item_platforms_type_0_item import (
     ListKeywordsResponse200DataItemPlatformsType0Item,
@@ -1618,6 +1634,9 @@ from .update_keyword_body_matching_required_mode import (
     UpdateKeywordBodyMatchingRequiredMode,
 )
 from .update_keyword_body_matching_subreddits import UpdateKeywordBodyMatchingSubreddits
+from .update_keyword_body_matching_term_in_item import (
+    UpdateKeywordBodyMatchingTermInItem,
+)
 from .update_keyword_body_platforms_type_0_item import (
     UpdateKeywordBodyPlatformsType0Item,
 )
@@ -1937,6 +1956,7 @@ __all__ = (
     "CreateKeywordBodyMatchingRepositoriesEventsItem",
     "CreateKeywordBodyMatchingRequiredMode",
     "CreateKeywordBodyMatchingSubreddits",
+    "CreateKeywordBodyMatchingTermInItem",
     "CreateKeywordBodyPlatformsType0Item",
     "CreateKeywordBodyReviewSourcesItem",
     "CreateKeywordBodyReviewSourcesItemPlatform",
@@ -1962,6 +1982,7 @@ __all__ = (
     "CreateKeywordsBodyKeywordsItemMatchingRepositoriesEventsItem",
     "CreateKeywordsBodyKeywordsItemMatchingRequiredMode",
     "CreateKeywordsBodyKeywordsItemMatchingSubreddits",
+    "CreateKeywordsBodyKeywordsItemMatchingTermInItem",
     "CreateKeywordsBodyKeywordsItemPlatformsType0Item",
     "CreateSearchBody",
     "CreateSearchBodyKind",
@@ -2207,6 +2228,7 @@ __all__ = (
     "KeywordBatchResultDataItemKeywordType0MatchingRepositoriesEventsItem",
     "KeywordBatchResultDataItemKeywordType0MatchingRequiredMode",
     "KeywordBatchResultDataItemKeywordType0MatchingSubreddits",
+    "KeywordBatchResultDataItemKeywordType0MatchingTermInItem",
     "KeywordBatchResultDataItemKeywordType0PlatformsType0Item",
     "KeywordBatchResultDataItemKeywordType0PollingItem",
     "KeywordBatchResultDataItemKeywordType0PollingItemPlatform",
@@ -2270,6 +2292,7 @@ __all__ = (
     "KeywordMatchingRepositoriesEventsItem",
     "KeywordMatchingRequiredMode",
     "KeywordMatchingSubreddits",
+    "KeywordMatchingTermInItem",
     "KeywordNoisyEventData",
     "KeywordNoisyEventDataKeyword",
     "KeywordNoisyEventDataKeywordKind",
@@ -2302,6 +2325,7 @@ __all__ = (
     "KeywordSuggestionPatchMatchingRepositoriesEventsItem",
     "KeywordSuggestionPatchMatchingRequiredMode",
     "KeywordSuggestionPatchMatchingSubreddits",
+    "KeywordSuggestionPatchMatchingTermInItem",
     "KeywordSuggestionPatchPlatformsType0Item",
     "KeywordSuggestionPatchReviewSourcesItem",
     "KeywordSuggestionPatchReviewSourcesItemPlatform",
@@ -2393,6 +2417,7 @@ __all__ = (
     "ListKeywordsResponse200DataItemMatchingRepositoriesEventsItem",
     "ListKeywordsResponse200DataItemMatchingRequiredMode",
     "ListKeywordsResponse200DataItemMatchingSubreddits",
+    "ListKeywordsResponse200DataItemMatchingTermInItem",
     "ListKeywordsResponse200DataItemPlatformsType0Item",
     "ListKeywordsResponse200DataItemPollingItem",
     "ListKeywordsResponse200DataItemPollingItemPlatform",
@@ -2732,6 +2757,7 @@ __all__ = (
     "UpdateKeywordBodyMatchingRepositoriesEventsItem",
     "UpdateKeywordBodyMatchingRequiredMode",
     "UpdateKeywordBodyMatchingSubreddits",
+    "UpdateKeywordBodyMatchingTermInItem",
     "UpdateKeywordBodyPlatformsType0Item",
     "UpdateKeywordBodyReviewSourcesItem",
     "UpdateKeywordBodyReviewSourcesItemPlatform",

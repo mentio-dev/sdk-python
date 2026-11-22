@@ -9,6 +9,9 @@ from attrs import field as _attrs_field
 from ..models.list_keywords_response_200_data_item_matching_required_mode import (
     ListKeywordsResponse200DataItemMatchingRequiredMode,
 )
+from ..models.list_keywords_response_200_data_item_matching_term_in_item import (
+    ListKeywordsResponse200DataItemMatchingTermInItem,
+)
 
 if TYPE_CHECKING:
     from ..models.list_keywords_response_200_data_item_matching_repositories import (
@@ -48,6 +51,15 @@ class ListKeywordsResponse200DataItemMatching:
             both.
         repositories (ListKeywordsResponse200DataItemMatchingRepositories): GitHub only: which repository events naming
             this keyword become mentions. An event outside the rule is dropped before it is stored, so it is never billed.
+        only_authors (list[str]): When non-empty, only posts BY these accounts match, in the forms excludedAuthors
+            takes; a Bluesky handle is stored with its DID. Reviews and comments read under a mention are exempt.
+        term_in (list[ListKeywordsResponse200DataItemMatchingTermInItem]): Where the term must appear, any part listed;
+            empty: anywhere; reviews are exempt. See [Keywords](/guides/keywords#where-the-term-must-appear).
+
+            - title: the post's title (none on X, Bluesky or LinkedIn).
+            - body: the text after the title.
+            - url: the post's link.
+            - author: the author's name or handle.
     """
 
     required_terms: list[str]
@@ -59,6 +71,8 @@ class ListKeywordsResponse200DataItemMatching:
     exact_phrase: bool
     subreddits: ListKeywordsResponse200DataItemMatchingSubreddits
     repositories: ListKeywordsResponse200DataItemMatchingRepositories
+    only_authors: list[str]
+    term_in: list[ListKeywordsResponse200DataItemMatchingTermInItem]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -84,6 +98,13 @@ class ListKeywordsResponse200DataItemMatching:
 
         repositories = self.repositories.to_dict()
 
+        only_authors = self.only_authors
+
+        term_in = []
+        for term_in_item_data in self.term_in:
+            term_in_item = term_in_item_data.value
+            term_in.append(term_in_item)
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -97,6 +118,8 @@ class ListKeywordsResponse200DataItemMatching:
                 "exactPhrase": exact_phrase,
                 "subreddits": subreddits,
                 "repositories": repositories,
+                "onlyAuthors": only_authors,
+                "termIn": term_in,
             }
         )
 
@@ -141,6 +164,17 @@ class ListKeywordsResponse200DataItemMatching:
             d.pop("repositories")
         )
 
+        only_authors = cast(list[str], d.pop("onlyAuthors"))
+
+        term_in = []
+        _term_in = d.pop("termIn")
+        for term_in_item_data in _term_in:
+            term_in_item = ListKeywordsResponse200DataItemMatchingTermInItem(
+                term_in_item_data
+            )
+
+            term_in.append(term_in_item)
+
         list_keywords_response_200_data_item_matching = cls(
             required_terms=required_terms,
             required_mode=required_mode,
@@ -151,6 +185,8 @@ class ListKeywordsResponse200DataItemMatching:
             exact_phrase=exact_phrase,
             subreddits=subreddits,
             repositories=repositories,
+            only_authors=only_authors,
+            term_in=term_in,
         )
 
         list_keywords_response_200_data_item_matching.additional_properties = d

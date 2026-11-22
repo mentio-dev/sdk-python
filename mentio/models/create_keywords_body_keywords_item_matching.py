@@ -9,6 +9,9 @@ from attrs import field as _attrs_field
 from ..models.create_keywords_body_keywords_item_matching_required_mode import (
     CreateKeywordsBodyKeywordsItemMatchingRequiredMode,
 )
+from ..models.create_keywords_body_keywords_item_matching_term_in_item import (
+    CreateKeywordsBodyKeywordsItemMatchingTermInItem,
+)
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -45,6 +48,16 @@ class CreateKeywordsBodyKeywordsItemMatching:
         exact_phrase (bool | Unset): true: only the exact phrase matches (a term sent in double quotes sets it). false:
             a multi-word keyword also matches its words close together, kept and billed only when scored relevant. See
             [Keywords](/guides/keywords#the-exact-phrase-only).
+        only_authors (list[str] | Unset): When non-empty, only posts BY these accounts match, in the forms
+            excludedAuthors takes; a Bluesky handle is stored with its DID. Reviews and comments read under a mention are
+            exempt.
+        term_in (list[CreateKeywordsBodyKeywordsItemMatchingTermInItem] | Unset): Where the term must appear, any part
+            listed; empty: anywhere; reviews are exempt. See [Keywords](/guides/keywords#where-the-term-must-appear).
+
+            - title: the post's title (none on X, Bluesky or LinkedIn).
+            - body: the text after the title.
+            - url: the post's link.
+            - author: the author's name or handle.
         repositories (CreateKeywordsBodyKeywordsItemMatchingRepositories | Unset): GitHub only: each field is replaced
             when sent, kept when omitted; null clears a minimum.
         subreddits (CreateKeywordsBodyKeywordsItemMatchingSubreddits | Unset): Reddit only, for this keyword alone: each
@@ -58,6 +71,8 @@ class CreateKeywordsBodyKeywordsItemMatching:
     excluded_authors: list[str] | Unset = UNSET
     case_sensitive: bool | Unset = UNSET
     exact_phrase: bool | Unset = UNSET
+    only_authors: list[str] | Unset = UNSET
+    term_in: list[CreateKeywordsBodyKeywordsItemMatchingTermInItem] | Unset = UNSET
     repositories: CreateKeywordsBodyKeywordsItemMatchingRepositories | Unset = UNSET
     subreddits: CreateKeywordsBodyKeywordsItemMatchingSubreddits | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -91,6 +106,17 @@ class CreateKeywordsBodyKeywordsItemMatching:
 
         exact_phrase = self.exact_phrase
 
+        only_authors: list[str] | Unset = UNSET
+        if not isinstance(self.only_authors, Unset):
+            only_authors = self.only_authors
+
+        term_in: list[str] | Unset = UNSET
+        if not isinstance(self.term_in, Unset):
+            term_in = []
+            for term_in_item_data in self.term_in:
+                term_in_item = term_in_item_data.value
+                term_in.append(term_in_item)
+
         repositories: dict[str, Any] | Unset = UNSET
         if not isinstance(self.repositories, Unset):
             repositories = self.repositories.to_dict()
@@ -116,6 +142,10 @@ class CreateKeywordsBodyKeywordsItemMatching:
             field_dict["caseSensitive"] = case_sensitive
         if exact_phrase is not UNSET:
             field_dict["exactPhrase"] = exact_phrase
+        if only_authors is not UNSET:
+            field_dict["onlyAuthors"] = only_authors
+        if term_in is not UNSET:
+            field_dict["termIn"] = term_in
         if repositories is not UNSET:
             field_dict["repositories"] = repositories
         if subreddits is not UNSET:
@@ -161,6 +191,19 @@ class CreateKeywordsBodyKeywordsItemMatching:
 
         exact_phrase = d.pop("exactPhrase", UNSET)
 
+        only_authors = cast(list[str], d.pop("onlyAuthors", UNSET))
+
+        _term_in = d.pop("termIn", UNSET)
+        term_in: list[CreateKeywordsBodyKeywordsItemMatchingTermInItem] | Unset = UNSET
+        if _term_in is not UNSET:
+            term_in = []
+            for term_in_item_data in _term_in:
+                term_in_item = CreateKeywordsBodyKeywordsItemMatchingTermInItem(
+                    term_in_item_data
+                )
+
+                term_in.append(term_in_item)
+
         _repositories = d.pop("repositories", UNSET)
         repositories: CreateKeywordsBodyKeywordsItemMatchingRepositories | Unset
         if isinstance(_repositories, Unset):
@@ -187,6 +230,8 @@ class CreateKeywordsBodyKeywordsItemMatching:
             excluded_authors=excluded_authors,
             case_sensitive=case_sensitive,
             exact_phrase=exact_phrase,
+            only_authors=only_authors,
+            term_in=term_in,
             repositories=repositories,
             subreddits=subreddits,
         )
