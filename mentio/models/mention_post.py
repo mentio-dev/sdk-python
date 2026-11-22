@@ -24,9 +24,9 @@ class MentionPost:
 
     Attributes:
         platform (MentionPostPlatform): Platform, one of:
-            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, threads, mastodon
             - Developer: hackernews, github, stackoverflow, devto
-            - Media: news, podcasts (titles, show notes, transcripts), rss (keyword feeds)
+            - Media: news, youtube, podcasts (with transcripts), rss (keyword feeds)
             - Web: web (blogs), substack, producthunt
             - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         kind (MentionPostKind): post: a top-level post. comment: answers a post or comment (Reddit, Hacker News or

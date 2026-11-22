@@ -1374,7 +1374,7 @@ class _Searches:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
           range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
-          platforms: Platforms to read; omit for all that search back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts, web, substack). devto, news and producthunt are skipped.
+          platforms: Platforms to read; omit for all that search back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts, web, substack, threads, mastodon). devto, news and producthunt are skipped.
           kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
           context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
         return _result(_ops.searches.create_search.sync_detailed(client=self._client, body=_body(_m.CreateSearchBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
@@ -3006,7 +3006,7 @@ class _AsyncSearches:
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
           range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
-          platforms: Platforms to read; omit for all that search back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts, web, substack). devto, news and producthunt are skipped.
+          platforms: Platforms to read; omit for all that search back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts, web, substack, threads, mastodon). devto, news and producthunt are skipped.
           kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
           context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
         return _result(await _ops.searches.create_search.asyncio_detailed(client=self._client, body=_body(_m.CreateSearchBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))

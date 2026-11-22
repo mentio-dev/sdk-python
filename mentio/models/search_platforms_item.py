@@ -18,9 +18,9 @@ class SearchPlatformsItem:
     """
     Attributes:
         platform (SearchPlatformsItemPlatform): Platform, one of:
-            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, threads, mastodon
             - Developer: hackernews, github, stackoverflow, devto
-            - Media: news, podcasts (titles, show notes, transcripts), rss (keyword feeds)
+            - Media: news, youtube, podcasts (with transcripts), rss (keyword feeds)
             - Web: web (blogs), substack, producthunt
             - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         status (SearchPlatformsItemStatus): queued: not read yet. running: being read or scored. done: read and scored.

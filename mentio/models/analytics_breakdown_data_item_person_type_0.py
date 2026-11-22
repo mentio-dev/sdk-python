@@ -21,9 +21,9 @@ class AnalyticsBreakdownDataItemPersonType0:
         id (None | str): Person id (aut_...); null for posts ingested before people were linked.
         name (None | str): Display name as the platform shows it.
         platform (AnalyticsBreakdownDataItemPersonType0Platform): Platform, one of:
-            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
+            - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, threads, mastodon
             - Developer: hackernews, github, stackoverflow, devto
-            - Media: news, podcasts (titles, show notes, transcripts), rss (keyword feeds)
+            - Media: news, youtube, podcasts (with transcripts), rss (keyword feeds)
             - Web: web (blogs), substack, producthunt
             - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         url (None | str): Profile URL.
