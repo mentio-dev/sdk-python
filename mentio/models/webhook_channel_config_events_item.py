@@ -3,6 +3,7 @@ from enum import StrEnum
 
 class WebhookChannelConfigEventsItem(StrEnum):
     CHANNEL_FAILING = "channel.failing"
+    EXPORT_READY = "export.ready"
     FEED_FAILING = "feed.failing"
     FEED_RECOVERED = "feed.recovered"
     KEYWORD_CAPPED = "keyword.capped"

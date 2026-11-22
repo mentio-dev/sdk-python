@@ -167,6 +167,100 @@ from .create_discord_channel_kind import CreateDiscordChannelKind
 from .create_email_channel import CreateEmailChannel
 from .create_email_channel_events_item import CreateEmailChannelEventsItem
 from .create_email_channel_kind import CreateEmailChannelKind
+from .create_export_body import CreateExportBody
+from .create_export_body_filter import CreateExportBodyFilter
+from .create_export_body_filter_countries_item import (
+    CreateExportBodyFilterCountriesItem,
+)
+from .create_export_body_filter_emotions_item import CreateExportBodyFilterEmotionsItem
+from .create_export_body_filter_keyword_kinds_item import (
+    CreateExportBodyFilterKeywordKindsItem,
+)
+from .create_export_body_filter_kind import CreateExportBodyFilterKind
+from .create_export_body_filter_not_countries_item import (
+    CreateExportBodyFilterNotCountriesItem,
+)
+from .create_export_body_filter_not_emotions_item import (
+    CreateExportBodyFilterNotEmotionsItem,
+)
+from .create_export_body_filter_not_keyword_kinds_item import (
+    CreateExportBodyFilterNotKeywordKindsItem,
+)
+from .create_export_body_filter_not_platforms_item import (
+    CreateExportBodyFilterNotPlatformsItem,
+)
+from .create_export_body_filter_not_sentiments_item import (
+    CreateExportBodyFilterNotSentimentsItem,
+)
+from .create_export_body_filter_platform import CreateExportBodyFilterPlatform
+from .create_export_body_filter_platforms_item import (
+    CreateExportBodyFilterPlatformsItem,
+)
+from .create_export_body_filter_range import CreateExportBodyFilterRange
+from .create_export_body_filter_sentiment import CreateExportBodyFilterSentiment
+from .create_export_body_filter_sentiments_item import (
+    CreateExportBodyFilterSentimentsItem,
+)
+from .create_export_body_filter_status import CreateExportBodyFilterStatus
+from .create_export_body_format import CreateExportBodyFormat
+from .create_export_body_resource import CreateExportBodyResource
+from .create_export_schedule_body import CreateExportScheduleBody
+from .create_export_schedule_body_cadence import CreateExportScheduleBodyCadence
+from .create_export_schedule_body_destination_type_0 import (
+    CreateExportScheduleBodyDestinationType0,
+)
+from .create_export_schedule_body_destination_type_0_kind import (
+    CreateExportScheduleBodyDestinationType0Kind,
+)
+from .create_export_schedule_body_destination_type_1 import (
+    CreateExportScheduleBodyDestinationType1,
+)
+from .create_export_schedule_body_destination_type_1_kind import (
+    CreateExportScheduleBodyDestinationType1Kind,
+)
+from .create_export_schedule_body_filter import CreateExportScheduleBodyFilter
+from .create_export_schedule_body_filter_countries_item import (
+    CreateExportScheduleBodyFilterCountriesItem,
+)
+from .create_export_schedule_body_filter_emotions_item import (
+    CreateExportScheduleBodyFilterEmotionsItem,
+)
+from .create_export_schedule_body_filter_keyword_kinds_item import (
+    CreateExportScheduleBodyFilterKeywordKindsItem,
+)
+from .create_export_schedule_body_filter_kind import CreateExportScheduleBodyFilterKind
+from .create_export_schedule_body_filter_not_countries_item import (
+    CreateExportScheduleBodyFilterNotCountriesItem,
+)
+from .create_export_schedule_body_filter_not_emotions_item import (
+    CreateExportScheduleBodyFilterNotEmotionsItem,
+)
+from .create_export_schedule_body_filter_not_keyword_kinds_item import (
+    CreateExportScheduleBodyFilterNotKeywordKindsItem,
+)
+from .create_export_schedule_body_filter_not_platforms_item import (
+    CreateExportScheduleBodyFilterNotPlatformsItem,
+)
+from .create_export_schedule_body_filter_not_sentiments_item import (
+    CreateExportScheduleBodyFilterNotSentimentsItem,
+)
+from .create_export_schedule_body_filter_platform import (
+    CreateExportScheduleBodyFilterPlatform,
+)
+from .create_export_schedule_body_filter_platforms_item import (
+    CreateExportScheduleBodyFilterPlatformsItem,
+)
+from .create_export_schedule_body_filter_sentiment import (
+    CreateExportScheduleBodyFilterSentiment,
+)
+from .create_export_schedule_body_filter_sentiments_item import (
+    CreateExportScheduleBodyFilterSentimentsItem,
+)
+from .create_export_schedule_body_filter_status import (
+    CreateExportScheduleBodyFilterStatus,
+)
+from .create_export_schedule_body_format import CreateExportScheduleBodyFormat
+from .create_export_schedule_body_weekday import CreateExportScheduleBodyWeekday
 from .create_feed_body import CreateFeedBody
 from .create_feed_body_auth_type_0 import CreateFeedBodyAuthType0
 from .create_feed_body_auth_type_0_type import CreateFeedBodyAuthType0Type
@@ -293,6 +387,29 @@ from .error_response import ErrorResponse
 from .error_response_error import ErrorResponseError
 from .error_response_error_code import ErrorResponseErrorCode
 from .error_response_error_details import ErrorResponseErrorDetails
+from .export import Export
+from .export_delivery_type_0 import ExportDeliveryType0
+from .export_delivery_type_0_kind import ExportDeliveryType0Kind
+from .export_delivery_type_0_status import ExportDeliveryType0Status
+from .export_download_type_0 import ExportDownloadType0
+from .export_error_type_0 import ExportErrorType0
+from .export_filter import ExportFilter
+from .export_filter_countries_item import ExportFilterCountriesItem
+from .export_filter_emotions_item import ExportFilterEmotionsItem
+from .export_filter_keyword_kinds_item import ExportFilterKeywordKindsItem
+from .export_filter_kind import ExportFilterKind
+from .export_filter_not_countries_item import ExportFilterNotCountriesItem
+from .export_filter_not_emotions_item import ExportFilterNotEmotionsItem
+from .export_filter_not_keyword_kinds_item import ExportFilterNotKeywordKindsItem
+from .export_filter_not_platforms_item import ExportFilterNotPlatformsItem
+from .export_filter_not_sentiments_item import ExportFilterNotSentimentsItem
+from .export_filter_platform import ExportFilterPlatform
+from .export_filter_platforms_item import ExportFilterPlatformsItem
+from .export_filter_range import ExportFilterRange
+from .export_filter_sentiment import ExportFilterSentiment
+from .export_filter_sentiments_item import ExportFilterSentimentsItem
+from .export_filter_status import ExportFilterStatus
+from .export_format import ExportFormat
 from .export_mentions_csv_countries_item import ExportMentionsCsvCountriesItem
 from .export_mentions_csv_emotions_item import ExportMentionsCsvEmotionsItem
 from .export_mentions_csv_keyword_kinds_item import ExportMentionsCsvKeywordKindsItem
@@ -341,6 +458,45 @@ from .export_people_csv_platforms_item import ExportPeopleCsvPlatformsItem
 from .export_people_csv_range import ExportPeopleCsvRange
 from .export_people_csv_sort import ExportPeopleCsvSort
 from .export_people_csv_stages_item import ExportPeopleCsvStagesItem
+from .export_resource import ExportResource
+from .export_schedule import ExportSchedule
+from .export_schedule_cadence import ExportScheduleCadence
+from .export_schedule_destination_type_0 import ExportScheduleDestinationType0
+from .export_schedule_destination_type_0_kind import ExportScheduleDestinationType0Kind
+from .export_schedule_destination_type_1 import ExportScheduleDestinationType1
+from .export_schedule_destination_type_1_kind import ExportScheduleDestinationType1Kind
+from .export_schedule_filter import ExportScheduleFilter
+from .export_schedule_filter_countries_item import ExportScheduleFilterCountriesItem
+from .export_schedule_filter_emotions_item import ExportScheduleFilterEmotionsItem
+from .export_schedule_filter_keyword_kinds_item import (
+    ExportScheduleFilterKeywordKindsItem,
+)
+from .export_schedule_filter_kind import ExportScheduleFilterKind
+from .export_schedule_filter_not_countries_item import (
+    ExportScheduleFilterNotCountriesItem,
+)
+from .export_schedule_filter_not_emotions_item import (
+    ExportScheduleFilterNotEmotionsItem,
+)
+from .export_schedule_filter_not_keyword_kinds_item import (
+    ExportScheduleFilterNotKeywordKindsItem,
+)
+from .export_schedule_filter_not_platforms_item import (
+    ExportScheduleFilterNotPlatformsItem,
+)
+from .export_schedule_filter_not_sentiments_item import (
+    ExportScheduleFilterNotSentimentsItem,
+)
+from .export_schedule_filter_platform import ExportScheduleFilterPlatform
+from .export_schedule_filter_platforms_item import ExportScheduleFilterPlatformsItem
+from .export_schedule_filter_sentiment import ExportScheduleFilterSentiment
+from .export_schedule_filter_sentiments_item import ExportScheduleFilterSentimentsItem
+from .export_schedule_filter_status import ExportScheduleFilterStatus
+from .export_schedule_format import ExportScheduleFormat
+from .export_schedule_weekday import ExportScheduleWeekday
+from .export_stats import ExportStats
+from .export_status import ExportStatus
+from .export_window_type_0 import ExportWindowType0
 from .feed import Feed
 from .feed_auth_type_0 import FeedAuthType0
 from .feed_auth_type_0_type import FeedAuthType0Type
@@ -649,6 +805,8 @@ from .list_channel_deliveries_response_200_data_item_status import (
     ListChannelDeliveriesResponse200DataItemStatus,
 )
 from .list_channels_response_200 import ListChannelsResponse200
+from .list_export_schedules_response_200 import ListExportSchedulesResponse200
+from .list_exports_response_200 import ListExportsResponse200
 from .list_feeds_response_200 import ListFeedsResponse200
 from .list_feeds_response_200_data_item import ListFeedsResponse200DataItem
 from .list_feeds_response_200_data_item_auth_type_0 import (
@@ -1096,6 +1254,7 @@ from .test_alert_response_200 import TestAlertResponse200
 from .test_alert_response_200_outcomes_item import TestAlertResponse200OutcomesItem
 from .test_channel_response_200 import TestChannelResponse200
 from .test_channel_response_200_outcomes_item import TestChannelResponse200OutcomesItem
+from .test_export_schedule_response_200 import TestExportScheduleResponse200
 from .unmute_alert_authors_body import UnmuteAlertAuthorsBody
 from .update_alert_body import UpdateAlertBody
 from .update_alert_body_filter import UpdateAlertBodyFilter
@@ -1153,6 +1312,63 @@ from .update_channel_body_events_item import UpdateChannelBodyEventsItem
 from .update_channel_body_headers import UpdateChannelBodyHeaders
 from .update_company_body import UpdateCompanyBody
 from .update_company_body_accounts import UpdateCompanyBodyAccounts
+from .update_export_schedule_body import UpdateExportScheduleBody
+from .update_export_schedule_body_cadence import UpdateExportScheduleBodyCadence
+from .update_export_schedule_body_destination_type_0 import (
+    UpdateExportScheduleBodyDestinationType0,
+)
+from .update_export_schedule_body_destination_type_0_kind import (
+    UpdateExportScheduleBodyDestinationType0Kind,
+)
+from .update_export_schedule_body_destination_type_1 import (
+    UpdateExportScheduleBodyDestinationType1,
+)
+from .update_export_schedule_body_destination_type_1_kind import (
+    UpdateExportScheduleBodyDestinationType1Kind,
+)
+from .update_export_schedule_body_filter import UpdateExportScheduleBodyFilter
+from .update_export_schedule_body_filter_countries_item import (
+    UpdateExportScheduleBodyFilterCountriesItem,
+)
+from .update_export_schedule_body_filter_emotions_item import (
+    UpdateExportScheduleBodyFilterEmotionsItem,
+)
+from .update_export_schedule_body_filter_keyword_kinds_item import (
+    UpdateExportScheduleBodyFilterKeywordKindsItem,
+)
+from .update_export_schedule_body_filter_kind import UpdateExportScheduleBodyFilterKind
+from .update_export_schedule_body_filter_not_countries_item import (
+    UpdateExportScheduleBodyFilterNotCountriesItem,
+)
+from .update_export_schedule_body_filter_not_emotions_item import (
+    UpdateExportScheduleBodyFilterNotEmotionsItem,
+)
+from .update_export_schedule_body_filter_not_keyword_kinds_item import (
+    UpdateExportScheduleBodyFilterNotKeywordKindsItem,
+)
+from .update_export_schedule_body_filter_not_platforms_item import (
+    UpdateExportScheduleBodyFilterNotPlatformsItem,
+)
+from .update_export_schedule_body_filter_not_sentiments_item import (
+    UpdateExportScheduleBodyFilterNotSentimentsItem,
+)
+from .update_export_schedule_body_filter_platform import (
+    UpdateExportScheduleBodyFilterPlatform,
+)
+from .update_export_schedule_body_filter_platforms_item import (
+    UpdateExportScheduleBodyFilterPlatformsItem,
+)
+from .update_export_schedule_body_filter_sentiment import (
+    UpdateExportScheduleBodyFilterSentiment,
+)
+from .update_export_schedule_body_filter_sentiments_item import (
+    UpdateExportScheduleBodyFilterSentimentsItem,
+)
+from .update_export_schedule_body_filter_status import (
+    UpdateExportScheduleBodyFilterStatus,
+)
+from .update_export_schedule_body_format import UpdateExportScheduleBodyFormat
+from .update_export_schedule_body_weekday import UpdateExportScheduleBodyWeekday
 from .update_feed_body import UpdateFeedBody
 from .update_feed_body_auth_type_0 import UpdateFeedBodyAuthType0
 from .update_feed_body_auth_type_0_type import UpdateFeedBodyAuthType0Type
@@ -1444,6 +1660,48 @@ __all__ = (
     "CreateEmailChannel",
     "CreateEmailChannelEventsItem",
     "CreateEmailChannelKind",
+    "CreateExportBody",
+    "CreateExportBodyFilter",
+    "CreateExportBodyFilterCountriesItem",
+    "CreateExportBodyFilterEmotionsItem",
+    "CreateExportBodyFilterKeywordKindsItem",
+    "CreateExportBodyFilterKind",
+    "CreateExportBodyFilterNotCountriesItem",
+    "CreateExportBodyFilterNotEmotionsItem",
+    "CreateExportBodyFilterNotKeywordKindsItem",
+    "CreateExportBodyFilterNotPlatformsItem",
+    "CreateExportBodyFilterNotSentimentsItem",
+    "CreateExportBodyFilterPlatform",
+    "CreateExportBodyFilterPlatformsItem",
+    "CreateExportBodyFilterRange",
+    "CreateExportBodyFilterSentiment",
+    "CreateExportBodyFilterSentimentsItem",
+    "CreateExportBodyFilterStatus",
+    "CreateExportBodyFormat",
+    "CreateExportBodyResource",
+    "CreateExportScheduleBody",
+    "CreateExportScheduleBodyCadence",
+    "CreateExportScheduleBodyDestinationType0",
+    "CreateExportScheduleBodyDestinationType0Kind",
+    "CreateExportScheduleBodyDestinationType1",
+    "CreateExportScheduleBodyDestinationType1Kind",
+    "CreateExportScheduleBodyFilter",
+    "CreateExportScheduleBodyFilterCountriesItem",
+    "CreateExportScheduleBodyFilterEmotionsItem",
+    "CreateExportScheduleBodyFilterKeywordKindsItem",
+    "CreateExportScheduleBodyFilterKind",
+    "CreateExportScheduleBodyFilterNotCountriesItem",
+    "CreateExportScheduleBodyFilterNotEmotionsItem",
+    "CreateExportScheduleBodyFilterNotKeywordKindsItem",
+    "CreateExportScheduleBodyFilterNotPlatformsItem",
+    "CreateExportScheduleBodyFilterNotSentimentsItem",
+    "CreateExportScheduleBodyFilterPlatform",
+    "CreateExportScheduleBodyFilterPlatformsItem",
+    "CreateExportScheduleBodyFilterSentiment",
+    "CreateExportScheduleBodyFilterSentimentsItem",
+    "CreateExportScheduleBodyFilterStatus",
+    "CreateExportScheduleBodyFormat",
+    "CreateExportScheduleBodyWeekday",
     "CreateFeedBody",
     "CreateFeedBodyAuthType0",
     "CreateFeedBodyAuthType0Type",
@@ -1530,6 +1788,29 @@ __all__ = (
     "ErrorResponseError",
     "ErrorResponseErrorCode",
     "ErrorResponseErrorDetails",
+    "Export",
+    "ExportDeliveryType0",
+    "ExportDeliveryType0Kind",
+    "ExportDeliveryType0Status",
+    "ExportDownloadType0",
+    "ExportErrorType0",
+    "ExportFilter",
+    "ExportFilterCountriesItem",
+    "ExportFilterEmotionsItem",
+    "ExportFilterKeywordKindsItem",
+    "ExportFilterKind",
+    "ExportFilterNotCountriesItem",
+    "ExportFilterNotEmotionsItem",
+    "ExportFilterNotKeywordKindsItem",
+    "ExportFilterNotPlatformsItem",
+    "ExportFilterNotSentimentsItem",
+    "ExportFilterPlatform",
+    "ExportFilterPlatformsItem",
+    "ExportFilterRange",
+    "ExportFilterSentiment",
+    "ExportFilterSentimentsItem",
+    "ExportFilterStatus",
+    "ExportFormat",
     "ExportMentionsCsvCountriesItem",
     "ExportMentionsCsvEmotionsItem",
     "ExportMentionsCsvKeywordKindsItem",
@@ -1570,6 +1851,33 @@ __all__ = (
     "ExportPeopleCsvRange",
     "ExportPeopleCsvSort",
     "ExportPeopleCsvStagesItem",
+    "ExportResource",
+    "ExportSchedule",
+    "ExportScheduleCadence",
+    "ExportScheduleDestinationType0",
+    "ExportScheduleDestinationType0Kind",
+    "ExportScheduleDestinationType1",
+    "ExportScheduleDestinationType1Kind",
+    "ExportScheduleFilter",
+    "ExportScheduleFilterCountriesItem",
+    "ExportScheduleFilterEmotionsItem",
+    "ExportScheduleFilterKeywordKindsItem",
+    "ExportScheduleFilterKind",
+    "ExportScheduleFilterNotCountriesItem",
+    "ExportScheduleFilterNotEmotionsItem",
+    "ExportScheduleFilterNotKeywordKindsItem",
+    "ExportScheduleFilterNotPlatformsItem",
+    "ExportScheduleFilterNotSentimentsItem",
+    "ExportScheduleFilterPlatform",
+    "ExportScheduleFilterPlatformsItem",
+    "ExportScheduleFilterSentiment",
+    "ExportScheduleFilterSentimentsItem",
+    "ExportScheduleFilterStatus",
+    "ExportScheduleFormat",
+    "ExportScheduleWeekday",
+    "ExportStats",
+    "ExportStatus",
+    "ExportWindowType0",
     "Feed",
     "FeedAuthType0",
     "FeedAuthType0Type",
@@ -1760,6 +2068,8 @@ __all__ = (
     "ListChannelDeliveriesResponse200DataItemMentionType0",
     "ListChannelDeliveriesResponse200DataItemStatus",
     "ListChannelsResponse200",
+    "ListExportSchedulesResponse200",
+    "ListExportsResponse200",
     "ListFeedsResponse200",
     "ListFeedsResponse200DataItem",
     "ListFeedsResponse200DataItemAuthType0",
@@ -2043,6 +2353,7 @@ __all__ = (
     "TestAlertResponse200OutcomesItem",
     "TestChannelResponse200",
     "TestChannelResponse200OutcomesItem",
+    "TestExportScheduleResponse200",
     "UnmuteAlertAuthorsBody",
     "UpdateAlertBody",
     "UpdateAlertBodyFilter",
@@ -2074,6 +2385,29 @@ __all__ = (
     "UpdateChannelBodyHeaders",
     "UpdateCompanyBody",
     "UpdateCompanyBodyAccounts",
+    "UpdateExportScheduleBody",
+    "UpdateExportScheduleBodyCadence",
+    "UpdateExportScheduleBodyDestinationType0",
+    "UpdateExportScheduleBodyDestinationType0Kind",
+    "UpdateExportScheduleBodyDestinationType1",
+    "UpdateExportScheduleBodyDestinationType1Kind",
+    "UpdateExportScheduleBodyFilter",
+    "UpdateExportScheduleBodyFilterCountriesItem",
+    "UpdateExportScheduleBodyFilterEmotionsItem",
+    "UpdateExportScheduleBodyFilterKeywordKindsItem",
+    "UpdateExportScheduleBodyFilterKind",
+    "UpdateExportScheduleBodyFilterNotCountriesItem",
+    "UpdateExportScheduleBodyFilterNotEmotionsItem",
+    "UpdateExportScheduleBodyFilterNotKeywordKindsItem",
+    "UpdateExportScheduleBodyFilterNotPlatformsItem",
+    "UpdateExportScheduleBodyFilterNotSentimentsItem",
+    "UpdateExportScheduleBodyFilterPlatform",
+    "UpdateExportScheduleBodyFilterPlatformsItem",
+    "UpdateExportScheduleBodyFilterSentiment",
+    "UpdateExportScheduleBodyFilterSentimentsItem",
+    "UpdateExportScheduleBodyFilterStatus",
+    "UpdateExportScheduleBodyFormat",
+    "UpdateExportScheduleBodyWeekday",
     "UpdateFeedBody",
     "UpdateFeedBodyAuthType0",
     "UpdateFeedBodyAuthType0Type",

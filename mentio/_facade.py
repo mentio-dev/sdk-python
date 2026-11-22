@@ -126,6 +126,17 @@ import mentio.api.channels.test_channel  # noqa: F401
 import mentio.api.channels.update_channel  # noqa: F401
 import mentio.api.company.get_company  # noqa: F401
 import mentio.api.company.update_company  # noqa: F401
+import mentio.api.exports.create_export  # noqa: F401
+import mentio.api.exports.create_export_schedule  # noqa: F401
+import mentio.api.exports.delete_export  # noqa: F401
+import mentio.api.exports.delete_export_schedule  # noqa: F401
+import mentio.api.exports.get_export  # noqa: F401
+import mentio.api.exports.get_export_file  # noqa: F401
+import mentio.api.exports.get_export_schedule  # noqa: F401
+import mentio.api.exports.list_export_schedules  # noqa: F401
+import mentio.api.exports.list_exports  # noqa: F401
+import mentio.api.exports.test_export_schedule  # noqa: F401
+import mentio.api.exports.update_export_schedule  # noqa: F401
 import mentio.api.feeds.create_feed  # noqa: F401
 import mentio.api.feeds.delete_feed  # noqa: F401
 import mentio.api.feeds.get_feed  # noqa: F401
@@ -1396,6 +1407,126 @@ class _Searches:
           cursor: nextCursor from the previous page.
           min_relevance: Only results scored at least this relevant (0 to 100); unscored results are left out when set."""
         return _result(_ops.searches.list_search_results.sync_detailed(id, client=self._client, **params))
+
+class _Exports:
+    """exports: create, delete, file, get, list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateExportBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Export:
+        """Start an export
+
+        Export the mentions a filter selects to a CSV or JSON Lines file, in the background.
+
+        - Up to 1,000,000 rows; GET /v1/mentions' filters, viewId included.
+        - Poll GET /v1/exports/{id}, then download.
+        - Not billed; 2 at once per workspace.
+
+        See [Exports](/guides/exports).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          resource: What is exported: mentions.
+          format: csv: the spreadsheet columns of GET /v1/mentions/export.csv, text cut at 1,000 characters. jsonl: one whole Mention object per line (newline-delimited JSON), as GET /v1/mentions returns it.
+          filter: Which mentions: every filter of GET /v1/mentions, in the same vocabulary (a list as an array or comma-separated), viewId and alertId included. {} is every mention the list shows.
+          maxRows: Stop after this many rows, newest matched first. At most 1,000,000, the default."""
+        return _result(_ops.exports.create_export.sync_detailed(client=self._client, body=_body(_m.CreateExportBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def delete(self, id: str) -> Any:
+        """Delete an export
+
+        Deletes the file and the export: its signed links stop working at once. A running export stops."""
+        return _result(_ops.exports.delete_export.sync_detailed(id, client=self._client))
+
+    def file(self, id: str) -> str:
+        """Download an export
+
+        The file of a succeeded export, streamed: CSV (text/csv) or JSON Lines (application/x-ndjson)."""
+        return _result(_ops.exports.get_export_file.sync_detailed(id, client=self._client))
+
+    def get(self, id: str) -> _m.Export:
+        """Get an export
+
+        Its status and progress. Once succeeded, `download.url` is a signed link to the file valid for an hour; read again for a fresh one."""
+        return _result(_ops.exports.get_export.sync_detailed(id, client=self._client))
+
+    def list(self, **params: Any) -> _m.ListExportsResponse200:
+        """List exports
+
+        The workspace's exports, newest first, kept 90 days; their files are kept 7.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page."""
+        return _result(_ops.exports.list_exports.sync_detailed(client=self._client, **params))
+
+class _ExportSchedules:
+    """export-schedules: create, delete, get, list, test, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateExportScheduleBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.ExportSchedule:
+        """Create an export schedule
+
+        Export the mentions matched since the last run, hourly, daily or weekly (UTC).
+
+        - link: an export.ready webhook event with a signed download link.
+        - s3: the file written into your own S3-compatible bucket (S3, R2, GCS, B2, MinIO).
+        - At most 10 per workspace.
+
+        See [Exports](/guides/exports).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): Unique per workspace, case-insensitive.
+          enabled: false saves it without running it.
+          format: csv: the spreadsheet columns of GET /v1/mentions/export.csv, text cut at 1,000 characters. jsonl: one whole Mention object per line (newline-delimited JSON), as GET /v1/mentions returns it.
+          filter: Which mentions: every filter of GET /v1/mentions except the window (range, from, to): each run exports the mentions matched since the previous run.
+          cadence (required): hourly: at five past each UTC hour, the hour before. daily: at hour (UTC), the 24 hours before. weekly: on weekday at hour (UTC), the week before.
+          hour: UTC hour daily and weekly runs start, 0 to 23 (default 6). Ignored for hourly.
+          weekday: Required for weekly; refused otherwise.
+          destination (required): Where each run goes. link: an export.ready event to your webhook channels, with a signed download link. s3: the file written into your own S3-compatible bucket (S3, R2, GCS, B2, MinIO), then the same event."""
+        return _result(_ops.exports.create_export_schedule.sync_detailed(client=self._client, body=_body(_m.CreateExportScheduleBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def delete(self, id: str) -> Any:
+        """Delete an export schedule
+
+        It stops; the exports it already made stay until they age out."""
+        return _result(_ops.exports.delete_export_schedule.sync_detailed(id, client=self._client))
+
+    def get(self, id: str) -> _m.ExportSchedule:
+        """Get an export schedule"""
+        return _result(_ops.exports.get_export_schedule.sync_detailed(id, client=self._client))
+
+    def list(self) -> _m.ListExportSchedulesResponse200:
+        """List export schedules
+
+        The workspace's recurring exports, oldest first."""
+        return _result(_ops.exports.list_export_schedules.sync_detailed(client=self._client))
+
+    def test(self, id: str, idempotency_key: str | None = None) -> _m.TestExportScheduleResponse200:
+        """Test an export schedule's bucket
+
+        Writes a tiny text file to the bucket with the stored credentials.
+
+        A mistake shows now rather than at the first run; a link destination has nothing to test."""
+        return _result(_ops.exports.test_export_schedule.sync_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def update(self, id: str, body: dict[str, Any] | _m.UpdateExportScheduleBody | None = None, **fields: Any) -> _m.ExportSchedule:
+        """Update an export schedule
+
+        Omitted fields are untouched. A new timing keeps the delta: the next run starts where the last one ended. Enabled again, it starts from the next run.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: Schedule name, unique in the workspace.
+          enabled: false stops it; true starts it again from the next run.
+          format: csv: the spreadsheet columns of GET /v1/mentions/export.csv, text cut at 1,000 characters. jsonl: one whole Mention object per line (newline-delimited JSON), as GET /v1/mentions returns it.
+          filter: Replaces the whole filter.
+          cadence: hourly: at five past each UTC hour, the hour before. daily: at hour (UTC), the 24 hours before. weekly: on weekday at hour (UTC), the week before.
+          hour: UTC hour daily and weekly runs start, 0 to 23 (default 6). Ignored for hourly.
+          weekday: Weekly runs: the day; null clears it (only when the cadence is no longer weekly).
+          destination: Replaces the destination. An s3 one may leave secretAccessKey out to keep the stored secret."""
+        return _result(_ops.exports.update_export_schedule.sync_detailed(id, client=self._client, body=_body(_m.UpdateExportScheduleBody, body, fields)))
 
 class _Automations:
     """automations: create, delete, get, list, update."""
@@ -2909,6 +3040,126 @@ class _AsyncSearches:
           min_relevance: Only results scored at least this relevant (0 to 100); unscored results are left out when set."""
         return _result(await _ops.searches.list_search_results.asyncio_detailed(id, client=self._client, **params))
 
+class _AsyncExports:
+    """exports: create, delete, file, get, list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateExportBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Export:
+        """Start an export
+
+        Export the mentions a filter selects to a CSV or JSON Lines file, in the background.
+
+        - Up to 1,000,000 rows; GET /v1/mentions' filters, viewId included.
+        - Poll GET /v1/exports/{id}, then download.
+        - Not billed; 2 at once per workspace.
+
+        See [Exports](/guides/exports).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          resource: What is exported: mentions.
+          format: csv: the spreadsheet columns of GET /v1/mentions/export.csv, text cut at 1,000 characters. jsonl: one whole Mention object per line (newline-delimited JSON), as GET /v1/mentions returns it.
+          filter: Which mentions: every filter of GET /v1/mentions, in the same vocabulary (a list as an array or comma-separated), viewId and alertId included. {} is every mention the list shows.
+          maxRows: Stop after this many rows, newest matched first. At most 1,000,000, the default."""
+        return _result(await _ops.exports.create_export.asyncio_detailed(client=self._client, body=_body(_m.CreateExportBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def delete(self, id: str) -> Any:
+        """Delete an export
+
+        Deletes the file and the export: its signed links stop working at once. A running export stops."""
+        return _result(await _ops.exports.delete_export.asyncio_detailed(id, client=self._client))
+
+    async def file(self, id: str) -> str:
+        """Download an export
+
+        The file of a succeeded export, streamed: CSV (text/csv) or JSON Lines (application/x-ndjson)."""
+        return _result(await _ops.exports.get_export_file.asyncio_detailed(id, client=self._client))
+
+    async def get(self, id: str) -> _m.Export:
+        """Get an export
+
+        Its status and progress. Once succeeded, `download.url` is a signed link to the file valid for an hour; read again for a fresh one."""
+        return _result(await _ops.exports.get_export.asyncio_detailed(id, client=self._client))
+
+    async def list(self, **params: Any) -> _m.ListExportsResponse200:
+        """List exports
+
+        The workspace's exports, newest first, kept 90 days; their files are kept 7.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page."""
+        return _result(await _ops.exports.list_exports.asyncio_detailed(client=self._client, **params))
+
+class _AsyncExportSchedules:
+    """export-schedules: create, delete, get, list, test, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateExportScheduleBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.ExportSchedule:
+        """Create an export schedule
+
+        Export the mentions matched since the last run, hourly, daily or weekly (UTC).
+
+        - link: an export.ready webhook event with a signed download link.
+        - s3: the file written into your own S3-compatible bucket (S3, R2, GCS, B2, MinIO).
+        - At most 10 per workspace.
+
+        See [Exports](/guides/exports).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name (required): Unique per workspace, case-insensitive.
+          enabled: false saves it without running it.
+          format: csv: the spreadsheet columns of GET /v1/mentions/export.csv, text cut at 1,000 characters. jsonl: one whole Mention object per line (newline-delimited JSON), as GET /v1/mentions returns it.
+          filter: Which mentions: every filter of GET /v1/mentions except the window (range, from, to): each run exports the mentions matched since the previous run.
+          cadence (required): hourly: at five past each UTC hour, the hour before. daily: at hour (UTC), the 24 hours before. weekly: on weekday at hour (UTC), the week before.
+          hour: UTC hour daily and weekly runs start, 0 to 23 (default 6). Ignored for hourly.
+          weekday: Required for weekly; refused otherwise.
+          destination (required): Where each run goes. link: an export.ready event to your webhook channels, with a signed download link. s3: the file written into your own S3-compatible bucket (S3, R2, GCS, B2, MinIO), then the same event."""
+        return _result(await _ops.exports.create_export_schedule.asyncio_detailed(client=self._client, body=_body(_m.CreateExportScheduleBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def delete(self, id: str) -> Any:
+        """Delete an export schedule
+
+        It stops; the exports it already made stay until they age out."""
+        return _result(await _ops.exports.delete_export_schedule.asyncio_detailed(id, client=self._client))
+
+    async def get(self, id: str) -> _m.ExportSchedule:
+        """Get an export schedule"""
+        return _result(await _ops.exports.get_export_schedule.asyncio_detailed(id, client=self._client))
+
+    async def list(self) -> _m.ListExportSchedulesResponse200:
+        """List export schedules
+
+        The workspace's recurring exports, oldest first."""
+        return _result(await _ops.exports.list_export_schedules.asyncio_detailed(client=self._client))
+
+    async def test(self, id: str, idempotency_key: str | None = None) -> _m.TestExportScheduleResponse200:
+        """Test an export schedule's bucket
+
+        Writes a tiny text file to the bucket with the stored credentials.
+
+        A mistake shows now rather than at the first run; a link destination has nothing to test."""
+        return _result(await _ops.exports.test_export_schedule.asyncio_detailed(id, client=self._client, idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def update(self, id: str, body: dict[str, Any] | _m.UpdateExportScheduleBody | None = None, **fields: Any) -> _m.ExportSchedule:
+        """Update an export schedule
+
+        Omitted fields are untouched. A new timing keeps the delta: the next run starts where the last one ended. Enabled again, it starts from the next run.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          name: Schedule name, unique in the workspace.
+          enabled: false stops it; true starts it again from the next run.
+          format: csv: the spreadsheet columns of GET /v1/mentions/export.csv, text cut at 1,000 characters. jsonl: one whole Mention object per line (newline-delimited JSON), as GET /v1/mentions returns it.
+          filter: Replaces the whole filter.
+          cadence: hourly: at five past each UTC hour, the hour before. daily: at hour (UTC), the 24 hours before. weekly: on weekday at hour (UTC), the week before.
+          hour: UTC hour daily and weekly runs start, 0 to 23 (default 6). Ignored for hourly.
+          weekday: Weekly runs: the day; null clears it (only when the cadence is no longer weekly).
+          destination: Replaces the destination. An s3 one may leave secretAccessKey out to keep the stored secret."""
+        return _result(await _ops.exports.update_export_schedule.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateExportScheduleBody, body, fields)))
+
 class _AsyncAutomations:
     """automations: create, delete, get, list, update."""
 
@@ -3256,6 +3507,8 @@ class Mentio:
         self.filters = _Filters(self.client)
         self.views = _Views(self.client)
         self.searches = _Searches(self.client)
+        self.exports = _Exports(self.client)
+        self.export_schedules = _ExportSchedules(self.client)
         self.automations = _Automations(self.client)
         self.labels = _Labels(self.client)
         self.attention = _Attention(self.client)
@@ -3317,6 +3570,8 @@ class AsyncMentio:
         self.filters = _AsyncFilters(self.client)
         self.views = _AsyncViews(self.client)
         self.searches = _AsyncSearches(self.client)
+        self.exports = _AsyncExports(self.client)
+        self.export_schedules = _AsyncExportSchedules(self.client)
         self.automations = _AsyncAutomations(self.client)
         self.labels = _AsyncLabels(self.client)
         self.attention = _AsyncAttention(self.client)
