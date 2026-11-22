@@ -18,8 +18,9 @@ class KeywordPollingItem:
         platform (KeywordPollingItemPlatform): Platform, one of:
             - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
             - Developer: hackernews, github, stackoverflow, devto
-            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
-            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
+            - Media: news, podcasts (titles, show notes, transcripts), rss (keyword feeds)
+            - Web: web (blogs), substack, producthunt
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         last_polled_at (None | str): Newest poll of this platform for the term; null until the first one.
         empty_polls (int): Consecutive polls that found nothing new; the scheduler slows down as it grows.
     """

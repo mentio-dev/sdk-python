@@ -20,8 +20,9 @@ class KeywordHealthStatsByPlatformItem:
         platform (KeywordHealthStatsByPlatformItemPlatform): Platform, one of:
             - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
             - Developer: hackernews, github, stackoverflow, devto
-            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
-            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
+            - Media: news, podcasts (titles, show notes, transcripts), rss (keyword feeds)
+            - Web: web (blogs), substack, producthunt
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         matches (int): Matches on this platform in the window.
         relevant (int): Of those, scored at or above the relevance line (40).
         filtered (int): Of those, scored under the line: the noise.

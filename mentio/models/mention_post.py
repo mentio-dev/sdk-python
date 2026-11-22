@@ -26,8 +26,9 @@ class MentionPost:
         platform (MentionPostPlatform): Platform, one of:
             - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
             - Developer: hackernews, github, stackoverflow, devto
-            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
-            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
+            - Media: news, podcasts (titles, show notes, transcripts), rss (keyword feeds)
+            - Web: web (blogs), substack, producthunt
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         kind (MentionPostKind): post: a top-level post. comment: answers a post or comment (Reddit, Hacker News or
             YouTube comments, X or Bluesky replies, Stack Overflow answers). repository: a GitHub repository event (see
             post.repository).

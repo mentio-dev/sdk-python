@@ -22,9 +22,9 @@ class CreateSearchBody:
             hashtag counts). Quotes are not needed.
         range_ (CreateSearchBodyRange | Unset): How far back the search reads, ending now: 24h, 7d or 30d. Instagram
             reads at most its last 7 days whatever the range. Default: CreateSearchBodyRange.VALUE_1.
-        platforms (list[CreateSearchBodyPlatformsItem] | Unset): The platforms to read; omit for every platform that can
-            search a term back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok,
-            instagram, facebook, podcasts). devto and news have no search and are reported as skipped.
+        platforms (list[CreateSearchBodyPlatformsItem] | Unset): Platforms to read; omit for all that search back in
+            time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook,
+            podcasts, web, substack). devto, news and producthunt are skipped.
         kind (CreateSearchBodyKind | Unset): What the term is to you, as on a keyword: brand (your company or product),
             competitor, or topic (the default). The classifier judges relevance with it. Default:
             CreateSearchBodyKind.TOPIC.

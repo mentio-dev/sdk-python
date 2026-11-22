@@ -23,8 +23,9 @@ class AnalyticsBreakdownDataItemPersonType0:
         platform (AnalyticsBreakdownDataItemPersonType0Platform): Platform, one of:
             - Social: bluesky, x, reddit, linkedin, facebook, instagram, tiktok, youtube
             - Developer: hackernews, github, stackoverflow, devto
-            - Media: news, podcasts (titles, show notes, transcripts), rss (feeds a keyword reads)
-            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews of a place)
+            - Media: news, podcasts (titles, show notes, transcripts), rss (keyword feeds)
+            - Web: web (blogs), substack, producthunt
+            - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         url (None | str): Profile URL.
         avatar_url (None | str): Avatar image URL, when the platform gave one.
         followers (int | None): From the audience profile; null when unknown.

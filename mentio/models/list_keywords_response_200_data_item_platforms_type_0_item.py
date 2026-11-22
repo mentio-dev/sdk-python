@@ -11,9 +11,12 @@ class ListKeywordsResponse200DataItemPlatformsType0Item(StrEnum):
     LINKEDIN = "linkedin"
     NEWS = "news"
     PODCASTS = "podcasts"
+    PRODUCTHUNT = "producthunt"
     REDDIT = "reddit"
     STACKOVERFLOW = "stackoverflow"
+    SUBSTACK = "substack"
     TIKTOK = "tiktok"
+    WEB = "web"
     X = "x"
     YOUTUBE = "youtube"
 
