@@ -151,10 +151,15 @@ import mentio.api.groups.get_group  # noqa: F401
 import mentio.api.groups.list_groups  # noqa: F401
 import mentio.api.groups.update_group  # noqa: F401
 import mentio.api.keywords.create_keyword  # noqa: F401
+import mentio.api.keywords.create_keyword_estimate  # noqa: F401
+import mentio.api.keywords.create_keywords  # noqa: F401
 import mentio.api.keywords.delete_keyword  # noqa: F401
 import mentio.api.keywords.duplicate_keyword  # noqa: F401
 import mentio.api.keywords.get_keyword  # noqa: F401
+import mentio.api.keywords.get_keyword_deletion_preview  # noqa: F401
+import mentio.api.keywords.get_keyword_estimate  # noqa: F401
 import mentio.api.keywords.get_keyword_health  # noqa: F401
+import mentio.api.keywords.list_keyword_estimates  # noqa: F401
 import mentio.api.keywords.list_keywords  # noqa: F401
 import mentio.api.keywords.update_keyword  # noqa: F401
 import mentio.api.members.create_invitation  # noqa: F401
@@ -199,7 +204,7 @@ import mentio.api.views.update_view  # noqa: F401
 
 
 class _Keywords:
-    """keywords: create, delete, duplicate, get, health, list, update."""
+    """keywords: create, create_many, delete, deletion_preview, duplicate, get, health, list, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -231,11 +236,34 @@ class _Keywords:
           readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
         return _result(_ops.keywords.create_keyword.sync_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
+    def create_many(self, body: dict[str, Any] | _m.CreateKeywordsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.KeywordBatchResult:
+        """Track many keywords
+
+        Create up to 100 keywords in one call, as POST /v1/keywords would, without reviewSources and feeds.
+
+        - Each is created or refused on its own; `data` answers in order.
+        - The wallet is checked keyword by keyword; none created for it is a 402.
+
+        See [Keywords](/guides/keywords#add-many-at-once).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          keywords (required): The keywords to create, 1 to 100 (10 before the first top-up), in order. Each is created or refused on its own."""
+        return _result(_ops.keywords.create_keywords.sync_detailed(client=self._client, body=_body(_m.CreateKeywordsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
     def delete(self, id: str) -> Any:
         """Delete a keyword
 
         Removes the keyword and its matches. Posts also matched by another keyword stay."""
         return _result(_ops.keywords.delete_keyword.sync_detailed(id, client=self._client))
+
+    def deletion_preview(self, id: str) -> _m.KeywordDeletionPreview:
+        """Preview a keyword deletion
+
+        What DELETE /v1/keywords/{id} would remove or change, without changing anything.
+
+        - Its mentions and what it cost this month (charges already made stay).
+        - Alert rules, automations and views naming it, and the effect on each: disabled, narrowed or empty."""
+        return _result(_ops.keywords.get_keyword_deletion_preview.sync_detailed(id, client=self._client))
 
     def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Keyword:
         """Duplicate a keyword
@@ -1373,7 +1401,7 @@ class _Searches:
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
-          range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
+          range: How far back the search reads, ending now. See [Search](/guides/search#platforms). - 24h, 7d, 30d: every platform (instagram at most 7 days). - 90d, 365d: only platforms reaching that far; the others are skipped (window).
           platforms: Platforms to read; omit for all that search back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts, web, substack, threads, mastodon). devto, news and producthunt are skipped.
           kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
           context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
@@ -1528,6 +1556,43 @@ class _ExportSchedules:
           destination: Replaces the destination. An s3 one may leave secretAccessKey out to keep the stored secret."""
         return _result(_ops.exports.update_export_schedule.sync_detailed(id, client=self._client, body=_body(_m.UpdateExportScheduleBody, body, fields)))
 
+class _KeywordEstimates:
+    """keyword-estimates: create, get, list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateKeywordEstimateBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.KeywordEstimate:
+        """Estimate keyword volume
+
+        Estimate how many mentions a month up to 10 candidate keywords would bring, and their cost.
+
+        - Free by default; `includePaid` also samples paid platforms.
+        - Poll until `status` is done. See [Keyword estimates](/guides/keyword-estimates).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          terms (required): Up to 10 candidate keywords, each estimated on its own.
+          platforms: The platforms the keyword would track; omit for every platform (what a new keyword tracks).
+          matching: The rules the keyword would carry, as on a keyword: a sampled post must pass them to count. Omitted fields take the keyword defaults.
+          includePaid: Also sample the paid platforms. See [Keyword estimates](/guides/keyword-estimates#cost). - false (default): index numbers and free samples only; costs nothing. - true: also the paid platforms, 2 to 20 cents per term and platform read; funded only."""
+        return _result(_ops.keywords.create_keyword_estimate.sync_detailed(client=self._client, body=_body(_m.CreateKeywordEstimateBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def get(self, id: str) -> _m.KeywordEstimate:
+        """Get a keyword estimate
+
+        Each term's expected matched mentions a month per platform, the monthly cost range, and what the estimate itself cost."""
+        return _result(_ops.keywords.get_keyword_estimate.sync_detailed(id, client=self._client))
+
+    def list(self, **params: Any) -> _m.ListKeywordEstimatesResponse200:
+        """List keyword estimates
+
+        The workspace's estimates, newest first, kept for 30 days.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page."""
+        return _result(_ops.keywords.list_keyword_estimates.sync_detailed(client=self._client, **params))
+
 class _Automations:
     """automations: create, delete, get, list, update."""
 
@@ -1618,7 +1683,7 @@ class _Attention:
 
         Keyword arguments (query):
           status: open (default), resolved, dismissed, or all.
-          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered never opens an item).
+          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing, mention.unanswered_influencer, mention.topic_cluster (feed.recovered never opens an item).
           limit: Items per page, newest first; 50 by default, at most 100.
           cursor: nextCursor from the previous page."""
         _coerce(params, {"status": (_enum, _m.ListAttentionStatus)})
@@ -1831,7 +1896,7 @@ class _Billing:
         return _result(_ops.billing.get_wallet.sync_detailed(client=self._client))
 
 class _AsyncKeywords:
-    """keywords: create, delete, duplicate, get, health, list, update."""
+    """keywords: create, create_many, delete, deletion_preview, duplicate, get, health, list, update."""
 
     def __init__(self, client: AuthenticatedClient) -> None:
         self._client = client
@@ -1863,11 +1928,34 @@ class _AsyncKeywords:
           readsWorkspaceFeeds: Whether the keyword also reads the workspace's feeds (GET /v1/feeds); default true. A new keyword reading them gets the look-back of the 8 most recently connected."""
         return _result(await _ops.keywords.create_keyword.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
 
+    async def create_many(self, body: dict[str, Any] | _m.CreateKeywordsBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.KeywordBatchResult:
+        """Track many keywords
+
+        Create up to 100 keywords in one call, as POST /v1/keywords would, without reviewSources and feeds.
+
+        - Each is created or refused on its own; `data` answers in order.
+        - The wallet is checked keyword by keyword; none created for it is a 402.
+
+        See [Keywords](/guides/keywords#add-many-at-once).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          keywords (required): The keywords to create, 1 to 100 (10 before the first top-up), in order. Each is created or refused on its own."""
+        return _result(await _ops.keywords.create_keywords.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordsBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
     async def delete(self, id: str) -> Any:
         """Delete a keyword
 
         Removes the keyword and its matches. Posts also matched by another keyword stay."""
         return _result(await _ops.keywords.delete_keyword.asyncio_detailed(id, client=self._client))
+
+    async def deletion_preview(self, id: str) -> _m.KeywordDeletionPreview:
+        """Preview a keyword deletion
+
+        What DELETE /v1/keywords/{id} would remove or change, without changing anything.
+
+        - Its mentions and what it cost this month (charges already made stay).
+        - Alert rules, automations and views naming it, and the effect on each: disabled, narrowed or empty."""
+        return _result(await _ops.keywords.get_keyword_deletion_preview.asyncio_detailed(id, client=self._client))
 
     async def duplicate(self, id: str, body: dict[str, Any] | _m.DuplicateKeywordBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.Keyword:
         """Duplicate a keyword
@@ -3005,7 +3093,7 @@ class _AsyncSearches:
 
         Body: a dict, a model, or the fields as keyword arguments:
           term (required): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a hashtag counts). Quotes are not needed.
-          range: How far back the search reads, ending now: 24h, 7d or 30d. Instagram reads at most its last 7 days whatever the range.
+          range: How far back the search reads, ending now. See [Search](/guides/search#platforms). - 24h, 7d, 30d: every platform (instagram at most 7 days). - 90d, 365d: only platforms reaching that far; the others are skipped (window).
           platforms: Platforms to read; omit for all that search back in time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook, podcasts, web, substack, threads, mastodon). devto, news and producthunt are skipped.
           kind: What the term is to you, as on a keyword: brand (your company or product), competitor, or topic (the default). The classifier judges relevance with it.
           context: A sentence the classifier reads for this search only, on top of the company profile: what the term means here, what to ignore."""
@@ -3160,6 +3248,43 @@ class _AsyncExportSchedules:
           destination: Replaces the destination. An s3 one may leave secretAccessKey out to keep the stored secret."""
         return _result(await _ops.exports.update_export_schedule.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateExportScheduleBody, body, fields)))
 
+class _AsyncKeywordEstimates:
+    """keyword-estimates: create, get, list."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateKeywordEstimateBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.KeywordEstimate:
+        """Estimate keyword volume
+
+        Estimate how many mentions a month up to 10 candidate keywords would bring, and their cost.
+
+        - Free by default; `includePaid` also samples paid platforms.
+        - Poll until `status` is done. See [Keyword estimates](/guides/keyword-estimates).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          terms (required): Up to 10 candidate keywords, each estimated on its own.
+          platforms: The platforms the keyword would track; omit for every platform (what a new keyword tracks).
+          matching: The rules the keyword would carry, as on a keyword: a sampled post must pass them to count. Omitted fields take the keyword defaults.
+          includePaid: Also sample the paid platforms. See [Keyword estimates](/guides/keyword-estimates#cost). - false (default): index numbers and free samples only; costs nothing. - true: also the paid platforms, 2 to 20 cents per term and platform read; funded only."""
+        return _result(await _ops.keywords.create_keyword_estimate.asyncio_detailed(client=self._client, body=_body(_m.CreateKeywordEstimateBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def get(self, id: str) -> _m.KeywordEstimate:
+        """Get a keyword estimate
+
+        Each term's expected matched mentions a month per platform, the monthly cost range, and what the estimate itself cost."""
+        return _result(await _ops.keywords.get_keyword_estimate.asyncio_detailed(id, client=self._client))
+
+    async def list(self, **params: Any) -> _m.ListKeywordEstimatesResponse200:
+        """List keyword estimates
+
+        The workspace's estimates, newest first, kept for 30 days.
+
+        Keyword arguments (query):
+          limit: Page size, 1 to 100.
+          cursor: nextCursor from the previous page."""
+        return _result(await _ops.keywords.list_keyword_estimates.asyncio_detailed(client=self._client, **params))
+
 class _AsyncAutomations:
     """automations: create, delete, get, list, update."""
 
@@ -3250,7 +3375,7 @@ class _AsyncAttention:
 
         Keyword arguments (query):
           status: open (default), resolved, dismissed, or all.
-          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing (feed.recovered never opens an item).
+          kind: Only these kinds, comma separated: mention.spike, sentiment.negative_spike, keyword.noisy, channel.failing, feed.failing, mention.unanswered_influencer, mention.topic_cluster (feed.recovered never opens an item).
           limit: Items per page, newest first; 50 by default, at most 100.
           cursor: nextCursor from the previous page."""
         _coerce(params, {"status": (_enum, _m.ListAttentionStatus)})
@@ -3509,6 +3634,7 @@ class Mentio:
         self.searches = _Searches(self.client)
         self.exports = _Exports(self.client)
         self.export_schedules = _ExportSchedules(self.client)
+        self.keyword_estimates = _KeywordEstimates(self.client)
         self.automations = _Automations(self.client)
         self.labels = _Labels(self.client)
         self.attention = _Attention(self.client)
@@ -3572,6 +3698,7 @@ class AsyncMentio:
         self.searches = _AsyncSearches(self.client)
         self.exports = _AsyncExports(self.client)
         self.export_schedules = _AsyncExportSchedules(self.client)
+        self.keyword_estimates = _AsyncKeywordEstimates(self.client)
         self.automations = _AsyncAutomations(self.client)
         self.labels = _AsyncLabels(self.client)
         self.attention = _AsyncAttention(self.client)

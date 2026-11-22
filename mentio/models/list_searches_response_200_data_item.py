@@ -34,8 +34,11 @@ class ListSearchesResponse200DataItem:
     Attributes:
         id (str): Search id (srch_...).
         term (str): The term searched, as typed.
-        range_ (ListSearchesResponse200DataItemRange): How far back the search reads, ending now: 24h, 7d or 30d.
-            Instagram reads at most its last 7 days whatever the range.
+        range_ (ListSearchesResponse200DataItemRange): How far back the search reads, ending now. See
+            [Search](/guides/search#platforms).
+
+            - 24h, 7d, 30d: every platform (instagram at most 7 days).
+            - 90d, 365d: only platforms reaching that far; the others are skipped (window).
         kind (ListSearchesResponse200DataItemKind): brand, competitor or topic: what the classifier was told the term
             is.
         context (None | str): The hint the classifier read, or null.

@@ -1,0 +1,176 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.keyword_batch_result_data_item_keyword_type_0_matching_required_mode import (
+    KeywordBatchResultDataItemKeywordType0MatchingRequiredMode,
+)
+
+if TYPE_CHECKING:
+    from ..models.keyword_batch_result_data_item_keyword_type_0_matching_repositories import (
+        KeywordBatchResultDataItemKeywordType0MatchingRepositories,
+    )
+    from ..models.keyword_batch_result_data_item_keyword_type_0_matching_subreddits import (
+        KeywordBatchResultDataItemKeywordType0MatchingSubreddits,
+    )
+
+
+T = TypeVar("T", bound="KeywordBatchResultDataItemKeywordType0Matching")
+
+
+@_attrs_define
+class KeywordBatchResultDataItemKeywordType0Matching:
+    """Matching rules applied before a mention is stored; a rejected post is never billed.
+
+    Attributes:
+        required_terms (list[str]): The post must ALSO contain these terms, any one of them or all of them per
+            requiredMode. A `*` at the start or the end of an entry is a wildcard (alert* matches alerts and alerting).
+            Empty: no requirement.
+        required_mode (KeywordBatchResultDataItemKeywordType0MatchingRequiredMode): any: at least one required term must
+            appear. all: every one must.
+        required_groups (list[list[str]]): Combinations: the post must ALSO contain every term of at least one group (an
+            OR of ANDs), on top of requiredTerms, with the same phrase and wildcard rules. See
+            [Keywords](/guides/keywords#several-searches-in-one-keyword).
+        excluded_terms (list[str]): A post containing any of these is dropped. A `*` at the start or the end of an entry
+            is a wildcard (beta.* matches beta.0.1; *bot matches nightlybot).
+        excluded_authors (list[str]): Posts by these authors are dropped: profile or post links, @handles, u/names,
+            Bluesky DIDs or display names, stored in canonical form like an alert's muted list.
+        case_sensitive (bool): true: the term must appear in the case it was typed (RAG, never rag). Default false.
+        exact_phrase (bool): true: only the exact phrase matches (a term sent in double quotes sets it). false: a multi-
+            word keyword also matches its words close together, kept and billed only when scored relevant. See
+            [Keywords](/guides/keywords#the-exact-phrase-only).
+        subreddits (KeywordBatchResultDataItemKeywordType0MatchingSubreddits): Reddit only, for this keyword alone; the
+            workspace filters' own subreddit lists (GET /v1/filters) still apply to every keyword, and a post must pass
+            both.
+        repositories (KeywordBatchResultDataItemKeywordType0MatchingRepositories): GitHub only: which repository events
+            naming this keyword become mentions. An event outside the rule is dropped before it is stored, so it is never
+            billed.
+    """
+
+    required_terms: list[str]
+    required_mode: KeywordBatchResultDataItemKeywordType0MatchingRequiredMode
+    required_groups: list[list[str]]
+    excluded_terms: list[str]
+    excluded_authors: list[str]
+    case_sensitive: bool
+    exact_phrase: bool
+    subreddits: KeywordBatchResultDataItemKeywordType0MatchingSubreddits
+    repositories: KeywordBatchResultDataItemKeywordType0MatchingRepositories
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        required_terms = self.required_terms
+
+        required_mode = self.required_mode.value
+
+        required_groups = []
+        for required_groups_item_data in self.required_groups:
+            required_groups_item = required_groups_item_data
+
+            required_groups.append(required_groups_item)
+
+        excluded_terms = self.excluded_terms
+
+        excluded_authors = self.excluded_authors
+
+        case_sensitive = self.case_sensitive
+
+        exact_phrase = self.exact_phrase
+
+        subreddits = self.subreddits.to_dict()
+
+        repositories = self.repositories.to_dict()
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "requiredTerms": required_terms,
+                "requiredMode": required_mode,
+                "requiredGroups": required_groups,
+                "excludedTerms": excluded_terms,
+                "excludedAuthors": excluded_authors,
+                "caseSensitive": case_sensitive,
+                "exactPhrase": exact_phrase,
+                "subreddits": subreddits,
+                "repositories": repositories,
+            }
+        )
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.keyword_batch_result_data_item_keyword_type_0_matching_repositories import (
+            KeywordBatchResultDataItemKeywordType0MatchingRepositories,
+        )
+        from ..models.keyword_batch_result_data_item_keyword_type_0_matching_subreddits import (
+            KeywordBatchResultDataItemKeywordType0MatchingSubreddits,
+        )
+
+        d = dict(src_dict)
+        required_terms = cast(list[str], d.pop("requiredTerms"))
+
+        required_mode = KeywordBatchResultDataItemKeywordType0MatchingRequiredMode(
+            d.pop("requiredMode")
+        )
+
+        required_groups = []
+        _required_groups = d.pop("requiredGroups")
+        for required_groups_item_data in _required_groups:
+            required_groups_item = cast(list[str], required_groups_item_data)
+
+            required_groups.append(required_groups_item)
+
+        excluded_terms = cast(list[str], d.pop("excludedTerms"))
+
+        excluded_authors = cast(list[str], d.pop("excludedAuthors"))
+
+        case_sensitive = d.pop("caseSensitive")
+
+        exact_phrase = d.pop("exactPhrase")
+
+        subreddits = KeywordBatchResultDataItemKeywordType0MatchingSubreddits.from_dict(
+            d.pop("subreddits")
+        )
+
+        repositories = (
+            KeywordBatchResultDataItemKeywordType0MatchingRepositories.from_dict(
+                d.pop("repositories")
+            )
+        )
+
+        keyword_batch_result_data_item_keyword_type_0_matching = cls(
+            required_terms=required_terms,
+            required_mode=required_mode,
+            required_groups=required_groups,
+            excluded_terms=excluded_terms,
+            excluded_authors=excluded_authors,
+            case_sensitive=case_sensitive,
+            exact_phrase=exact_phrase,
+            subreddits=subreddits,
+            repositories=repositories,
+        )
+
+        keyword_batch_result_data_item_keyword_type_0_matching.additional_properties = d
+        return keyword_batch_result_data_item_keyword_type_0_matching
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

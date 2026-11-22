@@ -1,0 +1,397 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+
+from attrs import define as _attrs_define
+from attrs import field as _attrs_field
+
+from ..models.keyword_batch_result_data_item_keyword_type_0_kind import (
+    KeywordBatchResultDataItemKeywordType0Kind,
+)
+from ..models.keyword_batch_result_data_item_keyword_type_0_platforms_type_0_item import (
+    KeywordBatchResultDataItemKeywordType0PlatformsType0Item,
+)
+
+if TYPE_CHECKING:
+    from ..models.group_ref import GroupRef
+    from ..models.keyword_batch_result_data_item_keyword_type_0_cap_type_0 import (
+        KeywordBatchResultDataItemKeywordType0CapType0,
+    )
+    from ..models.keyword_batch_result_data_item_keyword_type_0_comments import (
+        KeywordBatchResultDataItemKeywordType0Comments,
+    )
+    from ..models.keyword_batch_result_data_item_keyword_type_0_display import (
+        KeywordBatchResultDataItemKeywordType0Display,
+    )
+    from ..models.keyword_batch_result_data_item_keyword_type_0_matching import (
+        KeywordBatchResultDataItemKeywordType0Matching,
+    )
+    from ..models.keyword_batch_result_data_item_keyword_type_0_polling_item import (
+        KeywordBatchResultDataItemKeywordType0PollingItem,
+    )
+    from ..models.keyword_batch_result_data_item_keyword_type_0_stats import (
+        KeywordBatchResultDataItemKeywordType0Stats,
+    )
+    from ..models.keyword_feed import KeywordFeed
+    from ..models.review_source import ReviewSource
+
+
+T = TypeVar("T", bound="KeywordBatchResultDataItemKeywordType0")
+
+
+@_attrs_define
+class KeywordBatchResultDataItemKeywordType0:
+    """The created keyword; null when it failed.
+
+    Attributes:
+        id (str): Keyword id (kw_...).
+        term (str): The tracked text, as typed.
+        query (None | str): The boolean query the keyword was written as, as sent; term and matching hold what it
+            compiled to. Null for a keyword defined by its fields, or once its term or term rules changed by hand.
+        kind (KeywordBatchResultDataItemKeywordType0Kind): brand (your own name), competitor, or topic.
+        muted (bool): Not polled or matched. Paused by you, by the wallet (see pausedForBalance) or by the noise brake
+            (see pausedForNoise). A keyword at its mention cap is not muted (see pausedForCap).
+        paused_for_balance (bool): Muted by the wallet for lack of balance; a top-up resumes it, unmuting by hand needs
+            balance too.
+        paused_for_noise (bool): Muted by the noise brake: under 30% of 20 or more scored matches were relevant, on
+            welcome credit. Changing its rules, platforms or context, or unmuting, resumes it (balance permitting); a top-up
+            does not. See [Billing](/billing).
+        paused_for_cap (bool): At its monthly mention cap: not matched until the first of next month (UTC) or until the
+            cap is raised. Not muted: it keeps its place and its daily keyword charge.
+        cap (KeywordBatchResultDataItemKeywordType0CapType0 | None): The mention cap and its period, or null for none.
+        comments (KeywordBatchResultDataItemKeywordType0Comments): Comments under this keyword's relevant mentions, read
+            several times per thread on Hacker News, Bluesky, GitHub, Stack Overflow, DEV, YouTube and Reddit. List them
+            with GET /v1/mentions/{id}/comments; see [Comments](/guides/comments).
+        display (KeywordBatchResultDataItemKeywordType0Display): Which of this keyword's mentions you see, by language
+            and country. A hidden post is still matched, classified and billed, but kept out of lists, exports, search,
+            alerts and digests (includeHidden=true shows it). See [Keywords](/guides/keywords#show-only-some-languages-or-
+            countries).
+        group (GroupRef): The group the keyword belongs to.
+        platforms (list[KeywordBatchResultDataItemKeywordType0PlatformsType0Item] | None): Platforms the term is
+            searched on; null means every platform, [] none (the keyword only collects reviews).
+        feeds (list[KeywordFeed]): RSS and Atom feeds this keyword reads; empty for none.
+        reads_workspace_feeds (bool): true (the default): the keyword also reads every feed of the workspace (GET
+            /v1/feeds), on top of its own `feeds`. false: its own feeds alone.
+        review_sources (list[ReviewSource]): Where this keyword collects reviews from (App Store and Google Play apps,
+            Trustpilot pages, Google Maps places); empty for none.
+        context (None | str): A sentence the classifier reads for this keyword only, on top of the company profile or
+            group description: what the term means here, what to ignore. "Arc is our browser; ignore the geometry word."
+            Null clears it.
+        matching (KeywordBatchResultDataItemKeywordType0Matching): Matching rules applied before a mention is stored; a
+            rejected post is never billed.
+        stats (KeywordBatchResultDataItemKeywordType0Stats): Computed over this workspace's matches.
+        polling (list[KeywordBatchResultDataItemKeywordType0PollingItem]): Poll health per platform polled on a
+            schedule. Live feeds (Bluesky) have no entry.
+        created_at (str): ISO 8601 timestamp, UTC.
+    """
+
+    id: str
+    term: str
+    query: None | str
+    kind: KeywordBatchResultDataItemKeywordType0Kind
+    muted: bool
+    paused_for_balance: bool
+    paused_for_noise: bool
+    paused_for_cap: bool
+    cap: KeywordBatchResultDataItemKeywordType0CapType0 | None
+    comments: KeywordBatchResultDataItemKeywordType0Comments
+    display: KeywordBatchResultDataItemKeywordType0Display
+    group: GroupRef
+    platforms: list[KeywordBatchResultDataItemKeywordType0PlatformsType0Item] | None
+    feeds: list[KeywordFeed]
+    reads_workspace_feeds: bool
+    review_sources: list[ReviewSource]
+    context: None | str
+    matching: KeywordBatchResultDataItemKeywordType0Matching
+    stats: KeywordBatchResultDataItemKeywordType0Stats
+    polling: list[KeywordBatchResultDataItemKeywordType0PollingItem]
+    created_at: str
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        from ..models.keyword_batch_result_data_item_keyword_type_0_cap_type_0 import (
+            KeywordBatchResultDataItemKeywordType0CapType0,
+        )
+
+        id = self.id
+
+        term = self.term
+
+        query: None | str
+        query = self.query
+
+        kind = self.kind.value
+
+        muted = self.muted
+
+        paused_for_balance = self.paused_for_balance
+
+        paused_for_noise = self.paused_for_noise
+
+        paused_for_cap = self.paused_for_cap
+
+        cap: dict[str, Any] | None
+        if isinstance(self.cap, KeywordBatchResultDataItemKeywordType0CapType0):
+            cap = self.cap.to_dict()
+        else:
+            cap = self.cap
+
+        comments = self.comments.to_dict()
+
+        display = self.display.to_dict()
+
+        group = self.group.to_dict()
+
+        platforms: list[str] | None
+        if isinstance(self.platforms, list):
+            platforms = []
+            for platforms_type_0_item_data in self.platforms:
+                platforms_type_0_item = platforms_type_0_item_data.value
+                platforms.append(platforms_type_0_item)
+
+        else:
+            platforms = self.platforms
+
+        feeds = []
+        for feeds_item_data in self.feeds:
+            feeds_item = feeds_item_data.to_dict()
+            feeds.append(feeds_item)
+
+        reads_workspace_feeds = self.reads_workspace_feeds
+
+        review_sources = []
+        for review_sources_item_data in self.review_sources:
+            review_sources_item = review_sources_item_data.to_dict()
+            review_sources.append(review_sources_item)
+
+        context: None | str
+        context = self.context
+
+        matching = self.matching.to_dict()
+
+        stats = self.stats.to_dict()
+
+        polling = []
+        for polling_item_data in self.polling:
+            polling_item = polling_item_data.to_dict()
+            polling.append(polling_item)
+
+        created_at = self.created_at
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "id": id,
+                "term": term,
+                "query": query,
+                "kind": kind,
+                "muted": muted,
+                "pausedForBalance": paused_for_balance,
+                "pausedForNoise": paused_for_noise,
+                "pausedForCap": paused_for_cap,
+                "cap": cap,
+                "comments": comments,
+                "display": display,
+                "group": group,
+                "platforms": platforms,
+                "feeds": feeds,
+                "readsWorkspaceFeeds": reads_workspace_feeds,
+                "reviewSources": review_sources,
+                "context": context,
+                "matching": matching,
+                "stats": stats,
+                "polling": polling,
+                "createdAt": created_at,
+            }
+        )
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.group_ref import GroupRef
+        from ..models.keyword_batch_result_data_item_keyword_type_0_cap_type_0 import (
+            KeywordBatchResultDataItemKeywordType0CapType0,
+        )
+        from ..models.keyword_batch_result_data_item_keyword_type_0_comments import (
+            KeywordBatchResultDataItemKeywordType0Comments,
+        )
+        from ..models.keyword_batch_result_data_item_keyword_type_0_display import (
+            KeywordBatchResultDataItemKeywordType0Display,
+        )
+        from ..models.keyword_batch_result_data_item_keyword_type_0_matching import (
+            KeywordBatchResultDataItemKeywordType0Matching,
+        )
+        from ..models.keyword_batch_result_data_item_keyword_type_0_polling_item import (
+            KeywordBatchResultDataItemKeywordType0PollingItem,
+        )
+        from ..models.keyword_batch_result_data_item_keyword_type_0_stats import (
+            KeywordBatchResultDataItemKeywordType0Stats,
+        )
+        from ..models.keyword_feed import KeywordFeed
+        from ..models.review_source import ReviewSource
+
+        d = dict(src_dict)
+        id = d.pop("id")
+
+        term = d.pop("term")
+
+        def _parse_query(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        query = _parse_query(d.pop("query"))
+
+        kind = KeywordBatchResultDataItemKeywordType0Kind(d.pop("kind"))
+
+        muted = d.pop("muted")
+
+        paused_for_balance = d.pop("pausedForBalance")
+
+        paused_for_noise = d.pop("pausedForNoise")
+
+        paused_for_cap = d.pop("pausedForCap")
+
+        def _parse_cap(
+            data: object,
+        ) -> KeywordBatchResultDataItemKeywordType0CapType0 | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                cap_type_0 = KeywordBatchResultDataItemKeywordType0CapType0.from_dict(
+                    data
+                )
+
+                return cap_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(KeywordBatchResultDataItemKeywordType0CapType0 | None, data)
+
+        cap = _parse_cap(d.pop("cap"))
+
+        comments = KeywordBatchResultDataItemKeywordType0Comments.from_dict(
+            d.pop("comments")
+        )
+
+        display = KeywordBatchResultDataItemKeywordType0Display.from_dict(
+            d.pop("display")
+        )
+
+        group = GroupRef.from_dict(d.pop("group"))
+
+        def _parse_platforms(
+            data: object,
+        ) -> list[KeywordBatchResultDataItemKeywordType0PlatformsType0Item] | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, list):
+                    raise TypeError()
+                platforms_type_0 = []
+                _platforms_type_0 = data
+                for platforms_type_0_item_data in _platforms_type_0:
+                    platforms_type_0_item = (
+                        KeywordBatchResultDataItemKeywordType0PlatformsType0Item(
+                            platforms_type_0_item_data
+                        )
+                    )
+
+                    platforms_type_0.append(platforms_type_0_item)
+
+                return platforms_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(
+                list[KeywordBatchResultDataItemKeywordType0PlatformsType0Item] | None,
+                data,
+            )
+
+        platforms = _parse_platforms(d.pop("platforms"))
+
+        feeds = []
+        _feeds = d.pop("feeds")
+        for feeds_item_data in _feeds:
+            feeds_item = KeywordFeed.from_dict(feeds_item_data)
+
+            feeds.append(feeds_item)
+
+        reads_workspace_feeds = d.pop("readsWorkspaceFeeds")
+
+        review_sources = []
+        _review_sources = d.pop("reviewSources")
+        for review_sources_item_data in _review_sources:
+            review_sources_item = ReviewSource.from_dict(review_sources_item_data)
+
+            review_sources.append(review_sources_item)
+
+        def _parse_context(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        context = _parse_context(d.pop("context"))
+
+        matching = KeywordBatchResultDataItemKeywordType0Matching.from_dict(
+            d.pop("matching")
+        )
+
+        stats = KeywordBatchResultDataItemKeywordType0Stats.from_dict(d.pop("stats"))
+
+        polling = []
+        _polling = d.pop("polling")
+        for polling_item_data in _polling:
+            polling_item = KeywordBatchResultDataItemKeywordType0PollingItem.from_dict(
+                polling_item_data
+            )
+
+            polling.append(polling_item)
+
+        created_at = d.pop("createdAt")
+
+        keyword_batch_result_data_item_keyword_type_0 = cls(
+            id=id,
+            term=term,
+            query=query,
+            kind=kind,
+            muted=muted,
+            paused_for_balance=paused_for_balance,
+            paused_for_noise=paused_for_noise,
+            paused_for_cap=paused_for_cap,
+            cap=cap,
+            comments=comments,
+            display=display,
+            group=group,
+            platforms=platforms,
+            feeds=feeds,
+            reads_workspace_feeds=reads_workspace_feeds,
+            review_sources=review_sources,
+            context=context,
+            matching=matching,
+            stats=stats,
+            polling=polling,
+            created_at=created_at,
+        )
+
+        keyword_batch_result_data_item_keyword_type_0.additional_properties = d
+        return keyword_batch_result_data_item_keyword_type_0
+
+    @property
+    def additional_keys(self) -> list[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

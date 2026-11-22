@@ -16,6 +16,8 @@ if TYPE_CHECKING:
     from ..models.keyword_noisy_event_data import KeywordNoisyEventData
     from ..models.mention_spike_event_data import MentionSpikeEventData
     from ..models.negative_spike_event_data import NegativeSpikeEventData
+    from ..models.topic_cluster_event_data import TopicClusterEventData
+    from ..models.unanswered_influencer_event_data import UnansweredInfluencerEventData
 
 
 T = TypeVar("T", bound="AttentionItem")
@@ -32,6 +34,8 @@ class AttentionItem:
             - channel.failing: the channel's last sends all failed.
             - feed.failing: a workspace feed failed its last 3 hourly reads.
             - feed.recovered: it read again after failing.
+            - mention.unanswered_influencer: a top influencer's relevant mention is still open after 3 hours.
+            - mention.topic_cluster: posts on one keyword share a tag in 24 hours.
         status (AttentionItemStatus): open: the condition holds. resolved: it no longer does. dismissed: a person put it
             away; it does not come back for the same episode.
         subject (AttentionItemSubject): What the item is about.
@@ -40,8 +44,8 @@ class AttentionItem:
         resolved_at (None | str): When it no longer held; null while it does.
         dismissed_at (None | str): When a person dismissed it; null if nobody did.
         data (ChannelFailingEventData | FeedFailingEventData | KeywordNoisyEventData | MentionSpikeEventData |
-            NegativeSpikeEventData): The facts as they stood when it opened: the same object the account event of the same
-            name carries as `data`.
+            NegativeSpikeEventData | TopicClusterEventData | UnansweredInfluencerEventData): The facts as they stood when it
+            opened: the same object the account event of the same name carries as `data`.
     """
 
     id: str
@@ -58,14 +62,20 @@ class AttentionItem:
         | KeywordNoisyEventData
         | MentionSpikeEventData
         | NegativeSpikeEventData
+        | TopicClusterEventData
+        | UnansweredInfluencerEventData
     )
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.channel_failing_event_data import ChannelFailingEventData
+        from ..models.feed_failing_event_data import FeedFailingEventData
         from ..models.keyword_noisy_event_data import KeywordNoisyEventData
         from ..models.mention_spike_event_data import MentionSpikeEventData
         from ..models.negative_spike_event_data import NegativeSpikeEventData
+        from ..models.unanswered_influencer_event_data import (
+            UnansweredInfluencerEventData,
+        )
 
         id = self.id
 
@@ -91,6 +101,8 @@ class AttentionItem:
             or isinstance(self.data, NegativeSpikeEventData)
             or isinstance(self.data, KeywordNoisyEventData)
             or isinstance(self.data, ChannelFailingEventData)
+            or isinstance(self.data, FeedFailingEventData)
+            or isinstance(self.data, UnansweredInfluencerEventData)
         ):
             data = self.data.to_dict()
         else:
@@ -122,6 +134,10 @@ class AttentionItem:
         from ..models.keyword_noisy_event_data import KeywordNoisyEventData
         from ..models.mention_spike_event_data import MentionSpikeEventData
         from ..models.negative_spike_event_data import NegativeSpikeEventData
+        from ..models.topic_cluster_event_data import TopicClusterEventData
+        from ..models.unanswered_influencer_event_data import (
+            UnansweredInfluencerEventData,
+        )
 
         d = dict(src_dict)
         id = d.pop("id")
@@ -158,6 +174,8 @@ class AttentionItem:
             | KeywordNoisyEventData
             | MentionSpikeEventData
             | NegativeSpikeEventData
+            | TopicClusterEventData
+            | UnansweredInfluencerEventData
         ):
             try:
                 if not isinstance(data, dict):
@@ -191,11 +209,27 @@ class AttentionItem:
                 return data_type_3
             except (TypeError, ValueError, AttributeError, KeyError):
                 pass
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                data_type_4 = FeedFailingEventData.from_dict(data)
+
+                return data_type_4
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                data_type_5 = UnansweredInfluencerEventData.from_dict(data)
+
+                return data_type_5
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
             if not isinstance(data, dict):
                 raise TypeError()
-            data_type_4 = FeedFailingEventData.from_dict(data)
+            data_type_6 = TopicClusterEventData.from_dict(data)
 
-            return data_type_4
+            return data_type_6
 
         data = _parse_data(d.pop("data"))
 

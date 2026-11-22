@@ -16,8 +16,8 @@ class AttentionItemSubject:
     """What the item is about.
 
     Attributes:
-        type_ (AttentionItemSubjectType): keyword, channel or feed.
-        id (str): The keyword (kw_...), the channel (dest_...) or the feed (fd_...).
+        type_ (AttentionItemSubjectType): keyword, channel, feed or mention.
+        id (str): The keyword (kw_...), the channel (dest_...), the feed (fd_...) or the mention (mm_...).
     """
 
     type_: AttentionItemSubjectType

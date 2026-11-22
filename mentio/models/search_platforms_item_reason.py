@@ -8,6 +8,7 @@ class SearchPlatformsItemReason(StrEnum):
     RATE_LIMITED = "rate_limited"
     TIMEOUT = "timeout"
     UNSUPPORTED = "unsupported"
+    WINDOW = "window"
 
     def __str__(self) -> str:
         return str(self.value)

@@ -308,6 +308,65 @@ from .create_keyword_body_review_sources_item import CreateKeywordBodyReviewSour
 from .create_keyword_body_review_sources_item_platform import (
     CreateKeywordBodyReviewSourcesItemPlatform,
 )
+from .create_keyword_estimate_body import CreateKeywordEstimateBody
+from .create_keyword_estimate_body_matching import CreateKeywordEstimateBodyMatching
+from .create_keyword_estimate_body_matching_required_mode import (
+    CreateKeywordEstimateBodyMatchingRequiredMode,
+)
+from .create_keyword_estimate_body_platforms_item import (
+    CreateKeywordEstimateBodyPlatformsItem,
+)
+from .create_keywords_body import CreateKeywordsBody
+from .create_keywords_body_keywords_item import CreateKeywordsBodyKeywordsItem
+from .create_keywords_body_keywords_item_cap_type_0 import (
+    CreateKeywordsBodyKeywordsItemCapType0,
+)
+from .create_keywords_body_keywords_item_cap_type_0_per import (
+    CreateKeywordsBodyKeywordsItemCapType0Per,
+)
+from .create_keywords_body_keywords_item_comments import (
+    CreateKeywordsBodyKeywordsItemComments,
+)
+from .create_keywords_body_keywords_item_display import (
+    CreateKeywordsBodyKeywordsItemDisplay,
+)
+from .create_keywords_body_keywords_item_display_countries import (
+    CreateKeywordsBodyKeywordsItemDisplayCountries,
+)
+from .create_keywords_body_keywords_item_display_countries_excluded_item import (
+    CreateKeywordsBodyKeywordsItemDisplayCountriesExcludedItem,
+)
+from .create_keywords_body_keywords_item_display_countries_only_item import (
+    CreateKeywordsBodyKeywordsItemDisplayCountriesOnlyItem,
+)
+from .create_keywords_body_keywords_item_display_languages import (
+    CreateKeywordsBodyKeywordsItemDisplayLanguages,
+)
+from .create_keywords_body_keywords_item_display_languages_excluded_item import (
+    CreateKeywordsBodyKeywordsItemDisplayLanguagesExcludedItem,
+)
+from .create_keywords_body_keywords_item_display_languages_only_item import (
+    CreateKeywordsBodyKeywordsItemDisplayLanguagesOnlyItem,
+)
+from .create_keywords_body_keywords_item_kind import CreateKeywordsBodyKeywordsItemKind
+from .create_keywords_body_keywords_item_matching import (
+    CreateKeywordsBodyKeywordsItemMatching,
+)
+from .create_keywords_body_keywords_item_matching_repositories import (
+    CreateKeywordsBodyKeywordsItemMatchingRepositories,
+)
+from .create_keywords_body_keywords_item_matching_repositories_events_item import (
+    CreateKeywordsBodyKeywordsItemMatchingRepositoriesEventsItem,
+)
+from .create_keywords_body_keywords_item_matching_required_mode import (
+    CreateKeywordsBodyKeywordsItemMatchingRequiredMode,
+)
+from .create_keywords_body_keywords_item_matching_subreddits import (
+    CreateKeywordsBodyKeywordsItemMatchingSubreddits,
+)
+from .create_keywords_body_keywords_item_platforms_type_0_item import (
+    CreateKeywordsBodyKeywordsItemPlatformsType0Item,
+)
 from .create_search_body import CreateSearchBody
 from .create_search_body_kind import CreateSearchBodyKind
 from .create_search_body_platforms_item import CreateSearchBodyPlatformsItem
@@ -601,10 +660,111 @@ from .invitation_role import InvitationRole
 from .invoice_list import InvoiceList
 from .invoice_list_data_item import InvoiceListDataItem
 from .keyword import Keyword
+from .keyword_batch_result import KeywordBatchResult
+from .keyword_batch_result_data_item import KeywordBatchResultDataItem
+from .keyword_batch_result_data_item_error_type_0 import (
+    KeywordBatchResultDataItemErrorType0,
+)
+from .keyword_batch_result_data_item_keyword_type_0 import (
+    KeywordBatchResultDataItemKeywordType0,
+)
+from .keyword_batch_result_data_item_keyword_type_0_cap_type_0 import (
+    KeywordBatchResultDataItemKeywordType0CapType0,
+)
+from .keyword_batch_result_data_item_keyword_type_0_cap_type_0_own_per import (
+    KeywordBatchResultDataItemKeywordType0CapType0OwnPer,
+)
+from .keyword_batch_result_data_item_keyword_type_0_cap_type_0_per import (
+    KeywordBatchResultDataItemKeywordType0CapType0Per,
+)
+from .keyword_batch_result_data_item_keyword_type_0_comments import (
+    KeywordBatchResultDataItemKeywordType0Comments,
+)
+from .keyword_batch_result_data_item_keyword_type_0_display import (
+    KeywordBatchResultDataItemKeywordType0Display,
+)
+from .keyword_batch_result_data_item_keyword_type_0_display_countries import (
+    KeywordBatchResultDataItemKeywordType0DisplayCountries,
+)
+from .keyword_batch_result_data_item_keyword_type_0_display_countries_excluded_item import (
+    KeywordBatchResultDataItemKeywordType0DisplayCountriesExcludedItem,
+)
+from .keyword_batch_result_data_item_keyword_type_0_display_countries_only_item import (
+    KeywordBatchResultDataItemKeywordType0DisplayCountriesOnlyItem,
+)
+from .keyword_batch_result_data_item_keyword_type_0_display_languages import (
+    KeywordBatchResultDataItemKeywordType0DisplayLanguages,
+)
+from .keyword_batch_result_data_item_keyword_type_0_display_languages_excluded_item import (
+    KeywordBatchResultDataItemKeywordType0DisplayLanguagesExcludedItem,
+)
+from .keyword_batch_result_data_item_keyword_type_0_display_languages_only_item import (
+    KeywordBatchResultDataItemKeywordType0DisplayLanguagesOnlyItem,
+)
+from .keyword_batch_result_data_item_keyword_type_0_kind import (
+    KeywordBatchResultDataItemKeywordType0Kind,
+)
+from .keyword_batch_result_data_item_keyword_type_0_matching import (
+    KeywordBatchResultDataItemKeywordType0Matching,
+)
+from .keyword_batch_result_data_item_keyword_type_0_matching_repositories import (
+    KeywordBatchResultDataItemKeywordType0MatchingRepositories,
+)
+from .keyword_batch_result_data_item_keyword_type_0_matching_repositories_events_item import (
+    KeywordBatchResultDataItemKeywordType0MatchingRepositoriesEventsItem,
+)
+from .keyword_batch_result_data_item_keyword_type_0_matching_required_mode import (
+    KeywordBatchResultDataItemKeywordType0MatchingRequiredMode,
+)
+from .keyword_batch_result_data_item_keyword_type_0_matching_subreddits import (
+    KeywordBatchResultDataItemKeywordType0MatchingSubreddits,
+)
+from .keyword_batch_result_data_item_keyword_type_0_platforms_type_0_item import (
+    KeywordBatchResultDataItemKeywordType0PlatformsType0Item,
+)
+from .keyword_batch_result_data_item_keyword_type_0_polling_item import (
+    KeywordBatchResultDataItemKeywordType0PollingItem,
+)
+from .keyword_batch_result_data_item_keyword_type_0_polling_item_platform import (
+    KeywordBatchResultDataItemKeywordType0PollingItemPlatform,
+)
+from .keyword_batch_result_data_item_keyword_type_0_stats import (
+    KeywordBatchResultDataItemKeywordType0Stats,
+)
+from .keyword_batch_result_data_item_keyword_type_0_stats_cost import (
+    KeywordBatchResultDataItemKeywordType0StatsCost,
+)
+from .keyword_batch_result_data_item_keyword_type_0_stats_feedback import (
+    KeywordBatchResultDataItemKeywordType0StatsFeedback,
+)
+from .keyword_batch_result_data_item_keyword_type_0_stats_health import (
+    KeywordBatchResultDataItemKeywordType0StatsHealth,
+)
+from .keyword_batch_result_data_item_keyword_type_0_stats_noise import (
+    KeywordBatchResultDataItemKeywordType0StatsNoise,
+)
+from .keyword_batch_result_data_item_status import KeywordBatchResultDataItemStatus
 from .keyword_cap_type_0 import KeywordCapType0
 from .keyword_cap_type_0_own_per import KeywordCapType0OwnPer
 from .keyword_cap_type_0_per import KeywordCapType0Per
 from .keyword_comments import KeywordComments
+from .keyword_deletion_preview import KeywordDeletionPreview
+from .keyword_deletion_preview_alerts_item import KeywordDeletionPreviewAlertsItem
+from .keyword_deletion_preview_alerts_item_effect import (
+    KeywordDeletionPreviewAlertsItemEffect,
+)
+from .keyword_deletion_preview_automations_item import (
+    KeywordDeletionPreviewAutomationsItem,
+)
+from .keyword_deletion_preview_automations_item_effect import (
+    KeywordDeletionPreviewAutomationsItemEffect,
+)
+from .keyword_deletion_preview_cost import KeywordDeletionPreviewCost
+from .keyword_deletion_preview_keyword import KeywordDeletionPreviewKeyword
+from .keyword_deletion_preview_views_item import KeywordDeletionPreviewViewsItem
+from .keyword_deletion_preview_views_item_effect import (
+    KeywordDeletionPreviewViewsItemEffect,
+)
 from .keyword_display import KeywordDisplay
 from .keyword_display_countries import KeywordDisplayCountries
 from .keyword_display_countries_excluded_item import KeywordDisplayCountriesExcludedItem
@@ -612,6 +772,33 @@ from .keyword_display_countries_only_item import KeywordDisplayCountriesOnlyItem
 from .keyword_display_languages import KeywordDisplayLanguages
 from .keyword_display_languages_excluded_item import KeywordDisplayLanguagesExcludedItem
 from .keyword_display_languages_only_item import KeywordDisplayLanguagesOnlyItem
+from .keyword_estimate import KeywordEstimate
+from .keyword_estimate_platforms_item import KeywordEstimatePlatformsItem
+from .keyword_estimate_status import KeywordEstimateStatus
+from .keyword_estimate_terms_item import KeywordEstimateTermsItem
+from .keyword_estimate_terms_item_cost import KeywordEstimateTermsItemCost
+from .keyword_estimate_terms_item_monthly import KeywordEstimateTermsItemMonthly
+from .keyword_estimate_terms_item_platforms_item import (
+    KeywordEstimateTermsItemPlatformsItem,
+)
+from .keyword_estimate_terms_item_platforms_item_method import (
+    KeywordEstimateTermsItemPlatformsItemMethod,
+)
+from .keyword_estimate_terms_item_platforms_item_monthly_type_0 import (
+    KeywordEstimateTermsItemPlatformsItemMonthlyType0,
+)
+from .keyword_estimate_terms_item_platforms_item_platform import (
+    KeywordEstimateTermsItemPlatformsItemPlatform,
+)
+from .keyword_estimate_terms_item_platforms_item_reason import (
+    KeywordEstimateTermsItemPlatformsItemReason,
+)
+from .keyword_estimate_terms_item_platforms_item_sample_type_0 import (
+    KeywordEstimateTermsItemPlatformsItemSampleType0,
+)
+from .keyword_estimate_terms_item_platforms_item_status import (
+    KeywordEstimateTermsItemPlatformsItemStatus,
+)
 from .keyword_feed import KeywordFeed
 from .keyword_health import KeywordHealth
 from .keyword_health_ai import KeywordHealthAi
@@ -827,6 +1014,7 @@ from .list_groups_response_200 import ListGroupsResponse200
 from .list_groups_response_200_data_item import ListGroupsResponse200DataItem
 from .list_groups_response_200_data_item_stats import ListGroupsResponse200DataItemStats
 from .list_invitations_response_200 import ListInvitationsResponse200
+from .list_keyword_estimates_response_200 import ListKeywordEstimatesResponse200
 from .list_keywords_kind_item import ListKeywordsKindItem
 from .list_keywords_kinds_item import ListKeywordsKindsItem
 from .list_keywords_not_kinds_item import ListKeywordsNotKindsItem
@@ -1255,6 +1443,27 @@ from .test_alert_response_200_outcomes_item import TestAlertResponse200OutcomesI
 from .test_channel_response_200 import TestChannelResponse200
 from .test_channel_response_200_outcomes_item import TestChannelResponse200OutcomesItem
 from .test_export_schedule_response_200 import TestExportScheduleResponse200
+from .topic_cluster_event_data import TopicClusterEventData
+from .topic_cluster_event_data_baseline import TopicClusterEventDataBaseline
+from .topic_cluster_event_data_keyword import TopicClusterEventDataKeyword
+from .topic_cluster_event_data_keyword_kind import TopicClusterEventDataKeywordKind
+from .topic_cluster_event_data_tag import TopicClusterEventDataTag
+from .topic_cluster_event_data_tag_type import TopicClusterEventDataTagType
+from .topic_cluster_event_data_window import TopicClusterEventDataWindow
+from .unanswered_influencer_event_data import UnansweredInfluencerEventData
+from .unanswered_influencer_event_data_author import UnansweredInfluencerEventDataAuthor
+from .unanswered_influencer_event_data_author_platform import (
+    UnansweredInfluencerEventDataAuthorPlatform,
+)
+from .unanswered_influencer_event_data_keyword import (
+    UnansweredInfluencerEventDataKeyword,
+)
+from .unanswered_influencer_event_data_keyword_kind import (
+    UnansweredInfluencerEventDataKeywordKind,
+)
+from .unanswered_influencer_event_data_mention import (
+    UnansweredInfluencerEventDataMention,
+)
 from .unmute_alert_authors_body import UnmuteAlertAuthorsBody
 from .update_alert_body import UpdateAlertBody
 from .update_alert_body_filter import UpdateAlertBodyFilter
@@ -1731,6 +1940,29 @@ __all__ = (
     "CreateKeywordBodyPlatformsType0Item",
     "CreateKeywordBodyReviewSourcesItem",
     "CreateKeywordBodyReviewSourcesItemPlatform",
+    "CreateKeywordEstimateBody",
+    "CreateKeywordEstimateBodyMatching",
+    "CreateKeywordEstimateBodyMatchingRequiredMode",
+    "CreateKeywordEstimateBodyPlatformsItem",
+    "CreateKeywordsBody",
+    "CreateKeywordsBodyKeywordsItem",
+    "CreateKeywordsBodyKeywordsItemCapType0",
+    "CreateKeywordsBodyKeywordsItemCapType0Per",
+    "CreateKeywordsBodyKeywordsItemComments",
+    "CreateKeywordsBodyKeywordsItemDisplay",
+    "CreateKeywordsBodyKeywordsItemDisplayCountries",
+    "CreateKeywordsBodyKeywordsItemDisplayCountriesExcludedItem",
+    "CreateKeywordsBodyKeywordsItemDisplayCountriesOnlyItem",
+    "CreateKeywordsBodyKeywordsItemDisplayLanguages",
+    "CreateKeywordsBodyKeywordsItemDisplayLanguagesExcludedItem",
+    "CreateKeywordsBodyKeywordsItemDisplayLanguagesOnlyItem",
+    "CreateKeywordsBodyKeywordsItemKind",
+    "CreateKeywordsBodyKeywordsItemMatching",
+    "CreateKeywordsBodyKeywordsItemMatchingRepositories",
+    "CreateKeywordsBodyKeywordsItemMatchingRepositoriesEventsItem",
+    "CreateKeywordsBodyKeywordsItemMatchingRequiredMode",
+    "CreateKeywordsBodyKeywordsItemMatchingSubreddits",
+    "CreateKeywordsBodyKeywordsItemPlatformsType0Item",
     "CreateSearchBody",
     "CreateSearchBodyKind",
     "CreateSearchBodyPlatformsItem",
@@ -1954,10 +2186,49 @@ __all__ = (
     "InvoiceList",
     "InvoiceListDataItem",
     "Keyword",
+    "KeywordBatchResult",
+    "KeywordBatchResultDataItem",
+    "KeywordBatchResultDataItemErrorType0",
+    "KeywordBatchResultDataItemKeywordType0",
+    "KeywordBatchResultDataItemKeywordType0CapType0",
+    "KeywordBatchResultDataItemKeywordType0CapType0OwnPer",
+    "KeywordBatchResultDataItemKeywordType0CapType0Per",
+    "KeywordBatchResultDataItemKeywordType0Comments",
+    "KeywordBatchResultDataItemKeywordType0Display",
+    "KeywordBatchResultDataItemKeywordType0DisplayCountries",
+    "KeywordBatchResultDataItemKeywordType0DisplayCountriesExcludedItem",
+    "KeywordBatchResultDataItemKeywordType0DisplayCountriesOnlyItem",
+    "KeywordBatchResultDataItemKeywordType0DisplayLanguages",
+    "KeywordBatchResultDataItemKeywordType0DisplayLanguagesExcludedItem",
+    "KeywordBatchResultDataItemKeywordType0DisplayLanguagesOnlyItem",
+    "KeywordBatchResultDataItemKeywordType0Kind",
+    "KeywordBatchResultDataItemKeywordType0Matching",
+    "KeywordBatchResultDataItemKeywordType0MatchingRepositories",
+    "KeywordBatchResultDataItemKeywordType0MatchingRepositoriesEventsItem",
+    "KeywordBatchResultDataItemKeywordType0MatchingRequiredMode",
+    "KeywordBatchResultDataItemKeywordType0MatchingSubreddits",
+    "KeywordBatchResultDataItemKeywordType0PlatformsType0Item",
+    "KeywordBatchResultDataItemKeywordType0PollingItem",
+    "KeywordBatchResultDataItemKeywordType0PollingItemPlatform",
+    "KeywordBatchResultDataItemKeywordType0Stats",
+    "KeywordBatchResultDataItemKeywordType0StatsCost",
+    "KeywordBatchResultDataItemKeywordType0StatsFeedback",
+    "KeywordBatchResultDataItemKeywordType0StatsHealth",
+    "KeywordBatchResultDataItemKeywordType0StatsNoise",
+    "KeywordBatchResultDataItemStatus",
     "KeywordCapType0",
     "KeywordCapType0OwnPer",
     "KeywordCapType0Per",
     "KeywordComments",
+    "KeywordDeletionPreview",
+    "KeywordDeletionPreviewAlertsItem",
+    "KeywordDeletionPreviewAlertsItemEffect",
+    "KeywordDeletionPreviewAutomationsItem",
+    "KeywordDeletionPreviewAutomationsItemEffect",
+    "KeywordDeletionPreviewCost",
+    "KeywordDeletionPreviewKeyword",
+    "KeywordDeletionPreviewViewsItem",
+    "KeywordDeletionPreviewViewsItemEffect",
     "KeywordDisplay",
     "KeywordDisplayCountries",
     "KeywordDisplayCountriesExcludedItem",
@@ -1965,6 +2236,19 @@ __all__ = (
     "KeywordDisplayLanguages",
     "KeywordDisplayLanguagesExcludedItem",
     "KeywordDisplayLanguagesOnlyItem",
+    "KeywordEstimate",
+    "KeywordEstimatePlatformsItem",
+    "KeywordEstimateStatus",
+    "KeywordEstimateTermsItem",
+    "KeywordEstimateTermsItemCost",
+    "KeywordEstimateTermsItemMonthly",
+    "KeywordEstimateTermsItemPlatformsItem",
+    "KeywordEstimateTermsItemPlatformsItemMethod",
+    "KeywordEstimateTermsItemPlatformsItemMonthlyType0",
+    "KeywordEstimateTermsItemPlatformsItemPlatform",
+    "KeywordEstimateTermsItemPlatformsItemReason",
+    "KeywordEstimateTermsItemPlatformsItemSampleType0",
+    "KeywordEstimateTermsItemPlatformsItemStatus",
     "KeywordFeed",
     "KeywordHealth",
     "KeywordHealthAi",
@@ -2082,6 +2366,7 @@ __all__ = (
     "ListGroupsResponse200DataItem",
     "ListGroupsResponse200DataItemStats",
     "ListInvitationsResponse200",
+    "ListKeywordEstimatesResponse200",
     "ListKeywordsKindItem",
     "ListKeywordsKindsItem",
     "ListKeywordsNotKindsItem",
@@ -2354,6 +2639,19 @@ __all__ = (
     "TestChannelResponse200",
     "TestChannelResponse200OutcomesItem",
     "TestExportScheduleResponse200",
+    "TopicClusterEventData",
+    "TopicClusterEventDataBaseline",
+    "TopicClusterEventDataKeyword",
+    "TopicClusterEventDataKeywordKind",
+    "TopicClusterEventDataTag",
+    "TopicClusterEventDataTagType",
+    "TopicClusterEventDataWindow",
+    "UnansweredInfluencerEventData",
+    "UnansweredInfluencerEventDataAuthor",
+    "UnansweredInfluencerEventDataAuthorPlatform",
+    "UnansweredInfluencerEventDataKeyword",
+    "UnansweredInfluencerEventDataKeywordKind",
+    "UnansweredInfluencerEventDataMention",
     "UnmuteAlertAuthorsBody",
     "UpdateAlertBody",
     "UpdateAlertBodyFilter",

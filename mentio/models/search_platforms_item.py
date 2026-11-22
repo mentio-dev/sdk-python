@@ -25,9 +25,13 @@ class SearchPlatformsItem:
             - Reviews: appstore, googleplay, trustpilot, googlemaps (Google reviews)
         status (SearchPlatformsItemStatus): queued: not read yet. running: being read or scored. done: read and scored.
             skipped: not read (see reason). failed: the read failed (see reason).
-        reason (SearchPlatformsItemReason): Why a platform was skipped or failed: unsupported (no term search on it),
-            credentials (not connected on this deployment), budget (its monthly vendor budget is spent), rate_limited,
-            error, timeout. null otherwise.
+        reason (SearchPlatformsItemReason): Why a platform was skipped or failed; null otherwise.
+
+            - unsupported: no term search on it.
+            - window: its search cannot reach that far back.
+            - credentials: not connected on this deployment.
+            - budget: its monthly vendor budget is spent.
+            - rate_limited, error, timeout: the read failed.
         results (int): Results stored for this platform, at most 25.
         relevant (int): Of them, scored relevant (40 or more).
     """

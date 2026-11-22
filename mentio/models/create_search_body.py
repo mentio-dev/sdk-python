@@ -20,8 +20,12 @@ class CreateSearchBody:
     Attributes:
         term (str): The word or phrase to search, case-insensitive, matched as the phrase (written joined or as a
             hashtag counts). Quotes are not needed.
-        range_ (CreateSearchBodyRange | Unset): How far back the search reads, ending now: 24h, 7d or 30d. Instagram
-            reads at most its last 7 days whatever the range. Default: CreateSearchBodyRange.VALUE_1.
+        range_ (CreateSearchBodyRange | Unset): How far back the search reads, ending now. See
+            [Search](/guides/search#platforms).
+
+            - 24h, 7d, 30d: every platform (instagram at most 7 days).
+            - 90d, 365d: only platforms reaching that far; the others are skipped (window). Default:
+            CreateSearchBodyRange.VALUE_1.
         platforms (list[CreateSearchBodyPlatformsItem] | Unset): Platforms to read; omit for all that search back in
             time (bluesky, hackernews, github, stackoverflow, reddit, x, youtube, linkedin, tiktok, instagram, facebook,
             podcasts, web, substack, threads, mastodon). devto, news and producthunt are skipped.

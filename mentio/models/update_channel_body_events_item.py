@@ -11,6 +11,8 @@ class UpdateChannelBodyEventsItem(StrEnum):
     KEYWORD_PAUSED_FOR_BALANCE = "keyword.paused_for_balance"
     KEYWORD_RESUMED = "keyword.resumed"
     MENTION_SPIKE = "mention.spike"
+    MENTION_TOPIC_CLUSTER = "mention.topic_cluster"
+    MENTION_UNANSWERED_INFLUENCER = "mention.unanswered_influencer"
     SENTIMENT_NEGATIVE_SPIKE = "sentiment.negative_spike"
     WALLET_LOW = "wallet.low"
     WALLET_PAUSED = "wallet.paused"
