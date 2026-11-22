@@ -20,8 +20,8 @@ class CreateSlackChannel:
         kind (CreateSlackChannelKind): Channel kind.
         channel_id (str): A Slack channel id from the connected workspace.
         channel_name (str): The channel name, for the label.
-        events (list[CreateSlackChannelEventsItem] | Unset): Attention events to receive here, on top of whatever rules
-            send. Omit for none.
+        events (list[CreateSlackChannelEventsItem] | Unset): Attention events and followers.new to receive here, on top
+            of whatever rules send. Omit for none.
     """
 
     kind: CreateSlackChannelKind

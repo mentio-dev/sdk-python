@@ -27,8 +27,16 @@ class UsageBreakdownTotals:
         billable_comments (int): Comments billed in the window (the comments line): comments delivered under your
             mentions and comments that matched a keyword, each once per workspace.
         comment_cents (int): The billed comments at $0.008 each, rounded once on the total.
-        total_cents (int): keywordCents, mentionCents and commentCents, plus searchCents and estimateCents when the
-            report is not filtered: then the window's whole list price. The rows carry keyword spend only.
+        total_cents (int): keywordCents, mentionCents, commentCents, accountCents and followerCents, plus searchCents
+            and estimateCents when the report is not filtered: then the window's whole list price. The rows carry keyword
+            and tracked-account spend only.
+        account_days (int): Tracked-account days metered: the days the daily tick charged an account for. 0 on
+            by=keyword rows (an account is not a keyword).
+        account_cents (int): The account-days at the account rate ($2 a month, 200/30 cents a day), rounded once on the
+            total.
+        billable_followers (int): New followers of tracked accounts billed in the window, under the platform and group
+            the account had when they were billed (a moved or deleted account keeps them there).
+        follower_cents (int): The new followers at $0.008 each, rounded once on the total.
         ledger_debit_cents (int): What the ledger has debited for the window's days, by the day each debit settled
             (estimates: when charged), for the whole workspace whatever the filters, searches included. Lags totalCents by
             unsettled mentions; see [The ledger](/billing#the-ledger).
@@ -54,6 +62,10 @@ class UsageBreakdownTotals:
     billable_comments: int
     comment_cents: int
     total_cents: int
+    account_days: int
+    account_cents: int
+    billable_followers: int
+    follower_cents: int
     ledger_debit_cents: int
     search_results: int
     search_cents: int
@@ -81,6 +93,14 @@ class UsageBreakdownTotals:
 
         total_cents = self.total_cents
 
+        account_days = self.account_days
+
+        account_cents = self.account_cents
+
+        billable_followers = self.billable_followers
+
+        follower_cents = self.follower_cents
+
         ledger_debit_cents = self.ledger_debit_cents
 
         search_results = self.search_results
@@ -106,6 +126,10 @@ class UsageBreakdownTotals:
                 "billableComments": billable_comments,
                 "commentCents": comment_cents,
                 "totalCents": total_cents,
+                "accountDays": account_days,
+                "accountCents": account_cents,
+                "billableFollowers": billable_followers,
+                "followerCents": follower_cents,
                 "ledgerDebitCents": ledger_debit_cents,
                 "searchResults": search_results,
                 "searchCents": search_cents,
@@ -138,6 +162,14 @@ class UsageBreakdownTotals:
 
         total_cents = d.pop("totalCents")
 
+        account_days = d.pop("accountDays")
+
+        account_cents = d.pop("accountCents")
+
+        billable_followers = d.pop("billableFollowers")
+
+        follower_cents = d.pop("followerCents")
+
         ledger_debit_cents = d.pop("ledgerDebitCents")
 
         search_results = d.pop("searchResults")
@@ -160,6 +192,10 @@ class UsageBreakdownTotals:
             billable_comments=billable_comments,
             comment_cents=comment_cents,
             total_cents=total_cents,
+            account_days=account_days,
+            account_cents=account_cents,
+            billable_followers=billable_followers,
+            follower_cents=follower_cents,
             ledger_debit_cents=ledger_debit_cents,
             search_results=search_results,
             search_cents=search_cents,

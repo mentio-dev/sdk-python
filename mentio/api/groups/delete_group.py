@@ -70,7 +70,8 @@ def sync_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Delete a group and its keywords
 
-     Delete a group and EVERY keyword in it, with their mentions.
+     Delete a group, EVERY keyword in it (with their mentions) and every tracked account in it (with its
+    followers).
 
     Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
     deleted. The group's `stats.keywords` says how many go.
@@ -104,7 +105,8 @@ def sync(
 ) -> Any | ErrorResponse | None:
     """Delete a group and its keywords
 
-     Delete a group and EVERY keyword in it, with their mentions.
+     Delete a group, EVERY keyword in it (with their mentions) and every tracked account in it (with its
+    followers).
 
     Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
     deleted. The group's `stats.keywords` says how many go.
@@ -133,7 +135,8 @@ async def asyncio_detailed(
 ) -> Response[Any | ErrorResponse]:
     """Delete a group and its keywords
 
-     Delete a group and EVERY keyword in it, with their mentions.
+     Delete a group, EVERY keyword in it (with their mentions) and every tracked account in it (with its
+    followers).
 
     Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
     deleted. The group's `stats.keywords` says how many go.
@@ -165,7 +168,8 @@ async def asyncio(
 ) -> Any | ErrorResponse | None:
     """Delete a group and its keywords
 
-     Delete a group and EVERY keyword in it, with their mentions.
+     Delete a group, EVERY keyword in it (with their mentions) and every tracked account in it (with its
+    followers).
 
     Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be
     deleted. The group's `stats.keywords` says how many go.

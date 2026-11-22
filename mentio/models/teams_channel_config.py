@@ -17,8 +17,9 @@ class TeamsChannelConfig:
 
     Attributes:
         url_hint (str): The Teams Workflows URL with its signature hidden; the full URL is write-only.
-        events (list[TeamsChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
-            involved: one short message when an item opens (GET /v1/attention). Empty when it receives none.
+        events (list[TeamsChannelConfigEventsItem]): The account events this channel receives on its own, no rule
+            involved: the attention events (GET /v1/attention) and followers.new (new followers of a tracked account). Empty
+            when it receives none.
     """
 
     url_hint: str

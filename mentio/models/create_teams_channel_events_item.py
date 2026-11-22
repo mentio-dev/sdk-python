@@ -5,6 +5,7 @@ class CreateTeamsChannelEventsItem(StrEnum):
     CHANNEL_FAILING = "channel.failing"
     FEED_FAILING = "feed.failing"
     FEED_RECOVERED = "feed.recovered"
+    FOLLOWERS_NEW = "followers.new"
     KEYWORD_NOISY = "keyword.noisy"
     MENTION_SPIKE = "mention.spike"
     MENTION_TOPIC_CLUSTER = "mention.topic_cluster"

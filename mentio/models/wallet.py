@@ -31,10 +31,12 @@ class Wallet:
             rule as the low-balance email.
         active_keywords (int): Unmuted keywords.
         auto_muted_keywords (int): Keywords the wallet paused; a top-up resumes them.
-        next_day_cents (int): What one more day of the running keywords costs; tracking stops when the effective balance
-            drops under it.
-        resume_cost_cents (int): What one day of every keyword (running and paused) costs; a stopped workspace resumes
-            once the effective balance covers it.
+        active_accounts (int): Tracked accounts running (followers, $2 a month each).
+        auto_muted_accounts (int): Tracked accounts the wallet paused; a top-up resumes them.
+        next_day_cents (int): What one more day of the running keywords and tracked accounts costs; tracking stops when
+            the effective balance drops under it.
+        resume_cost_cents (int): What one day of every keyword and tracked account (running and paused) costs; a stopped
+            workspace resumes once the effective balance covers it.
         signup_credit (None | WalletSignupCreditType0): The welcome credit this workspace received, or null (a second
             workspace of the same user gets none).
         last_top_up_at (None | str): Newest paid top-up; null before the first.
@@ -55,6 +57,8 @@ class Wallet:
     low_balance: bool
     active_keywords: int
     auto_muted_keywords: int
+    active_accounts: int
+    auto_muted_accounts: int
     next_day_cents: int
     resume_cost_cents: int
     signup_credit: None | WalletSignupCreditType0
@@ -88,6 +92,10 @@ class Wallet:
         active_keywords = self.active_keywords
 
         auto_muted_keywords = self.auto_muted_keywords
+
+        active_accounts = self.active_accounts
+
+        auto_muted_accounts = self.auto_muted_accounts
 
         next_day_cents = self.next_day_cents
 
@@ -127,6 +135,8 @@ class Wallet:
                 "lowBalance": low_balance,
                 "activeKeywords": active_keywords,
                 "autoMutedKeywords": auto_muted_keywords,
+                "activeAccounts": active_accounts,
+                "autoMutedAccounts": auto_muted_accounts,
                 "nextDayCents": next_day_cents,
                 "resumeCostCents": resume_cost_cents,
                 "signupCredit": signup_credit,
@@ -170,6 +180,10 @@ class Wallet:
         active_keywords = d.pop("activeKeywords")
 
         auto_muted_keywords = d.pop("autoMutedKeywords")
+
+        active_accounts = d.pop("activeAccounts")
+
+        auto_muted_accounts = d.pop("autoMutedAccounts")
 
         next_day_cents = d.pop("nextDayCents")
 
@@ -219,6 +233,8 @@ class Wallet:
             low_balance=low_balance,
             active_keywords=active_keywords,
             auto_muted_keywords=auto_muted_keywords,
+            active_accounts=active_accounts,
+            auto_muted_accounts=auto_muted_accounts,
             next_day_cents=next_day_cents,
             resume_cost_cents=resume_cost_cents,
             signup_credit=signup_credit,

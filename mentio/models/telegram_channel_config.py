@@ -19,8 +19,9 @@ class TelegramChannelConfig:
     Attributes:
         chat_id (str): Telegram chat id.
         chat_type (TelegramChannelConfigChatType): private, group, supergroup or channel.
-        events (list[TelegramChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
-            involved: one short message when an item opens (GET /v1/attention). Empty when it receives none.
+        events (list[TelegramChannelConfigEventsItem]): The account events this channel receives on its own, no rule
+            involved: the attention events (GET /v1/attention) and followers.new (new followers of a tracked account). Empty
+            when it receives none.
     """
 
     chat_id: str

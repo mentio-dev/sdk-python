@@ -3,8 +3,10 @@ from enum import StrEnum
 
 class LedgerListDataItemKind(StrEnum):
     ADJUSTMENT = "adjustment"
+    DEBIT_ACCOUNT_DAYS = "debit_account_days"
     DEBIT_COMMENTS = "debit_comments"
     DEBIT_ESTIMATES = "debit_estimates"
+    DEBIT_FOLLOWERS = "debit_followers"
     DEBIT_KEYWORD_DAYS = "debit_keyword_days"
     DEBIT_MENTIONS = "debit_mentions"
     DEBIT_SEARCHES = "debit_searches"

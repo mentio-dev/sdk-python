@@ -23,8 +23,9 @@ class EmailChannelConfig:
 
     Attributes:
         recipients (list[EmailChannelConfigRecipientsItem]): Every address on the list and whether it confirmed.
-        events (list[EmailChannelConfigEventsItem]): The attention events this channel receives on its own, no rule
-            involved: one short message when an item opens (GET /v1/attention). Empty when it receives none.
+        events (list[EmailChannelConfigEventsItem]): The account events this channel receives on its own, no rule
+            involved: the attention events (GET /v1/attention) and followers.new (new followers of a tracked account). Empty
+            when it receives none.
     """
 
     recipients: list[EmailChannelConfigRecipientsItem]

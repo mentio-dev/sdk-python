@@ -7,8 +7,10 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
+    from ..models.usage_summary_accounts import UsageSummaryAccounts
     from ..models.usage_summary_balance import UsageSummaryBalance
     from ..models.usage_summary_burn import UsageSummaryBurn
+    from ..models.usage_summary_followers import UsageSummaryFollowers
     from ..models.usage_summary_keywords import UsageSummaryKeywords
     from ..models.usage_summary_mentions import UsageSummaryMentions
 
@@ -23,7 +25,9 @@ class UsageSummary:
         balance (UsageSummaryBalance): The prepaid wallet.
         burn (UsageSummaryBurn): How fast the balance goes.
         keywords (UsageSummaryKeywords): Keywords against the wallet.
+        accounts (UsageSummaryAccounts): Tracked accounts (followers) against the wallet.
         mentions (UsageSummaryMentions): Matched mentions, the other thing that bills.
+        followers (UsageSummaryFollowers): New followers of tracked accounts, billed like mentions.
         stopped (bool): The wallet paused tracking; a top-up that covers a day of every keyword resumes it.
         low_balance (bool): Running, and the effective balance is at or under 20 percent of the last credit.
         last_top_up_at (None | str): Newest paid top-up; null before the first.
@@ -32,7 +36,9 @@ class UsageSummary:
     balance: UsageSummaryBalance
     burn: UsageSummaryBurn
     keywords: UsageSummaryKeywords
+    accounts: UsageSummaryAccounts
     mentions: UsageSummaryMentions
+    followers: UsageSummaryFollowers
     stopped: bool
     low_balance: bool
     last_top_up_at: None | str
@@ -45,7 +51,11 @@ class UsageSummary:
 
         keywords = self.keywords.to_dict()
 
+        accounts = self.accounts.to_dict()
+
         mentions = self.mentions.to_dict()
+
+        followers = self.followers.to_dict()
 
         stopped = self.stopped
 
@@ -61,7 +71,9 @@ class UsageSummary:
                 "balance": balance,
                 "burn": burn,
                 "keywords": keywords,
+                "accounts": accounts,
                 "mentions": mentions,
+                "followers": followers,
                 "stopped": stopped,
                 "lowBalance": low_balance,
                 "lastTopUpAt": last_top_up_at,
@@ -72,8 +84,10 @@ class UsageSummary:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.usage_summary_accounts import UsageSummaryAccounts
         from ..models.usage_summary_balance import UsageSummaryBalance
         from ..models.usage_summary_burn import UsageSummaryBurn
+        from ..models.usage_summary_followers import UsageSummaryFollowers
         from ..models.usage_summary_keywords import UsageSummaryKeywords
         from ..models.usage_summary_mentions import UsageSummaryMentions
 
@@ -84,7 +98,11 @@ class UsageSummary:
 
         keywords = UsageSummaryKeywords.from_dict(d.pop("keywords"))
 
+        accounts = UsageSummaryAccounts.from_dict(d.pop("accounts"))
+
         mentions = UsageSummaryMentions.from_dict(d.pop("mentions"))
+
+        followers = UsageSummaryFollowers.from_dict(d.pop("followers"))
 
         stopped = d.pop("stopped")
 
@@ -101,7 +119,9 @@ class UsageSummary:
             balance=balance,
             burn=burn,
             keywords=keywords,
+            accounts=accounts,
             mentions=mentions,
+            followers=followers,
             stopped=stopped,
             low_balance=low_balance,
             last_top_up_at=last_top_up_at,

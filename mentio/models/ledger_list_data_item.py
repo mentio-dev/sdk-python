@@ -22,13 +22,16 @@ class LedgerListDataItem:
     """
     Attributes:
         id (str): Ledger entry id (led_...).
-        kind (LedgerListDataItemKind): signup_credit, topup, refund, debit_keyword_days, debit_mentions, debit_comments,
-            debit_searches (on-demand search results), debit_estimates (paid samples of keyword estimates), adjustment,
-            transfer_in (money moved in from the parent or a child workspace) or transfer_out (money moved out to one).
+        kind (LedgerListDataItemKind): The row kind:
+
+            - Credits: signup_credit, topup, adjustment, transfer_in (from the parent or a child workspace).
+            - Out: refund, transfer_out.
+            - Debits: debit_keyword_days, debit_mentions, debit_comments, debit_searches, debit_estimates,
+            debit_account_days (tracked accounts), debit_followers (new followers).
         amount_cents (int): Integer USD cents; credits positive, debits negative.
         day (None | str): Debit rows: the last UTC day the row settled (YYYY-MM-DD).
-        units (int | None): Debit rows: cumulative units (mentions or keyword-days) settled up to this row; on
-            debit_estimates, the paid samples of that one estimate.
+        units (int | None): Debit rows: cumulative units (mentions, keyword-days, account-days or followers) settled up
+            to this row; on debit_estimates, the paid samples of that one estimate.
         note (None | str): Free text on credits and adjustments.
         polar_order_id (None | str): Top-ups and refunds: the Polar order.
         transfer (LedgerListDataItemTransferType0 | None): transfer_in and transfer_out rows: the transfer and the other

@@ -22,8 +22,8 @@ class CreateTeamsChannel:
             channel", then copy the URL it gives). Office 365 connector URLs (webhook.office.com), retired by Microsoft in
             2026, are refused. Write-only: reads show urlHint.
         label (str | Unset): A name for the channel ("Marketing > Mentions"); "Teams" when omitted.
-        events (list[CreateTeamsChannelEventsItem] | Unset): Attention events to receive here, on top of whatever rules
-            send. Omit for none.
+        events (list[CreateTeamsChannelEventsItem] | Unset): Attention events and followers.new to receive here, on top
+            of whatever rules send. Omit for none.
     """
 
     kind: CreateTeamsChannelKind

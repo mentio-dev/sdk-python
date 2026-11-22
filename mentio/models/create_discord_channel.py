@@ -22,8 +22,8 @@ class CreateDiscordChannel:
             settings, Integrations, Webhooks, Copy Webhook URL). A ?thread_id= posts into a thread. Write-only: reads show
             urlHint.
         label (str | Unset): A name for the channel ("#alerts on our server"); "Discord" when omitted.
-        events (list[CreateDiscordChannelEventsItem] | Unset): Attention events to receive here, on top of whatever
-            rules send. Omit for none.
+        events (list[CreateDiscordChannelEventsItem] | Unset): Attention events and followers.new to receive here, on
+            top of whatever rules send. Omit for none.
     """
 
     kind: CreateDiscordChannelKind

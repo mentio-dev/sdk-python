@@ -16,10 +16,12 @@ class ListGroupsResponse200DataItemStats:
     Attributes:
         keywords (int): Keywords in the group, muted ones included.
         active (int): Keywords in the group that are tracking (not muted).
+        accounts (int): Tracked accounts in the group; a delete takes them too.
     """
 
     keywords: int
     active: int
+    accounts: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -27,12 +29,15 @@ class ListGroupsResponse200DataItemStats:
 
         active = self.active
 
+        accounts = self.accounts
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "keywords": keywords,
                 "active": active,
+                "accounts": accounts,
             }
         )
 
@@ -45,9 +50,12 @@ class ListGroupsResponse200DataItemStats:
 
         active = d.pop("active")
 
+        accounts = d.pop("accounts")
+
         list_groups_response_200_data_item_stats = cls(
             keywords=keywords,
             active=active,
+            accounts=accounts,
         )
 
         list_groups_response_200_data_item_stats.additional_properties = d

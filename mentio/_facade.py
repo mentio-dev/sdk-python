@@ -85,6 +85,12 @@ def _body(target: Any, body: Any, fields: dict[str, Any]) -> Any:
 
 
 
+import mentio.api.accounts.create_account  # noqa: F401
+import mentio.api.accounts.delete_account  # noqa: F401
+import mentio.api.accounts.get_account  # noqa: F401
+import mentio.api.accounts.list_account_followers  # noqa: F401
+import mentio.api.accounts.list_accounts  # noqa: F401
+import mentio.api.accounts.update_account  # noqa: F401
 import mentio.api.alerts.create_alert  # noqa: F401
 import mentio.api.alerts.delete_alert  # noqa: F401
 import mentio.api.alerts.get_alert  # noqa: F401
@@ -1027,7 +1033,7 @@ class _Channels:
           kind: Channel kind.
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
-          events: Attention events to receive here, on top of whatever rules send. Omit for none.
+          events: Attention events and followers.new to receive here, on top of whatever rules send. Omit for none.
           emails: Each address gets a confirmation link; workspace members are confirmed on sight.
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
@@ -1723,7 +1729,7 @@ class _Groups:
     def delete(self, id: str) -> Any:
         """Delete a group and its keywords
 
-        Delete a group and EVERY keyword in it, with their mentions.
+        Delete a group, EVERY keyword in it (with their mentions) and every tracked account in it (with its followers).
 
         Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be deleted. The group's `stats.keywords` says how many go."""
         return _result(_ops.groups.delete_group.sync_detailed(id, client=self._client))
@@ -1755,6 +1761,79 @@ class _Groups:
           externalId: Replaces your id for the group; null clears it.
           context: Replaces the group's company description; null clears it. New mentions are judged with it at once, old ones are not rescored. Not on the default group (400 default_group_context)."""
         return _result(_ops.groups.update_group.sync_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
+
+class _Accounts:
+    """accounts: create, delete, followers, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    def create(self, body: dict[str, Any] | _m.CreateAccountBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.TrackedAccount:
+        """Track an account
+
+        Start tracking an account's followers.
+
+        The first read is the baseline, never billed. Then each new follower bills $0.008 and each poll that finds some sends one `followers.new` event. `cap.followers` bounds a month. See [Followers](/guides/followers).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          platform (required): x, bluesky or github. instagram is refused for now (a 400): its follower list is not readable newest first.
+          handle (required): The handle on the platform, with or without the @; a profile link works too (https://x.com/acme, https://bsky.app/profile/acme.bsky.social).
+          groupId: The keyword group it belongs to (grp_...); omit for the default group.
+          cap: A monthly cap on billed new followers; omit or null for none."""
+        return _result(_ops.accounts.create_account.sync_detailed(client=self._client, body=_body(_m.CreateAccountBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    def delete(self, id: str) -> Any:
+        """Stop tracking an account
+
+        The account and the followers seen go; what was already billed stays on the usage record."""
+        return _result(_ops.accounts.delete_account.sync_detailed(id, client=self._client))
+
+    def followers(self, id: str, **params: Any) -> _m.ListAccountFollowersResponse200:
+        """List an account's followers
+
+        A tracked account's new followers, newest first, cursor paged.
+
+        `includeBaseline=true` adds the ones the first read found. Filter by when they were first seen (`range`, `from`, `to`), their reach (`minFollowers`) or text (`q`).
+
+        Keyword arguments (query):
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          include_baseline: true: also the followers the first read found. Default false: only new ones.
+          min_followers: Only followers with at least this many followers of their own.
+          q: Text in the handle, the name or the bio.
+          limit: Page size, 1 to 100. Default 50.
+          cursor: From the previous page's nextCursor."""
+        _coerce(params, {"range_": (_enum, _m.ListAccountFollowersRange)})
+        return _result(_ops.accounts.list_account_followers.sync_detailed(id, client=self._client, **params))
+
+    def get(self, id: str) -> _m.TrackedAccount:
+        """Get a tracked account"""
+        return _result(_ops.accounts.get_account.sync_detailed(id, client=self._client))
+
+    def list(self) -> _m.ListAccountsResponse200:
+        """List tracked accounts
+
+        The accounts the workspace tracks for new followers, newest first.
+
+        Each carries its follower count, the new followers billed this month and the poll state. An account costs $2 a month, a new follower $0.008. See [Followers](/guides/followers)."""
+        return _result(_ops.accounts.list_accounts.sync_detailed(client=self._client))
+
+    def update(self, id: str, body: dict[str, Any] | _m.UpdateAccountBody | None = None, **fields: Any) -> _m.TrackedAccount:
+        """Update a tracked account
+
+        Pause, resume, move or cap a tracked account.
+
+        - `muted`: a paused account is neither read nor charged.
+        - `groupId`: move it to another keyword group.
+        - `cap`: the monthly follower cap; null removes it, a raise resumes it.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          muted: Pause (true) or resume (false) reading and charging it.
+          groupId: Move it to this keyword group (grp_...).
+          cap: Set the monthly follower cap; null removes it."""
+        return _result(_ops.accounts.update_account.sync_detailed(id, client=self._client, body=_body(_m.UpdateAccountBody, body, fields)))
 
 class _Auth:
     """auth: whoami."""
@@ -2827,7 +2906,7 @@ class _AsyncChannels:
           kind: Channel kind.
           channelId: A Slack channel id from the connected workspace.
           channelName: The channel name, for the label.
-          events: Attention events to receive here, on top of whatever rules send. Omit for none.
+          events: Attention events and followers.new to receive here, on top of whatever rules send. Omit for none.
           emails: Each address gets a confirmation link; workspace members are confirmed on sight.
           url: Where the signed POSTs go. https in production.
           label: A name for the channel; the host of the URL when omitted.
@@ -3523,7 +3602,7 @@ class _AsyncGroups:
     async def delete(self, id: str) -> Any:
         """Delete a group and its keywords
 
-        Delete a group and EVERY keyword in it, with their mentions.
+        Delete a group, EVERY keyword in it (with their mentions) and every tracked account in it (with its followers).
 
         Alert rules naming them are adjusted; charges stay on the usage record. The default group cannot be deleted. The group's `stats.keywords` says how many go."""
         return _result(await _ops.groups.delete_group.asyncio_detailed(id, client=self._client))
@@ -3555,6 +3634,79 @@ class _AsyncGroups:
           externalId: Replaces your id for the group; null clears it.
           context: Replaces the group's company description; null clears it. New mentions are judged with it at once, old ones are not rescored. Not on the default group (400 default_group_context)."""
         return _result(await _ops.groups.update_group.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateGroupBody, body, fields)))
+
+class _AsyncAccounts:
+    """accounts: create, delete, followers, get, list, update."""
+
+    def __init__(self, client: AuthenticatedClient) -> None:
+        self._client = client
+
+    async def create(self, body: dict[str, Any] | _m.CreateAccountBody | None = None, idempotency_key: str | None = None, **fields: Any) -> _m.TrackedAccount:
+        """Track an account
+
+        Start tracking an account's followers.
+
+        The first read is the baseline, never billed. Then each new follower bills $0.008 and each poll that finds some sends one `followers.new` event. `cap.followers` bounds a month. See [Followers](/guides/followers).
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          platform (required): x, bluesky or github. instagram is refused for now (a 400): its follower list is not readable newest first.
+          handle (required): The handle on the platform, with or without the @; a profile link works too (https://x.com/acme, https://bsky.app/profile/acme.bsky.social).
+          groupId: The keyword group it belongs to (grp_...); omit for the default group.
+          cap: A monthly cap on billed new followers; omit or null for none."""
+        return _result(await _ops.accounts.create_account.asyncio_detailed(client=self._client, body=_body(_m.CreateAccountBody, body, fields), idempotency_key=idempotency_key if idempotency_key is not None else UNSET))
+
+    async def delete(self, id: str) -> Any:
+        """Stop tracking an account
+
+        The account and the followers seen go; what was already billed stays on the usage record."""
+        return _result(await _ops.accounts.delete_account.asyncio_detailed(id, client=self._client))
+
+    async def followers(self, id: str, **params: Any) -> _m.ListAccountFollowersResponse200:
+        """List an account's followers
+
+        A tracked account's new followers, newest first, cursor paged.
+
+        `includeBaseline=true` adds the ones the first read found. Filter by when they were first seen (`range`, `from`, `to`), their reach (`minFollowers`) or text (`q`).
+
+        Keyword arguments (query):
+          range_: A preset window ending now: 7d is today and the six days before, in `timezone`, as in the analytics reports. Ignored when from or to is given. Omit range, from and to for no window.
+          from_: Start, inclusive: a day (YYYY-MM-DD, from its first moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          to: End, inclusive: a day (YYYY-MM-DD, to its last moment in `timezone`) or an instant (ISO 8601 with its offset, or epoch ms).
+          timezone: IANA zone that days in range, from and to are cut in (Europe/Madrid). Default UTC.
+          include_baseline: true: also the followers the first read found. Default false: only new ones.
+          min_followers: Only followers with at least this many followers of their own.
+          q: Text in the handle, the name or the bio.
+          limit: Page size, 1 to 100. Default 50.
+          cursor: From the previous page's nextCursor."""
+        _coerce(params, {"range_": (_enum, _m.ListAccountFollowersRange)})
+        return _result(await _ops.accounts.list_account_followers.asyncio_detailed(id, client=self._client, **params))
+
+    async def get(self, id: str) -> _m.TrackedAccount:
+        """Get a tracked account"""
+        return _result(await _ops.accounts.get_account.asyncio_detailed(id, client=self._client))
+
+    async def list(self) -> _m.ListAccountsResponse200:
+        """List tracked accounts
+
+        The accounts the workspace tracks for new followers, newest first.
+
+        Each carries its follower count, the new followers billed this month and the poll state. An account costs $2 a month, a new follower $0.008. See [Followers](/guides/followers)."""
+        return _result(await _ops.accounts.list_accounts.asyncio_detailed(client=self._client))
+
+    async def update(self, id: str, body: dict[str, Any] | _m.UpdateAccountBody | None = None, **fields: Any) -> _m.TrackedAccount:
+        """Update a tracked account
+
+        Pause, resume, move or cap a tracked account.
+
+        - `muted`: a paused account is neither read nor charged.
+        - `groupId`: move it to another keyword group.
+        - `cap`: the monthly follower cap; null removes it, a raise resumes it.
+
+        Body: a dict, a model, or the fields as keyword arguments:
+          muted: Pause (true) or resume (false) reading and charging it.
+          groupId: Move it to this keyword group (grp_...).
+          cap: Set the monthly follower cap; null removes it."""
+        return _result(await _ops.accounts.update_account.asyncio_detailed(id, client=self._client, body=_body(_m.UpdateAccountBody, body, fields)))
 
 class _AsyncAuth:
     """auth: whoami."""
@@ -3865,6 +4017,7 @@ class Mentio:
         self.labels = _Labels(self.client)
         self.attention = _Attention(self.client)
         self.groups = _Groups(self.client)
+        self.accounts = _Accounts(self.client)
         self.auth = _Auth(self.client)
         self.members = _Members(self.client)
         self.workspaces = _Workspaces(self.client)
@@ -3932,6 +4085,7 @@ class AsyncMentio:
         self.labels = _AsyncLabels(self.client)
         self.attention = _AsyncAttention(self.client)
         self.groups = _AsyncGroups(self.client)
+        self.accounts = _AsyncAccounts(self.client)
         self.auth = _AsyncAuth(self.client)
         self.members = _AsyncMembers(self.client)
         self.workspaces = _AsyncWorkspaces(self.client)

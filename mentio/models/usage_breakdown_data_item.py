@@ -46,6 +46,13 @@ class UsageBreakdownDataItem:
             mentions and comments that matched a keyword, each once per workspace.
         comment_cents (int): The billed comments at $0.008 each, rounded once on the total.
         total_cents (int): keywordCents plus mentionCents plus commentCents.
+        account_days (int): Tracked-account days metered: the days the daily tick charged an account for. 0 on
+            by=keyword rows (an account is not a keyword).
+        account_cents (int): The account-days at the account rate ($2 a month, 200/30 cents a day), rounded once on the
+            total.
+        billable_followers (int): New followers of tracked accounts billed in the window, under the platform and group
+            the account had when they were billed (a moved or deleted account keeps them there).
+        follower_cents (int): The new followers at $0.008 each, rounded once on the total.
     """
 
     key: str
@@ -62,6 +69,10 @@ class UsageBreakdownDataItem:
     billable_comments: int
     comment_cents: int
     total_cents: int
+    account_days: int
+    account_cents: int
+    billable_followers: int
+    follower_cents: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -116,6 +127,14 @@ class UsageBreakdownDataItem:
 
         total_cents = self.total_cents
 
+        account_days = self.account_days
+
+        account_cents = self.account_cents
+
+        billable_followers = self.billable_followers
+
+        follower_cents = self.follower_cents
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -134,6 +153,10 @@ class UsageBreakdownDataItem:
                 "billableComments": billable_comments,
                 "commentCents": comment_cents,
                 "totalCents": total_cents,
+                "accountDays": account_days,
+                "accountCents": account_cents,
+                "billableFollowers": billable_followers,
+                "followerCents": follower_cents,
             }
         )
 
@@ -226,6 +249,14 @@ class UsageBreakdownDataItem:
 
         total_cents = d.pop("totalCents")
 
+        account_days = d.pop("accountDays")
+
+        account_cents = d.pop("accountCents")
+
+        billable_followers = d.pop("billableFollowers")
+
+        follower_cents = d.pop("followerCents")
+
         usage_breakdown_data_item = cls(
             key=key,
             label=label,
@@ -241,6 +272,10 @@ class UsageBreakdownDataItem:
             billable_comments=billable_comments,
             comment_cents=comment_cents,
             total_cents=total_cents,
+            account_days=account_days,
+            account_cents=account_cents,
+            billable_followers=billable_followers,
+            follower_cents=follower_cents,
         )
 
         usage_breakdown_data_item.additional_properties = d

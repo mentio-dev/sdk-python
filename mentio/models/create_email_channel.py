@@ -19,8 +19,8 @@ class CreateEmailChannel:
     Attributes:
         kind (CreateEmailChannelKind): Channel kind.
         emails (list[str]): Each address gets a confirmation link; workspace members are confirmed on sight.
-        events (list[CreateEmailChannelEventsItem] | Unset): Attention events to receive here, on top of whatever rules
-            send. Omit for none.
+        events (list[CreateEmailChannelEventsItem] | Unset): Attention events and followers.new to receive here, on top
+            of whatever rules send. Omit for none.
     """
 
     kind: CreateEmailChannelKind
